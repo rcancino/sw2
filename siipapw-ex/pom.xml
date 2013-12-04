@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<project>
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.luxsoft.siipap</groupId>
+		<artifactId>sw2</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.luxsoft.siipap</groupId>
+	<artifactId>siipapw-ex</artifactId>
+	<packaging>jar</packaging>
+	<name>SiipapWin EX</name>
+	<url>http://siipap.luxsoftnet.com</url>
+
+	<description>
+		ERP	SiipapWin EX 
+	</description>
+	
+	<dependencies>
+		 
+		<dependency>
+			<groupId>com.luxsoft.siipap</groupId>
+			<artifactId>sw2-ui</artifactId>		
+		</dependency>
+		
+		<dependency>
+			<groupId>com.luxsoft.siipap</groupId>
+			<artifactId>tesoreria-ui</artifactId>		
+		</dependency>
+		
+		<dependency>
+			<groupId>com.luxsoft.siipap</groupId>
+			<artifactId>sw2-cxc</artifactId>
+			<version>${project.version}</version>					
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all-minimal</artifactId>
+			<version>1.5.6</version>
+		</dependency>
+ -->
+	</dependencies>
+	
+	
+	<!-- 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>appassembler-maven-plugin</artifactId>
+				<configuration>
+					<extraJvmArguments>-Xmx256m</extraJvmArguments>
+					<programs>
+						<program>
+							<mainClass>com.luxsoft.siipap.swx.SiipapEx</mainClass>
+							<name>SiipapEx</name>
+						</program>
+					</programs>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+        		<artifactId>maven-assembly-plugin</artifactId>
+        		<configuration>
+          			<descriptors>
+            			<descriptor>src/main/assembly/src.xml</descriptor>
+          			</descriptors>
+        		</configuration>
+        	</plugin>
+			
+		</plugins>
+	</build>
+ -->
+
+</project>

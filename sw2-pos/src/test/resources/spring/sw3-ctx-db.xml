@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+
+
+	<description>
+		Definiciones e infraestructura basica par la persistencia en Data Bases
+	</description>
+	
+	<context:property-placeholder location="classpath:spring/swx-jdbc.properties"/> 
+	 
+	<!--<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="${jdbc.driverClassName}"
+        p:url="${jdbc.url}"
+        p:username="${jdbc.username}"
+        p:password="${jdbc.password}"
+        p:initialSize="1"
+        p:maxActive="1"
+        p:maxWait="20000"
+	/>
+	 
+	--><bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://localhost/andrade?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="2"
+        p:maxWait="20000"
+	/>
+</beans>

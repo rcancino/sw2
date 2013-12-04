@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+
+<!--
+  Build file Auxiliar para algunas tareas de SiipapEx - Core
+  
+-->
+
+
+<project name="SW2 POS" basedir=".">
+
+
+	<property file="project.properties" />
+
+
+	<path id="lib">
+		<fileset dir="/m2/repository">
+			<include name="**/**.jar" />
+		</fileset>
+	</path>
+
+	
+	<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask">
+		<classpath >
+			<path location="${dbunit.jar}" />
+			<path location="${jdbc.jar}" />			
+			<path location="${basedir}/src/test/resources/" />
+			<fileset dir="${repository.path}">
+				<include name="org/slf4j/**/*.jar"/>
+				<include name="log4j/log4j/**/*.jar"/>
+				<include name="commons-collections/commons-collections/3.2.1/**/*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	
+
+	<target name="respalda-catalogos-basico" 
+		description="Respalda de la base de datos de produccion los catalogos   y tablas basicas">
+		<mkdir dir="${basedir}/src/main/dbunit/" />
+		<dbunit driver="${prod.jdbc.driverClassName}" 
+				url="${prod.jdbc.url}" 
+				userid="${prod.jdbc.username}" 
+				password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+		    </dbconfig> 
+			<export dest="${basedir}/src/test/resources/test-data/" format="csv" ordered="false" >
+								
+				<table name="SW_EMPRESAS" />
+				<table name="SW_SUCURSALES" />
+				<table name="SW_DEPARTAMENTOS" />
+				<table name="SW_BANCOS" />				
+				<table name="SW_CUENTAS" />
+				<table name="SX_TARJETAS" />
+				<table name="SX_ESQUEMAS" />
+				<table name="sx_tarjetas_esquemas" />
+				<table name="SW_CONCEPTOS" />
+				<table name="SX_COBRADORES" />
+				<table name="SX_VENDEDORES" />
+				<table name="SX_CORTES"/>
+				<table name="SX_LINEAS" />
+				<table name="SX_MARCAS" />
+				<table name="SX_CLASES" />
+				<table name="SX_UNIDADES" />
+				<table name="SX_PRODUCTOS" />
+				<table name="SX_CONFIGURACION" />
+				<table name="SX_CLIENTES_CREDITO"/>
+				<table name="SX_CLIENTES"/>
+				<!--
+				<query name="SX_CLIENTES" 
+					sql="select * from SX_CLIENTES where CREDITO_ID is not null">
+				</query>-->
+				<table name="sx_desc_vol"/>
+				<table name="sx_proveedores"/>
+				<table name="sx_lp_cliente"/>
+				<table name="sx_lp_cliente_det"/>
+				<table name="sx_lp_provs"/>
+				<table name="sx_lp_provs_det"/>
+				
+				
+				<query name="SX_VENTAS" 
+					sql="select * from sx_ventas  where ORIGEN='CRE' and year(fecha)=year(now()) and month(fecha)=month(now())">
+				</query>
+				<query name="sx_existencias"
+					sql="select a.* from sx_existencias a where year=year(now()) and mes=month(now())-1">
+				</query>
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-catalogos-basico" description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${basedir}/src/test/resources/test-data/" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>	
+
+	
+	<target name="exportar-kernell" 
+		description="Exporta los catalogos basicos del KERNELL">
+		<mkdir dir="${basedir}/src/main/dbunit/" />
+		<dbunit driver="${jdbc.driverClassName}" 
+			url="${prod.jdbc.url}" 
+			userid="${prod.jdbc.username}" 
+			password="${prod.jdbc.password}">
+			<export dest="${basedir}/src/main/dbunit/kernell.xml">
+				<table name="SX_USUARIOS"/>
+				<table name="SX_ROLE"/>
+				<table name="SX_PERMISOS" />
+				<table name="SX_USER_ROLE" />
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-kernell" description="Importa catalogos basicos del sistema">
+		<dbunit driver="${jdbc.driverClassName}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/kernell.xml" transaction="true" />
+		</dbunit>
+	</target>
+
+	<target name="exportar-ventas" 
+			description="Exporta las ventas del mes">
+			<mkdir dir="${basedir}/src/main/dbunit/" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${basedir}/src/test/resources/test-data/" format="csv" ordered="false" >
+					<query name="SX_VENTAS" 
+						sql="select a.* from sx_ventas a where ORIGEN='CRE' and year(fecha)=year(now()) and month(fecha)=month(now())">
+					</query>
+					<query name="SX_VENTASDET" 
+						sql="select a.* from sx_ventasdet a left join sx_ventas b on (a.venta_id=b.CARGO_ID)    where b.ORIGEN='CRE' and year(b.fecha)=year(now()) and month(b.fecha)=month(now())">
+					</query>
+				</export>
+			</dbunit>
+	</target>
+
+	
+</project>

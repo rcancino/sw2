@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+       
+     <bean id="messageSource"
+ 		class="org.springframework.context.support.ResourceBundleMessageSource">
+ 		<property name="basenames">
+ 			<list>
+ 				<value>config/gasApplication</value>
+ 				<value>config/gasActions</value> 				
+ 				<value>config/gasReportes</value> 				 				
+ 			</list>
+ 		</property>
+ 	</bean> 
+ 	
+ 	<bean id="cxc" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>config/gasApplication.properties</value>
+			</list>
+		</property>
+	</bean>
+     
+    <bean id="resourceLocator"
+     	class="com.luxsoft.siipap.swing.impl.ResourceLocatorImpl"/>
+   
+ 	<bean id="menuFactory" 
+ 		class="com.luxsoft.siipap.swx.MainMenuFactory">
+ 		<property name="actionManager" ref="actionManager"/>
+	</bean>
+ 	
+ 	<bean id="toolbarFactory"
+ 		class="com.luxsoft.siipap.swx.ToolbarFactory">
+ 		<property name="actionManager" ref="actionManager"/>
+	</bean> 
+	
+ 	<bean id="windowPage"
+ 		class="com.luxsoft.siipap.swing.impl.InfoNodeTabbedPage"/>
+ 		
+ 	<bean id="statusBar"
+ 		class="com.luxsoft.siipap.swing.controls.StatusBar"/>
+ 		
+ 	<bean id="header"
+ 		class="com.luxsoft.siipap.swing.controls.Header">
+		<property name="titulo" 		value="${app.title}"/>
+ 		<property name="descripcion" 	value="${app.description}"/>
+		<property name="iconPath"		value="${app.image}"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/>		 		
+	</bean>
+	
+ 	<bean id="applicationWindow"
+ 		class="com.luxsoft.siipap.swing.DefaultApplicationWindow">
+ 		<property name="menuFactory" ref="menuFactory"/>
+ 		<property name="toolbarFactory" ref="toolbarFactory"/>
+ 		<property name="windowPage" ref="windowPage"/>
+ 		<property name="statusBar" ref="statusBar"/>
+ 		<property name="header" ref="header"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/> 				 		 		 		
+ 	</bean>
+ 	
+ 	<bean id="application" 
+ 		class="com.luxsoft.siipap.swing.Application"
+ 		factory-method="instance">
+ 		<property name="mainWindow" ref="applicationWindow"/>
+ 		<property name="userPreferencesRootName" value="${app.userpref}"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/> 				 		 		 		 		
+ 	</bean>
+ 	
+ 	<bean id="visualElementConfigurer"
+ 		class="com.luxsoft.siipap.swing.impl.VisualElementConfigurerImpl">
+ 		<property name="resourceLocator" ref="resourceLocator"/> 
+	</bean>
+ 	
+ 	<!-- Infrea estructura para las acciones -->
+ 	
+ 	<bean id="actionManager"
+ 		class="com.luxsoft.siipap.swing.actions.ActionManagerImpl">
+ 		<property name="configurer" ref="actionConfigurer"/>
+ 	</bean>
+ 	
+ 	<bean id="actionConfigurer"
+ 		class="com.luxsoft.siipap.swing.actions.DefaultActionConfigurer">
+ 		<property name="resourceLocator" ref="resourceLocator"/>
+ 	</bean>
+ 	
+ 	<bean id="actionDecorator"
+ 		class="com.luxsoft.siipap.swing.actions.ActionDecorator">
+ 		<property name="actionConfigurer" ref="actionConfigurer"/>
+ 	</bean>
+	
+	<!-- Vistas -->
+	
+	<bean id="abstractView"
+		class="com.luxsoft.siipap.swing.AbstractView"
+		abstract="true">
+		<property name="actionConfigurer" ref="actionConfigurer"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/>				
+	</bean>
+	
+	<bean id="welcomeView"
+     	class="com.luxsoft.siipap.swing.views.WelcomeView"
+     	parent="abstractView">
+     </bean>
+     
+     <!-- Kernell -->
+     
+     <bean id="kernellView"
+     	class="com.luxsoft.siipap.kernell.KernellView"
+     	parent="abstractView"/>
+     	
+     <!-- Consultas BI -->
+     <bean id="reportsView"
+     	class="com.luxsoft.siipap.swing.reports.ReportView"
+     	parent="abstractView"/>
+     	
+     <bean id="biConsultasView"
+     	class="com.luxsoft.siipap.analisis.ui.BIConsultasView"
+     	parent="abstractView"/>
+     
+     <bean id="ventasMainView" 
+     	class="com.luxsoft.siipap.ventas.VentasTaskView"
+     	parent="abstractView">
+     </bean>
+     
+     <!-- Beans para el Modulo de Gastos -->
+     
+     <bean id="gastos.comprasView"
+     	class="com.luxsoft.siipap.gastos.operaciones.OCompraView">
+     </bean>
+     
+    <bean id="gastos.activoFijoView"
+    	class="com.luxsoft.siipap.gastos.operaciones.ActivoFijoView">
+    </bean>
+
+	<bean id="gastos.pagosView" 
+		class="com.luxsoft.siipap.gastos.operaciones.PagosView">
+	</bean>
+	
+	<bean id="gastos.requisicionesDePagoView"
+		class="com.luxsoft.siipap.gastos.operaciones.RequisicionesDePagoView">
+	</bean>	
+	
+	<bean id="gastos.polizasContablesView"
+		class="com.luxsoft.siipap.gastos.consultas.PolizasContablesView">
+	</bean>
+	<bean id="analisisDeGastosView"
+		class="com.luxsoft.siipap.gastos.consultas.AnalisisDeGastosView"/>
+  
+</beans>

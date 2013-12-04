@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+
+
+	<description>
+		Componentes para la replicacion con Bolivar
+	</description>
+	
+	<util:properties id="hibernateProperties">
+		<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+		<prop key="hibernate.query.substitutions">true 'Y', false 'N'</prop>
+		<prop key="hibernate.cache.use_second_level_cache">true</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">true</prop>
+	</util:properties>
+	
+	<!-- <context:property-placeholder location="classpath:spring/swx-jdbc.properties"/>  -->
+	 
+	  <bean id="calle4_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.5.1/produccion"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="5"
+        p:maxWait="20000"
+	/>	
+	
+	<bean id="calle4_jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="calle4_dataSource"
+	/>
+	
+	<bean id="calle4_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="calle4_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="calle4_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="calle4_sessionFactory"/>
+    	
+    <bean id="calle4_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="calle4_sessionFactory"/>
+    
+    	
+    <!-- BOLIVAR   -->
+    
+    <bean id="bolivar_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.4.1/produccion"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="3"
+        p:maxActive="8"
+        p:maxIdle="8"
+        p:minIdle="2"
+        p:maxWait="20000"
+        p:removeAbandoned="true"
+        lazy-init="false"
+	/>
+	
+	<bean id="bolivar_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="bolivar_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="bolivar_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="bolivar_sessionFactory"/>
+    	
+    <bean id="bolivar_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="bolivar_sessionFactory"/>
+    	
+    <bean id="bolivar_jdbcTemplate"
+    	class="org.springframework.jdbc.core.JdbcTemplate"
+    	p:dataSource-ref="bolivar_dataSource"/>
+    	
+    	 
+    <!-- ANDRADE   -->
+    
+     <bean id="andrade_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.2.1/produccion"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="5"
+        p:maxWait="20000"
+	/>	
+	
+	<bean id="andrade_jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="andrade_dataSource"
+	/>
+	
+	<bean id="andrade_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="andrade_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="andrade_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="andrade_sessionFactory"/>
+    	
+    <bean id="andrade_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="andrade_sessionFactory"/>
+    	
+    	<!-- TACUBA -->  
+    
+    <bean id="tacuba_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.1.101/produccion"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="5"
+        p:maxWait="20000"
+	/>
+	
+	<bean id="tacuba_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="tacuba_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="tacuba_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="tacuba_sessionFactory"/>
+    	
+    <bean id="tacuba_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="tacuba_sessionFactory"/>
+    	
+    <bean id="tacuba_jdbcTemplate"
+    	class="org.springframework.jdbc.core.JdbcTemplate"
+    	p:dataSource-ref="tacuba_dataSource"/>
+    	
+    	<!-- QUERETARO -->  
+    
+    <bean id="queretaro_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.1.221/qro_produccion"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="5"
+        p:maxWait="20000"
+	/>
+	
+	<bean id="queretaro_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="queretaro_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="queretaro_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="queretaro_sessionFactory"/>
+    	
+    <bean id="queretaro_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="queretaro_sessionFactory"/>
+    	
+    <bean id="queretaro_jdbcTemplate"
+    	class="org.springframework.jdbc.core.JdbcTemplate"
+    	p:dataSource-ref="queretaro_dataSource"/>
+
+
+     <!-- 5DEFEBRERO   -->
+    
+    <bean id="cincoFebrero_dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://10.10.7.1/produccion"
+        p:username="replicaUser"
+        p:password="sys"
+        p:initialSize="0"
+        p:maxActive="2"
+        p:maxIdle="2"        
+        p:maxWait="20000"
+        p:removeAbandoned="true"
+        lazy-init="false"
+	/>
+	
+	<bean id="cincoFebrero_sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="cincoFebrero_dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"/>
+		
+    <bean id="cincoFebrero_transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="cincoFebrero_sessionFactory"/>
+    	
+    <bean id="cincoFebrero_hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="cincoFebrero_sessionFactory"/>
+    	
+    <bean id="cincoFebrero_jdbcTemplate"
+    	class="org.springframework.jdbc.core.JdbcTemplate"
+    	p:dataSource-ref="cincoFebrero_dataSource"/>
+    
+</beans>

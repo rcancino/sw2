@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de Ventas
+    </description>
+    
+    
+    <bean id="preciosDeVentaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".15">
+     	<property name="panels">
+     		<list>
+     			<ref bean="preciosDeVentaPanel"/>  
+     		</list>
+     	</property>
+     </bean>
+    
+    <bean id="preciosDeVentaPanel"
+    	class="com.luxsoft.siipap.ventas.ui.PreciosDeVentaPanel"
+    	p:title="Precios de Venta"
+    	p:defaultPanel="true"/>
+    
+	 
+	 <bean id="embarques.controlDeEmbarques" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".05">
+     	<property name="panels">
+     		<list>
+     			<bean id="facturistas" class="com.luxsoft.sw3.embarques.ui.consultas.FacturistasPanel"/>
+     			<bean id="controlDeEmbarques"
+     					class="com.luxsoft.sw3.embarques.ui.consultas.EmbarquesCentralizadosPanel">
+     				<property name="title" value="Control de embarques"/>
+     			</bean>
+     			<bean id="trasladosParaEmbarques" class="com.luxsoft.sw3.embarques.ui.consultas.TrasladosPanel"/>
+     			<bean class="com.luxsoft.sw3.embarques.ui.consultas.EntregasPanel"/>
+     			
+     			
+     			
+     		</list>
+     	</property>
+     </bean>
+     
+         
+     <bean id="analisisDeVentasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<ref bean="facturasCentralizadasPanel"/>
+     			<ref bean="comprobantesFiscalesDigitalesPanel"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="facturasCentralizadasPanel"
+    	class="com.luxsoft.sw3.ventas.ui.consultas.FacturasCentralizadasPanel"
+    	p:title="Facturas">
+    </bean>
+    
+    <bean id="comprobantesFiscalesDigitalesPanel" 
+    	class="com.luxsoft.sw3.ventas.ui.consultas.CFDPanel"
+    	p:title="Comprobantes Fiscales Digitales">
+    </bean>
+    
+     
+     
+    
+</beans>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	default-lazy-init="true"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+   
+	<util:set id="destinos">
+		<value>TACUBA</value>
+		<value>ANDRADE</value>
+		<value>CF5FEBRERO</value>
+		<value>BOLIVAR</value>
+		<value>CALLE4</value>
+		<value>VERTIZ</value>
+	</util:set>
+	
+	<util:set id="exclusiones">
+	<value>Pedido</value>
+	<value>PedidoDet</value>
+	<value>Folio</value>
+
+	</util:set>
+      
+	<util:set id="catalogos">
+      	<value>Producto</value>
+      	<value>ListaDePrecios</value>
+      	<value>ListaDePreciosDet</value>
+      	<value>Cliente</value>
+      	<value>ClienteCredito</value>
+      	<value>Linea</value>
+      	<value>Marca</value>
+      	<value>Clase</value>
+      	<value>Proveedor</value>
+      	<value>Chofer</value>
+      	<value>ChoferFacturista</value>
+      	<value>User.class</value>
+		<value>Permiso</value>
+		<value>Role</value>
+		<value>ListaDePreciosCliente</value>
+		<value>ListaDePreciosClienteDet</value>
+		<value>Socio</value>
+		<value>Transporte</value>
+		<value>CheckPlusOpcion</value>
+		<value>CheckPlusVenta</value>
+		<value>CheckPlusCliente</value>
+		<value>CheckPlusReferenciaBancaria</value>
+		<value>CheckPlusDocumento</value>
+	</util:set>
+      
+	<util:set id="entidades">
+    	<value>Existencia</value>
+    	<value>Compra2</value>
+   	    <value>SolicitudDeTraslado</value>
+   	    <value>SolicitudDeTrasladoDet</value>
+      	<value>Traslado</value>
+      	<value>TrasladoDet</value>
+      	<value>Embarque</value> 
+      	<value>Entrega</value>
+      	<value>EntregaDet</value>
+      	<value>SolicitudDeDeposito</value>
+      	<value>PagoConDeposito</value>
+      	<value>AplicacionDePago</value>
+      	<value>AplicacionDeNota</value>
+      	<value>CompraUnitaria</value>
+      	<value>NotaDeCreditoDevolucion</value>
+      	<value>NotaDeCreditoBonificacion</value>
+      	<value>CargoPorTesoreria</value>
+      	<value>AsignacionVentaCE</value>
+      	<value>TipoDeCambio</value>
+      	<value>SolicitudDeModificacion</value>
+      	<value>AutorizacionDeAbono</value>
+      	<value>AutorizacionDeAplicacionCxC</value>
+      	<!--
+		   <value>com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito</value>
+		   <value>com.luxsoft.siipap.cxc.model.PagoConEfectivo</value>
+		   <value>com.luxsoft.siipap.cxc.model.AplicacionDePago</value>
+		   <value>com.luxsoft.sw3.cfd.model.ComprobanteFiscal</value>
+           <value>com.luxsoft.siipap.inventarios.model.Movimiento</value>
+           <value>com.luxsoft.siipap.inventarios.model.Inventario</value>
+ 		   <value>com.luxsoft.siipap.compras.model.DevolucionDeCompra</value> 	
+           <value>com.luxsoft.siipap.inventarios.model.Transformacion</value> 	
+           <value>com.luxsoft.siipap.ventas.model.Devolucion</value> 
+		   <value>com.luxsoft.siipap.model.core.Cliente</value> 
+		   <value>com.luxsoft.siipap.cxc.model.Ficha</value>
+		    --> 
+   	</util:set>
+      
+      <bean id="auditLogListener" class="com.luxsoft.sw3.replica.AuditLogListener">
+      	<property name="sucursalOrigen" value="${sucursalOrigen}"/>
+      	<property name="destinos" ref="destinos"/>
+      	<property name="entidades" ref="entidades"/>
+      	<property name="catalogos" ref="catalogos"/>
+      	<property name="exclusiones" ref="exclusiones"/>
+		<property name="sessionFactory">
+			<bean class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+				<property name="dataSource" >
+						<bean
+							class="org.apache.commons.dbcp.BasicDataSource"
+							destroy-method="close"
+							p:driverClassName="com.mysql.jdbc.Driver"
+        					p:url="${jdbc.url}"
+        					p:username="${jdbc.username}"
+        					p:password="${jdbc.password}"
+        					p:initialSize="0"
+        					p:maxActive="2"
+							p:maxIdle="2"
+        					p:maxWait="20000"	
+				/>
+				</property>
+				<property name="hibernateProperties">
+					<props>
+						<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+						<prop key="hibernate.query.substitutions">true 'Y', false 'N'</prop>
+				        <prop key="hibernate.show_sql">false</prop>
+        				<prop key="hibernate.format_sql">true</prop>
+					</props>
+				</property>
+				<property name="annotatedClasses">
+					<value>com.luxsoft.sw3.replica.AuditLog</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+      
+       
+       <bean id="existenciasListener"  class="com.luxsoft.sw3.aop.ExistenciasListener"/>
+       <bean id="abonoListener" 	   class="com.luxsoft.sw3.aop.AbonoListener"/>
+       <bean id="cargoListener" 	   class="com.luxsoft.sw3.aop.CargoListener"/>
+       <bean id="juridicoListener" 	   class="com.luxsoft.sw3.aop.JuridicoListener"/>
+
+    <!-- Hibernate SessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="hibernateProperties">
+            <value>
+                hibernate.dialect=${hibernate.dialect}
+                hibernate.query.substitutions=true 'Y', false 'N'
+<!--                 hibernate.cache.use_second_level_cache=true -->
+<!--                 hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider -->
+                hibernate.show_sql=false
+				hibernate.format_sql=true
+            </value>            
+        </property>
+         <property name="eventListeners">
+        	<map>
+        		<entry key="post-insert">
+        			<list>
+        				<ref bean="replicaLogger"/>
+        				<ref bean="auditLogListener"/>
+        				<!-- <ref bean="abonoListener"/>
+        				<ref bean="cargoListener"/>
+        				<ref bean="juridicoListener"/> -->
+        			</list>
+        		</entry>
+        		<entry key="post-update">
+        			<list>
+        				<ref bean="replicaLogger"/>
+        				<ref bean="auditLogListener"/>
+        				<bean class="com.luxsoft.sw3.replica.ProductoLogListener"/>
+        				<!-- <ref bean="abonoListener"/>
+        				<ref bean="cargoListener"/> -->
+        			</list>
+        		</entry>
+        		<entry key="post-delete">
+        			<list>
+        				<ref bean="replicaLogger"/>
+        				<ref bean="auditLogListener"/>
+        			</list>
+        		</entry>        		
+        		<entry key="pre-update" value-ref="existenciasListener"></entry>
+        		<entry key="pre-insert" value-ref="existenciasListener"></entry>        		
+        	</map>        	 
+        </property>
+          
+    </bean>
+        
+   	<bean id="replicaLogger"
+   		class="com.luxsoft.sw3.replica.ReplicationLoggerOficinas">
+   		<property name="replicar" value="${serviceLocator.replicar}"/>
+   		<property name="sucursalOrigen" value="${sucursal.name}"/>   		
+   		<property name="messageCreator">
+   			<bean class="com.luxsoft.sw3.replica.ReplicaMessageCreator"/>
+   		</property>   		
+   	</bean>
+   	
+   
+
+    <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    	<constructor-arg ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Sistema de replica SiipapEx to Siipa DBF -->
+    
+    <bean id="exportadorDeProductos" class="com.luxsoft.siipap.replica.ExportadorDeProductos"/>
+    
+    <bean id="exportadorDeExistencias" class="com.luxsoft.siipap.replica.ExportadorDeExistencias"/>
+    
+    <bean id="exportManager" class="com.luxsoft.siipap.replica.aop.ExportadorManager">
+    	<property name="exportadorDeProductos" ref="exportadorDeProductos"/>
+    	<property name="exportadorDeSaldos" ref="exportadorDeExistencias"/>
+    	<!-- <property name="destino" value="${replica.target}"/> --> 
+    	 <!-- <property name="destino" value="G:\\SIIPAP\\ARCHIVOS\\COMUNICA\\"/> --> 
+    	<!--  <property name="destino" value="C:\\PRUEBAS\\REPLICA\\"></property>-->
+    </bean>
+
+    <!-- UniversalDao - can be used when doing standard CRUD - made available 
+        for those who don't mind casting.  If you don't want to cast, look at 
+        'fooDao' below. -->
+    <bean id="universalDao" class="com.luxsoft.siipap.dao.hibernate.UniversalDaoHibernate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="lookupDao" class="com.luxsoft.siipap.dao.hibernate.LookupDaoHibernate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="userDao" class="com.luxsoft.siipap.dao.hibernate.UserDaoHibernate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="roleDao" class="com.luxsoft.siipap.dao.hibernate.RoleDaoHibernate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- If you want to be able to do simple CRUD for new domain objects without 
+        having to cast, you don't have create a Dao interface and implementation 
+        for that domain object, you simply have to do the following.  
+        
+        eg... 'fooDao'
+    
+    <bean id="fooDao" class="com.luxsoft.siipap.dao.hibernate.GenericDaoHibernate">
+        <constructor-arg value="com.luxsoft.siipap.model.Foo"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    You will need to create a Dao interface and implementation for that 
+        domain object if you need more than simple CRUD to occur.  
+        (finders, bulk update/delete, etc.)
+    -->
+
+    <!-- Add new DAOs here -->
+    
+    
+    
+    <bean id="departamentoDao" 
+    	class="com.luxsoft.siipap.dao.hibernate.GenericDaoHibernate">
+    	<constructor-arg value="com.luxsoft.siipap.model.Departamento"/>
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="localidadesDao"
+    	class="com.luxsoft.siipap.dao.LocalidadesDaoImpl">
+    </bean>
+
+
+</beans>

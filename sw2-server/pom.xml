@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>sw2</artifactId>
+    <groupId>com.luxsoft.siipap</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>  
+  <artifactId>sw2-server</artifactId>  
+  <name>sw2-server</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <description>Servidor central de servicios empresariales para SiipapWin 2</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.luxsoft.siipap</groupId>
+			<artifactId>sw2-ui</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>net.sf.flexjson</groupId>
+            <artifactId>flexjson</artifactId>
+            <version>2.1</version>
+        </dependency>
+	</dependencies>
+	<build>
+<!-- 		<finalName>central-server</finalName> -->
+		<plugins>
+			<!-- Configuracion de maven-assembly-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<!-- Configuracion de maven-jar-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!-- Configuracion de archiver -->
+					<archive>
+						<manifest>
+							<!-- Classpath is added to the manifest of the created jar file. -->
+                            <addClasspath>true</addClasspath>
+                            <!--
+                               Configures the classpath prefix. This configuration option is
+                               used to specify that all needed libraries are found under lib/
+                               directory.
+                           -->
+                           <classpathPrefix>lib/</classpathPrefix>
+                           <!-- Specifies the main class of the application -->
+                           <mainClass>com.luxsoft.sw2.server.ui.SWServer</mainClass>
+                           
+						</manifest>	
+						<manifestEntries>
+    						<Class-Path>. log4j.xml</Class-Path>
+  						</manifestEntries>					
+					</archive>
+					<excludes>
+						<exclude>**/swx-jdbc.properties</exclude>
+						<exclude>**/log4*.*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

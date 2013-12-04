@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<description>
+		Contexto para hospedar objetos de tipo javax.swing.Action
+	</description>
+
+	<bean id="viewActionCreator"
+		class="com.luxsoft.siipap.swing.views.ViewActionCreator">
+	</bean>
+
+	<bean id="exitApplication"
+		class="com.luxsoft.siipap.swing.actions.ExitAction">
+		<property name="application" ref="application" />
+	</bean>
+
+	<bean id="showWelcomeView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="welcomeView" />
+	</bean>
+	
+	<bean id="clientesBrowser"
+     	class="com.luxsoft.siipap.cxc.ui.clientes.ClienteBrowser"
+     	factory-method="getShowAction">
+   	</bean>
+
+	<!--  Kernell -->
+	<bean id="mostrarKernell"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="kernellView" />
+	</bean>
+	
+	<bean id="showReportView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="reportsView" />
+	</bean>
+	
+
+	<!--                Catalogos	Generales			-->
+
+	<bean id="empresaBrowser" class="com.luxsoft.siipap.EmpresaBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="sucursalBrowser"
+		class="com.luxsoft.siipap.SucursalBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="departamentoBrowser"
+		class="com.luxsoft.siipap.DepartamentoBrowser"
+		factory-method="getShowAction" />
+	
+	<bean id="lineasBrowser"
+     	class="com.luxsoft.siipap.swx.catalogos.LineaBrowser"
+     	factory-method="getShowAction">
+   	</bean>
+     
+ 	<bean id="clasesBrowser"
+     	class="com.luxsoft.siipap.swx.catalogos.ClaseBrowser"
+     	factory-method="getShowAction">
+   	</bean>
+
+ 	<bean id="marcasBrowser"
+     	class="com.luxsoft.siipap.swx.catalogos.MarcaBrowser"
+     	factory-method="getShowAction">
+   	</bean>
+
+	<bean id="productosBrowser"
+   		class="com.luxsoft.siipap.swx.catalogos.ProductoBrowser"
+   		factory-method="getShowAction"/>
+   		
+   	<bean id="showProductosView"
+   		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+   		<property name="viewId" value="productosView"/>
+   	</bean>
+   	
+   	<bean id="proveedoresBrowser"
+     	class="com.luxsoft.siipap.swx.catalogos.ProveedorBrowser"
+     	factory-method="getShowAction">
+   	</bean>
+   	
+   	
+   
+   	
+   	<!--  Tesoreria -->	
+
+	<bean id="mantenimientoDeTarjetas"
+		class="com.luxsoft.siipap.tesoreria.catalogos.TarjetasBrowser"
+		factory-method="getShowAction">
+	</bean>
+	
+	<bean id="solicitudesDeDepositosView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="tesoreria.solicitudParaDepositosView"/>
+	</bean>
+	
+	
+   	
+   	<!--  Modulo de Compras y CXP-->
+	
+	<bean id="showComprasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="comprasView"/>
+	</bean>
+	<bean id="showListasDePrecios"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="compras.listaDePreciosView"/>
+	</bean>
+	
+	<bean id="showCXPView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="cxpView"/>
+	</bean>
+	
+	<bean id="consultasBI"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="cxp.Consultas"/>
+	</bean>
+	
+	<bean id="analisisDeComprasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="compras.analisisView"/>
+	</bean>
+	
+	<!-- Inventarios -->
+	
+	<bean id="consultaDeMovimientosDeInventario"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="inventarios.movimientosView"/>
+	</bean>
+	
+	<bean id="consultaDeCostosDeInventario"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="inventarios.CostosView"/>
+	</bean>
+	
+	<!-- Ventas -->
+	
+	<bean id="preciosDeVenta"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="preciosDeVentaView"/>
+	</bean>
+	
+	<bean id="showVentasTaskView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="ventasMainView"/>
+	</bean>
+	
+	<bean id="showPolizaDeVentasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="polizasDeVentasView"/>
+	</bean>
+	
+	<bean id="showAnalisisDeVentasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="analisisDeVentasView"/>
+	</bean>
+	
+	
+
+	<!--                GASTOS			-->
+
+	<bean id="gastos.tiposDeProveedorBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.TipoDeProveedorBrowser"
+		factory-method="getShowAction">
+	</bean>
+
+	<bean id="gastos.proveedoresBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.ProveedorDeGastosBrowser"
+		factory-method="getShowAction">
+	</bean>
+
+	<bean id="gastos.conceptosBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.ConceptoDeGastosBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="gastos.productosBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.ProductoBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="gastos.ordenDeCompraBrowser"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="gastos.comprasView" />
+	</bean>
+
+
+	<bean id="gastos.showRequisicionesView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="gastos.requisicionesDePagoView" />
+	</bean>
+
+	<bean id="gastos.showRecepcion"
+		class="com.luxsoft.siipap.gastos.actions.RecepcionAction">
+	</bean>
+
+	<bean id="gastos.showAnalisisIETU"
+		class="com.luxsoft.siipap.gastos.actions.IetuAction">
+	</bean>
+
+	<bean id="gastos.showEstadoDeCuenta"
+		class="com.luxsoft.siipap.gastos.actions.EstadoDeCuentaAction">
+	</bean>
+
+	<bean id="gastos.showPagosView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="gastos.pagosView" />
+	</bean>
+
+	<bean id="gastos.generarPolizaEgresoCompras"
+		class="com.luxsoft.siipap.gastos.actions.GenerarPolizaEgresoCompras">
+	</bean>
+
+	<bean id="gastos.showPolizasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="gastos.polizasContablesView" />
+	</bean>
+	
+	<bean id="gastos.showAnalisisDeGastos"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="analisisDeGastosView"/>
+	</bean>
+
+	<!-- Activo Fijo -->
+
+	<bean id="gastos.iNPCBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.INPCBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="gastos.clasificacionDeActivosBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.ClasificacionDeActivoBrowser"
+		factory-method="getShowAction" />
+	<bean id="gastos.consignatarioBrowser"
+		class="com.luxsoft.siipap.gastos.catalogos.ConsignatariosBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="gastos.activoFijoBrowser"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="gastos.activoFijoView" />
+	</bean>
+
+
+	<!-- Consulta de ánalisis -->
+	<bean id="showBIConsultasView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="bi.analisisDeVentasView"/>
+	</bean>
+
+	<bean id="ContralorDeEmbarques"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="embarques.controlDeEmbarques"/>
+	</bean>
+
+	<bean id="showMaquilaView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="maquilaView"/>
+	</bean>
+	
+	<!-- Comprobantes Fiscales Digitales CFD -->
+	
+	<bean id="cfdCertificados"
+		class="com.luxsoft.sw3.cfd.ui.selectores.CertificadosBrowser"
+		factory-method="getShowAction"/>
+		
+	<bean id="cfdFolios"
+		class="com.luxsoft.sw3.cfd.ui.selectores.FoliosBrowser"
+		factory-method="getShowAction"/>
+		
+	<bean id="showComprobantesFiscalesView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="comprasView"/>
+	</bean>
+
+</beans>

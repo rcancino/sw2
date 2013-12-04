@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+
+
+	<description>
+		Definiciones e infraestructura basica par la persistencia en Data Bases
+	</description>
+	
+	<bean id="replicaLogger"
+   		class="com.luxsoft.sw3.replica.ReplicationLogger"
+   		lazy-init="true">
+	    <property name="sucursalOrigen" value="${sucursalOrigen}"/>
+	    <!-- <property name="activo" value="${replicaJmsActiva}"></property> -->
+   	    <property name="clases">
+   	    	<set>
+   	    	   	<value>com.luxsoft.siipap.inventarios.model.Existencia</value>	
+   	    	   	<value>com.luxsoft.siipap.compras.model.Compra2</value>
+   	    	   	<value>com.luxsoft.siipap.compras.model.RecepcionDeCompra</value>
+		   		<value>com.luxsoft.siipap.ventas.model.Venta</value>		      
+		   		<value>com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado</value>
+		   		<value>com.luxsoft.siipap.inventarios.model.Traslado</value>
+		   		<value>com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito</value>
+		   		<value>com.luxsoft.siipap.cxc.model.Abono</value>
+		   		<value>com.luxsoft.sw3.cfd.model.ComprobanteFiscal</value>  
+		   		<value>com.luxsoft.sw3.embarque.Embarque</value> 
+                <value>com.luxsoft.siipap.inventarios.model.Movimiento</value> 
+ 		   		<value>com.luxsoft.siipap.compras.model.DevolucionDeCompra</value> 	
+                <value>com.luxsoft.siipap.inventarios.model.Transformacion</value> 	
+                <value>com.luxsoft.siipap.ventas.model.Devolucion</value> 
+		   		<value>com.luxsoft.siipap.model.core.Cliente</value> 
+		   		<value>com.luxsoft.siipap.cxc.model.Ficha</value> 
+		   		<value>com.luxsoft.siipap.maquila.model.RecepcionDeMaquila</value>
+   	    	</set>
+   	    </property> 
+   	</bean>
+	
+	
+	<bean id="existenciasListener" class="com.luxsoft.sw3.aop.ExistenciasListener"/>
+	
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource"
+	/>
+	
+	<util:properties id="hibernateProperties">
+		<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+		<prop key="hibernate.query.substitutions">true 'Y', false 'N'</prop>
+       <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">true</prop>
+	</util:properties>
+	
+	
+	<util:map id="hibernateEventListeners">
+		<entry key="post-commit-update" value-ref="replicaLogger"></entry>
+        <entry key="post-commit-delete" value-ref="replicaLogger"></entry>
+        <entry key="post-commit-insert" value-ref="replicaLogger"></entry> 
+        <entry key="pre-insert" value-ref="existenciasListener"></entry>
+        <entry key="pre-update" value-ref="existenciasListener"></entry>
+	</util:map>	
+	
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:hibernateProperties-ref="hibernateProperties"		
+		p:configLocation="classpath:spring/hibernate.cfg.xml"
+		p:event-listeners-ref="hibernateEventListeners"
+		p:entityInterceptor-ref="auditLogInterceptor"
+		/>
+		
+		
+    <bean id="transactionManager" 
+    	class="org.springframework.orm.hibernate3.HibernateTransactionManager"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+   <!--   <bean id="globalInterceptor" class="com.luxsoft.sw3.services.aop.GlobalInterceptor"/>-->
+    	
+   
+    <bean id="hibernateTemplate" 
+    	class="org.springframework.orm.hibernate3.HibernateTemplate"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="userDao" class="com.luxsoft.siipap.dao.hibernate.UserDaoHibernate"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="universalDao" class="com.luxsoft.siipap.dao.hibernate.UniversalDaoHibernate"
+    	p:sessionFactory-ref="sessionFactory"/>
+	
+	<bean id="clienteDao" class="com.luxsoft.siipap.dao.core.ClienteDaoImpl"
+		p:sessionFactory-ref="sessionFactory"/>
+		
+	<bean id="sucursalDao" class="com.luxsoft.siipap.dao.SucursalDaoImpl"
+		p:sessionFactory-ref="sessionFactory"/>
+	
+	<bean id="productoDao" class="com.luxsoft.siipap.dao.core.ProductoDaoImpl"
+		p:sessionFactory-ref="sessionFactory"/>
+		
+	<bean id="proveedorDao" class="com.luxsoft.siipap.compras.dao.ProveedorDaoImpl"
+		p:sessionFactory-ref="sessionFactory"/>	
+	
+		
+	<bean id="existenciaDao" class="com.luxsoft.siipap.inventarios.dao.ExistenciaDaoImpl"
+		p:sessionFactory-ref="sessionFactory"
+		p:productoDao-ref="productoDao"
+		p:jdbcTemplate-ref="jdbcTemplate"/>
+	
+	<bean id="movimientoDao" class="com.luxsoft.siipap.inventarios.dao.MovimientoDaoImpl"
+		p:sessionFactory-ref="sessionFactory"/>
+	
+	<bean id="descPorVolDao" class="com.luxsoft.siipap.ventas.dao.DescPorVolDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="listaDePreciosClienteDao" class="com.luxsoft.siipap.ventas.dao.ListaDePreciosClienteDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="ventaDao" class="com.luxsoft.siipap.ventas.dao.VentaDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="listaDePreciosProveedor" class="com.luxsoft.siipap.compras.dao.ListaDePreciosDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+		
+	<!-- Todos los DAO's de sw3 deben ser detectados en forma automatica -->   
+	 
+	<context:component-scan base-package="com.luxsoft.siipap.dao.core"/> 
+    <context:component-scan base-package="com.luxsoft.sw3.ventas"/>  
+    <context:component-scan base-package="com.luxsoft.sw3.dao"/>
+    <context:component-scan base-package="com.luxsoft.sw3.tesoreria"/>
+    <context:component-scan base-package="com.luxsoft.siipap.compras.dao"/>
+    <context:component-scan base-package="com.luxsoft.sw3.cfd.services"/>
+       
+    <!-- <bean id="pedidoDao" class="com.luxsoft.sw3.ventas.dao.PedidoDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/> -->
+    
+    <bean id="entradaDeMaterialDao" class="com.luxsoft.sw3.maquila.dao.EntradaDeMaterialDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+    
+     <bean id="ordenDeCorteDao" class="com.luxsoft.sw3.maquila.dao.OrdenDeCorteDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+     <bean id="recepcionDeCorteDao" class="com.luxsoft.sw3.maquila.dao.RecepcionDeCorteDaoImpl"
+        p:sessionFactory-ref="sessionFactory"/>
+    
+    <bean id="recepcionDeMaquilaDao" class="com.luxsoft.sw3.maquila.dao.RecepcionDeMaquilaDaoImpl"
+        p:sessionFactory-ref="sessionFactory"/>
+        
+    <bean id="salidaDeBobinasDao" class="com.luxsoft.sw3.maquila.dao.SalidaDeBobinasDaoImpl"
+        p:sessionFactory-ref="sessionFactory"/>
+        
+    <bean id="analisisDeMaterialDao" class="com.luxsoft.sw3.maquila.dao.AnalisisDeMaterialDaoImpl"
+        p:sessionFactory-ref="sessionFactory"/>
+</beans>

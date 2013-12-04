@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		
+		>
+	
+	<bean id="generadorDePdfs" class="com.luxsoft.sw3.cfd.task.GeneradorDePdf"/>
+	
+	<bean id="generadorDePdfsJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="generadorDePdfs"
+		p:targetMethod="generar"
+		p:concurrent="false"/>
+	<bean id="generadorDePdfsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="generadorDePdfsJob"
+		p:cronExpression="0 0 15,19,20 * * ? "
+		/>
+		
+	<!--Global  Scheduler -->
+	
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="generadorDePdfsTrigger"/>
+			</list>			
+		</property>
+	</bean>
+	
+	</beans>

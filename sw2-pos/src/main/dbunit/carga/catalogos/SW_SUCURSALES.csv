@@ -1,0 +1,9 @@
+SUCURSAL_ID, CLAVE, FOLIO_INV, HABILITADA, NOMBRE, EMPRESA_ID
+"1","1","0","true","OFICINAS","1"
+"2","10","2","true","CALLE 4","1"
+"3","12","3","true","TACUBA","1"
+"4","11","4","false","ERMITA","1"
+"5","5","5","true","BOLIVAR","1"
+"6","3","6","true","ANDRADE","1"
+"7","9","7","true","QUERETARO","1"
+"8","50","0","true","TRANSITO","1"

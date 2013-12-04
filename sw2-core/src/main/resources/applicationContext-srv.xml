@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+
+    <!-- =================================================================== -->
+    <!-- AOP: Configuration and Aspects                                      -->
+    <!-- =================================================================== -->
+    
+    <bean id="jdbcResources"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+            <list>
+                <value>classpath:swx-jdbc.properties</value>               
+            </list>
+        </property>
+	</bean> 
+    
+    <aop:config>
+        <aop:advisor id="userManagerTx" 
+        	advice-ref="userManagerTxAdvice" 
+        	pointcut="execution(* *..service.UserManager.*(..))" 
+        	order="0"/>        
+        <aop:advisor id="userManagerSecurity" 
+        	advice-ref="userSecurityAdvice" 
+        	pointcut="execution(* *..service.UserManager.saveUser(..))" 
+        	order="1"/>
+        <aop:advisor id="managerTx" 
+        	advice-ref="txAdvice" pointcut="execution(* *..service.*Manager.*(..))" order="2"/>
+    </aop:config>
+    
+    
+    <!-- Enable @Transactional support -->
+    <tx:annotation-driven/>
+    
+    <!-- Fix bug in Spring 2.0.6: http://issues.appfuse.org/browse/APF-887 -->
+    <bean id="annotationTransactionAspect" class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" 
+    	factory-method="aspectOf" dependency-check="none" lazy-init="false">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+    
+    <!-- Enable @AspectJ support -->
+    <aop:aspectj-autoproxy/>
+
+    <!-- Enable @Configured support -->
+    <aop:spring-configured/>
+    
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <!-- Read-only commented out to make things easier for end-users -->
+            <!-- http://issues.appfuse.org/browse/APF-556 -->
+            <!--tx:method name="get*" read-only="true"/-->
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <tx:advice id="userManagerTxAdvice">
+        <tx:attributes>
+            <tx:method name="save*" rollback-for="UserExistsException"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <bean id="userSecurityAdvice" class="com.luxsoft.siipap.service.UserSecurityAdvice"/>
+    
+    <!-- =================================================================== -->
+    <!-- Mail: Sender and Velocity configuration                             -->
+    <!-- =================================================================== -->
+ <!--    <bean id="mailEngine" class="com.luxsoft.siipap.service.MailEngine">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="velocityEngine" ref="velocityEngine"/>
+        <property name="from" value="${mail.default.from}"/>
+    </bean> -->
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/> 
+        
+         <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <value>
+                mail.smtp.auth=true
+                mail.smtp.starttls.enable=true
+                mail.smtp.port=587
+            </value>
+        </property>
+   </bean>
+  
+    
+    <!-- Configure Velocity for sending e-mail -->
+  <!-- <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="velocityProperties">
+            <props>
+                <prop key="resource.loader">class</prop>
+                <prop key="class.resource.loader.class">
+                    org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+                </prop>
+                <prop key="velocimacro.library"></prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" scope="prototype">
+        <property name="from" value="${mail.default.from}"/>
+    </bean> 
+-->
+    <!-- =================================================================== -->
+    <!-- Security classes from Acegi - used to configure Password Encryption -->
+    <!-- in UserManagerImpl. Overridden in security.xml.                     -->
+    <!-- =================================================================== -->
+    <!-- =================================================================== -->
+    
+    <bean id="authenticationManager"
+    	class="org.acegisecurity.providers.ProviderManager">
+    	<property name="providers" ref="daoAuthenticationProvider"/>
+    </bean>
+    
+    <bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+         <property name="userDetailsService" ref="userDao"/>
+         <property name="passwordEncoder" ref="passwordEncoder"/>
+         <!-- <property name="userCache"></property> -->
+    </bean>
+
+    <bean id="passwordEncoder" class="org.acegisecurity.providers.encoding.ShaPasswordEncoder"/>
+    
+    <bean id="loginManager"
+    	class="com.luxsoft.siipap.service.LoginManager">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+    
+    <bean id="autorizacionesManager"
+    	class="com.luxsoft.siipap.service.AutorizacionesManager">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+    <!-- =================================================================== -->
+    <!-- Managers: For accessing DAOs                                        -->
+    <!-- =================================================================== -->
+    <bean id="universalManager" class="com.luxsoft.siipap.service.impl.UniversalManagerImpl">
+        <property name="dao" ref="universalDao"/>
+    </bean>
+    
+    <bean id="lookupManager" class="com.luxsoft.siipap.service.impl.LookupManagerImpl">
+        <property name="lookupDao" ref="lookupDao"/>
+    </bean>
+
+    <bean id="userManager" class="com.luxsoft.siipap.service.impl.UserManagerImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="authenticationProvider" ref="daoAuthenticationProvider"/>
+    </bean>
+
+    <bean id="roleManager" class="com.luxsoft.siipap.service.impl.RoleManagerImpl">
+        <property name="roleDao" ref="roleDao"/>
+    </bean>
+
+    <!-- Add new Managers here -->
+    
+    
+    <bean id="productoManager"
+    	class="com.luxsoft.siipap.service.core.ProductoManagerImpl">
+    	<constructor-arg ref="productoDao"></constructor-arg>
+    	<property name="jmsTemplate" ref="jmsTemplate"/>
+    </bean>
+    
+    <bean id="proveedorManager"
+    	class="com.luxsoft.siipap.service.core.ProveedorManagerImpl">
+    	<constructor-arg ref="proveedorDao"></constructor-arg>
+    </bean>
+    
+    <bean id="clienteManager"
+    	class="com.luxsoft.siipap.service.core.ClienteManagerImpl">
+    	<constructor-arg ref="clienteDao"></constructor-arg>
+    	<property name="clienteServices" ref="clienteServices"/>
+    	<property name="sucursalDao" ref="sucursalDao"></property>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    	<property name="folioDao" ref="folioDao"/>
+    	<property name="jmsTemplate" ref="jmsTemplate"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="comprasManager" class="com.luxsoft.sw3.services.ComprasManagerImpl">
+		<property name="compraDao" ref="compraDao"/>
+		<property name="listaDePreciosDao" ref="listaDePreciosDao"/>
+		<property name="existenciaDao" ref="existenciaDao"/>
+		<property name="folioDao" ref="folioDao"/>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jmsTemplate" ref="jmsTemplate"/>
+    </bean>
+    
+    <!-- CXP Managers -->
+    
+    <bean id="cxpManager"
+    	class="com.luxsoft.siipap.cxp.service.CXPManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="contraReciboManager"
+    	class="com.luxsoft.siipap.cxp.service.ContraReciboManagerImpl">
+    	<constructor-arg ref="contraReciboDao"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="cxpFacturaManager" class="com.luxsoft.siipap.cxp.service.FacturaManagerImpl">
+    	<constructor-arg ref="facturaDao"></constructor-arg>
+    	<property name="template" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="cxpAbonosManager"
+    	class="com.luxsoft.siipap.cxp.service.CXPAbonosManagerImpl">
+    	<property name="pagoDao" ref="cxpPagoDao"/>
+    	<property name="notaDao" ref="cxpNotaDao"/>
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Inventarios -->
+    
+    <bean id="inventarioManager"
+    	class="com.luxsoft.siipap.inventarios.service.InventarioManagerImpl">
+    	<constructor-arg ref="movimientoDao"></constructor-arg>
+    	<property name="existenciasDao" ref="existenciaDao"/>
+    	<property name="inventarioDao" ref="inventarioDao"></property>
+    	<property name="trasladoDao" ref="trasladoDao"/>
+    	<property name="entradaPorCompraDao" ref="entradaPorCompraDao"/>
+    	<property name="kitDao" ref="kitDao"/>
+    	<property name="universalDao" ref="universalDao"/>
+    	<property name="costoPromedioManager" ref="costoPromedioManager"/>
+    </bean>
+    
+    <bean id="costoPromedioManager"
+    	class="com.luxsoft.siipap.inventarios.service.CostoPromedioManagerImpl">
+    	<constructor-arg ref="costoPromedioDao"></constructor-arg>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>    	
+    	<property name="productoManager" ref="productoManager"/>
+    </bean>
+    
+    <bean id="costoUltimoManager"
+    	class="com.luxsoft.siipap.inventarios.service.CostoUltimoManager">
+    	<property name="costoPromedioManager" ref="costoPromedioManager"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
+    <bean id="costosServices"
+    	class="com.luxsoft.siipap.inventarios.service.CostosServices">
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="costoPromedioManager" ref="costoPromedioManager"/>
+    	<property name="costoUltimoManager" ref="costoUltimoManager"/>
+    	<property name="transformacionesManager" ref="transformacionesManager"/>
+    	<property name="existenciaDao" ref="existenciaDao"/>
+    	
+    </bean>
+    
+    <bean id="transformacionesManager"
+    	class="com.luxsoft.siipap.inventarios.service.TransformacionesManagerImpl">
+    	<constructor-arg>
+    		<bean class="com.luxsoft.siipap.dao.hibernate.GenericDaoHibernate">
+                 <constructor-arg value="com.luxsoft.siipap.inventarios.model.TransformacionDet"/>
+                 <property name="sessionFactory" ref="sessionFactory"/>
+             </bean>    	
+    	</constructor-arg>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <!-- Ventas Managers -->
+    
+    
+    <bean id="ventasManager"
+    	class="com.luxsoft.siipap.ventas.service.VentasManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="ventaDao" ref="ventaDao"/>
+    </bean>
+    
+    <bean id="descuentosManager"
+    	class="com.luxsoft.siipap.ventas.service.DescuentosManagerImpl">
+    	<property name="clienteDao" ref="clienteDao"/>
+    	<property name="descPorVolDao" ref="descPorVolDao"/>
+    	<property name="ventasManager" ref="ventasManager"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <!-- CXC -->
+    
+    <bean id="cxcManager"
+    	class="com.luxsoft.siipap.cxc.service.CXCManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="pagoDao" ref="pagoDao"/>
+    	<property name="listaDePreciosClienteDao" ref="listaDePreciosClienteDao"/>
+    	<property name="clienteManager" ref="clienteManager"/>
+    	<property name="notaDao" ref="notaDeCreditoDao"/>
+    	<property name="cargoDao" ref="cargoDao"/>
+    	<property name="clienteServices" ref="clienteServices"/>
+    	<property name="notaDeCargoDao" ref="notaDeCargoDao"/>
+    	<property name="estadoDeCuentaManager" ref="estadoDeCuentaManager"/>
+    	<property name="comprobanteDigitalManager" ref="cfdManager"/>
+    	<property name="taskExecutor" ref="taskExecutor"/>
+    </bean>
+    
+    <bean id="clienteServices"
+    	class="com.luxsoft.siipap.cxc.service.ClienteServices">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="estadoDeCuentaManager"
+    	class="com.luxsoft.siipap.cxc.service.EstadoDecuentaManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="depositosManager"
+    	class="com.luxsoft.siipap.cxc.service.DepositosManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="folioDao" ref="folioDao"/>
+    </bean>
+    
+    <bean id="notaDeCreditoManager"
+    	class="com.luxsoft.siipap.cxc.service.NotaDeCreditoManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="listaDePreciosClienteManager"
+    	class="com.luxsoft.sw3.services.ListaDePreciosClienteManagerImpl">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="listaDePreciosClienteDao" ref="listaDePreciosClienteDao"/>
+    </bean>
+    
+    <!-- Gastos -->
+    
+    <bean id="requisicionesManager"
+    	class="com.luxsoft.siipap.service.tesoreria.RequisicionesManagerImpl">
+    	<constructor-arg ref="requisicionDao"/>
+    	<property name="cargoAbonoDao" ref="cargoAbonoDao"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="comprasDeGastosManager"
+    	class="com.luxsoft.siipap.service.gastos.ComprasDeGastosManagerImpl">
+    	<constructor-arg ref="compraDeGastosDao"/>    	
+    	<property name="cargoAbonoDao" ref="cargoAbonoDao"></property>
+    </bean>
+    
+      <!-- Maquila -->
+      
+      <bean id="maquilaManager"
+    		class="com.luxsoft.sw3.services.MaquilaManagerImpl">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="entradaDeMaterialDao" ref="entradaDeMaterialDao"/>
+    	<property name="ordenDeCorteDao" ref="ordenDeCorteDao"/>
+    	<property name="recepcionDeCorteDao" ref="recepcionDeCorteDao"/>
+    	<property name="salidaDeBobinasDao" ref="salidaDeBobinasDao"/>
+    	<property name="analisisDeMaterialDao" ref="analisisDeMaterialDao"/>
+     </bean>
+     
+     <!-- Tesoreria -->
+     
+     <bean id="solicitudDeDepositosManager"
+     	class="com.luxsoft.sw3.services.SolicitudDeDepositosManagerImpl">
+     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+     	<property name="folioDao" ref="folioDao"/>
+     	<property name="solicitudDeDepositoDao" ref="solicitudDeDepositosDao"/>
+     	<property name="ingresosManager" ref="ingresosManager"/>
+     	<property name="jmsTemplate" ref="jmsTemplate"/>
+     </bean>	
+    
+    
+    <bean id="ingresosManager"
+     	class="com.luxsoft.sw3.services.IngresosManagerImpl">
+     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+     	<property name="corteDeTarjetaDao" ref="corteDeTarjetaDao"/>
+     	<property name="depositosManager" ref="depositosManager"/>
+     	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+     </bean>	
+     
+     
+	<!-- Comprobantes Fiscales Digitales CFD -->
+	
+	<bean id="cadenaOriginalBuilder" 
+		class="com.luxsoft.sw3.cfd.services.CadenaOriginalBuilderImpl"/>
+		
+	<bean id="selladorDigital" 
+		class="com.luxsoft.sw3.cfd.services.SelladorDigitalImpl"
+		init-method="init">
+		<property name="certificadoDeSelloDigitalDao" ref="certificadoDeSelloDigitalDao"/>
+	</bean>
+		
+	<bean id="cfdManager" 
+		class="com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManagerImpl">
+		<property name="folioFiscalDao" ref="folioFiscalDao"/>		
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="cadenaBuider" ref="cadenaOriginalBuilder"/>
+		<property name="sellador" ref="selladorDigital"/>
+		<property name="certificadoDeSelloDigitalDao" ref="certificadoDeSelloDigitalDao"/>
+	</bean>
+	
+	<bean id="pedidosManager" class="com.luxsoft.siipap.service.ventas.PedidosManagerImpl">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	<bean id="facturasManager" class="com.luxsoft.siipap.service.ventas.FacturasManagerImpl">
+		<property name="folioDao" ref="folioDao"/>		
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="existenciaDao" ref="existenciaDao"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+		<property name="ventaDao" ref="ventaDao"/>
+	</bean>
+	
+	<bean id="cxcMailServices" class="com.luxsoft.sw3.cxc.services.CXCMailServices">
+		<property name="mailSender" ref="mailSender"/>
+	</bean>
+	
+	<bean id="listaDePreciosVentaManager"
+		class="com.luxsoft.siipap.ventas.service.ListaDePreciosVentaManagerImpl">
+		<property name="lisDePreciosVentaDao" ref="listaDePreciosVentaDao"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	</bean>
+	
+	<bean id="cuentasContablesManager"
+		class="com.luxsoft.sw3.contabilidad.services.CuentasContablesManagerImpl">
+		<property name="cuentaContableDao" ref="cuentaContableDao"/>
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+	<bean id="polizasManager" 
+		class="com.luxsoft.sw3.contabilidad.services.PolizasManagerImpl">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+		<property name="polizaDao" ref="polizaDao"/>
+		<property name="saldosManager" ref="saldosDeCuentasManager"/>
+	</bean>
+	
+	<bean id="saldosDeCuentasManager" 
+		class="com.luxsoft.sw3.contabilidad.services.SaldoDeCuentasManagerImpl">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+	<bean id="cierreAnualManager" 
+		class="com.luxsoft.sw3.contabilidad.services.CierreAnualManager">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+	<!-- 
+	<bean id="saldoDeCuentasPorConceptoManager" 
+		class="com.luxsoft.sw3.contabilidad.services.SaldoDeCuentasPorConceptoManagerImpl">
+		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+ -->
+ <bean id="analisisDeCompraManager"
+ 	class="com.luxsoft.siipap.cxp.service.AnalisisDeCompraManager">
+ 	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/> 
+ </bean>
+ 
+ <bean id="anticipoDeComprasManager"
+ 	class="com.luxsoft.siipap.cxp.service.AnticipoDeComprasManager">
+ 	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+	<property name="jdbcTemplate" ref="jdbcTemplate"/> 
+	<property name="facturasManager" ref="cxpFacturaManager"/>
+ </bean>
+
+
+	<bean id="analisisTransformacionesManager"
+ 		class="com.luxsoft.sw3.services.AnalisisDeTransfomracionesManager">
+ 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+ 	</bean>
+ 	
+ 	<bean id="activoFijoManager"
+ 		class="com.luxsoft.sw3.services.ActivoFijoManager">
+ 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+ 	</bean>
+ 	
+ 	<bean id="tesoreriaManager"
+ 		class="com.luxsoft.sw3.services.TesoreriaManager">
+ 		<property name="hibernateTemplate" ref="hibernateTemplate"/>
+		<property name="jdbcTemplate" ref="jdbcTemplate"/>
+ 	</bean>
+
+ 	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+ 		<property name="corePoolSize" value="3" />
+  		<property name="maxPoolSize" value="5" />
+  		<property name="queueCapacity" value="25" />
+	</bean>
+    
+ 	
+	 <bean id="connectionFactory"
+    	class="org.apache.activemq.spring.ActiveMQConnectionFactory" >
+    	<property name="brokerURL" value="${centralBroker.url}"></property>
+    </bean>
+    
+    <bean id="jmsTemplate"
+    	class="org.springframework.jms.core.JmsTemplate">
+    	<property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    
+    <bean id="replicaMessageCreator"
+    	class="com.luxsoft.sw3.replica.ReplicaMessageCreator">
+    	<property name="jmsTemplate" ref="jmsTemplate"/>
+    </bean>
+    
+    <bean id="cfdMailServices" class="com.luxsoft.sw3.cfd.services.CFDMailServices">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="mailSender" ref="mailSender"/>
+    </bean>
+    
+    <bean id="checkplusManager" class="com.luxsoft.sw3.services.CheckplusManager">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
+    <bean id="solicitudDeModificacionesManager" class="com.luxsoft.sw3.services.SolicitudDeModificacionesManager">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    	<property name="folioDao" ref="folioDao"/>
+    </bean>
+    
+    <bean id="simuladorDePreciosManager"
+    	class="com.luxsoft.sw3.services.SimuladorDePreciosManager">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <!-- CFDI components -->
+    <bean id="cfdiSellador" class="com.luxsoft.sw3.cfdi.CFDISellador">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    <bean id="cfdiCadenaBuilder" class="com.luxsoft.sw3.cfdi.CFDICadenaOriginalBuilder"/>
+    
+    <bean id="cfdiFactura" class="com.luxsoft.sw3.cfdi.CFDIFactura">
+    	<property name="cadenaBuilder" ref="cfdiCadenaBuilder"/>
+    	<property name="folioFiscalDao" ref="folioFiscalDao"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="sellador" ref="cfdiSellador"/>
+    </bean>
+ 
+</beans>
+
+

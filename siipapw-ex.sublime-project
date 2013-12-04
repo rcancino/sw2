@@ -1,0 +1,31 @@
+{
+	"build_systems":
+	[
+	],
+	"folders":
+	[
+		{
+			"name": "Core",
+			"path": "sw2-core/src"
+		},
+		{
+			"name": "Pos",
+			"path": "sw2-pos/src"
+		},
+		{
+			"name": "Launcher",
+			"path": "sw2-launcher/src"
+		},
+		{
+			"name": "Replica Server",
+			"path": "sw2-server/src"
+		},
+		{
+			"name": "Replica Sucursal",
+			"path": "sw2-server-suc/src"
+		}
+	],
+	"settings":
+	{
+	}
+}

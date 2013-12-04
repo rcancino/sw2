@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+	
+	
+	<bean id="replicaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+    	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.ClientesCentralizadosPanel" p:title="Clientes"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.ProductosCentralizadosReplicaPanel" p:title="Productos"/>
+     			<value>Operaciones</value>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.DefaultSqlCentralReplicaPanel" 
+     					p:title="Abonos" 
+     					p:sql="SELECT * FROM SX_CXC_ABONOS A WHERE DATE(A.FECHA) BETWEEN ? AND ?"
+     					p:pk="ABONO_ID"
+     					p:entity="com.luxsoft.siipap.cxc.model.Abono"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.SolicitudesParaPagoConDepositoPanel" p:title="Solicitudes de Dep"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.ComprasReplicaPanel" p:title="Compras"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.LP_ClientesPanel" p:title="L. Pre. Clientes"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.ProveedoresPanel" p:title="Proveedores"/>
+     			
+     		</list>
+     		
+     	</property>
+     </bean>
+  
+</beans>

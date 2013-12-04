@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>
+		
+	<bean id="replicationLocalView" 
+    	class="com.luxsoft.sw2.server.ui.consultas.ReplicationLocalView"
+     	/>
+           
+	<bean id="replicaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+    	<property name="panels">
+     		<list>
+     			<ref bean="comprasPanel"/>
+     			<ref bean="recepcionDeComprasPanel"/>
+     			<ref bean="ventasReplicaPanel"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.ExistenciasPanel"	p:title="Existencias"/> 
+     			<ref bean="abonosPanel"/>
+     			<bean class="com.luxsoft.sw2.server.ui.consultas.SolicitudesParaPagoConDepositoPanel" p:title="Solicitudes de Dep"/>
+     		</list>
+     		
+     	</property>
+     </bean>
+	
+		
+	<bean id="comprasPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultCentralReplicaPanel">
+		<constructor-arg value="com.luxsoft.siipap.compras.model.Compra2"/>
+		<property name="properties" value="folio,sucursal.nombre,clave,nombre,fecha,moneda,tc,total,descuentoEspecial,depuracion,consolidada,comentario"/>
+		<property name="labels" value="Folio,Sucursal,Proveedor,Nombre,Fecha,Mon,TC,Total,Desc,Depuración,Consolidada,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Proveedor" value="clave,nombre"/>
+				<entry key="Folio" value="folio"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="recepcionDeComprasPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultCentralReplicaPanel"
+		p:hibernateQuery="from @CLASS s left join fetch s.compra.proveedor p where date(s.fecha) between ? and ?">
+		<constructor-arg value="com.luxsoft.siipap.compras.model.RecepcionDeCompra"/>
+		<property name="properties" value="sucursal.nombre,documento,fecha,compra.proveedor.nombre,compra.folio,compra.fecha"/>
+		<property name="labels" value="Sucursal,Docto,Fecha,Proveedor,Compra,Fecha C"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Proveedor" value="compra.proveedor.nombre"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean id="ventasReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultCentralReplicaPanel" >
+		<constructor-arg value="com.luxsoft.siipap.ventas.model.Venta"/>
+		<property name="properties" value="sucursal.nombre,fecha,documento,origen,clave,nombre,comentario"/>
+		<property name="labels" value="Sucursal,Fecha,Venta,Tipo,Cliente,Nombre,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Docto" value="documento"/>
+				<entry key="Tipo" value="origen"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="devolucionesReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultCentralReplicaPanel">
+		<constructor-arg value="com.luxsoft.siipap.ventas.model.Devolucion"/>
+		<property name="properties" value="sucursal.nombre,fecha,documento,origen,clave,nombre,comentario"/>
+		<property name="labels" value="Sucursal,Fecha,Venta,Tipo,Cliente,Nombre,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Docto" value="documento"/>
+				<entry key="Tipo" value="origen"/>
+			</map>
+		</property>
+	</bean>
+  
+  	<bean id="abonosPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultCentralReplicaPanel" >
+		<constructor-arg value="com.luxsoft.siipap.cxc.model.Abono"/>
+		<property name="properties" value="sucursal.nombre,tipo,clave,nombre,fecha,total,Tipo,id"/>
+		<property name="labels"     value="Sucursal,Tipo,Cliente,Nombre,Fecha,Total,Info,Id"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Cliente" value="clave,nombre"/>
+				<entry key="Tipo" value="tipo"/>
+				<entry key="Info" value="info"/>
+				<entry key="Total" value="total"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+  
+  
+</beans>

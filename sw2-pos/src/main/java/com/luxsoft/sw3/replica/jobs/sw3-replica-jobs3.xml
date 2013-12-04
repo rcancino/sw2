@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		
+		>  
+
+	
+	<!-- ABONOS -->
+	
+	<bean id="replicadorDeAbonos" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeAbonos"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeAbonosJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeAbonos"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeAbonosTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeAbonosJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+	<bean id="replicadorDeAbonosEliminadosJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeAbonos"
+		p:targetMethod="actualizarAbonosEliminados"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeAbonosEliminadosTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeAbonosEliminadosJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+	<!-- FICHAS -->
+		
+	<bean id="replicadorDeFichas" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeFichas"
+		p:sucursales-ref="sucursales"/>
+	<bean id="replicadorDeFichasJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeFichas"
+		p:targetMethod="importarVerificando"
+		p:concurrent="false"/>
+	<bean id="replicadorDeFichasTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="replicadorDeFichasJob"
+		p:cronExpression="0 0 21,22,23 * * ?"/>
+		
+		
+	<!-- Ventas por facturisa -->
+		
+	<bean id="ventasPorFacturista" 
+		class="com.luxsoft.sw3.replica.tasks.VentasPorFacturista"
+		p:sucursales-ref="sucursales"/>
+	<bean id="ventasPorFacturistaJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="ventasPorFacturista"
+		p:targetMethod="actualizar"
+		p:concurrent="false"/>
+	<bean id="ventasPorFacturistaTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="ventasPorFacturistaJob"
+		p:cronExpression="0 0 18,17,23 * * ?"/>
+		
+	<bean id="comprobantesDigitales" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeCFD"
+		p:sucursales-ref="sucursales"/>
+	<bean id="comprobantesDigitalesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="comprobantesDigitales"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+	<bean id="comprobantesDigitalesTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="comprobantesDigitalesJob"
+	    p:startDelay="1000"
+		p:repeatInterval="100000"/> 
+		
+	
+	<!--Scheduler -->
+	
+	<bean id="scheduler3"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>			
+				<ref bean="replicadorDeAbonosTrigger"/>
+			 	<ref bean="replicadorDeAbonosEliminadosTrigger"/>
+				 <ref bean="replicadorDeFichasTrigger"/>
+				<ref bean="ventasPorFacturistaTrigger"/>
+				<ref bean="comprobantesDigitalesTrigger"/>  
+			</list>			
+		</property>
+	</bean>
+    
+</beans>

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+
+   <typedef name="encryptedBigDecimalAsString" class="org.jasypt.hibernate.type.EncryptedBigDecimalAsStringType">
+		<param name="encryptorRegisteredName">jasyptHibernateEncryptor</param>
+    </typedef>
+    
+    <typedef name="encryptedBigDecimal" class="org.jasypt.hibernate.type.EncryptedBigDecimalType">
+		<param name="encryptorRegisteredName">jasyptBigDecimalHibernateEncryptor</param>
+    </typedef>
+    	
+</hibernate-mapping>

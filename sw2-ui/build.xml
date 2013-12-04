@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<!--
+  Build file for Luxor based projects.
+
+  This script requires a "lib" directory containing the necessary third party JAR files.
+  See project.properties for the definitions of the properties used in this file.
+
+  Building Luxor requires J2SE 1.5+; the releases are built with Sun's JDK 1.5.0.
+-->
+
+
+<project name="Luxor-DLG" basedir="." default="usage">
+
+	<property file="build.properties"/>
+	<property file="project.properties"/>
+
+	<!--
+	<path id="lib">
+		<fileset dir="${repository.path}">
+			<include name="**/**.jar" />
+		</fileset>
+	</path>
+	-->
+	<target name="usage">
+
+		<echo message=""/>
+		<echo message="${name} build file"/>
+		<echo message="------------------------------------------------------"/>
+		<echo message=""/>
+		<echo message="Among the available targets are:"/>
+		<echo message=""/>
+		<echo message=" schema"/>
+		<echo message=""/>
+
+	</target>
+
+
+	
+
+	<!-- ***************************************************************** -->
+	<!-- D I S T    Deploys the application for local distribution or 	   -->
+	<!-- 			testing   											   -->
+	<!-- ***************************************************************** -->
+
+	<!-- ***************************************************************** -->
+	<!-- D E P L O Y     Deploys application to Production distribution	   -->
+	<!-- ***************************************************************** -->
+
+	<target name="sign-bin-jars" description="">
+		<echo message="Signning jars for use in Java WebStart deployment" />
+
+		<signjar jar="${dist.dir}/${jar.name}" alias="papel" storepass="sistemas" verbose="true" />
+	</target>
+
+	<target name="deploy-bin" 
+		description="Manda al servidor de produccion los archivos de la aplicacion para su distribucion via WebStart" 
+		depends="sign-bin-jars">
+
+		<echo message="Sending only newer  jar/zip files"/>
+
+		<ftp server="${deploy.ftp.server}"
+			remotedir="${deploy.ftp.directory}/lib"
+			userid="${deploy.ftp.userid}"
+			password="${deploy.ftp.password}"
+			depends="yes"
+			binary="yes"
+			verbose="yes"
+		>
+			
+			<fileset dir="${dist.dir}">
+				<include name="*${jar.name}"/>
+			</fileset>
+			
+		</ftp>
+
+	</target>
+	
+	<target name="deploy-lib" 
+		description="Manda al servidor de produccion las librerias y recursos de la aplicacion para su distribucion via WebStart" >
+
+		<echo message="Sending only newer  jar/zip files"/>
+
+		<ftp server="${deploy.ftp.server}"
+			remotedir="${deploy.ftp.directory}/lib"
+			userid="${deploy.ftp.userid}"
+			password="${deploy.ftp.password}"
+			depends="yes"
+			binary="yes"
+			verbose="true"
+		>			
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+				<include name="images.zip"/>
+			</fileset>
+		</ftp>
+
+	</target>	
+
+	<target name="deploy-all"
+		depends="deploy-bin,deploy-lib"
+		description="Manda todo para su distribucion via WebStart" >
+	</target>
+	
+
+	<!-- ***************************************************************** -->
+	<!-- MISC		Several utility tasks								   -->
+	<!-- ***************************************************************** -->
+
+	<target name="gen-key" description="Generates a key in keystore">
+		<genkey alias="papel" storepass="sistemas" 
+			  dname="CN=Papel SA, OU=Software Division, O=PapelSA.org, C=MX"
+			  validity="90"/>
+	</target>
+	
+	<target name="sign-lib-jars"  description="">
+		<echo message="Signning jars for use in Java WebStart deployment" />
+
+		<signjar alias="papel" storepass="sistemas" verbose="true" >
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+				<include name="**/images.zip"/>
+			</fileset>
+		</signjar>
+	</target>
+
+	<target name="webstart-jnlp-deploy" description="Deploies only the jnlp file">
+
+		<ftp server="${deploy.ftp.server}"
+			remotedir="${deploy.ftp.directory}"
+			userid="${deploy.ftp.userid}"
+			password="${deploy.ftp.password}"
+			depends="yes"
+			binary="no"
+			verbose="yes"
+		>
+			<fileset dir="${basedir}">
+				<include name="*.jnlp"/>
+			</fileset>
+		</ftp>
+
+	</target>
+	
+	
+	
+	
+</project>

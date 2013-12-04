@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.luxsoft.siipap</groupId>
+		<artifactId>sw2</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>sw2-pos</artifactId>
+	<packaging>jar</packaging>
+	<name>POS Punto de Venta para SiipapWin</name>
+	<url>http://siipap.luxsoftnet.com</url>
+	<description> POS Punto de Venta para SiipapWin </description>
+	<dependencies>
+		<dependency>
+			<groupId>com.luxsoft.siipap</groupId>
+			<artifactId>sw2-ui</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>it.tidalwave.betterbeansbinding</groupId>
+			<artifactId>betterbeansbinding-core</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+		<dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<excludes>
+						<exclude>**/swx-jdbc.properties</exclude>
+						<exclude>**/log4*.*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<!-- <targetPath>spring</targetPath> -->
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<!-- <targetPath>spring</targetPath> -->				
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+	</build>
+	<properties>
+	
+		<junit.version>4.4</junit.version>
+	 
+        
+	</properties>
+</project>

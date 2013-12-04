@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	default-lazy-init="false"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">  
+       
+    <description>
+    	Contexto para la GUI de Contabilidad
+    </description>
+     
+     
+     
+     <bean id="cfdView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.cfd.ui.consultas.ComprobantesFiscalesDigitalesPanel"
+     			    p:title="Comprobantes Digitales (SAT)"
+     			    p:defaultPanel="true"/>
+     			 <bean class="com.luxsoft.sw3.cfd.ui.consultas.ComprobanteFiscalImpresosPanel"
+     			    p:title="Comprobantes Impresos (SAT)"/>
+     		</list>
+     	</property>
+     </bean>
+    
+    
+    <bean id="cuentasContablesView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.contabilidad.ui.consultas.CuentasContablesPanel"
+     			    p:title="Cátalogo de Cuentas"
+     			    p:defaultPanel="false"/>
+     			 <bean class="com.luxsoft.sw3.contabilidad.ui.consultas2.ConsultaGeneralDePolizas"
+     			 	p:title="Global de Pólizas"/>
+     			 <bean class="com.luxsoft.sw3.contabilidad.ui.consultas.BalanzaPanel"/>
+     			 <bean class="com.luxsoft.sw3.tesoreria.ui.consultas.MantenimientoDeChequesPanel"
+     			 	p:title="Mto Cheques"/>
+     			 <bean class="com.luxsoft.sw3.tesoreria.ui.consultas.MantenimientoDeFichasPanel"
+     			 	p:title="Mto Fichas"/>
+     			 <bean class="com.luxsoft.sw3.tesoreria.ui.consultas.MantenimientoContableParaCortesDeTarjetaPanel"
+     			 	p:title="Mto Tarjetas"/>
+     			  <bean class="com.luxsoft.sw3.contabilidad.ui.consultas2.CierreAnualPanel"
+     			 	p:title="Cierre anual"/>
+     			 <bean class="com.luxsoft.sw3.bi.SolicitudDeModificacionesPanel"
+     			 	p:title="Autorización de Modificaciones">
+     			 </bean>
+     		</list>
+     	</property>
+     </bean>
+    <!--  
+     <bean id="contabilidadReportView"
+     	class="com.luxsoft.sw3.contabilidad.ui.reportes.ReportesDockPanel">
+     </bean>
+       -->
+       
+        <bean id="contabilidadReportView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+       			<list>
+       				<bean class="com.luxsoft.sw3.contabilidad.ui.reportes.AnalisisDeDIOTPanel"
+       					p:title="Informe DIOD"/>
+       				<bean class="com.luxsoft.sw3.contabilidad.ui.reportes.DetalleDeIvaAcreditablePanel"
+       					p:title="IVA Acreditable"/>
+       			</list>
+       		</property>
+       </bean>
+       
+       <!--  El DockingView panel no esta funcionando beian
+       <bean id="contabilidadReportView"
+       		class="com.luxsoft.siipap.swing.views2.DockingView">
+       		<property name="panels">
+       			<list>
+       				<bean class="com.luxsoft.sw3.contabilidad.ui.reportes.AnalisisDeDIOTPanel"
+       					p:title="Informe DIOD"/>
+       				<bean class="com.luxsoft.sw3.contabilidad.ui.reportes.DetalleDeIvaAcreditablePanel"
+       					p:title="IVA Acreditable"/>
+       			</list>
+       		</property>
+       </bean>
+      -->
+     
+</beans>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+      >
+       
+    <description>
+    	Contexto para la GUI de Inventarios
+    </description> 
+    
+    
+    <bean id="inventarios.movimientosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			<ref bean="movimientosCentralizadosPanel"/>
+     			<ref bean="trasladosCentralizadosPanel"/>
+     			<ref bean="solicitudDeTrasladosCentralizadosPanel"/>
+     			<ref bean="transformacionesCentralizadasPanel"/>
+     			<ref bean="recepcionDeMaquilaCentralizadasPanel"/>
+     			<ref bean="devolucionesCentralizadasDeCompras"/>
+     			<ref bean="analisisCentralizadoDeConteoDeInventario"/>
+     			<bean class="com.luxsoft.siipap.compras.ui.consultas.RecepcionDeComprasCentralizadasPanel">
+     				<property name="title" value="Recepción de Compras"/>
+     			</bean>
+     			<bean class="com.luxsoft.siipap.inventario.ui.consultas.DevolucionesCentralizadasDeVentasPanel">
+     				<property name="title" value="Devoluciones de ventas"/>
+     			</bean>
+     			<bean class="com.luxsoft.siipap.inventario.ui.consultas.VentasCentralizadasDeVentasPanel"/>
+     		</list>
+     		
+     	</property>
+     </bean>
+    
+     <bean id="movimientosCentralizadosPanel"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.MovimientosCentralizadosPanel">
+     	<property name="defaultPanel" value="true"/>
+     </bean>
+     
+     <bean id="trasladosCentralizadosPanel"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.TrasladosCentralizadosPanel"/>
+     	
+     	
+      <bean id="solicitudDeTrasladosCentralizadosPanel"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.SolicitudDeTrasladosCentralizadosPanel"/>
+     	
+     <bean id="transformacionesCentralizadasPanel"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.TransformacionesCentralizadasPanel"/>
+    
+    <bean id="recepcionDeMaquilaCentralizadasPanel"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.RecepcionDeMaquilaCentralizadaPanel"/>
+     	
+     <bean id="devolucionesCentralizadasDeCompras"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.DevolucionesCentralizadasDeComprasPanel"/>
+     	
+     <bean id="analisisCentralizadoDeConteoDeInventario"	
+     	class="com.luxsoft.siipap.inventario.ui.consultas.AnalisisCentralizadoDeConteoDeInventario"/>
+    
+    <bean id="inventarios.CostosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			<ref bean="inventarios.costosPanel"/>
+     			<ref bean="inventarios.existenciasPanel"/>
+     			<ref bean="inventarios.transformacionesPanel"/>
+     			<ref bean="inventarios.movimientosCosteadosPanel"/>
+     			<ref bean="inventarios.analisisDecostosPanel"/>
+     		</list>
+     	</property>
+     </bean>
+    
+   <bean id="inventarios.costosPanel"
+   		class="com.luxsoft.siipap.inventario.ui.consultas.CostosPanel">
+   		<property name="title" value="Costos Unitarios"/>
+   		<property name="defaultPanel" value="true"/>
+   </bean>
+	 
+	<bean id="inventarios.existenciasPanel"
+   		class="com.luxsoft.siipap.inventario.ui.consultas.ExistenciasPanel">
+   		<property name="title" value="Existencias"/>
+   </bean>
+    
+  
+   
+   <bean id="inventarios.transformacionesPanel"
+   		class="com.luxsoft.siipap.inventario.ui.consultas.TransformacionesPanel">
+   		<property name="title" value="Transformaciones"/>
+   </bean>
+   
+   <bean id="inventarios.movimientosCosteadosPanel"
+   		class="com.luxsoft.siipap.inventario.ui.consultas.MovimientosCosteadosPanel">
+   	<property name="title" value="Movimientos Costeados"/>
+   	</bean>
+   	
+   <bean id="inventarios.analisisDecostosPanel"
+   		class="com.luxsoft.sw3.inventarios.ui.consultas.AnalisisDeCostosPromedioPanel">
+   	<property name="title" value="Análisis de Costos"/>
+   	</bean>
+  
+  
+  <bean id="inventarios.ProductosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			 <bean 	class="com.luxsoft.siipap.inventario.ui.consultas.ProductosParaInventariosPanel" >
+     			 	<property name="defaultPanel" value="true"/>
+  					<property name="title" value="Mantenimiento"/>
+  					
+  				</bean>
+     		</list>
+     	</property>
+  </bean>
+   
+ 
+  
+</beans>

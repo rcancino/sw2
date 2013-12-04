@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+	<description>
+    	Contexto para el punto de venta (POS)
+    </description>
+    
+    <context:component-scan base-package="com.luxsoft.siipap.pos.ui"/>
+    <context:component-scan base-package="com.luxsoft.sw3.ui"/>
+    <context:component-scan base-package="com.luxsoft.siipap.pos.facturacion"/>
+    
+    <bean id="ventasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<ref bean="pedidosPanel"/>
+     			<ref bean="pedidosEspecialesPanel"/> 
+     			<ref bean="facturacionCreditoPanel"/>
+     			<ref bean="devolucionesPanel"/>
+     			<ref bean="preDevolucionesPanel"/>
+     			<ref bean="facturasGeneradasPanel"/>
+     			<ref bean="cfdPanel"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.caja.SolicitudesParaPagoConDepositoPanel"
+					p:title="Autorización de Depositos"/>
+				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TrasladosPanel2"
+     			    p:title="Traslados (Atendidos)"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.SolicitudDeTrasladosPanel"
+     			    p:title="Traslados (Solicitados)"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.EstadoDeVentasPanel"
+     				p:title="Rastreo de ventas"/>
+     		</list>
+     	</property>
+     </bean>
+     	
+    <!--  <bean id="pedidosPanel" 
+     	class="com.luxsoft.siipap.pos.ui.consultas.PedidosPanel"
+     	p:title="Pedidos"
+     	p:defaultPanel="true"/> -->
+     	
+     <bean id="pedidosPanel" 
+     	class="com.luxsoft.sw3.pedidos.PedidosPanel2"
+     	p:title="Pedidos"
+     	p:defaultPanel="true"/>
+     	
+     <bean id="pedidosEspecialesPanel"
+     	class="com.luxsoft.siipap.pos.ui.consultas.PedidosEspecialesPanel"
+     	p:title="Especiales"/>
+     	
+     <bean id="facturacionCreditoPanel"
+     	class="com.luxsoft.siipap.pos.ui.consultas.FacturacionCreditoPanel"
+     	p:title="Facturación Crédito"
+     	/>
+     <bean id="devolucionesPanel"
+        class="com.luxsoft.siipap.pos.ui.consultas.almacen.DevolucionesPanel"
+        lazy-init="true"
+        p:title="Devoluciones"/>
+        
+     <bean id="preDevolucionesPanel"
+        class="com.luxsoft.siipap.pos.ui.consultas.almacen.PreDevolucionesPanel"
+        lazy-init="true"
+        p:title="Pre - Devoluciones"/>
+     
+     <bean id="facturasGeneradasPanel"
+        class="com.luxsoft.siipap.pos.ui.consultas.FacturasGeneradasPanel"
+        p:title="Facturas (Todas)"/>
+        
+        <bean id="cfdPanel"
+        class="com.luxsoft.siipap.pos.ui.consultas.CFDPanel"
+         p:title="Comprobantes XML CFD"/>
+     
+     <bean id="comprasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	
+     	>
+     	<property name="panels">
+     		<list>
+     			<ref bean="comprasPanel"/>
+     			<ref bean="comprasRecibidas"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.AlcancesPanel_Pos"
+     			 p:title="Alcances"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.RecepcionDeMaquilaPanel"
+     	         p:title="Recepción de Maquila"/>
+                <bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.DevolucionesDeComprasPanel"
+     	         p:title="Devolución de Compras"/> 
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="comprasPanel" class="com.luxsoft.siipap.pos.ui.consultas.ComprasPanel"
+     	p:title="Nacionales"/>
+     	
+     <bean id="comprasRecibidas" class="com.luxsoft.siipap.pos.ui.consultas.almacen.RecepcionDeComprasPanel"
+     	p:title="Recibidas"/>
+     	
+     <bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.RecepcionDeMaquilaPanel"
+     	p:title="Recepción de Maquila"/>
+     <bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.DevolucionesDeComprasPanel"
+     	p:title="Devolución de Compras"/>
+     
+    
+    <bean id="almacenView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.MovimientosPanel"
+     				p:title="Movimientos (Internos)"
+     				p:defaultPanel="true"/>   			
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TransformacionesPanel"
+     				p:title="Transformaciones"/>
+     			
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TablerosPanel"
+     				p:title="Tableros de Control"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.ConteoDeInventarioPanel"
+     				p:title="Conteo de Inventario"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.AnalisisDeConteoDeInventario"
+     				p:title="Análisis de Conteo"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="embarquesView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<ref bean="embarquesPanel"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.EntregasPendientesDeAsignarPanel"
+     				p:title="Facturas Pendientes"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.EstadoDeEntregasPanel"
+     				p:title="Estado de Entregas"/>
+     			<!-- <ref bean="solicitudesDeEmbarquePanel"/>-->
+     			<ref bean="tableroEmbarques"/> 
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="embarquesPanel"
+     	class="com.luxsoft.siipap.pos.ui.consultas.EmbarquesPanel"
+     	p:title="Embarques"
+     	 
+     	/>
+     
+     
+     <bean id="solicitudesDeEmbarquePanel"
+     	class="com.luxsoft.siipap.pos.ui.consultas.SolicitudesDeEmbarquesPanel"
+     	p:title="Solicitures">
+     </bean>
+     
+     <bean id="tableroEmbarques"
+     	class="com.luxsoft.siipap.pos.ui.consultas.TableroDeEmbarques"
+     	p:title="Tableros">
+     </bean>
+     
+     <bean id="cajaPanel" class="com.luxsoft.siipap.pos.ui.consultas.caja.CajaPanel"
+     		p:title="Facturación Contado"
+     		p:defaultPanel="true"/>
+     
+     <bean id="cobroPanel" class="com.luxsoft.siipap.pos.ui.consultas.caja.CajaPanel"
+     		p:title="Facturación Contado"
+     		p:defaultPanel="true"/>
+     
+     <bean id="cajaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			
+     			<ref bean="cajaPanel"/>
+     			 <bean class="com.luxsoft.siipap.pos.ui.consultas.caja.CobranzaPagoContraEntregaPanel"
+     			    p:title="Cobranza PCE"/> 
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.caja.PagosPanel"
+     			    p:title="Pagos"/>
+     			 <bean class="com.luxsoft.siipap.pos.ui.consultas.caja.DepositosPanel"
+     			    p:title="Depositos"/>
+     			 <bean class="com.luxsoft.siipap.pos.ui.consultas.caja.CortesDeCajaPanel"
+     			    p:title="Cortes de Caja"/>
+     			 <bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDICajaPanel"
+     			 	p:title="Facturación CFDI"/>
+     			 
+     		</list>
+     	</property>
+     </bean><!--
+     
+     <bean id="autorizacionesView"
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.AutorizacionDepositosPanel"
+     			    p:title="Depositos por autorizar"
+     			    p:defaultPanel="true"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.DepositosAutorizadosPanel"
+     			    p:title="Depósitos autorizados"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.caja.DepositosConsolidadosPanel"
+     			    p:title="Consolidados"/>
+     		</list>
+     	</property>     	
+     </bean>
+     
+     
+     --><bean id="notasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.NotasDeCreditoDevolucionPanel"
+     				p:title="Notas de Crédito (Dev)"
+     				p:defaultPanel="true"/>
+     		</list>
+     	</property>
+     </bean>
+     <!-- 
+     <bean id="cajaLoader"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="cajaPanel"
+		p:targetMethod="triggerLoad"
+		p:concurrent="false"/>
+		
+	<bean id="cajaLoaderTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="cajaLoader"
+		p:startDelay="1000"
+		p:repeatInterval="60000"/>
+     
+    
+     
+     <bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false">
+		<property name="triggers">
+			<list>
+				<ref bean="cajaLoaderTrigger"/>
+			</list>			
+		</property>
+	</bean>
+	  -->
+  <!--   <aop:aspectj-autoproxy/> -->
+  
+  <bean id="solicitudDeModificacionesPanel" class="com.luxsoft.sw3.solicitudes.SolicitudDeModificacionesPOSPanel">
+     	<property name="title" value="Solicitudes para modificacion"/>
+    </bean>
+  
+   <bean id="sistemasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true"
+     	p:procesosTasksVisible="false"
+     	p:resizeWeightForView=".08">
+     	<property name="panels">
+     		<list>
+     			<ref bean="solicitudDeModificacionesPanel"/>
+     		</list>
+     	</property>
+     </bean>
+    
+</beans>

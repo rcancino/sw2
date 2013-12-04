@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		
+		>  
+
+
+	<description>
+		configuracion de tareas programadas
+	</description>
+	
+	
+	
+		
+	<!-- Replicacion de Lista de precios porcliente -->
+	
+	<bean id="replicadorDeListaDePreciosPorCliente" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeListasDePreciosClientes"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeListaDePreciosPorClienteJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeListaDePreciosPorCliente"
+		p:targetMethod="replicar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeListaDePreciosPorClienteTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeListaDePreciosPorClienteJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+	<!-- Replicacion de Lista de precios por proveedor -->
+	
+	<bean id="replicadorDeListaDePreciosProveedor" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeListaDePrecios"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeListaDePreciosPorProveedorJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeListaDePreciosProveedor"
+		p:targetMethod="replicar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeListaDePreciosPorProveedorTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeListaDePreciosPorProveedorJob"
+		p:startDelay="1000"
+		p:repeatInterval="5000"/>
+		
+	<!-- Replicacion de Notas de devolucion -->
+	
+	<bean id="replicadorDeNotasDeDevolucion" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeNotasDeDevolucion"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeNotasDeDevolucionJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeNotasDeDevolucion"
+		p:targetMethod="sincronizar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeNotasDeDevolucionTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeNotasDeDevolucionJob"
+		p:startDelay="1000"
+		p:repeatInterval="45000"/>
+		
+		
+			<!-- Replicacion de Devoluciones -->
+	
+	<bean id="replicadorDeDevoluciones" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeDevoluciones"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeDevolucionesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeDevoluciones"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeDevolucionesTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeDevolucionesJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+		
+		
+		<!-- Replicacion de Devoluciones De Compra-->
+	
+	<bean id="replicadorDeDevolucionesDeCompra" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeDevolucionesDeCompra"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeDevolucionesDeCompraJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeDevolucionesDeCompra"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeDevolucionesDeCompraTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeDevolucionesDeCompraJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+		
+		<!-- Replicacion de Transformaciones -->
+	
+	<bean id="replicadorDeTransformaciones" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeTransformaciones"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeTransformacionesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeTransformaciones"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeTransformacionesTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeTransformacionesJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+    
+    
+		
+		
+		<!-- Replicacion de Notas de Bonificacion -->
+	
+			
+	<bean id="replicadorDeNotasDeBonificacionJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeNotasDeDevolucion"
+		p:targetMethod="replicarBonificacion"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeNotasDeBonificacionTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="replicadorDeNotasDeBonificacionJob"
+		p:cronExpression="0 0 15,22 * * ? "/>
+	
+	
+	
+	<!--Global  Scheduler -->
+	
+	<bean id="scheduler2"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>			
+				<ref bean="replicadorDeListaDePreciosPorClienteTrigger"/> 		
+				<ref bean="replicadorDeNotasDeDevolucionTrigger"/>
+				<ref bean="replicadorDeListaDePreciosPorProveedorTrigger"/>
+				<ref bean="replicadorDeMovimientosTrigger"/>
+				<ref bean="replicadorDeMaquilaTrigger"/>
+				<ref bean="actualizadorDeAtrasoMaximoTrigger"/>
+				<ref bean="replicadorDeEmbarquesTrigger"/>
+				<ref bean="replicadorDeNotasDeBonificacionTrigger"/>
+				<ref bean="replicadorDeDevolucionesTrigger"/>
+				<ref bean="replicadorDeTransformacionesTrigger"/>
+				<ref bean="replicadorDeDevolucionesDeCompraTrigger"/>
+			</list>			
+		</property>
+	</bean>
+	
+	<!-- Replicacion de movimientos genericos de inventarios -->
+	
+	<bean id="replicadorDeMovimientos" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeMovimientos"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeMovimientosJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeMovimientos"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeMovimientosTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeMovimientosJob"
+		p:startDelay="1000"
+		p:repeatInterval="4000"/>
+		
+
+    
+    <!-- Replicacion de Maquila -->
+	
+	<bean id="replicadorDeMaquila" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeMaqs"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeMaquilaJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeMaquila"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeMaquilaTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="replicadorDeMaquilaJob"
+		p:cronExpression="0 0 15,22 * * ? "
+		/>
+		
+	<!-- Actualizador de Atraso maximo -->
+	
+	<bean id="actualizadorDeAtrasoMaximo" 
+		class="com.luxsoft.sw3.replica.tasks.ActualizadorDeAtrasoMaximo"/>
+		
+	<bean id="actualizadorDeAtrasoMaximoJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="actualizadorDeAtrasoMaximo"
+		p:targetMethod="execute"
+		p:concurrent="false"/>
+		
+	<bean id="actualizadorDeAtrasoMaximoTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="actualizadorDeAtrasoMaximoJob"
+		p:cronExpression="0 0 5 * * ? "
+		/>
+		
+	<!-- Replicacion de embarques -->
+	
+	<bean id="replicadorDeEmbarques" 
+		class="com.luxsoft.sw3.replica.ReplicadorDeEmbarques"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="replicadorDeEmbarquesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="replicadorDeEmbarques"
+		p:targetMethod="importar"
+		p:concurrent="false"/>
+		
+	<bean id="replicadorDeEmbarquesTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="replicadorDeEmbarquesJob"
+		p:startDelay="1000"
+		p:repeatInterval="20000"/>
+</beans>

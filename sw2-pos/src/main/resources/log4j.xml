@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%p - [%t] - %C{2}.%M(%L) | %m%n"/>
+        </layout>
+    </appender> 
+
+    <logger name="net.sf.ehcache">
+        <level value="ERROR"/>
+    </logger>
+
+    <!-- Suppress success logging from InteractiveAuthenticationSuccessEvent -->
+    <logger name="org.acegisecurity">
+        <level value="ERROR"/>
+    </logger>
+    
+    
+    <logger name="com.luxsoft.siipap.service">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.siipap.service.aop">
+        <level value="INFO"/>
+    </logger>
+
+    <logger name="com.luxsoft.siipap.pos.ui.forms">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.pedidos">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.reports">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.ui.forms">
+        <level value="OFF"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.ventas.rules">
+        <level value="OFF"/>
+    </logger>
+    
+    <logger name="com.luxsoft.siipap.pos.ui.consultas.caja">
+        <level value="OFF"/>
+    </logger>
+    
+    
+    <logger name="com.luxsoft.sw3.replica">
+        <level value="INFO"/>
+    </logger>
+    
+    
+    <logger name="com.luxsoft.sw3.replica.ReplicadorDeNotasDeDevolucion">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.replica.ReplicadorDeProductos">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.services">
+        <level value="INFO"/>
+    </logger>
+    
+
+    <logger name="org.hibernate">
+        <level value="OFF"/>
+    </logger>
+  
+    <logger name="org.hibernate.SQL">
+        <level value="OFF"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="OFF"/>
+    </logger>
+   
+    
+    <logger name="org.apache.activemq">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="org.springframework.jms">
+        <level value="info"/>
+    </logger>
+
+    <root>
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>

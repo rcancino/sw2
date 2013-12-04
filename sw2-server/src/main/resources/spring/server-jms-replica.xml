@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xmlns:aop="http://www.springframework.org/schema/aop"
+       	xmlns:tx="http://www.springframework.org/schema/tx"
+       	xmlns:jms="http://www.springframework.org/schema/jms"       	
+		xmlns:amq="http://activemq.apache.org/schema/core"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/springaop-2.5.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			http://activemq.apache.org/schema/core
+			http://activemq.apache.org/schema/core/activemq-core-5.2.0.xsd
+			http://www.springframework.org/schema/jms 
+			http://www.springframework.org/schema/jms/spring-jms-2.5.xsd			
+			"
+		default-lazy-init="false"
+		>
+	
+	<description> Configuracion de servicios de replica local para las sucursales </description>
+	
+	<context:property-placeholder location="classpath:swx-jdbc.properties"/>
+	  
+    
+    <!-- Conexiones a los brokers de las sucursales -->
+    
+    <bean id="abstractSucursalConnectionFactory"
+    	class="org.apache.activemq.spring.ActiveMQConnectionFactory"    	
+    	p:useAsyncSend="true"
+    	p:copyMessageOnSend="false"
+    	p:useCompression="true"
+    	abstract="true"
+    	/>
+    
+    <bean id="cf5febreroConnectionFactory"	p:brokerURL="${cf5febreroBroker.url}"	parent="abstractSucursalConnectionFactory"/>
+    <bean id="tacubaConnectionFactory"		p:brokerURL="${tacubaBroker.url}"		parent="abstractSucursalConnectionFactory"/>
+    <bean id="andradeConnectionFactory"		p:brokerURL="${andradeBroker.url}"		parent="abstractSucursalConnectionFactory"/>
+    <bean id="bolivarConnectionFactory"		p:brokerURL="${bolivarBroker.url}"		parent="abstractSucursalConnectionFactory"/>
+    <bean id="calle4ConnectionFactory"		p:brokerURL="${calle4Broker.url}"		parent="abstractSucursalConnectionFactory"/>
+    <bean id="vertiz176ConnectionFactory"	p:brokerURL="${vertiz176Broker.url}"	parent="abstractSucursalConnectionFactory"/>
+             
+    <!-- 			LISTENERS A LAS COLAS DE REPLICA DE LAS SUCURSALES 					-->
+    
+    <jms:listener-container connection-factory="cf5febreroConnectionFactory"  	acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+    
+    <jms:listener-container connection-factory="tacubaConnectionFactory"  		acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+    
+     <jms:listener-container connection-factory="andradeConnectionFactory"  		acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+    
+     <jms:listener-container connection-factory="bolivarConnectionFactory"  		acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+    
+     <jms:listener-container connection-factory="calle4ConnectionFactory"  		acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+    
+       <jms:listener-container connection-factory="vertiz176ConnectionFactory"  		acknowledge="transacted" >
+	  	<jms:listener destination="REPLICA.QUEUE" ref="importadorManager" method="importarEntidad" />
+    </jms:listener-container>
+  		    		
+    
+   <!-- I M P O R T A C I O N   A   L A S   O F I C I N A S                  --> 
+     		
+    <bean id="importadorManager" class="com.luxsoft.sw2.replica.consumers.ImportadorCentralManager">
+    	<property name="importadores">
+    		<map>
+    			<entry key="com.luxsoft.siipap.model.core.Cliente" value-ref="importadorDeClientes"/>
+    			<entry key="com.luxsoft.siipap.inventarios.model.Existencia" value-ref="importadorDeExistencias"/>
+    			<entry key="com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado" value-ref="importadorDeSolicitudDeTraslados"/>
+    			<entry key="com.luxsoft.siipap.inventarios.model.Traslado" value-ref="importadorDeTraslados"/>
+    			<entry key="com.luxsoft.siipap.ventas.model.Venta" value-ref="importadorDeVentas"/>
+    			<entry key="com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito" value-ref="importadorDeSolicitudDeDepositos"/>
+    			<entry key="com.luxsoft.sw3.embarque.Embarque" value-ref="importadorDeEmbarques"/>
+    		</map>
+    	</property>
+    </bean> 
+    
+    <bean id="importadorDeClientes"    			class="com.luxsoft.sw2.replica.consumers.ImportadorRedirect"		/>
+    <bean id="importadorDeExistencias" 			class="com.luxsoft.sw2.replica.consumers.ImportadorRedirect"		/>
+    <bean id="importadorDeSolicitudDeTraslados" class="com.luxsoft.sw2.replica.consumers.ImportadorRedirect"		/>
+    <bean id="importadorDeTraslados" 			class="com.luxsoft.sw2.replica.consumers.ImportadorRedirect"		/>
+    <bean id="importadorDeVentas" 				class="com.luxsoft.sw2.replica.consumers.ImportadorCentralDeVentas"	/>
+    <bean id="importadorDeSolicitudDeDepositos" 				class="com.luxsoft.sw2.replica.consumers.ImportadorCentralDeSolicitudDeDepositos"	/>
+    <bean id="importadorDeEmbarques" class="com.luxsoft.sw2.replica.consumers.ImportadorCentralDeEmbarques"/>
+   
+   
+   <!--           R E P L I C A C I O N       Desde los tableros del servidor         -->
+   
+   <bean id="replicaManager" class="com.luxsoft.sw2.replica.ReplicadorCentral"/>
+	
+</beans>

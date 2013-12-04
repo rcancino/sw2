@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		
+		>
+	<util:set id="sucursales">
+		<value>3</value>
+		<value>2</value> 
+		<value>6</value>
+		<value>5</value>		
+		<value>9</value>
+		<value>11</value>
+	</util:set>
+	
+	<bean id="exportadorDeProductos" class="com.luxsoft.sw2.replica.valida.ExportadorDeProductos"/> 
+	<bean id="exportadorDeProductosJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="exportadorDeProductos"
+		p:targetMethod="exportar"
+		p:concurrent="false"/>		
+	<bean id="exportadorDeProductosTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="exportadorDeProductosJob"
+		p:cronExpression="0 0,30 7,10,11,12,13,14,15,16,17,18,19 * * ? "
+		/>
+	
+	<bean id="exportadorDeClientes" 	class="com.luxsoft.sw2.replica.valida.ExportadorDeClientes"/>
+		
+	<bean id="exportadorDeClientesJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="exportadorDeClientes"
+		p:targetMethod="exportar"
+		p:concurrent="false"/>
+		
+	<bean id="exportadorDeClientesTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="exportadorDeClientesJob"
+		p:cronExpression="0 0 7,10,11,12,13,14,15,16,17,18,19 * * ? "
+		/>
+		
+	<bean id="exportadorDeProveedores" class="com.luxsoft.sw2.replica.valida.ExportadorDeProveedores"/> 
+	<bean id="exportadorDeProveedoresJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="exportadorDeProveedores"
+		p:targetMethod="exportar"
+		p:concurrent="false"/>		
+	<bean id="exportadorDeProveedoresTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="exportadorDeProveedoresJob"
+		p:cronExpression="0 30 10,13,17,19 * * ? "
+		/>
+		
+	<bean id="exportadorDeListaDePreciosCliente" class="com.luxsoft.sw2.replica.valida.ExportadorDeListaDePreciosCliente"/> 
+	<bean id="exportadorDeListaDePreciosClienteJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="exportadorDeListaDePreciosCliente"
+		p:targetMethod="exportar"
+		p:concurrent="false"/>		
+	<bean id="exportadorDeListaDePreciosClienteTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="exportadorDeListaDePreciosClienteJob"
+		p:cronExpression="0 0,30 10,11,12,14,16,18,19 * * ? "
+		/>
+		
+	<!-- 			Existencias 			-->
+	<bean id="sincronizadorDeExistencias" class="com.luxsoft.sw2.replica.valida.SincronizadorDeExistencias"
+		p:sucursales-ref="sucursales"/>
+		
+	<bean id="sincronizadorParcialDeExistenciasJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="sincronizadorDeExistencias"
+		p:targetMethod="sincronizarFaltantes"
+		p:concurrent="false"/>		
+	
+	<bean id="sincronizadorParcialDeExistenciasTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="sincronizadorParcialDeExistenciasJob"
+		p:cronExpression="0 0 10,17 * * ? "
+		/>
+	<bean id="sincronizadorTotalDeExistenciasJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="sincronizadorDeExistencias"
+		p:targetMethod="sincronizarTodo"
+		p:concurrent="false"/>	
+		
+	<bean id="sincronizadorTotalDeExistenciasTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="sincronizadorTotalDeExistenciasJob"
+		p:cronExpression="0 0 6,22 * * ? "
+		/>
+	
+	<bean id="actualizadorDeDocumento" class="com.luxsoft.sw2.replica.valida.ActualizadorDeDocumentoYSAF"
+	      />
+	<bean id="actualizadorDeDocumentoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="actualizadorDeDocumento"
+		p:targetMethod="actualizar"
+		p:concurrent="false"/>
+	<bean id="actualizadorDeDocumentoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="actualizadorDeDocumentoJob"
+		p:cronExpression="0 0 23 * * ? "
+		/>
+	
+	<bean id="eliminadorDeSolicitudDeTraslado" class="com.luxsoft.sw2.replica.valida.EliminadorDeSolicitudDeTraslado"
+	      p:sucursales-ref="sucursales"/>
+	<bean id="eliminadorDeSolicitudDeTrasladoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="eliminadorDeSolicitudDeTraslado"
+		p:targetMethod="eliminar"
+		p:concurrent="false"/>
+	<bean id="eliminadorDeSolicitudDeTrasladoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="eliminadorDeSolicitudDeTrasladoJob"
+		p:cronExpression="0 15 21 * * ? "
+		/>
+	
+	
+	<bean id="importadorCentralDeCxC" class="com.luxsoft.sw2.replica.valida.ImportadorCentralCXC"
+	      p:sucursales-ref="sucursales"/>
+	<bean id="importadorCentralDeCxCJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="importadorCentralDeCxC"
+		p:targetMethod="importarFaltantes"
+		p:concurrent="false"/>
+	<bean id="importadorCentralDeCxCTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="importadorCentralDeCxCJob"
+		p:cronExpression="0 15 10,11,12,13,15,18,19,23 * * ? "
+		/>
+	
+	<bean id="importadorDeDepositos" class="com.luxsoft.sw2.replica.valida.ImportadorCentralDeSolicitudesDeDepositos"
+	       p:sucursales-ref="sucursales"/>
+	<bean id="importadorDeDepositosJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="importadorDeDepositos"
+		p:targetMethod="importarFaltantes"
+		p:concurrent="false"/>
+	<bean id="importadorDeDepositosTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="importadorDeDepositosJob"
+		p:cronExpression="0 0,15,30,45 10,11,12,14,16,18,19 * * ? "
+		/>
+	
+	<bean id="importadorDeInventarios" class="com.luxsoft.sw2.replica.valida.ImportadorCentralDeInventarios"
+	      p:sucursales-ref="sucursales"/>	
+	
+	<bean id="importadorDeInventariosJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="importadorDeInventarios"
+		p:targetMethod="importarFaltantes"
+		p:concurrent="false"/>
+		
+	<bean id="importadorDeInventariosTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="importadorDeInventariosJob"
+		p:cronExpression="0 25 10,11,12,14,16,17,18,19,23 * * ? "
+		/>
+	
+	<bean id="actualizadorDeAtrasoMaximo" class="com.luxsoft.sw2.replica.valida.ActualizarSaldoAtrasoClientes"/>
+	<bean id="actualizadorDeAtrasoMaximoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="actualizadorDeAtrasoMaximo"
+		p:targetMethod="actualizar"
+		p:concurrent="false"/>
+	<bean id="actualizadorDeAtrasoMaximoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="actualizadorDeAtrasoMaximoJob"
+		p:cronExpression="0 0 5 * * ? "
+		/>
+		
+	<bean id="ventasPorFacturista" class="com.luxsoft.sw2.replica.valida.VentasPorFacturista"
+	      p:sucursales-ref="sucursales"/>	
+	
+	<bean id="ventasPorFacturistaJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="ventasPorFacturista"
+		p:targetMethod="actualizar"
+		p:concurrent="false"/>
+		
+	<bean id="ventasPorFacturistaTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		p:jobDetail-ref="ventasPorFacturistaJob"
+		p:cronExpression="0 2 01 * * ? "
+		/>
+		
+		
+		
+		
+	<!--Global  Scheduler -->
+	
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="exportadorDeProductosTrigger"/>			
+				<ref bean="exportadorDeClientesTrigger"/>
+				<ref bean="exportadorDeProveedoresTrigger"/>
+				<ref bean="exportadorDeListaDePreciosClienteTrigger"/>
+				<ref bean="sincronizadorParcialDeExistenciasTrigger"/>
+				<ref bean="sincronizadorTotalDeExistenciasTrigger"/>
+				<ref bean="importadorCentralDeCxCTrigger"/>
+				<ref bean="importadorDeDepositosTrigger"/>
+				<ref bean="importadorDeInventariosTrigger"/>
+				<ref bean="actualizadorDeAtrasoMaximoTrigger"/>
+				<ref bean="ventasPorFacturistaTrigger"/>
+				<ref bean="actualizadorDeDocumentoTrigger"/>
+				<ref bean="eliminadorDeSolicitudDeTrasladoTrigger"/>
+			</list>			
+		</property>
+	</bean>
+	
+	</beans>

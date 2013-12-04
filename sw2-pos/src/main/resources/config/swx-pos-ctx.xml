@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="true"
+		>
+	
+     <bean id="messageSource"
+ 		class="org.springframework.context.support.ResourceBundleMessageSource"
+ 		>
+ 		<property name="basenames">
+ 			<list>
+ 				<value>config/posApplication</value>
+ 				<value>config/posActions</value> 				
+ 				 				 				
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
+ 	<context:property-placeholder location="classpath:config/posApplication.properties"/>
+ 	
+ 	<!--<bean id="cxc" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>config/posApplication.properties</value>
+			</list>
+		</property>
+	</bean>
+     
+    --><bean id="resourceLocator"
+     	class="com.luxsoft.siipap.swing.impl.ResourceLocatorImpl"/>
+   
+ 	<bean id="menuFactory" 
+ 		class="com.luxsoft.siipap.pos.ui.MenuFactory">
+ 		<property name="actionManager" ref="actionManager"/>
+	</bean>
+ 	
+ 	<bean id="toolbarFactory"
+ 		class="com.luxsoft.siipap.pos.ui.ToolbarFactory">
+ 		<property name="actionManager" ref="actionManager"/>
+	</bean> 
+	
+ 	<bean id="windowPage"
+ 		class="com.luxsoft.siipap.swing.impl.InfoNodeTabbedPage"/>
+ 		
+ 	<bean id="statusBar"
+ 		class="com.luxsoft.siipap.pos.ui.status.POSStatusBar"/>
+ 		
+ 	<bean id="header"
+ 		class="com.luxsoft.siipap.swing.controls.Header">
+		<property name="titulo" 		value="${app.title}"/>
+ 		<property name="descripcion" 	value="${app.description}"/>
+		<property name="iconPath"		value="${app.image}"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/>
+ 		<property name="tituloSize" value="18"/>
+ 		<property name="descSize" value="14"/>		 		
+	</bean>
+	
+ 	<bean id="applicationWindow"
+ 		class="com.luxsoft.siipap.swing.DefaultApplicationWindow">
+ 		<property name="menuFactory" ref="menuFactory"/>
+ 		<property name="toolbarFactory" ref="toolbarFactory"/>
+ 		<property name="windowPage" ref="windowPage"/>
+ 		<property name="statusBar" ref="statusBar"/>
+<!--  		<property name="header" ref="header"/> -->
+ 		<property name="resourceLocator" ref="resourceLocator"/> 				 		 		 		
+ 	</bean>
+ 	
+ 	<bean id="application" 
+ 		class="com.luxsoft.siipap.swing.Application"
+ 		factory-method="instance">
+ 		<property name="mainWindow" ref="applicationWindow"/>
+ 		<property name="userPreferencesRootName" value="${app.userpref}"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/> 				 		 		 		 		
+ 	</bean>
+ 	
+ 	<bean class="com.luxsoft.sw3.services.ServiceLayerCloser"/>
+ 	
+ 	<bean id="visualElementConfigurer"
+ 		class="com.luxsoft.siipap.swing.impl.VisualElementConfigurerImpl">
+ 		<property name="resourceLocator" ref="resourceLocator"/> 
+	</bean>
+ 	
+ 	<!-- Infrea estructura para las acciones -->
+ 	
+ 	<bean id="actionManager"
+ 		class="com.luxsoft.siipap.swing.actions.ActionManagerImpl">
+ 		<property name="configurer" ref="actionConfigurer"/>
+ 	</bean>
+ 	
+ 	<bean id="actionConfigurer"
+ 		class="com.luxsoft.siipap.swing.actions.DefaultActionConfigurer">
+ 		<property name="resourceLocator" ref="resourceLocator"/>
+ 	</bean>
+ 	
+ 	<bean id="actionDecorator"
+ 		class="com.luxsoft.siipap.swing.actions.ActionDecorator">
+ 		<property name="actionConfigurer" ref="actionConfigurer"/>
+ 	</bean>
+	
+	<!-- Vistas -->
+	
+	<bean id="abstractView"
+		class="com.luxsoft.siipap.swing.AbstractView"
+		abstract="true">
+		<property name="actionConfigurer" ref="actionConfigurer"/>
+ 		<property name="resourceLocator" ref="resourceLocator"/>				
+	</bean>
+	
+	<bean id="welcomeView"
+     	class="com.luxsoft.siipap.swing.views.WelcomeView"
+     	parent="abstractView">
+     </bean>
+
+	
+  
+</beans>

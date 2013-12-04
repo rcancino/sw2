@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	
+
+	<database-object>
+		
+		<create>
+			CREATE TRIGGER FOLIOS_DE_PEDIDOS
+			BEFORE INSERT  ON sx_pedidos 
+			FOR EACH ROW BEGIN
+			SET NEW.FOLIO= IF(NEW.SUCURSAL_ID=2,(SELECT IFNULL(MAX(FOLIO),0)+1 FROM SX_PEDIDOS WHERE SUCURSAL_ID=2),NEW.FOLIO);
+			END
+		</create>
+		<drop>
+			DROP TRIGGER FOLIOS_DE_PEDIDOS
+		</drop>
+		<dialect-scope name="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+	</database-object>
+	
+
+</hibernate-mapping>

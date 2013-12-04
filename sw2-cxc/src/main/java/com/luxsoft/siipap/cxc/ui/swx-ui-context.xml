@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+		
+<!--<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+       default-lazy-init="true"
+      >
+       
+    --><description>
+    	Contexto para el modulo de Cuentas por Cobrar
+    </description>
+    
+    <bean id="carteraDeCreditoPanel" class="com.luxsoft.sw3.cxc.consultas.CuentasPorCobrarPanel2"
+    	lazy-init="true">
+    	<property name="defaultPanel" value="true"/>
+    	<property name="securityId" value="CXC_CarteraDeCredito"/>
+    </bean>
+    <bean id="cxcRevisionPanel"
+    	class="com.luxsoft.sw3.cxc.consultas.RevisionCobroPanel">
+    	<property name="securityId" value="CXC_RevisionCobro"/>
+    </bean>
+    <!-- 
+     <bean id="cuentasPorCobrarModel" 
+     	class="com.luxsoft.siipap.cxc.ui.model.CuentasPorCobrarModel"
+     	init-method="init">
+     </bean>
+    
+     <bean id="cuentasPorCobrarPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.CuentasPorCobrarPanel">
+     	<constructor-arg ref="cuentasPorCobrarModel"/>
+     	<property name="title" value="Cuentas por Cobrar"/>
+     	<property name="defaultPanel" value="true"/>
+     	<property name="securityId" value="CXC_CarteraDeCredito"/>
+     </bean>
+     
+     <bean id="cxcRevisionPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.CXCRevisionPanel"
+     	lazy-init="true">
+     	<constructor-arg ref="cuentasPorCobrarModel"/>
+     	<property name="title" value="Revisión y Cobro"/>
+     	<property name="securityId" value="CXC_RevisionCobro"/>
+     </bean>
+     
+     -->
+     <bean id="antiguedadDeSaldosModel"
+     	class="com.luxsoft.siipap.cxc.ui.model.AntiguedadDeSaldosModel">     	
+     </bean>
+     
+     <bean id="antiguedadDeSaldosPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.AntiguedadDeSaldosPanel">
+     	<constructor-arg ref="antiguedadDeSaldosModel"/>
+     	<property name="title" value="Antigüedad de Saldos"></property>
+     	   	
+     </bean>
+     
+     <bean id="estadoDeMovimientos"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.DetalleDeMovimientos">
+     	<property name="title" value="Estado de Movimientos"/>
+     	<property name="securityId" value="CXC_EstadoMovimientos"/>
+     </bean>
+      
+     <bean id="cxcMainView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true">
+     	<property name="resizeWeightForView" value=".2"></property>
+     	<property name="panels">
+     		<list>
+     			<ref bean="carteraDeCreditoPanel"/>
+     			<ref bean="cxcRevisionPanel"/>
+     			<ref bean="abonosPanel"/>
+     			<ref bean="antiguedadDeSaldosPanel"/>
+     			<ref bean="estadoDeMovimientos"/>         			
+     			<ref bean="comisionesPanel"/>
+     			<ref bean="carteraDeChequesDevueltosPanel"/>
+     			<ref bean="carteraDeJuridicoPanel"/>
+     			<ref bean="cfdPanel"/>
+     			<ref bean="clientesCreditoPanel"/>
+     			<ref bean="checkplusPanel"/>
+     		</list>
+     	</property>     	
+     </bean>
+     
+     
+     
+     <bean id="cxc.ListaDePreciosyDescuentosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>     			
+     			<ref bean="listaDePreciosPorClientePanel"/>
+     		</list>
+     	</property>     	
+     </bean>
+     
+     <bean id="listaDePreciosPorClientePanel" 
+     	class="com.luxsoft.sw3.cxc.consultas.ListaDePreciosClientePanel"
+     	p:title="Listas por cliente"  
+     	p:defaultPanel="true"   	
+     />
+     
+     <bean id="registroDeDepositosView" 
+     	class="com.luxsoft.siipap.cxc.ui.depositos.RegistroDeDepositosView"
+     	parent="abstractView"
+     	lazy-init="true">
+     	<property name="registrosPanel" ref="registroDeDepositosPanel"/>
+     </bean>
+     
+     <bean id="registroDeDepositosPanel" 
+     	class="com.luxsoft.siipap.cxc.ui.depositos.RegistroDeDepositosPanel"
+     	lazy-init="true">
+     </bean>
+     
+     <bean id="cxcPagosPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.PagosPanel"
+     	lazy-init="true">
+     	<property name="title" value="Pagos"/>
+     	<property name="defaultPanel" value="true"/>
+     	<property name="securityId" value="CXC_ConsultaDePagos"/>
+     </bean>
+     
+     <bean id="depositosPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.DepositosPanel"
+     	lazy-init="true">
+     	<property name="title" value="Depositos"/>
+     	<property name="securityId" value="CXC_DEPOSITOS_PANEL"/>
+     </bean>
+     
+     <bean id="carteraDeChequesDevueltosPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.CarteraDeChequesDevueltosPanel"
+     	lazy-init="true">
+     	<property name="title" value="Cartera de Cheques "/>
+     	<property name="securityId" value="CarteraDeCheques"/>
+     </bean>
+     
+      <bean id="carteraDeJuridicoPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.CarteraDeJuridicoPanel"
+     	lazy-init="true">
+     	<property name="title" value="Cartera de Trámite Jurídico"/>
+     	<property name="securityId" value="CXC_Juridico"/>
+     </bean>
+     
+     <bean id="cfdPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.CFDPanel"
+     	lazy-init="true">
+     	<property name="title" value="Comprobantes Fiscales (CFD)"/>
+     </bean>
+     
+     <bean id="cxcPagosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			<ref bean="cxcPagosPanel"/>
+     			<ref bean="depositosPanel"/>     			
+     			<ref bean="carteraDeChequesDevueltosPanel"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <!-- Aplicaciones de pagos -->
+     
+     <bean id="abonosPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.AbonosPanel"
+     	lazy-init="true">
+     	<property name="title" value="Abonos"/>
+     	<property name="securityId" value="CXC_Abonos"/>
+     </bean>
+     
+     <bean id="aplicacionDePagoModel"
+    	class="com.luxsoft.siipap.cxc.ui.model.AplicacionDePagoModel"
+    	init-method="init"
+    	lazy-init="true">
+    </bean>
+    
+    <bean id="aplicacionDePagoForm"
+    	class="com.luxsoft.siipap.cxc.ui.form.AplicacionDePagoForm"
+    	lazy-init="true">
+    	<constructor-arg ref="aplicacionDePagoModel"/>
+    </bean>
+    
+    
+    <bean id="cxcPolizasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			<ref bean="cxc.polizaCobranzaCredito"/>
+     		</list>
+     	</property>
+     	<property name="consultasLabel" value="Polizas"/>
+     </bean>
+     
+     <bean id="cxc.polizaCobranzaCredito"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.PolizaCobranzaCredito">
+     	<property name="title" value="Cobranza Crédito"/>
+     </bean>
+     
+     <bean id="comisionesPanel"
+     	class="com.luxsoft.siipap.cxc.ui.consultas.ComisionesPanel" lazy-init="true">
+     	<property name="title" value="Comisiones"/>
+     	<property name="securityId" value="CXC_Comisiones"/>
+     </bean>
+     
+     <!-- Consultas de analisis -->
+     <bean id="cxc.AnalisisView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true"
+     	p:procesosTasksVisible="false"
+     	p:resizeWeightForView=".08">
+     	<property name="panels">
+     		<list>	     		
+     			<ref bean="antiguedadDeSaldosPanel"/>
+     			<ref bean="carteraDeCreditoSoloLecturaPanel"/>
+     			<ref bean="analisisDeCobranzaPanel"/>
+     			<ref bean="cxcCamioneta"/>
+     			<ref bean="estadoDeEmbarques"/>
+     			<bean class="com.luxsoft.sw3.bi.EntregasCentralizadasPendientesDeAsignarPanel"/>
+     			<ref bean="clientesCreditoPanel"/>
+     			<ref bean="checkplusPanel"/>
+     			<ref bean="solicitudDeModificacionesPanel" />
+     		</list>
+     	</property>
+     </bean>
+     
+     
+     <bean id="cuentasPorCobrarContadoView"
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true"
+     	p:resizeWeightForView=".08">
+     	<property name="panels">
+     		<bean class="com.luxsoft.sw3.cxc.consultas.CuentasPorCobrarContadoPanel"
+     			p:title="Cuentas por cobrar">
+     		</bean>
+     	</property>
+     </bean>
+     
+     <bean id="analisisDeCobranzaPanel" class="com.luxsoft.siipap.cxc.ui.analisis.AnalisisDeCobranzaPanel"
+      p:title="Cobranza Semanal"
+      p:securityId="ConsultasDeAnalisis"/>
+     
+     <bean id="cxcCamioneta" class="com.luxsoft.siipap.cxc.ui.analisis.CxC_CamionetaPanel"
+     	p:title="Facturas Pendientes(CAM)"/>
+    
+    <bean id="estadoDeEmbarques"
+     	class="com.luxsoft.sw3.bi.EstadoDeEntregasCentralizadoPanel">
+     	<property name="title" value="Estado de Embarques"/>
+     </bean>
+     
+     <bean id="clientesCreditoPanel"
+     	class="com.luxsoft.sw3.bi.ClientesCreditoPanel">
+     	<property name="title" value="Clientes crédito"/>
+     </bean>
+     
+     <bean id="checkplusPanel" class="com.luxsoft.sw3.bi.CheckPlusPanel">
+     	<property name="title" value="Clientes CheckPlus"/>
+     </bean>
+     <bean id="solicitudDeModificacionesPanel" class="com.luxsoft.sw3.bi.SolicitudDeModificacionesPanel">
+     	<property name="title" value="Solicitudes para modificacion"/>
+     </bean>
+     
+     <bean id="carteraDeCreditoSoloLecturaPanel" class="com.luxsoft.sw3.cxc.consultas.CarteraDeCreditoSoloLecturaPanel"
+    	lazy-init="true">
+    </bean>
+     
+     <!-- Consultas de analisis -->
+     <bean id="sistemasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	lazy-init="true"
+     	p:procesosTasksVisible="false"
+     	p:resizeWeightForView=".08">
+     	<property name="panels">
+     		<list>
+     			<ref bean="solicitudDeModificacionesPanel"/>
+     			<bean class="com.luxsoft.sw3.bi.SolicitudDeModificacionesPendientesPanel"
+     				p:title="Solicitudes Modificacion (Pendientes)"/>
+     		</list>
+     	</property>
+     </bean>
+    
+</beans>

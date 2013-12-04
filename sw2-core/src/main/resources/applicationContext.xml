@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <!-- Add new DAOs here -->
+     <!-- 
+     <bean id="existenciaListener"
+    	class="com.luxsoft.siipap.inventarios.service.HbmExistenciaListener">
+    	<property name="existenciaDao" ref="existenciaDao"/>    	
+    	<property name="activo" value="false"/>
+    </bean>
+          -->
+    <!-- Core Daos -->
+   
+   <bean id="sucursalDao"
+    	class="com.luxsoft.siipap.dao.SucursalDaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="proveedorDao"
+    	class="com.luxsoft.siipap.compras.dao.ProveedorDaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="lineaDao" class="com.luxsoft.siipap.dao.hibernate.GenericDaoHibernate">
+        <constructor-arg value="com.luxsoft.siipap.model.core.Linea"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="productoDao" class="com.luxsoft.siipap.dao.core.ProductoDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="clienteDao" class="com.luxsoft.siipap.dao.core.ClienteDaoImpl"
+        autowire="byType"/>
+        
+    <bean id="folioDao" class="com.luxsoft.siipap.dao.core.FolioDaoImpl"
+        autowire="byType"/>
+        
+    <!-- Inventarios-->
+    
+    <bean id="inventarioDao" class="com.luxsoft.siipap.inventarios.dao.InventarioDaoImpl"
+        autowire="byType"/>
+        
+     <bean id="movimientoDao" class="com.luxsoft.siipap.inventarios.dao.MovimientoDaoImpl"
+        autowire="byType"/>
+     
+     <bean id="trasladoDao" class="com.luxsoft.siipap.inventarios.dao.TrasladoDaoImpl"
+        autowire="byType"/>
+        
+    <bean id="ordenDeMaquilaDao" 
+    	class="com.luxsoft.siipap.dao.hibernate.GenericDaoHibernate">
+    	<constructor-arg value="com.luxsoft.siipap.maquila.model.RecepcionDeMaquila"/>
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="inventarioAnualDao" class="com.luxsoft.siipap.inventarios.dao.InventarioAnualDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>    	
+    </bean>
+    
+    <bean id="existenciaDao" class="com.luxsoft.siipap.inventarios.dao.ExistenciaDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="productoDao" ref="productoDao"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
+    <bean id="kitDao" class="com.luxsoft.siipap.inventarios.dao.KitDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="costoPromedioDao" class="com.luxsoft.siipap.inventarios.dao.CostoPromedioDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+        
+    <!-- Compras-->
+    
+    <bean id="compraDao" class="com.luxsoft.siipap.compras.dao.Compra2DaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="compra2Dao" class="com.luxsoft.siipap.compras.dao.Compra2DaoImpl"
+    	autowire="byType"/>    
+    
+    <bean id="entradaPorCompraDao" class="com.luxsoft.siipap.compras.dao.EntradaPorCompraDaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="listaDePreciosDao" class="com.luxsoft.siipap.compras.dao.ListaDePreciosDaoImpl"
+		autowire="byType"/>
+		
+	<!-- CXP -->
+	
+	 <bean id="facturaDao" class="com.luxsoft.siipap.cxp.dao.FacturaDaoImpl"
+    	autowire="byType"/>
+    	
+    <bean id="cxpPagoDao"
+    	class="com.luxsoft.siipap.cxp.dao.CXPPAgoDaoImpl"
+    	autowire="byType"/>
+	
+	<bean id="cxpNotaDao"
+    	class="com.luxsoft.siipap.cxp.dao.CXPNotaDaoImpl"
+    	autowire="byType"/>
+	
+	<bean id="contraReciboDao"
+		class="com.luxsoft.siipap.cxp.dao.ContraReciboDaoImpl"
+		autowire="byType"/>
+	
+	<!-- CXC -->
+	
+	<bean id="pagoDao"
+		class="com.luxsoft.siipap.cxc.dao.PagoDaoImpl"
+		autowire="byType">
+	</bean>
+    
+    <bean id="notaDeCreditoDao"
+		class="com.luxsoft.siipap.cxc.dao.NotaDeCreditoDaoImpl"
+		autowire="byType">
+	</bean>
+	
+	<bean id="cargoDao"
+		class="com.luxsoft.siipap.cxc.dao.CargoDaoImpl"
+		autowire="byType">
+	</bean>
+	
+	<bean id="notaDeCargoDao"
+		class="com.luxsoft.siipap.cxc.dao.NotaDeCargoDaoImpl"
+		autowire="byType">
+	</bean>
+	
+	<bean id="comisionDao"
+		class="com.luxsoft.siipap.ventas.dao.ComisionDaoImpl"
+		autowire="byType">
+	</bean>
+	
+    <!--  Ventas -->
+    
+    <bean id="descPorVolDao"
+    	class="com.luxsoft.siipap.ventas.dao.DescPorVolDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="ventaDao" class="com.luxsoft.siipap.ventas.dao.VentaDaoImpl"
+        autowire="byType"/>
+    <bean id="listaDePreciosVentaDao" class="com.luxsoft.siipap.ventas.dao.ListaDePreciosVentaDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="listaDePreciosClienteDao" class="com.luxsoft.siipap.ventas.dao.ListaDePreciosClienteDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Tesoreria -->
+    
+    <bean id="cargoAbonoDao" 
+    	class="com.luxsoft.siipap.dao.tesoreria.CargoAbonoDaoImpl">    	
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="conciliacionDao"
+    	class="com.luxsoft.siipap.dao.tesoreria.ConciliacionDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="requisicionDao"
+    	class="com.luxsoft.siipap.dao.tesoreria.RequisicionDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="transferenciaDao"
+    	class="com.luxsoft.siipap.dao.tesoreria.TransferenciaDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="solicitudDeDepositosDao"
+    	class="com.luxsoft.sw3.tesoreria.dao.SolicitudDeDepositosDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="corteDeTarjetaDao"
+    	class="com.luxsoft.sw3.tesoreria.dao.CorteDeTarjetaDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- Gastos (Bienes/Servicios) -->    
+    
+    <bean id="clasificacionDao" 
+    	class="com.luxsoft.siipap.dao.gastos.GClasificacionDaoImpl"
+    	autowire="byType">
+    </bean>
+    
+    <bean id="proveedorDeGastosDao" 
+    	class="com.luxsoft.siipap.dao.gastos.GProveedorDaoImpl"
+    	autowire="byType">
+    </bean>
+    
+    <bean id="productoServicioDao" 
+    	class="com.luxsoft.siipap.dao.gastos.GProductoServicioDaoImpl"
+    	autowire="byType">
+    </bean>
+    
+    <bean id="compraDeGastosDao"
+    	class="com.luxsoft.siipap.dao.gastos.GCompraDaoImpl"
+    	autowire="byType">
+    </bean>
+    
+    <bean id="activoFijoDao"
+    	class="com.luxsoft.siipap.dao.gastos.ActivoFijoDaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="importadorDeDepositos"
+    	class="com.luxsoft.siipap.service.tesoreria.ImportadorDeDepositos">
+    	<property name="universalDao" ref="universalDao"/>
+    	<property name="cargoAbonoDao" ref="cargoAbonoDao"/>
+    	<property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    
+    <!-- Maquila -->
+    
+    <bean id="maquilaDao" class="com.luxsoft.siipap.maquila.dao.OrdenDeMaquilaDaoImpl"
+        autowire="byType"/>
+        
+     <bean id="entradaDeMaterialDao" class="com.luxsoft.sw3.maquila.dao.EntradaDeMaterialDaoImpl"
+        autowire="byType"/>
+        
+     <bean id="ordenDeCorteDao" class="com.luxsoft.sw3.maquila.dao.OrdenDeCorteDaoImpl"
+        autowire="byType"/>
+        
+      <bean id="recepcionDeCorteDao" class="com.luxsoft.sw3.maquila.dao.RecepcionDeCorteDaoImpl"
+        autowire="byType"/>
+    
+    <bean id="salidaDeBobinasDao" class="com.luxsoft.sw3.maquila.dao.SalidaDeBobinasDaoImpl"
+        autowire="byType"/>
+    
+    <bean id="analisisDeMaterialDao" class="com.luxsoft.sw3.maquila.dao.AnalisisDeMaterialDaoImpl"
+        autowire="byType"/>
+
+    <!-- Add new Managers here -->
+	
+	<!-- Legacy Daos -->
+	<bean id="depositoDao" class="com.luxsoft.siipap.dao.legacy.DepositoDaoImpl">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+    
+    	<!-- Comprobantes fiscales digitales CFD Daos -->
+    
+    <bean id="certificadoDeSelloDigitalDao" class="com.luxsoft.sw3.cfd.dao.CertificadoDeSelloDigitalDaoImpl"
+    	autowire="byType"/>
+    
+    <bean id="folioFiscalDao" class="com.luxsoft.sw3.cfd.dao.FolioFiscalDaoImpl"
+    	autowire="byType"/>
+    	
+    <!--  Contabilidad -->
+    
+    <bean id="cuentaContableDao"
+    	class="com.luxsoft.sw3.contabilidad.dao.CuentaContableDaoImpl"
+    	autowire="byType"/>
+    	
+   	<bean id="polizaDao"
+    	class="com.luxsoft.sw3.contabilidad.dao.PolizaDaoImpl"
+    	autowire="byType"/>
+    
+    <tx:annotation-driven/> 
+    
+</beans>

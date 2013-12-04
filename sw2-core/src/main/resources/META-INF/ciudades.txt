@@ -1,0 +1,604 @@
+Abasolo
+Acala
+Acaponeta
+Acapulco de Juárez
+Acatlán de Juárez
+Acatlán de Osorio
+Acayucan
+Actopan
+Acámbaro
+Agua Prieta
+Agua dulce
+Aguaruto
+Aguascalientes
+Ahome
+Ahuacatlán
+Ahualulco de Mercado
+Ajijic
+Aldama
+Almoloya de Juárez
+Altamira
+Altotonga
+Alvarado
+Amatepec
+Ameca
+Amozoc
+Angel R. Cabada
+Angostura
+Anáhuac
+Apan
+Apaseo el Grande
+Apatzingan de la Constitución
+Apaxtla de Castrejón
+Apizaco
+Apodaca
+Arandas
+Arcelia
+Armería
+Arriaga
+Arteaga
+Asientos
+Asunción Nochixtlán
+Atlixco
+Atotonilco el Alto
+Atoyac
+Atoyac de Álvarez
+Autlán de Navarro
+Ayutla de los Libres
+Azoyu
+Bahías de Huatulco
+Banderilla
+Benito Juárez
+Boca del Rio
+Bucerias
+Buenavista de Cuellar
+Cabo San Lucas
+Caborca (Heroica Caborca)
+Cacahotan
+Cadereyta Jiménez
+Calera de Victor Rosales
+Calkini
+Calpulalpan
+Calvillo
+Campeche
+Cananea
+Canatlán
+Cancún
+Candelaria
+Capulhuac
+Carlos a Carrillo
+Casimiro Castillo
+Castaños
+Catemaco
+Cazones de Herrera
+Cedral
+Celaya
+Cerritos
+Cerro Azul
+Chahuites
+Chalco de Díaz Covarrubias
+Champotón
+Chapala
+Charcas
+Chetumal (Ciudad Chetumal)
+Chiapa de Corzo
+Chiautempan
+Chiconcuac
+Chihuahua
+Chilapa de Álvarez
+Chilpancingo de los Bravo
+Chimalhuacán
+Choix
+Cihuatlán
+Cintalapa de Figueroa
+Ciudad Acuña
+Ciudad Adolfo López Mateos
+Ciudad Allende
+Ciudad Altamirano
+Ciudad Camargo
+Ciudad Constitución (Villa Constitución)
+Ciudad Cuauhtémoc
+Ciudad Delicias
+Ciudad Gustavo Díaz Ordaz
+Ciudad Guzmán
+Ciudad Hidalgo
+Ciudad Ixtepec
+Ciudad Juárez
+Ciudad Lerdo
+Ciudad Madero
+Ciudad Mante
+Ciudad Nezahualcoyotl
+Ciudad Obregón
+Ciudad Sabinas
+Ciudad Serdán
+Ciudad Valles
+Ciudad Victoria
+Ciudad de Fray Bernardino de Sahagún
+Ciudad del Carmen
+Ciudad del Maíz
+Ciénega de Flores
+Coacalco de Berriozabal
+Coatepec
+Coatzacoalcos
+Coatzintla
+Cocula
+Colima
+Colotlán
+Comalcalco
+Comitán de Domínguez
+Comonfort
+Compostela
+Copala
+Cortazar
+Cosala
+Cosamaloapan de Carpio
+Cosio
+Cosolapa
+Cosoleacaque
+Coyuca de Benitez
+Coyuca de Catalán
+Cozumel
+Cruz Azul
+Cruz Grande
+Cuajinicuilapa
+Cuatro Ciénegas de Carranza
+Cuautitlán
+Cuautitlán Izcalli
+Cuautla (Cuautla de Morelos)
+Cuautlancingo
+Cuernavaca
+Cuerámaro
+Cuicatlán
+Cuichapa
+Cuitláhuac
+Culiacán
+Cunduacan
+Cutzamala de Pinzon
+Cárdenas
+Córdoba
+Doctor Arroyo
+Durango
+Ecatepec de Morelos
+Ejutla de Crespo
+El Camarón
+El Grullo
+El Higo
+El Ocotito
+El Pueblito
+El Salto
+El cercado
+El quince
+El rosario
+Emiliano Zapata
+Empalme
+Empalme Escobedo
+Ensenada
+Escuinapa
+Escárcega
+Etzatlan
+Felipe Carrillo Puerto
+Fortín de las Flores
+Fracción el Refugio
+Francisco I Madero
+Fresnillo
+Frontera
+Galeana
+García
+General Escobedo
+General Miguel Alemán
+González
+Guadalajara
+Guadalupe
+Guadalupe (Ciudad Guadalupe)
+Guamúchil
+Guanajuato
+Guasave
+Guaymas (Heroica Guaymas)
+Guerrero Negro
+Gutierrez Zamora
+Gómez Palacio
+Hecelchakan
+Hermosillo
+Heroica Ciudad de Tlaxiaco
+Heroica Mulegé
+Hidalgo del Parral
+Higuera de Zaragoza
+Hopelchen
+Huajuapan de León
+Hualahuises
+Huamantla
+Huamuxtitlan
+Huanimaro
+Huatabampo
+Huatusco
+Huauchinango
+Huayacocotla
+Huejuquilla el Alto
+Huejutla de Reyes
+Huetamo de Núñez
+Huiloapan de Cuauhtémoc
+Huimanguillo
+Huitzuco
+Huixquilucan de Degollado
+Huixtla
+Iguala de la Independencia
+Irapuato
+Isla
+Isla Mujeres
+Ixmiquilpan
+Ixtaczoquitlán
+Ixtapaluca
+Ixtlán del Rio
+Izúcar de Matamoros
+Jacona de Plancarte
+Jala
+Jalostotitlán
+Jalpa
+Jalpa de Méndez
+Jaltipan de Morelos (Jaltipan)
+Jamay
+Jaumave
+Jerez (Jerez de García Salinas)
+Jerécuaro
+Jesús María
+Jiménez
+Jiquilpan
+Jiquipilas
+Jocotepec
+Jojutla
+José Cardel
+Juan Aldama
+Juan Díaz Covarrubias
+Juan Rodríguez Clara
+Juchitepec de Mariano Riva Palacio
+Juchitán (Juchitán de Zaragoza)
+Kantunilkin
+La Barca
+La Cruz
+La Paz
+La Unión
+La peñita de Jaltemba
+La piedad de Cavadas
+Lagos de Moreno
+Lagunas Estación
+Las Choapas
+Las Guacamayas
+Las Margaritas
+Las Pintitas
+Las Rosas
+Las Varas
+Leon de los Aldama (leon)
+Lerdo de Tejada
+Linares
+Loma Bonita
+Loreto
+Los Mochis
+Los Reyes Acaquilpan (La Paz)
+Los Reyes de Salgado (Los Reyes)
+Luis Moya
+Lázaro Cárdenas
+Macuspana
+Madera
+Magdalena
+Manuel Estación
+Manzanillo
+Mapastepec
+Maravatio de Ocampo
+Mariscala de Juárez
+Marquelia
+Matamoros (Heroica Matamoros)
+Matamoros de la Laguna
+Matehuala
+Matías Romero
+Mazatlán
+Melchor Muzquiz
+Melchor Ocampo
+Metepec
+Mexicali
+Miahuatlán de Porfirio Díaz
+Miguel Alemán
+Minatitlán
+Mocorito
+Monclova
+Montemorelos
+Monterrey
+Morelia
+Morelos
+Moroleón
+Motozintla
+Motul
+Moyahua de Estrada
+Mérida
+Nadadores
+Naranjo
+Naranjos
+Natividad
+Naucalpan de Juárez
+Nava
+Navojoa
+Navolato
+Nochistlán
+Nogales
+Nombre de Dios
+Nueva Ciudad Guerrero
+Nueva Rosita
+Nuevo Casas Grandes
+Nuevo Laredo
+Oaxaca (Oaxaca de Juárez)
+Ocosingo
+Ocotlán
+Ocotlán de Morelos
+Ocoyoacac
+Ocozocoautla de Espinosa
+Ojinaga
+Ojocaliente
+Olinalá
+Orizaba
+Pabellón de Arteaga
+Pachuca de Soto
+Palenque
+Panuco
+Panuco de Coronado
+Papantla (Papantla de Olarte)
+Paracho
+Paraje Nuevo
+Paraíso
+Parras de la Fuente
+Paso de Ovejas
+Paso del Macho
+Patzcuaro
+Petatlán
+Peñón Blanco
+Pichucalco
+Piedras Negras
+Pijijiapan
+Pinotepa Nacional
+Platón Sanchez
+Playa Vicente
+Playa del Carmen
+Pomuch
+Poncitlán
+Poza Rica (Poza Rica de Hidalgo)
+Puebla (Heroica Puebla)
+Puente de Ixtla
+Puerto Adolfo López Mateos
+Puerto Escondido
+Puerto Madero
+Puerto Peñasco
+Puerto San Blas
+Puerto Vallarta
+Puruandiro
+Purísima de Bustos
+Putla Villa de Guerrero
+Pénjamo
+Querétaro
+Quila
+Ramos Arizpe
+Reforma
+Reynosa (Ciudad Reynosa)
+Rincón de Romos
+Rincón de Tamayo
+Rio Bravo (Ciudad Rio Bravo)
+Rio Verde
+Rio blanco
+Rio grande
+Rodolfo Sánchez t (Maneadero)
+Romita
+Rosarito
+Ruiz
+Sabancuy
+Sabinas Hidalgo
+Sahuayo de Morelos
+Salamanca
+Salina Cruz
+Salinas de Hidalgo
+Saltillo
+Salvatierra
+San Andrés Cholula
+San Andrés Tuxtla
+San Blas
+San Buenaventura
+San Cristóbal de las Casas
+San Diego de Alejandría
+San Felipe
+San Felipe Jalapa de Díaz
+San Fernando
+San Francisco Ixhuatán
+San Francisco Telixtlahuaca
+San Francisco de los Romo
+San Francisco del Rincón
+San Ignacio
+San Ignacio Cerro Gordo
+San Jerónimo de Juárez
+San José del Cabo
+San José el Verde
+San Juan Bautista Valle Nacional
+San Juan Bautista lo de Soto
+San Juan Cacahuatepec
+San Juan de los Lagos
+San Juan del Rio
+San Julián
+San Luis Acatlán
+San Luis Potosí
+San Luis Rio Colorado (Horcasitas)
+San Luis San Pedro
+San Luis de la Loma
+San Luis de la Paz
+San Marcos
+San Martín Texmelucan de Labastida
+San Mateo Atenco
+San Miguel el Alto
+San Miguel el Grande
+San Nicolás de los Garza
+San Pablo Huitzo
+San Pablo Villa de Mitla
+San Pedro Cholula
+San Pedro Garza García
+San Pedro Mixtepec
+San Pedro Pochutla
+San Pedro Tapanatepec
+San Pedro Totolapa
+San Pedro de las Colinas
+San Rafael
+San Sebastián Tecomaxtlahuaca
+San Vicente Chicoloapan de Juárez
+San miguel de Allende
+San pedro Lagunillas
+Santa Catarina
+Santa Cruz Itundujia
+Santa Maria Huatulco
+Santa Maria Tultepec
+Santa Maria del Oro
+Santa Rosa Treinta
+Santiago
+Santiago Ixcuintla
+Santiago Jamiltepec
+Santiago Juxtlahuaca
+Santiago Maravatio
+Santiago Papasquiaro
+Santiago Suchilquitongo
+Santiago Tulantepec
+Santiago Tuxtla
+Santo Domingo Tehuantepec
+Sayula
+Sihuapan
+Silao
+Sinaloa de Leyva
+Soledad de Doblado
+Soledad de Graciano Sánchez
+Sombrerete
+Sonoyta
+Soto la Marina
+Tacámbaro de Codallos
+Tala
+Talpa de Allende
+Tamasopo
+Tamazula
+Tamazulapam
+Tamazunchale
+Tampico
+Tampico Alto
+Tamuin
+Tangancícuaro de Arista
+Tantoyuca
+Tapachula
+Tarandacuao
+Taxco de Alarcón
+Teapa
+Tecalitlán
+Tecamac de Felipe Villanueva
+Tecamachalco
+Tecate
+Tecoman
+Tecpan de Galeana
+Tecuala
+Tehuacan
+Tejupilco de Hidalgo
+Teloloapan
+Tempoal
+Tenosique
+Teocaltiche
+Teotitlán de Flores Magon
+Tepatitlán de Morelos
+Tepeaca
+Tepecoacuilco de Trujano
+Tepeji del Rio
+Tepezala
+Tepic
+Tepotzotlán
+Tequila
+Tequixquiac
+Texcoco de Mora
+Teziutlan
+Tezonapa
+Ticul
+Tierra Blanca
+Tierra Colorada
+Tierra Nueva
+Tihuatlán
+Tijuana
+Tixtla de Guerrero
+Tizayuca
+Tizimin
+Tlacojalpan
+Tlacolula de Matamoros
+Tlajomulco de Zuñiga
+Tlalixtaquilla
+Tlalnepantla de Baz
+Tlapa de Comonfort
+Tlapacoyan
+Tlapehuala
+Tlaquepaque
+Tlaquiltenango
+Tlaxcala (Tlaxcala de Xicotencatl)
+Tlaxcoapan
+Todos Santos
+Toluca de Lerdo
+Tonala
+Topolobampo
+Torreón
+Tototlan
+Tres Valles
+Tula
+Tula de Allende
+Tulancingo
+Tultitlán de Mariano Escobedo
+Tuxpam de Rodríguez Cano
+Tuxpan
+Tuxtepec (San Juan Bautista Tuxtepec)
+Tuxtla Gutiérrez
+Union Hidalgo
+Union de San Antonio
+Uriangato
+Uruapan
+Valladolid
+Valle Hermoso
+Valle de Chalco Solidaridad
+Valle de Guadalupe
+Valle de Santiago
+Valparaíso
+Venustiano Carranza
+Veracruz
+Vicente Estación
+Vicente Guerrero
+Viesca
+Villa Alberto a Alvarado
+Villa Corona
+Villa Hidalgo
+Villa Nicolás Romero
+Villa San Blas Atempa
+Villa Sola de Vega
+Villa Unión
+Villa Vicente Guerrero
+Villa Yecuatla
+Villa de Cos
+Villa de Reyes
+Villa de Zaachila
+Villa de Álvarez
+Villaflores
+Villagrán
+Villahermosa
+Villanueva
+Xalapa Enríquez
+Xalisco
+Xicotencatl
+Xicotepec
+Xonacatlán
+Yahualica de González Gallo
+Yuriria
+Yurécuaro
+Zacapu
+Zacatecas
+Zacatepec de Hidalgo
+Zacatlán
+Zacoalco de Torres
+Zamora de Hidalgo
+Zapopan
+Zapotiltic
+Zaragoza
+Zimapan
+Zimatlán de Álvarez
+Zinapecuaro de Figueroa
+Zitacuaro (Heroica Zitacuaro)
+Zumpango del Rio
+Ébano

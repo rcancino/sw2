@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+
+<!--
+  Build file para cargar  una base de datos con informacion de una sucursal 
+  
+-->
+
+
+<project name="Carga_SW2" basedir=".">
+
+
+	<property file="project.properties" />
+	<property name="dest.dir" value="${basedir}/src/main/dbunit/carga" />
+	<property name="sucursal" value="6"/>
+
+
+	<path id="lib">
+		<fileset dir="/m2/repository">
+			<include name="**/**.jar" />
+		</fileset>
+	</path>
+
+	
+	<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask">
+		<classpath >
+			<path location="${dbunit.jar}" />
+			<path location="${jdbc.jar}" />			
+			<path location="${basedir}/src/test/resources/" />
+			<fileset dir="${repository.path}">
+				<include name="org/slf4j/**/*.jar"/>
+				<include name="log4j/log4j/**/*.jar"/>
+				<include name="commons-collections/commons-collections/3.2.1/**/*.jar"/>
+			</fileset>
+		</classpath>
+	</taskdef>
+	
+
+	<target name="exportar-catalogos-basico" 
+		description="Exporta los catalogos basicos de produccion">
+		<mkdir dir="${dest.dir}/catalogos" />
+		<dbunit driver="${prod.jdbc.driverClassName}" 
+				url="${prod.jdbc.url}" 
+				userid="${prod.jdbc.username}" 
+				password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+		    </dbconfig> 
+			<export dest="${dest.dir}/catalogos" format="csv" ordered="false" >
+					
+				<table name="SX_USUARIOS"/>
+				<table name="SX_ROLE"/>
+				<table name="SX_PERMISOS" />
+				<table name="SX_USER_ROLE" />			
+				<table name="SW_EMPRESAS" />
+				<table name="SW_SUCURSALES" />
+				<table name="SW_DEPARTAMENTOS" />
+				<table name="SW_BANCOS" />				
+				<table name="SW_CUENTAS" />
+				<table name="SX_TARJETAS" />
+				<table name="SX_ESQUEMAS" />
+				<table name="sx_tarjetas_esquemas" />
+				<table name="SW_CONCEPTOS" />
+				<table name="SX_COBRADORES" />
+				<table name="SX_VENDEDORES" />
+				<table name="SX_CORTES" />
+				<table name="SX_CORTES_MEDIDAS" />
+				<table name="SX_LINEAS" />
+				<table name="SX_MARCAS" />
+				<table name="SX_CLASES" />
+				<table name="SX_UNIDADES" />
+				<table name="SX_PRODUCTOS" />
+				<table name="SX_CONFIGURACION" />
+				<table name="SX_CLIENTES_CREDITO"/>
+				<table name="SX_CLIENTES"/>
+				<table name="sx_desc_vol"/>
+				<table name="sx_proveedores"/>
+				<table name="sx_lp_cliente"/>
+				<table name="sx_lp_cliente_det"/>
+				<table name="sx_lp_provs"/>
+				<table name="sx_lp_provs_det"/>
+				<table name="SX_ROLES_PERMISOS"/>				
+				<table name="SX_CLIENTES_TELS"/>
+				<table name="SX_CLIENTES_CUENTAS"/>
+				<table name="SX_CLIENTES_COMENT"/>
+				<table name="SX_CHOFER_FACTURISTA"/>
+				<table name="SX_CHOFERES"/>
+				<table name="SX_TRANSPORTES"/>				
+				<table name="SX_SOCIOS"/>
+				<table name="SX_FOLIOS"/>
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-catalogos-basico" 
+			description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/catalogos" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>
+
+	<target name="exportar-ventas" 
+			description="Exporta las ventas del mes">
+			<mkdir dir="${dest.dir}/ventas" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${dest.dir}/ventas" format="csv" ordered="false" >
+				<!--
+					 <query name="SX_VENTAS" 
+						sql="select * from sx_ventas  where SUCURSAL_ID=6 and TIPO='FAC'">
+					</query>
+					 	 	-->	 
+					<query name="SX_VENTASDET" 
+						sql="select * from sx_ventasdet  where SUCURSAL_ID=6">
+					</query> 	
+				</export>
+			</dbunit>
+	</target>
+
+	<target name="importar-VENTAS" 
+		description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/ventas" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>
+	
+	<target name="exportar-DEVOLUCIONES" 
+			description="Exporta las devoluciones">
+			<mkdir dir="${dest.dir}/devoluciones" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${dest.dir}/devoluciones" format="csv" ordered="false" >
+					<query name="SX_DEVOLUCIONES" 
+						sql="select * from sx_devoluciones where VENTA_ID in(select cargo_id from sx_ventas where sucursal_id=6)">
+					</query>
+										 
+					<query name="sx_inventario_dev" 
+						sql="SELECT * FROM sx_inventario_dev WHERE SUCURSAL_ID=6">
+					</query> 
+				</export>
+			</dbunit>
+	</target>
+	
+	<target name="importar-DEVOLUCIONES" 
+		description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/devoluciones" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>
+ 
+	<target name="exportar-abonos" 
+			description="Exporta las abonos de ventas">
+			<mkdir dir="${dest.dir}/abonos" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${dest.dir}/abonos" format="csv" ordered="false" >
+					<query name="SX_CXC_ABONOS" 
+						sql="select * from sx_cxc_abonos where ABONO_ID    in(select abono_id  from sx_cxc_aplicaciones where CAR_SUCURSAL='ANDRADE' and CAR_ORIGEN in('CAM','MOS'))">
+					</query>
+					
+					<query name="SX_CXC_APLICACIONES" 
+						sql="select * from sx_cxc_aplicaciones where CAR_SUCURSAL='ANDRADE' and CAR_ORIGEN in('CAM','MOS') ">
+					</query> 
+				</export>
+			</dbunit>
+	</target>
+
+	
+	<target name="importar-ABONOS" 
+		description="Importa los Abonos y aplicaciones">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/abonos" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>
+	
+	<target name="exportar-MOVIMIENTOS" 
+			description="Exporta las Movimientos">
+			<mkdir dir="${dest.dir}/movimientos" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${dest.dir}/movimientos" format="csv" ordered="false" >
+					<query name="SX_INVENTARIO_MOV" 
+						sql="select * from sx_inventario_mov where sucursal_id=6">
+					</query>
+					<query name="SX_INVENTARIO_COM" 
+						sql="select * from sx_inventario_com where sucursal_id=6">
+					</query>
+					<query name="SX_INVENTARIO_INI" 
+						sql="select * from sx_inventario_ini where sucursal_id=6">
+					</query>
+					<query name="SX_INVENTARIO_TRS" 
+						sql="select * from sx_inventario_trs where sucursal_id=6">
+					</query>
+					<query name="SX_INVENTARIO_MAQ" 
+						sql="select * from sx_inventario_maq where sucursal_id=6">
+					</query>
+				</export>
+			</dbunit>
+	</target>
+	
+	<target name="importar-MOVIMIENTOS" 
+		description="Importa los Movimientos genericos">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/movimientos" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target>
+	
+	
+	
+	
+	<target name="exportar-EXISTENCIAS" 
+			description="Exporta Existencias">
+			<mkdir dir="${dest.dir}/exis" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+						url="${prod.jdbc.url}" 
+						userid="${prod.jdbc.username}" 
+						password="${prod.jdbc.password}">	 		
+			<dbconfig>
+				<property name="datatypeFactory" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
+			    <feature name="batchedStatements" value="true" />
+			</dbconfig> 
+				<export dest="${dest.dir}/exis" format="csv" ordered="false" >
+					<query name="SX_EXISTENCIAS" 
+						sql="select * from sx_existencias ">
+					</query>
+				</export>
+			</dbunit>
+	</target>
+	  
+	<target name="importar-EXISTENCIAS" 
+		description="Importa los INIs">
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="jdbc:mysql://localhost/sw3" 
+				userid="root" 
+				password="sys">			
+			<operation type="CLEAN_INSERT"
+				src="${dest.dir}/exis" 
+				transaction="true" format="csv" />
+		</dbunit>
+	</target> 
+	
+	
+</project>

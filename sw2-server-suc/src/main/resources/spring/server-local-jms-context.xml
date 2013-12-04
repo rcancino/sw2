@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xmlns:aop="http://www.springframework.org/schema/aop"
+       	xmlns:tx="http://www.springframework.org/schema/tx"
+       	xmlns:jms="http://www.springframework.org/schema/jms"       	
+		xmlns:amq="http://activemq.apache.org/schema/core"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/springaop-2.5.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			http://activemq.apache.org/schema/core
+			http://activemq.apache.org/schema/core/activemq-core-5.2.0.xsd
+			http://www.springframework.org/schema/jms 
+			http://www.springframework.org/schema/jms/spring-jms-2.5.xsd			
+			"
+		default-lazy-init="false"
+		>
+	
+	<description> Configuracion de servicios de replica local para las sucursales </description>
+	
+	<context:component-scan base-package="com.luxsoft.sw2.replica.producers"/>
+	<context:component-scan base-package="com.luxsoft.sw2.replica.consumers"/>
+	
+	<context:property-placeholder location="classpath:swx-jdbc.properties"/>
+	 
+	<bean id="centralBrokerConnectionFactory"	 	
+    	class="org.apache.activemq.spring.ActiveMQConnectionFactory"    	
+    	p:useAsyncSend="true"
+    	p:copyMessageOnSend="false"
+    	p:useCompression="true"
+    	p:brokerURL="${centralBroker.url}"/>
+    	
+      <bean id="centralBrokerTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager"
+    	p:connectionFactory-ref="centralBrokerConnectionFactory"/> 
+    
+     <bean id="localBrokerConnectionFactory"
+    	class="org.apache.activemq.spring.ActiveMQConnectionFactory" 
+    	p:useAsyncSend="true"
+    	p:copyMessageOnSend="false"
+    	p:useCompression="true"
+    	p:brokerURL="${localBroker.url}"
+    	p:clientID="${sucursal.name}-Broker" />    	
+   
+   <bean id="localJmsTemplate"
+    	class="org.springframework.jms.core.JmsTemplate"
+    	p:connectionFactory-ref="localBrokerConnectionFactory"
+    	p:deliveryPersistent="true"
+    	p:explicitQosEnabled="false"
+    	/>
+    	
+    
+    <bean id="localBrokerTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager"
+    	p:connectionFactory-ref="localBrokerConnectionFactory"/>
+             
+    <!-- 			I M P O R T A C I O N E S 	DESDE EL BROKER DE OFICINAS				-->
+    
+    <jms:listener-container 
+    	connection-factory="centralBrokerConnectionFactory" 
+    	destination-type="durableTopic"	
+    	client-id="${sucursal.name}-Listener"
+    	acknowledge="transacted"
+    	>
+    	<jms:listener destination="REPLICA.TOPIC" ref="importadorManager" method="importarEntidad" subscription="IMPORTACION_${sucursal.name}" />
+     	 
+    </jms:listener-container>
+    
+    <jms:listener-container	connection-factory="centralBrokerConnectionFactory"	acknowledge="auto" >
+    	<jms:listener destination="REPLICA.QUEUE.${sucursal.name}" ref="importadorManager" method="importarEntidad"/>
+    </jms:listener-container> 
+    
+    
+  	<bean id="importadorManager" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalManager">
+  		<property name="importadores">
+    		<map>
+    			<entry key="com.luxsoft.siipap.inventarios.model.Existencia" value-ref="importadorDeExistencias"/>
+    			<entry key="com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado" value-ref="importadorDeSolicitudesDeTraslados"/>
+    			<entry key="com.luxsoft.siipap.inventarios.model.Traslado" value-ref="importadorDeTraslados"/>
+    			<entry key="com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito" value-ref="importadorDeSolicitudDeDepositos"/>
+    			<entry key="com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito" value-ref="importadorDeSolicitudDeDepositos"/>
+    			<entry key="com.luxsoft.siipap.compras.model.Compra2" value-ref="importadorLocalDecompras"/>
+    		</map>
+    	</property>
+    </bean>
+    
+    <bean id="importadorDeExistencias" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalDeExistencias"
+    	p:sucursales="${sucursal.name}"/>
+    
+    <bean id="importadorDeSolicitudesDeTraslados" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalDeSolicitudesDeTraslados" 
+    	p:sucursalOrigenId="${sucursal.id}"/>
+    	
+    <bean id="importadorDeTraslados" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalDeTraslados" 
+    	p:sucursalOrigenId="${sucursal.id}"
+    	p:jmsTemplate-ref="localJmsTemplate"/>
+    	
+    <bean id="importadorDeSolicitudDeDepositos" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalDeSolicitudDePagoConDeposito"/>
+    	
+    <bean id="importadorLocalDecompras" class="com.luxsoft.sw2.replica.consumers.ImportadorLocalDeCompras"/>	
+   		
+   <!-- R E P L I C A     L O C A L  D E S D E    L A   S U C U R S  AL   A    L A S   O F I  C I N A S  USANDO LA CONSOLA -->
+   
+	<bean id="replicaManager" class="com.luxsoft.sw2.replica.ReplicaManagerImpl"
+		p:defaultReplicador-ref="defaultReplicador">
+   		<property name="replicadores">
+			<map>
+				<entry key="com.luxsoft.siipap.model.core.ClienteRow2" value-ref="replicadorDeClientes"/>
+				<entry key="com.luxsoft.siipap.ventas.model.Venta"     value-ref="replicadorDeVentas"/>
+				<entry key="com.luxsoft.siipap.compras.model.Compra2"  value-ref="replicadorDeCompras"/>
+				<entry key="com.luxsoft.siipap.compras.model.RecepcionDeCompra"  value-ref="replicadorDeRecepcionDeCompras"/>
+				<entry key="com.luxsoft.siipap.cxc.model.Ficha"  value-ref="replicadorDeFichas"/>
+				<entry key="com.luxsoft.siipap.inventarios.model.Transformacion"  value-ref="replicadorDeTransformaciones"/>
+			</map>
+		</property>
+   </bean>
+	
+	<!-- QUEUE en el que se registran la replicas  -->
+	<bean id="replicaDestino" class="org.apache.activemq.command.ActiveMQQueue" p:physicalName="REPLICA.QUEUE"/>
+	
+	<!-- Replica JMS Producers (Replicadores) -->
+	
+	<bean id="defaultReplicador" class="com.luxsoft.sw2.replica.producers.JMSReplicator"
+   		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+	
+	
+	<bean id="replicadorDeClientes" class="com.luxsoft.sw2.replica.producers.ClienteLocalProducer"
+		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+   		
+   	<bean id="replicadorDeVentas" class="com.luxsoft.sw2.replica.producers.ReplicadorLocalDeVentas"
+   		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+   		
+   	<bean id="replicadorDeCompras" class="com.luxsoft.sw2.replica.producers.ReplicadorLocalDeCompras"
+   		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+	
+	<bean id="replicadorDeRecepcionDeCompras" class="com.luxsoft.sw2.replica.producers.ReplicadorLocalDeRecepcionesDeCompras"
+   		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+   		
+	<bean id="replicadorDeFichas" class="com.luxsoft.sw2.replica.producers.ReplicadorLocalDeFichas"
+		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+   		
+   	<bean id="replicadorDeTransformaciones" class="com.luxsoft.sw2.replica.producers.ReplicadorLocalDeTransformaciones"
+		p:jmsTemplate-ref="localJmsTemplate"
+   		p:sucursal="${sucursal.name}"
+   		p:destino-ref="replicaDestino"/>
+	
+
+</beans>

@@ -1,0 +1,117 @@
+CLASE_ID, NOMBRE, CORTE_ID
+"99","GENERICA",null
+"100","ALBANENE","2"
+"101","ALTA BLANCURA",null
+"102","ALTA OPACIDAD",null
+"103","ALTO BRILLO",null
+"104","ALTO CALIBRE",null
+"105","AMERICANO",null
+"106","ANTE",null
+"107","BIBLIA",null
+"108","BOBINAS",null
+"109","BOLSA",null
+"110","BRISTOL BLANCA",null
+"111","BRISTOL COLOR",null
+"112","BURGO",null
+"113","CAJA CORRUGADO",null
+"114","CARBON","2"
+"115","CARRONCILLO","1"
+"116","CART FLUORESCENTE","1"
+"117","CARTELES",null
+"121","CINTA",null
+"122","COPIA",null
+"123","CORRUGADO",null
+"124","CORUS STYLE",null
+"125","CREST",null
+"126","DIARIO",null
+"127","DIGITAL",null
+"128","EDICION",null
+"129","EDUCACION",null
+"130","ENGOMADO","2"
+"131","ENVOLTURA",null
+"132","ETIQUETAS",null
+"133","EUA",null
+"134","EUROPOLART",null
+"135","FIBRA LISO",null
+"136","FLEXIBLE",null
+"137","FOLDER",null
+"138","FOTOGRAFICO",null
+"139","GALGO",null
+"140","GN",null
+"141","GOFRADO","1"
+"142","GRAFICO AGUA","3"
+"143","GRANITO",null
+"144","GUARRO",null
+"145","HOJAS",null
+"146","HOLANDESA",null
+"147","HOLOGRAMA",null
+"148","COUCHE",null
+"149","IMPORTADO",null
+"150","JUNIOR",null
+"151","KRAFT",null
+"152","LEDGER",null
+"153","LUSTROETIQUETAS",null
+"154","LUSTROLITO",null
+"155","LUSTROPAPSA",null
+"156","LWC",null
+"157","MAGNECOTE","2"
+"158","MANILA",null
+"159","MASCARILLA",null
+"160","METALIZADA",null
+"161","METALIZDO",null
+"162","METALVAC",null
+"163","MICROCORRUGADO",null
+"164","MICROPOROSO",null
+"165","MINAGRIS","1"
+"166","MONOKING",null
+"167","NAIPE",null
+"168","ORO",null
+"169","PAPSA",null
+"170","PAPSA BLANCO",null
+"171","PAPSA COLOR",null
+"172","PARCHEMIN",null
+"173","PEGAMENTO",null
+"174","PELICULA STRETCH",null
+"175","PLATA",null
+"176","POLART",null
+"177","PREMIER",null
+"179","R4",null
+"180","REFRIGERACION",null
+"181","REV BLANCO",null
+"182","REV CAFÉ",null
+"183","REVOLUCION",null
+"184","RIGIDOS",null
+"185","SBS 1C",null
+"186","SBS 2C",null
+"187","SECANTE",null
+"188","SEGURIDAD",null
+"189","SOBRE",null
+"191","TARJETAS",null
+"192","TORRAS",null
+"193","TORTIPAK",null
+"194","TRANSFER",null
+"195","UNI",null
+"196","VACIAS",null
+"197","VARIOS",null
+"198","VERDE OPTICO",null
+"200","AHUESADO",null
+"201","VERJURADO",null
+"202","VIRUTA",null
+"203","WFC",null
+"204","SIN ASIGNAR",null
+"205","NEVIA",null
+"206","ULTRA BLANCO",null
+"207","SUPERPOLART BRILLANTE",null
+"208","SUPERPOLART MATE",null
+"209","PRINTOVER",null
+"210","PRINTOMATT",null
+"211","NEVIA DELGADOS",null
+"212","NEVIA PESADOS",null
+"213","ESPECIAL",null
+"214","PELICULAS",null
+"215","COPAMEX CORTADOS",null
+"216","COPAMEX EXTENDIDOS",null
+"217","FORMULA 60 GRS",null
+"218","FORMULA 75 GRS",null
+"219","IMPORTADO 1C",null
+"220","PONDERLUX",null

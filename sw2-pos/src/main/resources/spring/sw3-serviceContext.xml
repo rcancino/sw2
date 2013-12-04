@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xmlns:aop="http://www.springframework.org/schema/aop"
+       	xmlns:tx="http://www.springframework.org/schema/tx"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/springaop-2.5.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+			"
+		default-lazy-init="false"
+		>  
+
+	<description>
+		Service Layer components
+	</description>
+
+ 	<!-- =================================================================== -->
+    <!-- Security classes from Acegi - used to configure Password Encryption -->
+    <!-- in UserManagerImpl. Overridden in security.xml.                     -->
+    <!-- =================================================================== -->
+    <!-- =================================================================== -->
+    
+     <bean id="userDao" class="com.luxsoft.siipap.dao.hibernate.UserDaoHibernate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean id="authenticationManager"
+    	class="org.acegisecurity.providers.ProviderManager">
+    	<property name="providers" ref="daoAuthenticationProvider"/>
+    </bean>
+    
+    <bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+         <property name="userDetailsService" ref="userDao"/>
+         <property name="passwordEncoder" ref="passwordEncoder"/>
+         <!-- <property name="userCache"></property> -->
+    </bean>
+
+    <bean id="passwordEncoder" class="org.acegisecurity.providers.encoding.ShaPasswordEncoder"/>
+    
+    <bean id="loginManager"
+    	class="com.luxsoft.siipap.service.LoginManager">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+    
+    <bean id="autorizacionesManager"
+    	class="com.luxsoft.siipap.service.AutorizacionesManager">
+    	<property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+	 <bean id="userManager" class="com.luxsoft.siipap.service.impl.UserManagerImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="authenticationProvider" ref="daoAuthenticationProvider"/>
+    </bean>
+		
+	<!-- Todos los ServicesManagers   de sw3 en la medida de lo posible
+		 deben ser detectados en forma automatica -->   
+	 
+    <context:component-scan base-package="com.luxsoft.sw3.services"/>
+    <context:component-scan base-package="com.luxsoft.sw3.cfd.services"/>
+    <context:component-scan base-package="com.luxsoft.sw3.cfd.dao"/>
+    <context:component-scan base-package="com.luxsoft.sw3.cfdi"/>
+    
+    
+      
+    <!-- <bean id="pedidoDao" class="com.luxsoft.sw3.ventas.dao.PedidoDaoImpl"
+    	p:sessionFactory-ref="sessionFactory"/> -->
+    	
+    	
+    <bean id="clienteManager" class="com.luxsoft.siipap.service.core.ClienteManagerImpl">
+    	<constructor-arg ref="clienteDao"/>
+    	<property name="clienteServices" ref="clienteServices"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    	<property name="folioDao" ref="folioDao"/>
+    	<property name="sucursalDao" ref="sucursalDao"/>
+    </bean>
+    
+    <bean id="clienteServices" class="com.luxsoft.siipap.cxc.service.ClienteServices" 
+    	p:sessionFactory-ref="sessionFactory"/>
+    	
+    <bean id="proveedoresManager" class="com.luxsoft.siipap.service.core.ProveedorManagerImpl">
+    	<constructor-arg ref="proveedorDao"/>
+    </bean>
+    
+    <bean id="depositosManager" class="com.luxsoft.siipap.cxc.service.DepositosManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="folioDao" ref="folioDao"/>
+    </bean>
+    
+    <bean id="evaluadorParaAutorizacionDePedidos" class="com.luxsoft.sw3.model.EvaluadorGenerico">
+    	<property name="autirizables">
+    		<list>
+    			<bean class="com.luxsoft.sw3.ventas.rules.EvaluadorParaDescuentoEspecialContado"/>
+    			<bean class="com.luxsoft.sw3.ventas.rules.EvaluadorParaPrecioEspecialCredito"/>
+    			<!--<bean class="com.luxsoft.sw3.ventas.rules.EvaluadorDeLineaDeCrédito"></bean>
+    		--></list>    		
+    	</property>
+    </bean>
+    
+    <util:list id="procesadoresDeComisiones" value-type="com.luxsoft.sw3.ventas.rules.PedidioProcessor">
+    	<ref bean="procesadorDeComisionPorTarjeta"/>
+    	<ref bean="procesadorDeComisionPorCheque"/>
+    </util:list>
+    
+    <bean id="pagosManager"
+    	class="com.luxsoft.sw3.services.PagosManagerImpl"
+    	p:sessionFactory-ref="sessionFactory">
+    </bean>
+    
+    <tx:annotation-driven />
+    
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+ 		<property name="corePoolSize" value="3" />
+  		<property name="maxPoolSize" value="5" />
+  		<property name="queueCapacity" value="25" />
+	</bean>
+    
+</beans>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<description>
+		Contexto para hospedar objetos de tipo javax.swing.Action
+	</description>
+
+	<bean id="viewActionCreator"
+		class="com.luxsoft.siipap.swing.views.ViewActionCreator">
+	</bean>
+
+	<bean id="exitApplication"
+		class="com.luxsoft.siipap.swing.actions.ExitAction">
+		<property name="application" ref="application" />
+	</bean>
+
+	<bean id="showWelcomeView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="welcomeView" />
+	</bean>
+
+	<!--                acciones para Tesoreria                    -->
+
+	<bean id="showAnalisisDePagosView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="analisisDePagosView" />
+	</bean>
+
+	<bean id="showInstitucionBancaria"
+		class="com.luxsoft.siipap.tesoreria.catalogos.ControlDeBancos"
+		factory-method="getShowAction">
+	</bean>
+
+	<bean id="showCuentaBancaria"
+		class="com.luxsoft.siipap.tesoreria.catalogos.CuentasBrowser"
+		factory-method="getShowAction" />
+
+	<bean id="mantenimientoDeconceptos"
+		class="com.luxsoft.siipap.tesoreria.catalogos.ConceptosBrowser"
+		factory-method="getShowAction" />
+		
+	<bean id="showMovimientosView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="movimientosView"/>
+	</bean>
+	
+	<bean id="importarDepositosTask"
+		class="com.luxsoft.siipap.tesoreria.procesos.ImportarDepositosTask"/>
+		
+	<bean id="showRequisicionesView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="requisicionesView"></property>
+	</bean>
+	
+	<bean id="showDepositosView"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="depositosView"></property>
+	</bean>
+
+	<bean id="CONTROL_DE_INGRESOS"
+		class="com.luxsoft.siipap.swing.actions.ShowViewAction">
+		<property name="viewId" value="tesoreria.IngresosView"></property>
+	</bean>
+
+</beans>

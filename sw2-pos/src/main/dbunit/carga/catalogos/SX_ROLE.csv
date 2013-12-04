@@ -1,0 +1,27 @@
+id, description, name, modulo
+"-2","Default role for all Users","ROLE_USER",null
+"-1","Administrator role (can edit Users)","ROLE_ADMIN",null
+"1","Usuario de tesoreria con privlegios para administrar tesoreria","TESORERIA_1",null
+"3","Registra Pagos ","TESORERIA_2",null
+"8","Auxiliar de CXC, Aplica pagos, revision y cobro","OPERADOR_CXC",null
+"9","Aplica Pagos, Revision y cobro , genera reportes estadisticos ","ADMIN_CXC",null
+"10","Administra la cartera de cheques devueltos","OPERADOR_CXC_CHE",null
+"11","Administra cartera de juridico","OPERADOR_CXC_JUR",null
+"12","Consultas de Analisis para Ejecutivos","CONSULTAS_BI",null
+"13","Autorizaciones  en CXC","CXC_AUTORIZA_N1",null
+"14","Autorizacion de Bonificaciones","CXC_AUTORIZA_N2",null
+"15","REALIZA CANCELACION  DE ABONOS Y NOTAS","CXC_CANCELA_ABN",null
+"16","CANCELA APLICACION DE ABONOS PAGOS","CXC_CANCELA_APL",null
+"17","Reportesde credito","REPORTES_CRE",null
+"20","VENDEDOR","VENDEDOR","POS"
+"21","GERENTE_DE_VENTAS","GERENTE_DE_VENTAS","POS"
+"22","ADMINISTRADOR_DE_VENTAS","ADMINISTRADOR_DE_VENTAS","POS"
+"23","ADMINISTRADOR_DE_COMRAS","ADMINISTRADOR_DE_COMRAS","POS"
+"24","CAJERO","CAJERO","POS"
+"25","FACTURISTA","FACTURISTA","POS"
+"26","EMBARQUES","EMBARQUES","POS"
+"27","AUTORIZADOR_DE_DEPOSITOS","AUTORIZADOR_DE_DEPOSITOS","POS"
+"28","FACTURACION_ESPECIAL","FACTURACION_ESPECIAL","POS"
+"29","ADMINISTRACION_INVENTARIOS","ADMINISTRACION_INVENTARIOS","POS"
+"30","ADMINISTRACION_EMBARQUES","ADMINISTRACION_EMBARQUES","POS"
+"31","NOTAS_POR_DEVOLUCION","NOTAS_POR_DEVOLUCION","POS"

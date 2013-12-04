@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	default-lazy-init="false"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">  
+       
+    <description>
+    	Contexto para la generacion de Controladores
+    </description>
+  <!-- 
+     <lang:groovy id="controladorDePruebas"
+     	script-source="classpath:scripts/VentasController.groovy">
+     	<lang:property name="clase" value="Groovy A"/>
+     </lang:groovy> -->
+     
+     <bean id="ventasController"
+     	class="com.luxsoft.sw3.contabilidad.polizas.ventas.VentasController"
+     	p:clase="VENTAS"/>
+     	
+     <bean id="cobranzaCamionetaController"
+     	class="com.luxsoft.sw3.contabilidad.polizas.cobranzacam.CobranzaCamionetaController"
+     	p:clase="Cobranza CAMIONETA"/>
+     	
+     <bean id="cobranzaCxCController"
+     	class="com.luxsoft.sw3.contabilidad.polizas.cxc.ControladorDeCobranzaCxC"
+     	p:clase="Cobranza CXC"/>
+     
+     <bean id="cobranzaCheController"
+     	class="com.luxsoft.sw3.contabilidad.polizas.che.ControladorDeCobranzaChe"
+     	p:clase="Cobranza CHE"/>
+     	
+    <bean id="cobranzaJurController"
+     	class="com.luxsoft.sw3.contabilidad.polizas.jur.ControladorDeCobranzaJur"
+     	p:clase="Cobranza JUR"/>
+     	
+     <bean id="controladorDeCompras"
+     	class="com.luxsoft.sw3.contabilidad.polizas.compras.ControladorDeCompras"
+     	p:clase="Compras"/>
+     	
+     <bean id="controladorComplementoDeCompras"
+     	class="com.luxsoft.sw3.contabilidad.polizas.complementocom.ControladorComplementoDeCompras"
+     	p:clase="Compras Complemento"/>
+     
+     	
+     <!-- Gastos -->
+     <bean id="controladorDePagoDeGastos"
+     	class="com.luxsoft.sw3.contabilidad.polizas.gastos.ControladorDePagoDeGastos"/>
+     	
+     <bean id="controladorDeChequeEnTransito"
+     	class="com.luxsoft.sw3.contabilidad.polizas.gastos.ControladorDeChequeEnTransito"
+     	p:clase="COBRO CHEQUE TRANSITO"/>
+     	
+     <bean id="controladorDeProvisionDeGastos"
+     	class="com.luxsoft.sw3.contabilidad.polizas.gastos.ControladorDeProvisionDeGastos"/>
+     	
+     <bean id="controladorDeCXPCompras"
+     	class="com.luxsoft.sw3.contabilidad.polizas.compras.ControladorDeCXPCompras"/>
+     	
+     <bean id="controladorDeInventarios"
+     	class="com.luxsoft.sw3.contabilidad.polizas.inventarios.ControladorDeInventarios"
+     	p:clase="INVENTARIOS"
+     	/>
+     <bean id="controladorDeTesoreria"
+     	class="com.luxsoft.sw3.contabilidad.polizas.tesoreria.ControladorDeTesoreria"
+     	p:clase="TESORERIA"
+     	/>
+     	
+     <bean id="controladorDeDescuentosEnCompras"
+     	class="com.luxsoft.sw3.contabilidad.polizas.compras.ControladorDeDescuentoCompras"/>
+     
+     <bean id="controladorDeActivoFijo"
+     	class="com.luxsoft.sw3.contabilidad.polizas.af.ControladorDeActivoFijo"/>
+
+	<bean id="ControladorDeMaquila"
+     	class="com.luxsoft.sw3.contabilidad.polizas.maquila.ControladorDeMaquila"/>
+     	
+     	 <bean id="controladorDePagosPorTesoreria"
+     	class="com.luxsoft.sw3.contabilidad.polizas.tesoreria.ControladorDePagoDeTesoreria"/>
+     
+      <bean id="controladorDeProvisionesContables"
+     	class="com.luxsoft.sw3.contabilidad.polizas.gastos.ControladorDeProvisionesContables"/>
+    
+    	<bean id="controladorDeMaquila"
+    		class="com.luxsoft.sw3.contabilidad.polizas.maquila.ControladorDeMaquila"/>
+    		
+     	<bean id="controladorDeTransitoDeDepositos"
+    		class="com.luxsoft.sw3.contabilidad.polizas.tesoreria.ControladorDeTransitoDeDepositos"/>
+    		
+    	<bean id="controladorDeCierreAnual"
+     		class="com.luxsoft.sw3.contabilidad.polizas.ControladorDeCierreAnual"
+     		p:clase="CIERRE_ANUAL"/>
+     		
+     <bean id="controladorDeInteresesPrestamoChofer"
+     	class="com.luxsoft.sw3.contabilidad.polizas.cobranzacam.InteresesPrestamoChoferesController"
+     	p:clase="INTERESES_PRESTAMO_CHOFER"/>
+</beans>

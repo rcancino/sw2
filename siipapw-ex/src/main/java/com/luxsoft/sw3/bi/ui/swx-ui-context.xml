@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de BI
+    </description>
+    
+    <bean id="bi.analisisDeVentasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.bi.consultas.BIVentasPorClientePanel"
+     				p:title="Análisis Por Cliente"/>
+     			<ref bean="sqlTestPanel"/>
+     			<bean class="com.luxsoft.sw3.bi.consultas.VentaNetaPanel"
+     				p:title="Venta Neta Mensual"/>
+     				<bean class="com.luxsoft.sw3.bi.consultas.VentaNetaAcumuladaPanel"
+     				p:title="Venta Neta Acumulada"/>
+     			<ref bean="simuladorDePrecios"/>
+     		</list>
+     		
+     	</property>
+     </bean>
+     
+    <bean name="sqlTestPanel"
+    	class="com.luxsoft.sw3.bi.consultas.SQLGroovyBrowserPanel"
+    	p:title="SQL Test">
+    </bean>
+    
+     <bean id="sistemasAdminView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.bi.AtencionDeSolicitudesDeModificacionPanel"
+     				p:title="Atención de modificaciones"/>
+     			<bean id="solicitudDeModificacionesPanel" class="com.luxsoft.sw3.bi.SolicitudDeModificacionesPanel"
+     				p:title="Solicitudes de modificaciones"/>
+     		</list>
+     		
+     	</property>
+     </bean>
+     
+     <bean id="simuladorDePrecios" class="com.luxsoft.sw3.bi.consultas.SimuladorDePreciosClientePanel">
+     	<property name="title" value="Simulador de Precios"/>
+     </bean>
+     
+     <bean id="biReportsView" class="com.luxsoft.sw3.bi.consultas.BIReportsView">
+     </bean>
+    
+</beans>

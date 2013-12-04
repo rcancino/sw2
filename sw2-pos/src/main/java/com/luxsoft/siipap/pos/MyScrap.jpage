@@ -1,0 +1,2 @@
+java.util.List data=new java.util.ArrayList();data.add("A");
+data.add("B");	y 

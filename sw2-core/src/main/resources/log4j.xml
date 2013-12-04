@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern"
+                value="%p - [%t] - %C{1}.%M(%L) | %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="net.sf.ehcache">
+        <level value="ERROR"/>
+    </logger>
+
+    <!-- Suppress success logging from InteractiveAuthenticationSuccessEvent -->
+    <logger name="org.acegisecurity">
+        <level value="ERROR"/>
+    </logger>
+
+    
+
+    <logger name="org.hibernate">
+        <level value="OFF"/>
+    </logger>
+  
+    <logger name="org.hibernate.SQL">
+        <level value="OFF"/>
+    </logger>
+
+    <logger name="org.springframework">
+        <level value="OFF"/>
+    </logger>
+   
+    <logger name="com.luxsoft.siipap">
+        <level value="DEBUG"/>
+    </logger>
+    
+    <logger name="com.luxsoft.siipap.service">
+        <level value="debug"/>
+    </logger>
+
+    <logger name="com.luxsoft.siipap.security">
+        <level value="debug"/>
+    </logger>
+    
+	<logger name="com.luxsoft.siipap.compras">
+        <level value="debug"/>
+    </logger>
+    
+    <logger name="org.apache.activemq">
+        <level value="INFO"/>
+    </logger>
+    
+    <logger name="org.springframework.jms">
+        <level value="info"/>
+    </logger>
+    
+    
+    <logger name="com.luxsoft.siipap.jms">
+        <level value="debug"/>
+    </logger>
+    
+    <logger name="com.luxsoft.siipap.cxp.ui.form">
+        <level value="debug"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.replica">
+        <level value="info"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.services">
+        <level value="info"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.tesoreria.ui">
+        <level value="info"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.cfd">
+        <level value="info"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.contabilidad.db">
+        <level value="info"/>
+    </logger>
+    
+
+    <logger name="com.luxsoft.sw3.impap.ui.controllers">
+        <level value="info"/>
+    </logger>
+	<logger name="com.luxsoft.sw3.cxp">
+        <level value="debug"/>
+    </logger>
+    
+     <logger name="com.luxsoft.sw3.cxp.forms">
+        <level value="debug"/>
+    </logger>
+    
+    <logger name="com.luxsoft.sw3.contabilidad.services">
+        <level value="DEBUG"/>
+    </logger>
+    
+    
+    
+    <root>
+        <level value="WARN"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>

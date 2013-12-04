@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de Tesoreria
+    </description>
+    
+    <bean id="tesoreria.solicitudParaDepositosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<ref bean="solicitudesPendientes"/>
+     			<ref bean="solicitudesAutorizadas"/>     			
+     			<ref bean="solicitudesCanceladas"/>
+     			<ref bean="solicitudesEnTransito"/>
+     		</list>
+     	</property>
+     </bean>
+    
+    <bean id="solicitudesPendientes"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.SolicitudesParaPagoConDepositoPanel"
+    	p:title="Pendientes"
+    	p:defaultPanel="true"/>
+    	
+    <bean id="solicitudesAutorizadas"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.SolicitudesParaPagoAutorizadasPanel"
+    	p:title="Autorizadas"/>
+    	
+    <bean id="solicitudesCanceladas"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.SolicitudesCanceladasPanel"
+    	p:title="Canceladas"/>
+    	
+    <bean id="solicitudesEnTransito"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.SolicitudesEnTransitoPanel"
+    	p:title="Transito"/>
+    	
+    <!-- Trigger para atender depositos pendientes  panel de solicitudes pendientes-->
+    	
+    <bean id="atebderDispatcher"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="solicitudesPendientes"
+		p:targetMethod="atender"
+		p:concurrent="false"/>
+		
+	<bean id="atenderTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="atebderDispatcher"
+		p:startDelay="2000"
+		p:repeatInterval="15000"/>
+		
+	<!-- Trigger re load del panel de solicitudes pendientes   -->
+	
+	<bean id="loadDispatcher"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		p:targetObject-ref="solicitudesPendientes"
+		p:targetMethod="reload"
+		p:concurrent="false"/>
+		
+	<bean id="loadTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
+		p:jobDetail-ref="loadDispatcher"
+		p:startDelay="0"
+		p:repeatInterval="60000"/>
+     
+     <!-- Scheduler para paneles y consultas  -->
+     
+     <bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		lazy-init="false">
+		<property name="triggers">
+			<list>
+				<ref bean="atenderTrigger"/>
+				<ref bean="loadTrigger"/>
+			</list>			
+		</property>
+	</bean>
+    
+    <bean id="tesoreria.controlDeIngresosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<ref bean="fichasDeDepositoPanel"/>
+     			<ref bean="corteDeTarjetaPanel"/>
+     			<ref bean="ingresoPorDepositosPanel"/>
+     			
+     		</list>
+     	</property>
+     </bean>
+     
+      <bean id="fichasDeDepositoPanel"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.FichasDeDepositoPanel"
+    	p:title="Fichas registradas"/>
+    	
+    	<bean id="corteDeTarjetaPanel"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.CortesDeTarjetaPanel"
+    	p:title="Corte de Tarjeta"/>
+    	
+    	<bean id="ingresoPorDepositosPanel"
+    	class="com.luxsoft.sw3.tesoreria.ui.consultas.IngresosPorDepositosPanel"
+    	p:title="Depositos autorizados"/>
+    
+</beans>

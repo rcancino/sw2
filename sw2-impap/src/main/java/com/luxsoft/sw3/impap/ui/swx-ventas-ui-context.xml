@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de Ventas
+    </description>
+    
+    <bean id="preciosDeVentaPanel"
+    	class="com.luxsoft.siipap.ventas.ui.PreciosDeVentaPanel">
+    </bean>
+    
+	 <bean id="preciosDeVentaView"
+	 	class="com.luxsoft.siipap.ventas.ui.PreciosDeVentaView">
+	 	<property name="preciosDeVentaPanel" ref="preciosDeVentaPanel"/>
+	 </bean>
+	 
+	 <bean id="embarques.controlDeEmbarques" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".05">
+     	<property name="panels">
+     		<list>
+     			<bean id="facturistas" class="com.luxsoft.sw3.embarques.ui.consultas.FacturistasPanel"/>
+     			<bean id="trasladosParaEmbarques" class="com.luxsoft.sw3.embarques.ui.consultas.TrasladosPanel"/>
+     			<bean class="com.luxsoft.sw3.embarques.ui.consultas.EntregasPanel"/>
+     			
+     		</list>
+     	</property>
+     </bean>
+         
+     <bean id="analisisDeVentasView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<ref bean="facturasPanel"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="facturasPanel"
+    	class="com.luxsoft.sw3.impap.ui.consultas.FacturacionCreditoPanel"
+    	p:title="Facturas">
+    </bean>
+    
+     
+     
+    
+</beans>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	default-lazy-init="false"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">  
+       
+    <description>
+    	Contexto para la generaion de vistas y/o paneles para las polizas contables
+    </description>
+ 
+    <bean id="polizaDeCobranza"
+     		class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCobranzaCamionetaPanel"
+     		p:title="Cobranza camioneta">
+     		<constructor-arg ref="cobranzaCamionetaController"/>
+    </bean>
+    
+    
+    
+ 
+    <bean id="polizaDeVentasPanel"
+    	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeVentasPanel"
+    	p:title="Ventas">
+    	<constructor-arg ref="ventasController"/>
+    </bean>
+    
+    <bean id="polizaDeCobranzaCxCPanel"
+     		class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCobranzaCxCPanel"
+     		p:title="Cobranza CxC">
+     		<constructor-arg ref="cobranzaCxCController"/>
+     </bean>
+     
+     <bean id="polizaDeCobranzaChePanel"
+     		class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCobranzaChePanel"
+     		p:title="Cobranza CHE">
+     		<constructor-arg ref="cobranzaCheController"/>
+     </bean>
+     
+     <bean id="polizaDeCobranzaJurPanel"
+     		class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCobranzaJurPanel"
+     		p:title="Cobranza JUR">
+     		<constructor-arg ref="cobranzaJurController"/>
+     </bean>
+     
+     <bean id="polizaDeComprasPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeComprasPanel"
+     	p:title="Compras">
+     	<constructor-arg ref="controladorDeCompras"/>
+     </bean>
+     
+     
+     
+     <bean id="polizaDeComplementoComprasPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeComplementoComprasPanel"
+     	p:title="Compras (Complemento)">
+     	<constructor-arg ref="controladorComplementoDeCompras"/>
+     </bean>
+     
+     <bean id="polizaDePagoDeGastosPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDePagoDeGastosPanel"
+     	p:title="Pago de Gastos">
+     	<constructor-arg ref="controladorDePagoDeGastos"/>
+     </bean>
+     <bean id="polizaDeChequeEnTransitoPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeChequeEnTransitoPanel"
+     	p:title="Cheques transito">
+     	<constructor-arg ref="controladorDeChequeEnTransito"/>
+     </bean>
+     <bean id="polizaDeProvisionDeGastosPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeProvisionDeGastosPanel"
+     	p:title="Provisión de Gastos">
+     	<constructor-arg ref="controladorDeProvisionDeGastos"/>
+     </bean>
+     
+     <bean id="polizaDeCXPComprasPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCXPComprasPanel"
+     	p:title="CxP Compras">
+     	<constructor-arg ref="controladorDeCXPCompras"/>
+     </bean>
+     
+     <bean id="polizaDeDescuentoComprasPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeDescuentosComprasPanel"
+     	p:title="Descuentos en Compras">
+     	<constructor-arg ref="controladorDeDescuentosEnCompras"/>
+     </bean>
+     
+     <bean id="polizaDeInventariosPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDinamicaPanel"
+     	p:title="Inventarios">
+     	<constructor-arg ref="controladorDeInventarios"/>
+     </bean>
+     
+     <bean id="polizaDeTesoreriaPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeTesoreriaPanel"
+     	p:title="Tesorería">
+     	<constructor-arg ref="controladorDeTesoreria"/>
+     </bean>
+     
+      <bean id="polizaDePagosTesoreriaPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDePagosTesoreriaPanel"
+     	p:title="Pagos Tesorería">
+     	<constructor-arg ref="controladorDePagosPorTesoreria"/>
+     </bean>
+     
+     <bean id="polizaDeActivoFijoPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeActivoFijoPanel"
+     	p:title="Activo Fijo">
+     	<constructor-arg ref="controladorDeActivoFijo"/>
+     </bean>
+     
+      <bean id="polizaGenericaPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas.PolizasGenericasPanel"
+     	p:title="Genérica">
+     </bean>
+     <bean id="polizaDeProvisionesContables"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeProvisionesContablesPanel"
+     	p:title="Provisiones Contables">
+     	<constructor-arg ref="controladorDeProvisionesContables"/>
+     </bean>
+     
+     <bean id="polizaDeTransitoDeDepositosPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeTransitoDeDepositosPanel"
+     	p:title="Depositos en transito">
+     	<constructor-arg ref="controladorDeTransitoDeDepositos"/>
+     </bean>
+     
+       <bean id="polizaDeMaquilaPanel"
+    	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeMaquilaPanel"    	
+    	p:title="Maquila">
+    	<constructor-arg ref="ControladorDeMaquila"/>
+    </bean>
+    
+    <bean id="polizaDeCierreAnualPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeCierreAnualPanel"
+     	p:title="Cierre Anual">
+     	<constructor-arg ref="controladorDeCierreAnual"/>
+     </bean>
+     
+     <bean id="polizaDeInteresesPrestamoChoferPanel"
+     	class="com.luxsoft.sw3.contabilidad.ui.consultas2.PolizaDeInteresesPrestamoChoferesPanel"
+     	p:title="Intereses prest Chofer">
+     	<constructor-arg ref="controladorDeInteresesPrestamoChofer"/>
+     	
+     </bean>
+      
+    <bean id="polizasView2" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+    	<property name="panels">
+     		<list>     			
+     			<ref local="polizaDeVentasPanel"/>
+     			<ref local="polizaDeCobranza"/>
+     			<ref local="polizaDeCobranzaCxCPanel"/>
+     			<ref local="polizaDeCobranzaChePanel"/>
+     			<ref local="polizaDeCobranzaJurPanel"/>
+     			<ref local="polizaDeTransitoDeDepositosPanel"/>
+     			<value>Compras</value>
+     			<ref local="polizaDeComprasPanel"/>
+     			<ref local="polizaDeComplementoComprasPanel"/>
+     			<ref local="polizaDeCXPComprasPanel"/>
+     			<ref local="polizaDeDescuentoComprasPanel"/>
+     			<ref local="polizaDeMaquilaPanel"/>     			
+     			<value>Gastos</value>
+     			<ref local="polizaDePagoDeGastosPanel"/>  
+     			<ref local="polizaDeChequeEnTransitoPanel"/>
+     			<ref local="polizaDeProvisionDeGastosPanel"/>
+     			<ref local="polizaDeProvisionesContables"/>     			
+     			<value>Inventarios</value>
+     			<ref local="polizaDeInventariosPanel"/>     			
+     			<value>Tesoreria</value>
+     			<ref local="polizaDePagosTesoreriaPanel"/>
+     			<ref local="polizaDeTesoreriaPanel"/>
+     			<value>Activo Fijo</value>
+     			<ref local="polizaDeActivoFijoPanel"/>
+     			<value>Otros</value>
+     			<ref local="polizaGenericaPanel"/>     			
+     			<ref local="polizaDeCierreAnualPanel"/>
+     			<ref local="polizaDeInteresesPrestamoChoferPanel"/>
+     		</list>
+     	</property>
+     </bean>
+    
+</beans>

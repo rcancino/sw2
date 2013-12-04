@@ -1,0 +1,27 @@
+<HEAD>
+null;
+J;
+0;
+A030050;
+AGENCIA DE SERVICIOS PUBLICITARIOS, S A DE C V;
+ASP 981217 JK0;
+BLVD.GOLONDRINAS 17-B EDIF.2-A DPTO 101-B CALACOAYA  52990;
+05/02/2010;
+<DETALLE>
+   DEVOLUCION PARCIAL DE LA FACTURA: 25791/0;
+                                            Cortes:         0.00;
+                                              SUMA:    15,120.20;
+<TOTALES>
+11:50:15;
+REV;
+0;
+PAG;
+0;
+AGE;
+null;
+COB;
+null;
+15,120.20;
+(DIECISIETE MIL QUINIENTOS TREINTA Y NUEVE PESOS 43/100 M.N.);
+2,419.23;
+17,539.43

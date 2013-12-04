@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <SX_USUARIOS id="-2" account_expired="false" account_locked="false" credentials_expired="false" email="matt@raibledesigns.com" account_enabled="true" first_name="Matt" last_name="Raible" password="a159b7ae81ba3552af61e9731b20870515944538" password_hint="Not a female kitty." username="admin" version="4" website="http://raibledesigns.com"/>
+  <SX_USUARIOS id="5" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="BEATRIZ" last_name="NAVARRETE" password="7cb8a0f5f00d5bf3a61c245b459106ce87b8a416" username="betyn" version="3"/>
+  <SX_USUARIOS id="6" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="false" first_name="JANET" last_name="MEDINA" password="472deff3000b065531b81215ef068055bad31acf" username="janetm" version="1"/>
+  <SX_USUARIOS id="7" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="LUCIA" last_name="GODINEZ" password="cdc5b3055ac2623428e9a73d32555876b103ba31" username="luciag" version="4"/>
+  <SX_USUARIOS id="8" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="GILBERTO" last_name="BARRAGAN" password="cb72f67ec98c58e3474044b8d886f0fab60112cd" username="gilbertob" version="4"/>
+  <SX_USUARIOS id="9" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="false" first_name="JOSE MANUEL" last_name="CHAVEZ" password="2a2c761afd0c3d3d79e7de8b4419d52953fcc6ed" username="josemanuelch" version="1"/>
+  <SX_USUARIOS id="10" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="VERONICA" last_name="AREVALO" password="5ed5e97370da9e1a96c58d009074e3a8f9ed1933" username="veronicaa" version="4"/>
+  <SX_USUARIOS id="11" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="CONSUELO" last_name="SANCHEZ" password="854698dc3e230b547ffeda7d29613433a7c2801e" username="consuelos" version="5"/>
+  <SX_USUARIOS id="12" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="JOSE CARLOS" last_name="ESPINO" password="ec6fb3a27c1535606979d4f02f42f61eade64601" username="josecarlose" version="4"/>
+  <SX_USUARIOS id="13" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="DAVID" last_name="FLORES" password="38ae1b48ed96d57c9e166f6cc6ffdf619b4856ab" username="davidf" version="2"/>
+  <SX_USUARIOS id="14" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="RAFAEL" last_name="SANCHEZ" password="ed6bf72e1340c54e29d3414ceeae6fee4278bfc0" username="rafaels" version="8"/>
+  <SX_USUARIOS id="15" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="false" first_name="SISTEMAS" last_name="SISTEMAS" password="a159b7ae81ba3552af61e9731b20870515944538" username="sistemas" version="1"/>
+  <SX_USUARIOS id="16" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="COMPRAS" last_name="COMPRAS" password="6c73ef58824b5eda5bcd6291a45325b0a2ed1fcf" username="compras" version="2"/>
+  <SX_USUARIOS id="17" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="CONTABILIDAD" last_name="CONTABILIDAD" password="92a130da5278fd2fefd7193d4070e86e985ca339" username="contabilidad" version="2"/>
+  <SX_USUARIOS id="18" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="JOSE ANTONIO" last_name="SANCHEZ" password="c781616f2b63d0493c27063823ef863c2f12881e" username="jasanchez" version="5"/>
+  <SX_USUARIOS id="19" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="JOSE ANGEL" last_name="MORALES" password="2138e291d607f7086210a8967f7a9e0a054b82f9" username="jamorales" version="3"/>
+  <SX_USUARIOS id="20" account_expired="false" account_locked="false" credentials_expired="false" account_enabled="true" first_name="JORGE ALBERTO" last_name="GARCIA SANCHEZ" password="91f87b233dfe77a2ed78a74312c2aa3337ae8aaa" username="jagarcia" version="3"/>
+  <SX_ROLE id="-2" description="Default role for all Users" name="ROLE_USER"/>
+  <SX_ROLE id="-1" description="Administrator role (can edit Users)" name="ROLE_ADMIN"/>
+  <SX_ROLE id="1" description="Usuario de tesoreria con privlegios para administrar tesoreria" name="TESORERIA_1"/>
+  <SX_ROLE id="3" description="Registra Pagos " name="TESORERIA_2"/>
+  <SX_ROLE id="8" description="Auxiliar de CXC, Aplica pagos, revision y cobro" name="OPERADOR_CXC"/>
+  <SX_ROLE id="9" description="Aplica Pagos, Revision y cobro , genera reportes estadisticos " name="ADMIN_CXC"/>
+  <SX_ROLE id="10" description="Administra la cartera de cheques devueltos" name="OPERADOR_CXC_CHE"/>
+  <SX_ROLE id="11" description="Administra cartera de juridico" name="OPERADOR_CXC_JUR"/>
+  <SX_ROLE id="12" description="Consultas de Analisis para Ejecutivos" name="CONSULTAS_BI"/>
+  <SX_ROLE id="13" description="Autorizaciones  en CXC" name="CXC_AUTORIZA_N1"/>
+  <SX_ROLE id="14" description="Autorizacion de Bonificaciones" name="CXC_AUTORIZA_N2"/>
+  <SX_ROLE id="15" description="REALIZA CANCELACION  DE ABONOS Y NOTAS" name="CXC_CANCELA_ABN"/>
+  <SX_ROLE id="16" description="CANCELA APLICACION DE ABONOS PAGOS" name="CXC_CANCELA_APL"/>
+  <SX_ROLE id="17" description="Reportesde credito" name="REPORTES_CRE"/>
+  <SX_PERMISOS id="1" DESCRIPCION="Notas de Credito" MODULO="CXC" NOMBRE="NotasDeCredito" version="0"/>
+  <SX_PERMISOS id="2" DESCRIPCION="Cuenta Por Cobrar" MODULO="CXC" NOMBRE="CuentasPorCobrar" version="0"/>
+  <SX_PERMISOS id="3" DESCRIPCION="Listas de Precios Cargo" MODULO="CXC" NOMBRE="ListasDePrecios" version="0"/>
+  <SX_PERMISOS id="4" DESCRIPCION="Estado de cuenta por cliente" MODULO="CXC" NOMBRE="EstadoDeCuentaReport" version="0"/>
+  <SX_PERMISOS id="5" DESCRIPCION="Registrar depositos en tesoreria" MODULO="CXC" NOMBRE="RegistrarDepositos" version="0"/>
+  <SX_PERMISOS id="6" DESCRIPCION="Registro y mantenimiento de pagos" MODULO="CXC" NOMBRE="RegistrarPagos" version="0"/>
+  <SX_PERMISOS id="7" DESCRIPCION="Registrar pago con cheque" MODULO="CXC" NOMBRE="PagarConCheque" version="0"/>
+  <SX_PERMISOS id="8" DESCRIPCION="Registrar pago con tarjeta" MODULO="CXC" NOMBRE="PagarConTarjeta" version="0"/>
+  <SX_PERMISOS id="9" DESCRIPCION="Registrar pago con Deposito/Transferencia" MODULO="CXC" NOMBRE="PagarConDeposito" version="0"/>
+  <SX_PERMISOS id="10" DESCRIPCION="Registrar pago con efectivo" MODULO="CXC" NOMBRE="PagarConEfectivo" version="0"/>
+  <SX_PERMISOS id="11" DESCRIPCION="Modificar pago de cualquier tipo " MODULO="CXC" NOMBRE="ModificarPago" version="0"/>
+  <SX_PERMISOS id="12" DESCRIPCION="Aplicar pago" MODULO="CXC" NOMBRE="AplicarPago" version="0"/>
+  <SX_PERMISOS id="13" DESCRIPCION="Cancela el un abono" MODULO="CXC" NOMBRE="CancelarAbono" version="0"/>
+  <SX_PERMISOS id="14" DESCRIPCION="Cancela nota de cargo" MODULO="CXC" NOMBRE="CancelarNotaDeCargo" version="0"/>
+  <SX_PERMISOS id="15" DESCRIPCION="Cancela una aplicacion" MODULO="CXC" NOMBRE="CancelarAplicacion" version="0"/>
+  <SX_PERMISOS id="16" DESCRIPCION="Solicitud de autorizacion para uso de abono" MODULO="CXC" NOMBRE="SolicitudDeAutorizacionParaAbono" version="0"/>
+  <SX_PERMISOS id="17" DESCRIPCION="Solicitud para  la de cancelacion de un abono" MODULO="CXC" NOMBRE="SolicitudDeCancelacion" version="0"/>
+  <SX_PERMISOS id="18" DESCRIPCION="Generar notas de credito para descuento en ventas" MODULO="CXC" NOMBRE="GenerarNotaDeDescuento" version="0"/>
+  <SX_PERMISOS id="19" DESCRIPCION="Generar notas de credito para bonificación sobre ventas" MODULO="CXC" NOMBRE="GenerarNotaDeBonificacion" version="0"/>
+  <SX_PERMISOS id="20" DESCRIPCION="Generar notas de credito para devolución en ventas" MODULO="CXC" NOMBRE="GenerarNotaDeDevolucion" version="0"/>
+  <SX_PERMISOS id="21" DESCRIPCION="Generar notas de cargo" MODULO="CXC" NOMBRE="GenerarNotaDeCargo" version="0"/>
+  <SX_PERMISOS id="22" DESCRIPCION="Generar un pago de diferencias" MODULO="CXC" NOMBRE="GenerarPagoDiferencias" version="0"/>
+  <SX_PERMISOS id="23" DESCRIPCION="Refrescar seleccion" MODULO="CXC" NOMBRE="RefrescarSeleccion" version="0"/>
+  <SX_PERMISOS id="24" DESCRIPCION="Revision y Cobro" MODULO="CXC" NOMBRE="RevisionyCobro" version="0"/>
+  <SX_PERMISOS id="25" DESCRIPCION="Actualiza los descuentos a las facturas de precio bruto con saldo" MODULO="CXC" NOMBRE="ActualizarDescuentosAFactura" version="0"/>
+  <SX_PERMISOS id="26" DESCRIPCION="Permite generar un descuento especial a las facturas de precio bruto" MODULO="CXC" NOMBRE="AplicarDescuentoEspecialAFactura" version="0"/>
+  <SX_PERMISOS id="27" DESCRIPCION="Permite cancelar un descuent especial" MODULO="CXC" NOMBRE="CancelarDescuentoEspecial" version="0"/>
+  <SX_PERMISOS id="28" DESCRIPCION="Mantenimiento a revisión y cobro de cuentas por cobrar" MODULO="CXC" NOMBRE="AdministracionRevisionCobro" version="0"/>
+  <SX_PERMISOS id="29" DESCRIPCION="Recepcion de cuentas por cobrar en el depto" MODULO="CXC" NOMBRE="RecepcionDeCuentasPorCobrar" version="0"/>
+  <SX_PERMISOS id="30" DESCRIPCION="Cancelar recepcion de cuentas por cobrar" MODULO="CXC" NOMBRE="CancelarRecepcionDeCuentasPorCobrar" version="0"/>
+  <SX_PERMISOS id="31" DESCRIPCION="Recalcula las fechas de revision y cobro para CXC" MODULO="CXC" NOMBRE="RecalcularRevisionCobro" version="0"/>
+  <SX_PERMISOS id="32" DESCRIPCION="Consultar disponibles del cliente" MODULO="CXC" NOMBRE="ConsultarDisponibles" version="0"/>
+  <SX_PERMISOS id="33" DESCRIPCION="Genera polizas contables" MODULO="CXC" NOMBRE="GenerarPolizasContablesCxC" version="0"/>
+  <SX_PERMISOS id="34" DESCRIPCION="Generar cargo por cheque devuelto" MODULO="CXC" NOMBRE="GenerarChequeDevuelto" version="0"/>
+  <SX_PERMISOS id="35" DESCRIPCION="Consulta y mantenimiento de clientes" MODULO="CXC" NOMBRE="MantenimientoClientes" version="0"/>
+  <SX_PERMISOS id="36" DESCRIPCION="Mantenimiento de comisiones de Vendedor y Cobrador" MODULO="CXC" NOMBRE="MantenimientoDeComisiones" version="0"/>
+  <SX_PERMISOS id="37" DESCRIPCION="Alta de cargos en jurídico" MODULO="CXC" NOMBRE="JuridicoAlta" version="0"/>
+  <SX_PERMISOS id="38" DESCRIPCION="Consulta de traspaso a jurídico" MODULO="CXC" NOMBRE="JuridicoView" version="0"/>
+  <SX_PERMISOS id="39" DESCRIPCION="Cancelar un traspaso a jurídico" MODULO="CXC" NOMBRE="JuridicoBaja" version="0"/>
+  <SX_PERMISOS id="40" DESCRIPCION="Permite imprimir nota de cargo" MODULO="CXC" NOMBRE="ImprimirNotaDeCargo" version="0"/>
+  <SX_PERMISOS id="41" DESCRIPCION="Genera fichas de deposito para pagos depositables" MODULO="CXC" NOMBRE="GenerarFichasDeDeposito" version="0"/>
+  <SX_PERMISOS id="42" DESCRIPCION="Consulta de reportes de pagos" MODULO="CXC" NOMBRE="ReportesDePagos" version="0"/>
+  <SX_PERMISOS id="43" DESCRIPCION="Consulta de reportes de depositos" MODULO="CXC" NOMBRE="ReportesDeDepositos" version="0"/>
+  <SX_PERMISOS id="44" DESCRIPCION="Cancelar envio de deposito al medio de valores" MODULO="CXC" NOMBRE="CancelarEnvioDeValores" version="0"/>
+  <SX_PERMISOS id="45" DESCRIPCION="Ejecutar reportes de la cartera de cheques devueltos" MODULO="CXC" NOMBRE="ReportesDeCarteraDeCheques" version="0"/>
+  <SX_PERMISOS id="46" DESCRIPCION="Consulta general de la seguridad del sistema" MODULO="KERNELL" NOMBRE="MostrarKernell" version="0"/>
+  <SX_PERMISOS id="47" DESCRIPCION="Muestra el panel de usuarios del sistema" MODULO="KERNELL" NOMBRE="MostrarUsuarios" version="0"/>
+  <SX_PERMISOS id="48" DESCRIPCION="Muestra el panel de roles del sistema" MODULO="KERNELL" NOMBRE="MostrarRoles" version="0"/>
+  <SX_PERMISOS id="49" DESCRIPCION="Muestra el panel de permisos del sistema" MODULO="KERNELL" NOMBRE="MostrarPermisos" version="0"/>
+  <SX_PERMISOS id="50" DESCRIPCION="Permite actualizar los permisos de todos los modulos" MODULO="KERNELL" NOMBRE="ActualizarPermisos" version="0"/>
+  <SX_PERMISOS id="51" DESCRIPCION="Permite agregar permisos a roles" MODULO="KERNELL" NOMBRE="AgregarPermisosPorRol" version="0"/>
+  <SX_PERMISOS id="52" DESCRIPCION="Mostrar las sucursales" MODULO="CORE" NOMBRE="SucursalBrowser" version="0"/>
+  <SX_PERMISOS id="53" DESCRIPCION="Mostrar las empresas" MODULO="CORE" NOMBRE="EmpresaBrowser" version="0"/>
+  <SX_PERMISOS id="54" DESCRIPCION="Mostrar los departamentos" MODULO="CORE" NOMBRE="DepartamentoBrowser" version="0"/>
+  <SX_PERMISOS id="55" DESCRIPCION="Consulta y mantenimiento de Líneas de productos" MODULO="CORE" NOMBRE="LineasBrowser" version="0"/>
+  <SX_PERMISOS id="56" DESCRIPCION="Consulta y mantenimiento de Clases" MODULO="CORE" NOMBRE="ClasesBrowser" version="0"/>
+  <SX_PERMISOS id="57" DESCRIPCION="Consulta y mantenimiento de Marcas" MODULO="CORE" NOMBRE="MarcasBrowser" version="0"/>
+  <SX_PERMISOS id="58" DESCRIPCION="Consulta y mantenimiento de productos" MODULO="CORE" NOMBRE="ProductosBrowser" version="0"/>
+  <SX_PERMISOS id="59" DESCRIPCION="Mantenimiento a los proveedores de compras" MODULO="CORE" NOMBRE="ProveedoresBrowser" version="0"/>
+  <SX_PERMISOS id="60" DESCRIPCION="Consulta y mantenimiento de clientes" MODULO="CORE" NOMBRE="ClientesBrowser" version="0"/>
+  <SX_PERMISOS id="61" DESCRIPCION="Mostrar los movimientos de inventario" MODULO="CORE" NOMBRE="ShowInventarioView" version="0"/>
+  <SX_PERMISOS id="62" DESCRIPCION="Mostrar browser de operaciones de ventas" MODULO="CORE" NOMBRE="ShowVentasTaskView" version="0"/>
+  <SX_PERMISOS id="63" DESCRIPCION="Eliminar Pedidos" MODULO="CORE" NOMBRE="EliminarPedidos" version="0"/>
+  <SX_PERMISOS id="64" DESCRIPCION="Cancelar Facturas" MODULO="CORE" NOMBRE="CancelarFacturas" version="0"/>
+  <SX_PERMISOS id="65" DESCRIPCION="Analisis de ventas" MODULO="CORE" NOMBRE="ShowAnalisisDeVentasView" version="0"/>
+  <SX_PERMISOS id="66" DESCRIPCION="Mostrar Reportes" MODULO="CORE" NOMBRE="ShowReportView" version="0"/>
+  <SX_PERMISOS id="67" DESCRIPCION="Mostrar Consultas" MODULO="CORE" NOMBRE="ShowBIConsultasView" version="0"/>
+  <SX_PERMISOS id="68" DESCRIPCION="Salir de la aplicación" MODULO="CORE" NOMBRE="ExitApplication" version="0"/>
+  <SX_PERMISOS id="69" DESCRIPCION="Consulta del catalogo de clientes" MODULO="CXC" NOMBRE="ConsultaDeClientes" version="0"/>
+  <SX_PERMISOS id="70" DESCRIPCION="Ejecutar reportes de la cartera de jurídico" MODULO="CXC" NOMBRE="ReportesDeCarteraDeJuridico" version="0"/>
+  <SX_PERMISOS id="71" DESCRIPCION="Consultas de análisis" MODULO="CXC" NOMBRE="ConsultasDeAnalisis" version="0"/>
+  <SX_PERMISOS id="72" DESCRIPCION="Reportes generales de CxC" MODULO="CXC" NOMBRE="ReportesGenerales" version="0"/>
+  <SX_PERMISOS id="73" DESCRIPCION="Acceso basico a la consulta de depositos" MODULO="CXC" NOMBRE="ConsultaDeDepositos" version="0"/>
+  <SX_PERMISOS id="74" DESCRIPCION="Acceso a la sub consulta de depositos" MODULO="CXC" NOMBRE="CXC_DEPOSITOS_PANEL" version="0"/>
+  <SX_PERMISOS id="75" DESCRIPCION="Acceso a la sub consulta de depositos" MODULO="CXC" NOMBRE="CXC_PAGOS_PANEL" version="0"/>
+  <SX_PERMISOS id="76" DESCRIPCION="Acceso a la sub consulta de de cartera de cheques devueltos" MODULO="CXC" NOMBRE="CXC_ConsultaDePagos" version="0"/>
+  <SX_PERMISOS id="77" DESCRIPCION="Acceso a la sub consulta de de cartera de cheques devueltos" MODULO="CXC" NOMBRE="CarteraDeCheques" version="0"/>
+  <SX_PERMISOS id="78" DESCRIPCION="Consulta de cartera de credito" MODULO="CXC" NOMBRE="CXC_CarteraDeCredito" version="0"/>
+  <SX_PERMISOS id="79" DESCRIPCION="Consulta de revisión y cobro" MODULO="CXC" NOMBRE="CXC_RevisionCobro" version="0"/>
+  <SX_PERMISOS id="80" DESCRIPCION="Abonos" MODULO="CXC" NOMBRE="CXC_Abonos" version="0"/>
+  <SX_PERMISOS id="81" DESCRIPCION="Consulta de Antigüedad de saldos" MODULO="CXC" NOMBRE="CXC_AntiguedadSaldos" version="0"/>
+  <SX_PERMISOS id="82" DESCRIPCION="Consulta de Estado de movimientos" MODULO="CXC" NOMBRE="CXC_EstadoMovimientos" version="0"/>
+  <SX_PERMISOS id="83" DESCRIPCION="Consulta de comisiones" MODULO="CXC" NOMBRE="CXC_Comisiones" version="0"/>
+  <SX_PERMISOS id="84" DESCRIPCION="Consulta de juridico" MODULO="CXC" NOMBRE="CXC_Juridico" version="0"/>
+  <SX_PERMISOS id="85" DESCRIPCION="Mostrar los tipos de proveedor" MODULO="GASTOS" NOMBRE="TiposDeProveedorBrowser" version="0"/>
+  <SX_PERMISOS id="86" DESCRIPCION="Mostrar los conceptos de gastos" MODULO="GASTOS" NOMBRE="ConceptosBrowser" version="0"/>
+  <SX_PERMISOS id="87" DESCRIPCION="Inidice de precios al consumidor" MODULO="GASTOS" NOMBRE="INPCBrowser" version="0"/>
+  <SX_PERMISOS id="88" DESCRIPCION="Clasificación de Activo Fijo" MODULO="GASTOS" NOMBRE="ClasificacionDeActivosBrowser" version="0"/>
+  <SX_PERMISOS id="89" DESCRIPCION="Consignatarios" MODULO="GASTOS" NOMBRE="ConsignatarioBrowser" version="0"/>
+  <SX_PERMISOS id="90" DESCRIPCION="Mostrar las el brwoser de ordenes de compra" MODULO="GASTOS" NOMBRE="OrdenDeCompraBrowser" version="0"/>
+  <SX_PERMISOS id="91" DESCRIPCION="Cancelacion De Compra" MODULO="GASTOS" NOMBRE="showCancelacionDeCompra" version="0"/>
+  <SX_PERMISOS id="92" DESCRIPCION="Modificacion de Compra" MODULO="GASTOS" NOMBRE="showModificacionDeCompra" version="0"/>
+  <SX_PERMISOS id="93" DESCRIPCION="Autorizaciones" MODULO="GASTOS" NOMBRE="showAutorizacionDeCompra" version="0"/>
+  <SX_PERMISOS id="94" DESCRIPCION="Eliminacion De Requisicion" MODULO="GASTOS" NOMBRE="showEliminacionDeRequisicion" version="0"/>
+  <SX_PERMISOS id="95" DESCRIPCION="Recepcion" MODULO="GASTOS" NOMBRE="showRecepcion" version="0"/>
+  <SX_PERMISOS id="96" DESCRIPCION="Proveedores" MODULO="GASTOS" NOMBRE="showProveedores" version="0"/>
+  <SX_PERMISOS id="97" DESCRIPCION="Pagos" MODULO="GASTOS" NOMBRE="showPagosProveedor" version="0"/>
+  <SX_PERMISOS id="98" DESCRIPCION="Cargos" MODULO="GASTOS" NOMBRE="showCargosProveedor" version="0"/>
+  <SX_PERMISOS id="99" DESCRIPCION="Polizas" MODULO="GASTOS" NOMBRE="showPolizasProveedor" version="0"/>
+  <SX_PERMISOS id="100" DESCRIPCION="Estado de Cuenta" MODULO="GASTOS" NOMBRE="showEstadoDeCuenta" version="0"/>
+  <SX_PERMISOS id="101" DESCRIPCION="Analisis IETU" MODULO="GASTOS" NOMBRE="showAnalisisIETU" version="0"/>
+  <SX_PERMISOS id="102" DESCRIPCION="Mostrar consulta de compras" MODULO="GASTOS" NOMBRE="showComprasView" version="0"/>
+  <SX_PERMISOS id="103" DESCRIPCION="Mostrar resumen de gastos" MODULO="GASTOS" NOMBRE="showResumenDeGastos" version="0"/>
+  <SX_PERMISOS id="104" DESCRIPCION="Activo Fijo" MODULO="GASTOS" NOMBRE="ActivoFijoBrowser" version="0"/>
+  <SX_PERMISOS id="105" DESCRIPCION="Mantenimiento a Activo Fijo" MODULO="GASTOS" NOMBRE="ShowActivoFijoFiscalView" version="0"/>
+  <SX_PERMISOS id="106" DESCRIPCION="Resumen a Activo Fijo (1)" MODULO="GASTOS" NOMBRE="ShowActivoFijoResumen1" version="0"/>
+  <SX_PERMISOS id="107" DESCRIPCION="Registro de A.F manual" MODULO="GASTOS" NOMBRE="RegistrarActivoManual" version="0"/>
+  <SX_PERMISOS id="108" DESCRIPCION="Registrar A.F. por proveedor" MODULO="GASTOS" NOMBRE="RegistrarActivoPorProveedor" version="0"/>
+  <SX_PERMISOS id="109" DESCRIPCION="Registrar A.F. por O.Compra" MODULO="GASTOS" NOMBRE="RegistrarActivoPorCompra" version="0"/>
+  <SX_PERMISOS id="110" DESCRIPCION="Enajenar A.F." MODULO="GASTOS" NOMBRE="EnajenarActivo" version="0"/>
+  <SX_PERMISOS id="111" DESCRIPCION="Actualizar información fiscal" MODULO="GASTOS" NOMBRE="ActualizarFiscal" version="0"/>
+  <SX_PERMISOS id="112" DESCRIPCION="Consulta de Pagos " MODULO="GASTOS" NOMBRE="ShowPagosView" version="0"/>
+  <SX_PERMISOS id="113" DESCRIPCION="Generar Poliza de egresos compras" MODULO="GASTOS" NOMBRE="GenerarPolizaEgresoCompras" version="0"/>
+  <SX_PERMISOS id="114" DESCRIPCION="Requisiciones" MODULO="GASTOS" NOMBRE="ShowRequisicionesView" version="0"/>
+  <SX_PERMISOS id="115" DESCRIPCION="Requisiciones" MODULO="GASTOS" NOMBRE="ShowRequisicionesBrowser" version="0"/>
+  <SX_PERMISOS id="116" DESCRIPCION="Registrar facturas de compras" MODULO="GASTOS" NOMBRE="RegistrarFacturas" version="0"/>
+  <SX_PERMISOS id="117" DESCRIPCION="Generar requisiciones" MODULO="GASTOS" NOMBRE="GenerarRequisiciones" version="0"/>
+  <SX_PERMISOS id="118" DESCRIPCION="Aplicar paro de requisición" MODULO="GASTOS" NOMBRE="AplicarAnticipoDePago" version="0"/>
+  <SX_PERMISOS id="119" DESCRIPCION="Revisión de requisición" MODULO="GASTOS" NOMBRE="RevisionDeRequisicion" version="0"/>
+  <SX_PERMISOS id="120" DESCRIPCION="Cancelar revisión de requisición" MODULO="GASTOS" NOMBRE="CancelarRevisionDeRequisicion" version="0"/>
+  <SX_PERMISOS id="121" DESCRIPCION="Mostrar consulta de polizas" MODULO="GASTOS" NOMBRE="ShowPolizasView" version="0"/>
+  <SX_PERMISOS id="122" DESCRIPCION="Generar poliza de gastos" MODULO="GASTOS" NOMBRE="GenerarPolizaDeGastos" version="0"/>
+  <SX_PERMISOS id="123" DESCRIPCION="Liberación de Cheques" MODULO="GASTOS" NOMBRE="LiberarCheques" version="0"/>
+  <SX_PERMISOS id="124" DESCRIPCION="Mostrar consulta de ánalisis de gastos" MODULO="GASTOS" NOMBRE="ShowAnalisisDeGastos" version="0"/>
+  <SX_PERMISOS id="125" DESCRIPCION="Mostrar vista de Contra Recibos" MODULO="GASTOS" NOMBRE="ShowContraRecibos" version="0"/>
+  <SX_USER_ROLE user_id="-2" role_id="-1"/>
+  <SX_USER_ROLE user_id="15" role_id="-1"/>
+  <SX_USER_ROLE user_id="16" role_id="-1"/>
+  <SX_USER_ROLE user_id="17" role_id="-1"/>
+  <SX_USER_ROLE user_id="5" role_id="1"/>
+  <SX_USER_ROLE user_id="10" role_id="3"/>
+  <SX_USER_ROLE user_id="6" role_id="8"/>
+  <SX_USER_ROLE user_id="7" role_id="8"/>
+  <SX_USER_ROLE user_id="8" role_id="8"/>
+  <SX_USER_ROLE user_id="12" role_id="8"/>
+  <SX_USER_ROLE user_id="12" role_id="9"/>
+  <SX_USER_ROLE user_id="7" role_id="10"/>
+  <SX_USER_ROLE user_id="12" role_id="10"/>
+  <SX_USER_ROLE user_id="13" role_id="11"/>
+  <SX_USER_ROLE user_id="11" role_id="12"/>
+  <SX_USER_ROLE user_id="14" role_id="12"/>
+  <SX_USER_ROLE user_id="18" role_id="12"/>
+  <SX_USER_ROLE user_id="19" role_id="12"/>
+  <SX_USER_ROLE user_id="20" role_id="12"/>
+  <SX_USER_ROLE user_id="10" role_id="13"/>
+  <SX_USER_ROLE user_id="11" role_id="13"/>
+  <SX_USER_ROLE user_id="14" role_id="13"/>
+  <SX_USER_ROLE user_id="20" role_id="13"/>
+  <SX_USER_ROLE user_id="11" role_id="14"/>
+  <SX_USER_ROLE user_id="14" role_id="14"/>
+  <SX_USER_ROLE user_id="18" role_id="14"/>
+  <SX_USER_ROLE user_id="20" role_id="14"/>
+  <SX_USER_ROLE user_id="14" role_id="15"/>
+  <SX_USER_ROLE user_id="18" role_id="15"/>
+  <SX_USER_ROLE user_id="19" role_id="16"/>
+  <SX_USER_ROLE user_id="18" role_id="17"/>
+</dataset>

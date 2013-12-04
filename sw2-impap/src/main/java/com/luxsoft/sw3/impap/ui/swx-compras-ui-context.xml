@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la UI del modulo de compras
+    </description> 
+    
+    
+    <!-- Compras -->
+    <bean id="compras.analisisView" class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+    	p:procesosTasksVisible="false"
+    	p:consultasLabel="Analisis"
+    	p:resizeWeightForView=".08">
+    </bean>
+    
+  
+    
+    <!-- Compras OLD-->
+    
+    <bean id="productosPanel" class="com.luxsoft.siipap.compras.ui.ProductosPanel"/>
+    
+    <bean id="productosView" class="com.luxsoft.siipap.compras.ui.ProductosView"
+    	parent="abstractView">
+    	<property name="productosPanel" ref="productosPanel"/>
+    </bean>
+     
+     <bean id="comprasView" class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.impap.ui.consultas.ComprasDeImportacionPanel">
+     				<property name="defaultPanel" value="true"/>
+     			</bean>
+     			<bean class="com.luxsoft.sw3.impap.ui.consultas.RecepcionDeComprasImportacionPanel"/>
+     		</list>
+     	</property>
+     </bean> 
+     
+    
+</beans>

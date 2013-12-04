@@ -1,0 +1,9 @@
+id, ACTIVO, APELLIDOM, APELLIDOP, CURP, CREADO, CREADO_USERID, MODIFICADO, MODIFICADO_USERID, NOMBRES, RFC, COMISION
+"1","true","","",null,"2009-03-17 09:12:18.0",null,"2009-06-26 11:32:40.0",null,"DIRECTO","","0.0"
+"2","false","","",null,"2009-03-17 09:12:18.0",null,"2009-03-17 09:12:18.0",null,"MARIO SIERRA","","0.0"
+"3","false","","",null,"2009-03-17 09:12:18.0",null,"2009-03-17 09:12:18.0",null,"ALEJANDRO SIERRA RANGEL","","0.0"
+"4","true","","",null,"2009-03-17 09:12:18.0",null,"2009-06-26 10:22:34.0",null,"JOSE ENRIQUE ESCALANTE MARTINEZ","","0.12"
+"5","false","","",null,"2009-03-17 09:12:18.0",null,"2009-03-17 09:12:18.0",null,"JESUS RODRIGUEZ","","0.0"
+"6","true","","",null,"2009-03-17 09:12:18.0",null,"2009-06-26 10:22:34.0",null,"IVAN ESTRADA MAYA","","0.12"
+"7","false","","",null,"2009-03-17 09:12:18.0",null,"2009-03-17 09:12:18.0",null,"E. ANTONIO ESCALANTE MAYA","","0.0"
+"8","true","","",null,"2009-03-17 09:12:18.0",null,"2009-06-26 10:22:34.0",null,"CESAR ESCALANTE MAYA","","0.12"

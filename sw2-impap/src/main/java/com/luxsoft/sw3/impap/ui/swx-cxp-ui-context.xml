@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la UI del modulo de CXP
+    </description>
+    
+    <bean id="cxpView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView">
+     	<property name="panels">
+     		<list>
+     			<ref bean="facturasAnalizadasPanel"/>
+     			<ref bean="contraReciboPanel"/>
+     			<ref bean="requisicionesPanel"/>
+     			<ref bean="cxpAbonosPanel"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="facturasAnalizadasPanel" class="com.luxsoft.siipap.cxp.ui.consultas.FacturasAnalizadas"
+     	lazy-init="true">
+     	<property name="title" value="Facturas Analizadas"/>
+     	<property name="defaultPanel" value="true"/>
+     </bean> 
+     
+     <bean id="contraReciboPanel"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.ContraRecibosPanel">
+     	<property name="title" value="Contra Recibos"/>
+     </bean>
+     
+     <bean id="requisicionesPanel"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.RequisicionesPanel">
+     	<property name="title" value="Requisiciones"/>
+     </bean>
+     
+     <bean id="cxpAbonosPanel"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.AbonosPanel">
+     	<property name="title" value="Pagos y Notas"/>
+     </bean>
+     
+     <bean id="cxp.Consultas"
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".08">
+     	<property name="panels">
+     		<list>
+     			<ref bean="analisisGlobal"/>
+     			<ref bean="analisisDeMovimientos"/>
+     			<ref bean="cxp.entradasAlmacenPoliza"/>
+     			<ref bean="cxp.entradasAlmacenPolizaImpap"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="analisisGlobal"
+      class="com.luxsoft.siipap.cxp.ui.consultas.AnalisisGlobal">
+      <property name="title" value="Análisis Global"/>
+     </bean>
+     
+     <bean id="analisisDeMovimientos"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.DetalleDeMovimientos">
+     	<property name="title" value="Estado de Cuenta"/>
+     </bean>
+     
+     <bean id="cxp.entradasAlmacenPoliza"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.PolizaAlmacenPanel">
+     	<property name="title" value="Póliza: Entradas Almacén"/>
+     </bean>
+     <bean id="cxp.entradasAlmacenPolizaImpap"
+     	class="com.luxsoft.siipap.cxp.ui.consultas.PolizaAlmacenPorProveedorPanel">
+     	<property name="title" value="Póliza: Entradas almacén IMPAP"/>
+     </bean>
+    
+</beans>

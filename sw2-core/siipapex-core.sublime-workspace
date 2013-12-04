@@ -1,0 +1,767 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"he",
+				"header	Tag"
+			],
+			[
+				"html",
+				"html	html"
+			],
+			[
+				"re",
+				"ready	document-ready"
+			],
+			[
+				"input",
+				"input	input - text"
+			],
+			[
+				"table",
+				"table-condensed"
+			],
+			[
+				"to",
+				"toggleClass"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"r",
+				"ready	document ready (safe)"
+			],
+			[
+				"rea",
+				"ready	document-ready"
+			],
+			[
+				"h1",
+				"h1	Tag"
+			],
+			[
+				"ro",
+				"row-fluid"
+			],
+			[
+				"ta",
+				"TABLE	Tag"
+			],
+			[
+				"li",
+				"li	Tag"
+			],
+			[
+				"a",
+				"a	<a>"
+			],
+			[
+				"run",
+				"runtime"
+			],
+			[
+				"b",
+				"blank"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
+			"settings":
+			{
+				"buffer_size": 24521,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/siipap/inventarios/model/Existencia.java",
+			"settings":
+			{
+				"buffer_size": 9689,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
+			"settings":
+			{
+				"buffer_size": 25614,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/siipap/model/core/Linea.java",
+			"settings":
+			{
+				"buffer_size": 3830,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 387.0,
+		"selected_items":
+		[
+			[
+				"sni tab",
+				"Snippet: <table>"
+			],
+			[
+				"pack in",
+				"Package Control: Install Package"
+			],
+			[
+				"mar",
+				"Markdown Preview: preview in Browser"
+			],
+			[
+				"packa ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: DOCTYPE HTML"
+			],
+			[
+				"PAC INS",
+				"Package Control: Install Package"
+			],
+			[
+				"pac in",
+				"Package Control: Install Package"
+			],
+			[
+				"pa:in",
+				"Package Control: Install Package"
+			],
+			[
+				"sni:belo",
+				"Snippet: belongsTo"
+			],
+			[
+				"sni:has",
+				"Snippet: hasMany"
+			],
+			[
+				"grai",
+				"Set Syntax: Grails Server Page"
+			],
+			[
+				"pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"Package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 602.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/services/CFDSupportImpl.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/CFDUtils.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/ImporteALetra.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/model/ComprobanteFiscal.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/contabilidad/model/CuentaContable.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxc/model/Aplicacion.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxc/model/PagoConDeposito.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxc/model/Pago.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxc/model/Abono.java",
+		"/Users/rubencancinoramos/tomcat/apache-tomcat-7.0.32/bin/startup.sh",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/resources/sql/parches/ContabilidadCargaInicial2012.csv",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/tesoreria/model/Inversion.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/tesoreria/model/ComisionBancaria.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxp/model/CXPAbono.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/cxp/model/CXPCargoAbono.java",
+		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/siipap/ventas/model/Venta.java",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/src/main/java/com/luxsoft/siipap/model/core/Producto.java",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/siipapex-core.sublime-project",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/src/main/java/com/luxsoft/siipap/model/Unidad.java",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/src/main/java/com/luxsoft/siipap/model/core/Unidad.java",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/src/main/java/com/luxsoft/siipap/model/tesoreria/Requisicion.java",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/pom.xml",
+		"/Users/rubencancinoramos/desarrollo/impap/siipapwin-impap/sw2/core/src/main/java/com/luxsoft/siipap/compras/model/Compra2.java",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/layouts/luxor.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/home/index.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/web-app/css/luxor.css",
+		"/Users/rubencancinoramos/projects/grails/impapx/web-app/css/scaffolding.css",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/layouts/_menu.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/layouts/main.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/controllers/com/luxsoft/impapx/HomeController.groovy",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/index.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/home/info.gsp",
+		"/Users/rubencancinoramos/projects/grails/impapx/web-app/css/main.css",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/conf/UrlMappings.groovy",
+		"/Users/rubencancinoramos/projects/grails/impapx/grails-app/views/importador/_mainMenu.gsp",
+		"/Users/rubencancinoramos/Desktop/luxsoftSite1/js/bootstrap.js",
+		"/Users/rubencancinoramos/Desktop/luxsoftSite1/css/bootstrap.css",
+		"/Users/rubencancinoramos/Desktop/luxsoftSite1/luxsoftSite1.sublime-project",
+		"/Users/rubencancinoramos/Desktop/demos/luxsoftSite1.sublime-project",
+		"/Users/rubencancinoramos/Desktop/demos/index.html",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/User/htmlStart.sublime-snippet",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/User/htmlStart",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/Markdown Preview/MarkdownPreview.sublime-settings",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/rubencancinoramos/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/index.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/conf/BuildConfig.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/layouts/bootstrap.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/cliente/create.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/controllers/demonav/ClienteController.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/controllers/demonav/ProductoController.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/domain/demonav/Producto.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/_fields/default/_field.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/_fields/localDate/_input.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/_fields/person/email/_input.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/web-app/css/scaffolding.css",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/conf/ScaffoldingResources.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/demoNav.sublime-project",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/domain/demonav/Venta.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/domain/demonav/VentaDet.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/views/layouts/main.gsp",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/conf/Config.groovy",
+		"/Users/rubencancinoramos/projects/demoNav/grails-app/domain/demonav/Cliente.groovy"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"index.html",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"toString()",
+			"body",
+			"footer",
+			"../assets/ico",
+			"../assets",
+			"fork",
+			"rel=\"apple"
+		],
+		"highlight": false,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
+					"settings":
+					{
+						"buffer_size": 24521,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1701.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/main/java/com/luxsoft/siipap/inventarios/model/Existencia.java",
+					"settings":
+					{
+						"buffer_size": 9689,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage"
+						},
+						"translation.x": 2.0,
+						"translation.y": 456.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
+					"settings":
+					{
+						"buffer_size": 25614,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 874.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/main/java/com/luxsoft/siipap/model/core/Linea.java",
+					"settings":
+					{
+						"buffer_size": 3830,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 304.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"linea",
+				"java/com/luxsoft/siipap/model/core/Linea.java"
+			],
+			[
+				"producto",
+				"java/com/luxsoft/siipap/model/core/Producto.java"
+			],
+			[
+				"existen",
+				"java/com/luxsoft/siipap/inventarios/model/Existencia.java"
+			],
+			[
+				"cliente",
+				"java/com/luxsoft/siipap/model/core/Cliente.java"
+			],
+			[
+				"cfds",
+				"java/com/luxsoft/sw3/cfd/services/CFDSupportImpl.java"
+			],
+			[
+				"cfdutils",
+				"java/com/luxsoft/sw3/cfd/CFDUtils.java"
+			],
+			[
+				"importealet",
+				"java/com/luxsoft/sw3/cfd/ImporteALetra.java"
+			],
+			[
+				"comprobantef",
+				"java/com/luxsoft/sw3/cfd/model/ComprobanteFiscal.java"
+			],
+			[
+				"cuentaco",
+				"java/com/luxsoft/sw3/contabilidad/model/CuentaContable.java"
+			],
+			[
+				"c",
+				"resources/sql/parches/ContabilidadCargaInicial2012.csv"
+			],
+			[
+				"aplicacion",
+				"java/com/luxsoft/siipap/cxc/model/Aplicacion.java"
+			],
+			[
+				"pagoconde",
+				"java/com/luxsoft/siipap/cxc/model/PagoConDeposito.java"
+			],
+			[
+				"pago",
+				"java/com/luxsoft/siipap/cxc/model/Pago.java"
+			],
+			[
+				"abono",
+				"java/com/luxsoft/siipap/cxc/model/Abono.java"
+			],
+			[
+				"venta",
+				"java/com/luxsoft/siipap/ventas/model/Venta.java"
+			],
+			[
+				"cxpcargoab",
+				"java/com/luxsoft/siipap/cxp/model/CXPCargoAbono.java"
+			],
+			[
+				"cxpabono",
+				"java/com/luxsoft/siipap/cxp/model/CXPAbono.java"
+			],
+			[
+				"comision",
+				"java/com/luxsoft/sw3/tesoreria/model/ComisionBancaria.java"
+			],
+			[
+				"inversion",
+				"java/com/luxsoft/sw3/tesoreria/model/Inversion.java"
+			],
+			[
+				"compradet",
+				"java/com/luxsoft/siipap/compras/model/CompraDet.java"
+			],
+			[
+				"produc",
+				"java/com/luxsoft/siipap/model/core/Producto.java"
+			],
+			[
+				"cargoab",
+				"java/com/luxsoft/siipap/model/tesoreria/CargoAbono.java"
+			],
+			[
+				"requisiconde",
+				"java/com/luxsoft/siipap/model/tesoreria/RequisicionDe.java"
+			],
+			[
+				"conversiones",
+				"java/com/luxsoft/sw3/cfd/model/Conversiones.java"
+			],
+			[
+				"comprobantesdi",
+				"java/com/luxsoft/sw3/cfd/services/ComprobantesDigitalesManagerImpl.java"
+			],
+			[
+				"cfdm",
+				"java/com/luxsoft/sw3/cfd/services/ComprobantesDigitalesManager.java"
+			],
+			[
+				"cant",
+				"java/com/luxsoft/siipap/model/CantidadMonetaria.java"
+			],
+			[
+				"requisi",
+				"java/com/luxsoft/siipap/model/tesoreria/Requisicion.java"
+			],
+			[
+				"unidad",
+				"java/com/luxsoft/siipap/model/core/Unidad.java"
+			],
+			[
+				"unida",
+				"java/com/luxsoft/siipap/model/Unidad.java"
+			],
+			[
+				"compraa2",
+				"java/com/luxsoft/siipap/compras/model/Compra2.java"
+			],
+			[
+				"main",
+				"Views/layouts/main.gsp"
+			],
+			[
+				"_men",
+				"Views/layouts/_menu.gsp"
+			],
+			[
+				"scaf",
+				"Web App/css/scaffolding.css"
+			],
+			[
+				"luxor.gs",
+				"Views/layouts/luxor.gsp"
+			],
+			[
+				"luxo",
+				"Web App/css/luxor.css"
+			],
+			[
+				"hom",
+				"Views/home/index.gsp"
+			],
+			[
+				"luxor.css",
+				"Web App/css/luxor.css"
+			],
+			[
+				"main.css",
+				"Web App/css/main.css"
+			],
+			[
+				"index",
+				"Views/home/index.gsp"
+			],
+			[
+				"url",
+				"Configuration/UrlMappings.groovy"
+			],
+			[
+				"info",
+				"Views/home/info.gsp"
+			],
+			[
+				"home",
+				"Controllers/com/luxsoft/impapx/HomeController.groovy"
+			],
+			[
+				"menu",
+				"Views/layouts/_menu.gsp"
+			],
+			[
+				"lux",
+				"Views/layouts/luxor.gsp"
+			],
+			[
+				"mainm",
+				"Views/importador/_mainMenu.gsp"
+			],
+			[
+				"boot",
+				"js/bootstrap.js"
+			],
+			[
+				"boo",
+				"css/bootstrap.css"
+			],
+			[
+				"r",
+				"js/rowcount.js"
+			],
+			[
+				"he",
+				"hero.html"
+			],
+			[
+				"in",
+				"index.html"
+			],
+			[
+				"sta",
+				"starter-template.html"
+			],
+			[
+				"flu",
+				"fluid.html"
+			],
+			[
+				"inde",
+				"index.html"
+			],
+			[
+				"sca",
+				"Web App/css/scaffolding.css"
+			],
+			[
+				"_in",
+				"Views/_fields/person/email/_input.gsp"
+			],
+			[
+				"_inp",
+				"Views/_fields/localDate/_input.gsp"
+			],
+			[
+				"_fie",
+				"Views/_fields/default/_field.gsp"
+			],
+			[
+				"produ",
+				"Domain Objects/demonav/Producto.groovy"
+			],
+			[
+				"sc",
+				"Configuration/ScaffoldingResources.groovy"
+			],
+			[
+				"productoco",
+				"Controllers/demonav/ProductoController.groovy"
+			],
+			[
+				"clientecon",
+				"Controllers/demonav/ClienteController.groovy"
+			],
+			[
+				"create",
+				"Views/cliente/create.gsp"
+			],
+			[
+				"b",
+				"Configuration/BuildConfig.groovy"
+			],
+			[
+				"ind",
+				"Views/index.gsp"
+			],
+			[
+				"productocon",
+				"Controllers/demonav/ProductoController.groovy"
+			],
+			[
+				"clientec",
+				"Controllers/demonav/ClienteController.groovy"
+			],
+			[
+				"build",
+				"Configuration/BuildConfig.groovy"
+			],
+			[
+				"ventade",
+				"Domain Objects/demonav/VentaDet.groovy"
+			],
+			[
+				"ventad",
+				"grails-app/domain/demonav/VentaDet.groovy"
+			],
+			[
+				"ven",
+				"grails-app/domain/demonav/Venta.groovy"
+			],
+			[
+				"bui",
+				"grails-app/conf/BuildConfig.groovy"
+			],
+			[
+				"con",
+				"grails-app/conf/Config.groovy"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/Users/rubencancinoramos/Desktop/luxsoftSite1/luxsoftSite1.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

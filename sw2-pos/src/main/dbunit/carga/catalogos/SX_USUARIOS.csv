@@ -1,0 +1,35 @@
+id, account_expired, account_locked, credentials_expired, email, account_enabled, first_name, last_name, password, password_hint, phone_number, username, version, website
+"-2","false","false","false","matt@raibledesigns.com","true","Matt","Raible","a159b7ae81ba3552af61e9731b20870515944538","Not a female kitty.",null,"admin","6","http://raibledesigns.com"
+"5","false","false","false",null,"true","BEATRIZ","NAVARRETE","7cb8a0f5f00d5bf3a61c245b459106ce87b8a416",null,null,"betyn","3",null
+"6","false","false","false",null,"false","JANET","MEDINA","472deff3000b065531b81215ef068055bad31acf",null,null,"janetm","1",null
+"7","false","false","false",null,"true","LUCIA","GODINEZ","cdc5b3055ac2623428e9a73d32555876b103ba31",null,null,"luciag","7",null
+"8","false","false","false",null,"true","GILBERTO","BARRAGAN","cb72f67ec98c58e3474044b8d886f0fab60112cd",null,null,"gilbertob","4",null
+"9","false","false","false",null,"false","JOSE MANUEL","CHAVEZ","2a2c761afd0c3d3d79e7de8b4419d52953fcc6ed",null,null,"josemanuelch","1",null
+"10","false","false","false",null,"true","VERONICA","AREVALO","5ed5e97370da9e1a96c58d009074e3a8f9ed1933",null,null,"veronicaa","4",null
+"11","false","false","false",null,"true","CONSUELO","SANCHEZ","854698dc3e230b547ffeda7d29613433a7c2801e",null,null,"consuelos","5",null
+"12","false","false","false",null,"true","JOSE CARLOS","ESPINO","ec6fb3a27c1535606979d4f02f42f61eade64601",null,null,"josecarlose","4",null
+"13","false","false","false",null,"true","DAVID","FLORES","38ae1b48ed96d57c9e166f6cc6ffdf619b4856ab",null,null,"davidf","2",null
+"14","false","false","false",null,"true","RAFAEL","SANCHEZ","ed6bf72e1340c54e29d3414ceeae6fee4278bfc0",null,null,"rafaels","8",null
+"15","false","false","false",null,"false","SISTEMAS","SISTEMAS","a159b7ae81ba3552af61e9731b20870515944538",null,null,"sistemas","1",null
+"16","false","false","false",null,"true","COMPRAS","COMPRAS","6c73ef58824b5eda5bcd6291a45325b0a2ed1fcf",null,null,"compras","2",null
+"17","false","false","false",null,"true","CONTABILIDAD","CONTABILIDAD","92a130da5278fd2fefd7193d4070e86e985ca339",null,null,"contabilidad","2",null
+"18","false","false","false",null,"true","JOSE ANTONIO","SANCHEZ","c781616f2b63d0493c27063823ef863c2f12881e",null,null,"jasanchez","5",null
+"19","false","false","false",null,"true","JOSE ANGEL","MORALES","2138e291d607f7086210a8967f7a9e0a054b82f9",null,null,"jamorales","3",null
+"20","false","false","false",null,"true","JORGE ALBERTO","GARCIA SANCHEZ","91f87b233dfe77a2ed78a74312c2aa3337ae8aaa",null,null,"jagarcia","3",null
+"21","false","false","false",null,"true","JOSE","SANCHEZ","d1083f7fd24dd56ab7c76e684b65faa61fe1fbf9",null,null,"jsanchez","2",null
+"22","false","false","false",null,"false","MOSTRADOR","TACUBA","f5dc7270404040153291e684654193b6a8da5314",null,null,"mostrador","0",null
+"23","false","false","false",null,"true","EVA M","BOBADILLA","eff5886f9c255580b61379584457107d3f0ed2ad",null,null,"ebobadilla","3",null
+"24","false","false","false",null,"true","GRACIELA","FLORES","2b9b0478b9c8297666fa5227cb12d1074aaccc95",null,null,"gflores","1",null
+"25","false","false","false",null,"true","IVONNE","TREJO","96c5a91b6cdccf3e396304f66454da9a8f5b886d",null,null,"itrejo","1",null
+"26","false","false","false",null,"true","PABLO","MEJIA","8f9b5ceea6afc2db71c6a4b6d32fe3d36751f0c5",null,null,"pmejia","0",null
+"27","false","false","false",null,"true","ANGELES","ALVAREZ","ba9d0ed6a987e462d462426609472a4eff859251",null,null,"aalvarez","2",null
+"28","false","false","false",null,"true","LIDIA","AGUILLON","dd9c5f48989d59175a4a8206f3f910f082e10cd6",null,null,"laguillon","1",null
+"29","false","false","false",null,"true","ANGELA","DOMINGUEZ","0d1df75852f99f015b62ec7d84d3a8dcc0aae194",null,null,"adominguez","2",null
+"30","false","false","false",null,"true","OLGA LIDIA","JAY","a60f283f8815cf57ec9eacee8a95fb92ddaf4e17",null,null,"oljay","1",null
+"31","false","false","false",null,"true","SILVIA","PATIÑO","4348ab9b66a4f775f1f798b10e48b6d4692d48ef",null,null,"spatiño","1",null
+"32","false","false","false",null,"true","MIRIAM","VILLANUEVA","3efd767fb75883f1ec608b009bc824f648e20167",null,null,"mvillanueva","2",null
+"33","false","false","false",null,"true","MARIA DE JESUS","VALENCIA ","8354336224c63279aadd00a9621757ef4fdf31fc",null,null,"mjvalencia","4",null
+"34","false","false","false",null,"true","CRISTINA","SOTO GOMAR","32cf5c4f8286ca353cf371a8d94525da48cfe649",null,null,"cgomar","2",null
+"35","false","false","false",null,"true","IVONNE","GODOY","fee802703d2b7a56e1375617f862cec3e6ad8f37",null,null,"igodoy","2",null
+"36","false","false","false",null,"true","SILVIA","MENDOZA ","564d4edf42d086029c467a3765df67bbbf8f3f27",null,null,"smendoza","3",null
+"37","false","false","false",null,"true","LIZETH ","CALDERON","ac7a2bc303f7cee506c6b9477ff660bc271ded76",null,null,"lcalderon","2",null

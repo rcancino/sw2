@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/xsd/assembly-1.1.0-SNAPSHOT.xsd">
+	 
+  <id>all</id>
+  <formats>
+    <format>dir</format>
+  </formats>  
+  <baseDirectory>siipapex</baseDirectory>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  
+ 
+  <dependencySets>
+  	<!-- Dependencies of other libraries -->  
+    <dependencySet>    
+      <outputDirectory>lib/</outputDirectory>      
+      <unpack>false</unpack>      
+      <useProjectArtifact>false</useProjectArtifact>
+      <excludes>
+      	<exclude>${groupId}:*</exclude>
+      </excludes>
+    </dependencySet>
+    
+    <!-- Dependencies of other modules -->    
+    <dependencySet>    
+      <outputDirectory>lib/siipapex</outputDirectory>
+      <unpack>false</unpack>      
+      <useProjectArtifact>false</useProjectArtifact>
+      <includes>
+      	<include>${groupId}:*</include>
+      </includes>      
+    </dependencySet>
+  </dependencySets>  
+  
+  <fileSets>    
+    <fileSet>
+  		<directory>src/main/commons-launcher-bin</directory>
+  		<outputDirectory>bin</outputDirectory>
+  	</fileSet>
+  	<fileSet>
+  		<directory>src/main/commons-launcher-jars</directory>
+  		<outputDirectory>lib/launcher</outputDirectory>
+  	</fileSet>
+  	<fileSet>
+  		<directory>src/main/commons-launcher-etc</directory>
+  		<outputDirectory>etc</outputDirectory>
+  	</fileSet>  	
+  </fileSets>
+  
+</assembly>

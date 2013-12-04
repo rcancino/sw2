@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>
+		
+	<bean id="replicationLocalView" 
+    	class="com.luxsoft.sw2.server.ui.consultas.ReplicationLocalView"
+     	/>
+           
+	<bean id="replicaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+    	<property name="panels">
+     		<list>
+     			<ref bean="clientesReplicaPanel"/>
+     			<ref bean="existenciasReplicaPanel"/>
+     			<value>Catalogos</value>
+     			<ref bean="comprasPanel"/>
+     			<ref bean="recepcionDeComprasPanel"/>
+     			<ref bean="ventasReplicaPanel"/>
+     			<ref bean="devolucionesReplicaPanel"/>
+     			<ref bean="solicitudesParaPagoConDepositosPanel"/>
+     			<ref bean="embarquesReplicaPanel"/>
+     			<ref bean="movimientosReplicaPanel"/>
+     			<ref bean="devolucionDeCompraReplicaPanel"/>
+     			<ref bean="transformacionesReplicaPanel"/>
+     			<ref bean="maquilasReplicaPanel"/>
+     			<ref bean="solicitudDeTrasladosReplicaPanel"/>
+     			<ref bean="trasladosReplicaPanel"/>
+     			<ref bean="abonosReplicaPanel"/>
+     			<ref bean="fichasReplicaPanel"/>
+     			<ref bean="cfdReplicaPanel"/>
+     		</list>
+     		
+     	</property>
+     </bean>
+     
+     <bean id="existenciasReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.ExistenciasPanel"
+     				p:title="Existencias"
+     				p:sucursalId="${sucursal.id}"/>
+	
+	<bean id="clientesReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.ClientesReplicaSucursalPanel"
+	 	p:sucursalId="${sucursal.id}"
+	 	p:sucursalNombre="${sucursal.name}"/>
+		
+	<bean id="comprasPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.compras.model.Compra2"/>
+		<property name="properties" value="folio,sucursal.nombre,clave,nombre,fecha,moneda,tc,total,descuentoEspecial,depuracion,consolidada,comentario"/>
+		<property name="labels" value="Folio,Sucursal,Proveedor,Nombre,Fecha,Mon,TC,Total,Desc,Depuración,Consolidada,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Proveedor" value="clave,nombre"/>
+				<entry key="Folio" value="folio"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="recepcionDeComprasPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" 
+		p:sucursalId="${sucursal.id}"
+		p:hibernateQuery="from @CLASS s left join fetch s.compra.proveedor p where s.sucursal.id=? and date(s.fecha) between ? and ?">
+		<constructor-arg value="com.luxsoft.siipap.compras.model.RecepcionDeCompra"/>
+		<property name="properties" value="sucursal.nombre,documento,fecha,compra.proveedor.nombre,compra.folio,compra.fecha"/>
+		<property name="labels" value="Sucursal,Docto,Fecha,Proveedor,Compra,Fecha C"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Proveedor" value="compra.proveedor.nombre"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean id="ventasReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" 
+		p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.ventas.model.Venta"/>
+		<property name="properties" value="sucursal.nombre,fecha,documento,origen,clave,nombre,comentario"/>
+		<property name="labels" value="Sucursal,Fecha,Venta,Tipo,Cliente,Nombre,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="sucursal.nombre"/>
+				<entry key="Docto" value="documento"/>
+				<entry key="Tipo" value="origen"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="devolucionesReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" 
+		p:sucursalId="${sucursal.id}"
+		p:hibernateQuery="from @CLASS d where d.venta.sucursal.id=? and date(d.fecha) between ? and ?">
+		<constructor-arg value="com.luxsoft.siipap.ventas.model.Devolucion"/>
+		<property name="properties" value="numero,fecha,venta.documento,venta.origen,venta.fecha,comentario"/>
+		<property name="labels" value="Documento,Fecha,Venta,Tipo,Fecha (F),Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Sucursal" value="venta.sucursal.nombre"/>
+				<entry key="Docto" value="numero"/>
+				<entry key="Tipo" value="venta.origen"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="movimientosReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.inventarios.model.Movimiento"/>
+		<property name="properties" value="documento,fecha,concepto,porInventario,comentario"/>
+		<property name="labels" value="Docto,Fecha,Concepto,Por Inv,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Tipo" value="concepto"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="solicitudDeTrasladosReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado"/>
+		<property name="properties" value="documento,fecha,pago.id,sucursal.nombre,atendido,comentario,referencia"/>
+		<property name="labels" value="Docto,Fecha,Abono,Origen,Atendido,Comentario,Referencia"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Referencia" value="referencia"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	 <bean id="devolucionDeCompraReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.compras.model.DevolucionDeCompra"/>
+		<property name="properties" value="documento,fecha,clave,nombre,sucursal.nombre,comentario"/>
+		<property name="labels" value="Docto,Fecha,Clave Prov,Proveedor,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Proveedor" value="clave,nombre"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="transformacionesReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.inventarios.model.Transformacion"/>
+		<property name="properties" value="documento,fecha,clase,porInventario,comentario"/>
+		<property name="labels" value="Docto,Fecha,Concepto,Por Inv,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Tipo" value="clase"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="maquilasReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.maquila.model.RecepcionDeMaquila"/>
+		<property name="properties" value="documento,fecha,proveedor.nombre,remision,comentario"/>
+		<property name="labels" value="Docto,Fecha,proveedor,Remision,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Proveedor" value="proveedor.nombre"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+  
+  	<bean id="abonosPanel" class="com.luxsoft.sw2.server.ui.consultas.AbonosPanel"
+     		p:title="Abonos"
+     		p:sucursalId="${sucursal.id}"/>
+    
+    <bean id="solicitudesParaPagoConDepositosPanel" class="com.luxsoft.sw2.server.ui.consultas.SolicitudesParaPagoConDepositoPanel"
+    		p:title="Solicitudes de Dep"
+     		p:sucursalId="${sucursal.id}"/>
+    
+    <bean id="embarquesReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.EmbarquesReplicaPanel"
+    		p:title="Embarques"
+     		p:sucursalName="${sucursal.name}"/>
+     		
+     		
+     <bean id="trasladosReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" 
+     	p:sucursalId="${sucursal.id}"
+     	p:hibernateQuery="from Traslado t where t.solicitud.origen.id=? and date(t.fecha) between ? and ?">
+		
+		<constructor-arg value="com.luxsoft.siipap.inventarios.model.Traslado"/>		
+		<property name="properties" value="Sucursal,tipo,documento,fecha,solicitud.documento,solicitud.sucursal,chofer,porInventario,comentario,solicitud.referencia"/>
+		<property name="labels" value="sucursal.nombre,Tipo,Docto,Fecha,Sol,Sucursal (SOL),Chofer,Por Inv,Comentario,Ref (Sol)"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Tipo" value="tipo"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+  
+    	<bean id="abonosReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.cxc.model.Abono"/>
+		<property name="properties" value="nombre,fecha,sucursal.nombre,origen,tipo,folio,total,aplicado,diferencia,disponibleCalculado,liberado,info,comentario"/>
+		<property name="labels" value="Cliente,Fecha,Sucursal,Origen,Tipo,Folio,Total,Aplicado,Otros Prod,Disponible,Liberado,Info,Comentario"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Cliente" value="nombre"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="fichasReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel" p:sucursalId="${sucursal.id}">
+		<constructor-arg value="com.luxsoft.siipap.cxc.model.Ficha"/>
+		<property name="properties" value="origen,fecha,sucursal.nombre,folio,total,cuenta,tipoDeFicha,corte,ingreso.id,comentario,cancelada"/>
+		<property name="labels" value="Origen,Fecha,Suc,Folio,Total,Cuenta,Tipo(Ficha),Corte,Ingreso,Comentario,Cancelada"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Cliente" value="nombre"/>
+				<entry key="Fecha" value="fecha"/>
+				<entry key="Folio" value="documento"/>
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean id="cfdReplicaPanel" class="com.luxsoft.sw2.server.ui.consultas.DefaultSucursalReplicaPanel">
+		<constructor-arg value="com.luxsoft.sw3.cfd.model.ComprobanteFiscal"/>
+		<property name="hibernateQuery" value="from @CLASS d where date(d.log.creado) between ? and ?"/>
+		<property name="properties" value="serie,tipo,folio,log.creado,total,estado"/>
+		<property name="labels" value="Serie,Tipo,Folio,Fecha,Total,Estado"/>
+		<property name="textFiltes">
+			<map>
+				<entry key="Serie" value="serie"/>
+				<entry key="Folio" value="folio"/>
+				<entry key="Tipo" value="tipo"/>
+			</map>
+		</property>
+	</bean>
+  
+  
+  
+  
+</beans>

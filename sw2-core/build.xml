@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+
+<!--
+  Build file Auxiliar para algunas tareas de SiipapEx - Core
+  
+-->
+
+
+<project name="SiipapEx-core" basedir=".">
+
+
+	<property file="project.properties" />
+
+
+	<path id="lib">
+		<fileset dir="/m2/repository">
+			<include name="**/**.jar" />
+		</fileset>
+	</path>
+
+	<!-- ***************************************************************** -->
+	<!-- DB Tasks														   -->
+	<!-- ***************************************************************** -->
+
+	<!-- Path to hibernate tools -->
+	<path id="hibernate.tools.path">
+		<fileset dir="${hibernate.tools.dir}">
+			<include name="**/*.jar" />
+			<include name="**/*.properties" />
+		</fileset>
+		<path location="${lib.dir}/${jdbc.driver.jar}" />
+	</path>
+
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask">
+		<classpath refid="hibernate.tools.path" />
+	</taskdef>
+
+	<target name="hbm2ddl" description="Genera un  esquema nuevo de la base de datos">
+
+		<hibernatetool destdir="${basedir}/target">
+
+			<classpath>
+				<path location="${target.classes.dir}" />
+				<path location="${basedir}/src/test/resources" />
+			</classpath>
+			<!--<configuration configurationfile="${basedir}/target/classes/hibernate.cfg.xml"/>-->
+			<annotationconfiguration configurationfile="${basedir}/target/classes/hibernate.cfg.xml" />
+
+			<hbm2ddl export="false" update="true" drop="true" create="true" console="true" outputfilename="${basedir}/target/hbm/schema2.sql" format="true" />
+		</hibernatetool>
+	</target>
+
+
+	<target name="hbm2doc" description="Genera Docs de las tablas y entidades">
+		<delete dir="${generated.dir}/hibernatedocs" />
+		<mkdir dir="${generated.dir}/hibernatedocs" />
+
+		<hibernatetool destdir="${generated.dir}/hibernatedocs">
+			<classpath>
+				<path location="${target.classes.dir}" />
+			</classpath>
+
+			<configuration configurationfile="${basedir}/hibernate.cfg.xml" />
+			<hbm2doc />
+		</hibernatetool>
+	</target>
+
+	<!-- =================================================================== -->
+	<!--            Export the data                                          -->
+	<!-- =================================================================== -->
+
+	<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask">
+		<classpath>
+			<path location="${dbunit.jar}" />
+			<path location="${jdbc.jar}" />
+			<path location="${oracle.jdbc.jar}" />
+		</classpath>
+	</taskdef>
+
+
+
+
+
+	<target name="respalda-produccion-basico" description="Respalda de la base de datos de produccion los catalogos
+					    y tablas basicas">
+		<mkdir dir="${basedir}/src/main/dbunit/" />
+		<dbunit driver="${prod.jdbc.driverClassName}" url="${prod.jdbc.url}" userid="${prod.jdbc.username}" password="${prod.jdbc.password}">
+			<export dest="${basedir}/src/main/dbunit/catalogos_basicos.xml">
+				<table name="SW_EMPRESAS" />
+				<table name="SW_SUCURSALES" />
+				<table name="SX_CORTES" />
+				<table name="SX_LINEAS" />
+				<table name="SX_MARCAS" />
+				<table name="SX_CLASES" />
+				<table name="SX_UNIDADES" />
+				<table name="SX_PRODUCTOS" />
+				<table name="SX_USUARIOS" />
+				<table name="SX_ROLE" />
+				<table name="SX_USER_ROLE" />
+				<table name="SW_BANCOS" />
+				<table name="SW_CUENTAS" />
+				<table name="SX_CONFIGURACION" />
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-produccion-basico" description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://10.10.1.228/tacuba" userid="root" password="sys">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/catalogos_basicos.xml" transaction="true" />
+		</dbunit>
+	</target>
+
+	<target name="respalda-clientes" description="Respalda algunas tablas adicionales">
+		<mkdir dir="${basedir}/src/main/dbunit/" />
+		<dbunit driver="${prod.jdbc.driverClassName}" url="jdbc:mysql://10.10.1.221/produccion" userid="root" password="sys">
+			<export dest="${basedir}/src/main/dbunit/clientes.xml">
+				<table name="SX_COBRADORES" />
+				<table name="SX_VENDEDORES" />
+				<table name="SX_CLIENTES_CREDITO" />
+				<table name="SX_CLIENTES" />  
+				<table name="SX_CLIENTES_DIRECCIONES" />
+				<table name="SX_CLIENTES_COMENT" />
+				<table name="SX_CLIENTES_TELS" />
+				<table name="SX_CLIENTES_CONTACTOS" />
+				<table name="SX_CLIENTES_CUENTAS" />
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-clientes" description="Importa los catalogos basicos de una base ya en produccio">
+		<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://10.10.1.228/tacuba" userid="root" password="sys">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/clientes.xml" transaction="true" />
+		</dbunit>
+	</target>
+	
+	
+
+	<target name="respalda-cuentas-x-cobrar" description="Respalda la cuenta por cobrar de la base local">
+		<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://localhost/sw2" userid="root" password="sys">
+			<export dest="${basedir}/src/main/dbunit/cxc.xml">
+				<table name="SX_VENTAS" />
+				<table name="SX_VENTASDET" />
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-cuentas-x-cobrar" description="Importa las cuentas por cobrar al sistema local">
+		<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://localhost/sw2" userid="root" password="sys">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/cxc.xml" transaction="true" />
+		</dbunit>
+	</target>
+	
+	<target name="respalda-gastos-tesoreria" description="Respalda gastos y cuenta por pagar de oracle">
+		<dbunit driver="${prod.jdbc.driverClassName}" url="${prod.jdbc.url}" userid="${prod.jdbc.username}" password="${prod.jdbc.password}">
+				<export dest="${basedir}/src/main/dbunit/gastosTesoreria.xml">
+					<table name="SW_DEPARTAMENTOS" />
+					<table name="SW_CONCEPTOS" />
+				</export>
+			</dbunit>
+		</target>
+
+		<target name="importar-gastos-tesoreria" description="Importa gastos y tesoreria de oracle">
+			<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://localhost/sw3" userid="root" password="sys">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/gastosTesoreria.xml" transaction="true" />
+			</dbunit>
+		</target>
+
+	<target name="respalda-proveedores" description="Respalda la cuenta por cobrar de la base local">
+		<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://10.10.1.221/produccion" userid="root" password="sys">
+			<export dest="${basedir}/src/main/dbunit/proveedores.xml">
+				<table name="SX_PROVEEDORES" />
+				<table name="SX_PROVEEDOR_PRODUCTOS" />
+				<table name="SX_LP_PROVS" />
+				<table name="SX_LP_PROVS_DET" /> 
+			</export>
+		</dbunit>
+	</target>
+	<target name="importar-proveedores" 
+			description="Importa el catalogo de proveedores">
+				<dbunit driver="${jdbc.driverClassName}" 
+					url="jdbc:mysql://10.10.1.228/tacuba" userid="root" password="sys">
+					<operation type="INSERT" 
+						src="${basedir}/src/main/dbunit/proveedores.xml" transaction="true" />
+				</dbunit>
+	</target>
+
+	<target name="exportar-kernell" description="Exporta los catalogos basicos del KERNELL">
+		<mkdir dir="${basedir}/src/main/dbunit/" />
+		<dbunit driver="${jdbc.driverClassName}" 
+				url="${jdbc.url}" 
+				userid="${jdbc.username}" 
+				password="${jdbc.password}">
+			<export dest="${basedir}/src/main/dbunit/kernell.xml">
+				<table name="SX_USUARIOS" />
+				<table name="SX_ROLE" />
+				<table name="SX_USER_ROLE" />
+			</export>
+		</dbunit>
+	</target>
+
+	<target name="importar-kernell" description="Importa catalogos basicos del sistema">
+		<dbunit driver="${jdbc.driverClassName}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}">
+			<operation type="INSERT" src="${basedir}/src/main/dbunit/kernell.xml" transaction="true" />
+		</dbunit>
+	</target>
+
+	<target name="respaldar-cfd" description="Tarea comodin para exportar datos">
+		<mkdir dir="${basedir}/target/dbunit/" />
+		<dbunit driver="${prod.jdbc.driverClassName}" url="${prod.jdbc.url}" userid="${prod.jdbc.username}" password="${prod.jdbc.password}">
+			<export dest="${basedir}/src/test/resources/dbunit/cfd-data.xml">
+				<table name="SX_CFD_CERTIFICADOS" />
+				<table name="SX_DESC_VOL"/>
+			</export>
+		</dbunit>
+	</target>
+	
+	<target name="exportar-tablas" description="Tarea comodin para exportar datos">
+			<mkdir dir="${basedir}/target/dbunit/" />
+			<dbunit driver="${prod.jdbc.driverClassName}" url="${prod.jdbc.url}" userid="${prod.jdbc.username}" password="${prod.jdbc.password}">
+				<export dest="${basedir}/src/main/dbunit/compras.xml">
+					<query name="sx_compras2" 
+						sql="select * from sx_compras2 where compra_id in(select compra_id from sx_compras2_det where COMPRADET_ID in (select COMPRADET_ID from sx_inventario_com where year(fecha)=2011 and month(fecha)=9))"/>
+					<query name="sx_compras2_det" 
+						sql="select * from sx_compras2_det where COMPRADET_ID in (select COMPRADET_ID from sx_inventario_com where year(fecha)=2011 and month(fecha)=9)"/>
+					<query name="sx_entrada_compras" 
+						sql="select * from sx_entrada_compras where id in(select recepcion_id from sx_inventario_com where year(fecha)=2011 and month(fecha)=9)"/>
+					<query name="sx_inventario_com" 
+						sql="select * from sx_inventario_com where year(fecha)=2011 and month(fecha)=9"/>
+				</export>
+			</dbunit>
+		</target>
+	
+	<target name="importar-tablas" description="Importa tablas">
+			<dbunit driver="${jdbc.driverClassName}" url="${jdbc.url}" 
+				userid="${jdbc.username}" password="${jdbc.password}">
+				<operation type="INSERT" src="${basedir}/src/main/dbunit/compras.xml" 
+					transaction="true" />
+			</dbunit>
+	</target>
+	
+	<target name="exportar-tablas-oracle" description="Tarea comodin para exportar datos de oracle">
+		<mkdir dir="${basedir}/target/dbunit/" />
+		<dbunit driver="${oracle.jdbc.driverClassName}" url="${oracle.jdbc.url}" userid="${oracle.jdbc.username}" password="${oracle.jdbc.password}" schema="SIIPAP">
+			<export dest="${basedir}/src/dbunit/bancos.xml">
+				<table name="SW_BANCOS" />
+				<table name="SW_CUENTAS" />
+			</export>
+		</dbunit>
+	</target>
+
+
+
+	
+
+
+	<target name="respalda-maquila" 
+			description="Respaldar Maquila">
+			<mkdir dir="${basedir}/src/main/dbunit/maquila/" />
+			<dbunit driver="${prod.jdbc.driverClassName}" 
+					url="${prod.jdbc.url}" 
+					userid="${prod.jdbc.username}" 
+					password="${prod.jdbc.password}"> 		
+				
+				<export dest="${basedir}/src/main/dbunit/maquila" 
+					format="csv"  >									
+					<table name="SX_ALMACENES" />
+					
+				</export>
+			</dbunit>
+		</target>
+
+	<target name="importar-maquila" 
+			description="Importa la informacion de maquila">
+			<dbunit driver="${jdbc.driverClassName}" 
+					url="jdbc:mysql://localhost/sw3" 
+					userid="root" 
+					password="sys">			
+				<operation type="CLEAN_INSERT"
+					src="${basedir}/src/main/dbunit/maquila/" 
+					transaction="true" format="csv" />
+			</dbunit>
+		</target>
+	
+	<target name="respalda-existencias" description="Respalda las existencias ">
+		<dbunit driver="${prod.jdbc.driverClassName}" url="${prod.jdbc.url}" userid="${prod.jdbc.username}" password="${prod.jdbc.password}">
+			<export dest="${basedir}/src/main/dbunit/existencias.xml">
+					<query name="SX_EXISTENCIAS" sql="select * from sx_existencias where year=2011 and mes=8"/>					
+				</export>
+			</dbunit>
+	</target>
+	<target name="importar-existencias" description="Importa las existencias">
+			<dbunit driver="${jdbc.driverClassName}" url="jdbc:mysql://localhost/sw3" userid="root" password="sys">
+				<operation type="INSERT" src="${basedir}/src/main/dbunit/existencias.xml" transaction="true" />
+			</dbunit>
+		</target>
+
+</project>

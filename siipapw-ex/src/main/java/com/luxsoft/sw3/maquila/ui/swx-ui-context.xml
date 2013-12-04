@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de Maquila
+    </description>
+     
+     <bean id="maquilaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".1">
+     	<property name="panels">
+     		<list>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.EntradaDeMaterialPanel"
+     			    p:title="Recepciones de Bobinas"
+     			    p:defaultPanel="true"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.OrdenesDeCortePanel"
+     			    p:title="Ordenes de corte"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.RecepcionDeCortePanel"
+     			    p:title="Recepciones de corte"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.SalidaDeHojasPanel"
+     			    p:title="Salida de Hojeado"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.SalidaDeBobinasPanel"
+     			    p:title="Salida de Bobinas"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.AnalisisDeMaterialPanel"
+     			    p:title="Análisis de Bobinas"/>
+     			<!--<bean class="com.luxsoft.sw3.maquila.ui.consultas.AnalisisDeFletePanel"
+     			    p:title="Análisis de Flete"/>
+     			<bean class="com.luxsoft.sw3.maquila.ui.consultas.AnalisisDeHojeoPanel"
+     			    p:title="Análisis de Hojeo"/>
+     		--></list>
+     	</property>
+     </bean>
+    
+</beans>

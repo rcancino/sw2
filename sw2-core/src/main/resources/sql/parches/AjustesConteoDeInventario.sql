@@ -1,0 +1,10 @@
+alter table SX_EXISTENCIA_CONTEO add column createdIp varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column createdMac varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column updatedIp varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column updatedMac varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column CREADO datetime;
+alter table SX_EXISTENCIA_CONTEO add column CREADO_USR varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column MODIFICADO datetime;
+alter table SX_EXISTENCIA_CONTEO add column MODIFICADO_USR varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column EXISTENCIA_ORIGEN varchar(255);
+alter table SX_EXISTENCIA_CONTEO add column CONTEO_PARCIAL bit default 0;

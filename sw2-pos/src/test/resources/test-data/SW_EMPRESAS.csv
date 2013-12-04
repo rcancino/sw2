@@ -1,0 +1,2 @@
+EMPRESA_ID, CLAVE, DESCRIPCION, CALLE, CIUDAD, COLONIA, CP, ESTADO, LOCALE, DELMPO, NUMERO, NUMEROINT, PAIS, NOMBRE, RFC
+"1","PAPELSA","Empresa primaria del sistema","Biólogo Maximino Martínez","México D.F.","San Salvador Xochimanca","02870","Mexico D.F.","es_MX","DF","3902","3902","MEXICO","PAPEL S.A. de C.V.","PAP830101CR3"

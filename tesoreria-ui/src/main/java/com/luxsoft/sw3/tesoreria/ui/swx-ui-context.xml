@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+       
+    <description>
+    	Contexto para la GUI de Tesoreria
+    </description>
+    
+    <bean id="movimientosView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<ref local="saldoDeCuentasPanel"/>
+     			<ref local="traspasosDeCuentasPanel"/>
+     			<ref local="InversionesPanel"/>
+     			<ref local="comisionesPanel"/>
+     			<ref bean="movimientosPanel"/>
+     			<ref bean="estadoDeCuentaPanel"/>
+     		</list>
+     	</property>
+     </bean>
+     
+     <bean id="movimientosPanel"
+    	class="com.luxsoft.siipap.tesoreria.movimientos.MovimientosPanel"
+    	p:title="Movimientos"
+    	p:defaultPanel="false"/>
+    	
+    <bean id="estadoDeCuentaPanel"
+    	class="com.luxsoft.siipap.tesoreria.movimientos.EstadoDeCuentaPanel"
+    	p:title="Estado de Cuenta"
+    	/>
+    
+   <bean id="traspasosDeCuentasPanel"
+   		class="com.luxsoft.sw3.tesoreria.ui.consultas.TraspasosDeCuentasPanel"
+   		p:title="Traspasos"/>
+   	
+   	<bean id="InversionesPanel"
+   		class="com.luxsoft.sw3.tesoreria.ui.consultas.InversionesPanel"
+   		p:title="Inversiones"/>
+   	
+   	<bean id="comisionesPanel"
+   		class="com.luxsoft.sw3.tesoreria.ui.consultas.ComisionesBancariasPanel"
+   		p:title="Comisiones"/>
+   		
+   	<bean id="saldoDeCuentasPanel"
+   		class="com.luxsoft.sw3.tesoreria.ui.consultas.SaldoDeBancosPanel"
+   		p:title="Saldos"
+   		p:defaultPanel="true"/>
+   
+    	
+   
+     
+    
+</beans>
