@@ -15,6 +15,8 @@ import javax.swing.JSplitPane;
 
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.PredicateUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,11 @@ import com.jgoodies.uif.panel.SimpleInternalFrame;
 import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.pos.POSActions;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.facturacion.FacturacionController;
+import com.luxsoft.siipap.pos.facturacion.FacturacionController.CFDIVenta;
 
 import com.luxsoft.siipap.pos.ui.reports.AplicacionDeSaldosReportForm;
 import com.luxsoft.siipap.pos.ui.reports.ArqueoCaja;
@@ -48,6 +52,7 @@ import com.luxsoft.siipap.pos.ui.venta.forms.PedidoFormView;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Venta;
 
 import com.luxsoft.sw3.cfdi.model.CFDI;
@@ -70,6 +75,8 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	
 	@Autowired
 	private FacturacionController facturacionController;
+	
+	private Sucursal sucursal;
 
 	public CFDICajaPanel() {
 		super(Pedido.class);
@@ -147,14 +154,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	}
 	
 	
-	public void triggerLoad(){
-		if(isInitialized()){
-			if(logger.isDebugEnabled()){
-				logger.debug("Cargando datos..: "+new Date());
-			}
-			load();
-		}		
-	}
+	
 	
 	protected JComponent buildFacturasPanel(){		
 		JXTable grid=facturasBrowser.getGrid();
@@ -191,13 +191,13 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 			Action buscarAction=addAction("buscar.id","buscar", "Buscar");
 			buscarAction.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/page_find.png"));
 			List<Action> actions=ListUtils.predicatedList(new ArrayList<Action>(), PredicateUtils.notNullPredicate());
-			actions.add(addRoleBasedContextAction(new FacturarPredicate(), POSRoles.CAJERO.name(),this, "facturar", "Generar venta"));
+			actions.add(addRoleBasedContextAction(new VentaPredicate(), POSRoles.CAJERO.name(),this, "generarVenta", "Generar venta"));
 			actions.add(addRoleBasedContextAction(null, POSRoles.CAJERO.name(),this, "cancelar", "Cancelar"));
 			actions.add(buscarAction);
 			actions.add(getLoadAction());
 			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"regresarPendiente", "Regresar a Pendiente"));
 			actions.add(addAction(POSRoles.CAJERO.name(),"consultarDisponibles", "Disponibles"));
-			actions.add(addAction(POSRoles.CAJERO.name(), "generarCFDI", "Generar CFDI"));
+			actions.add(addAction(POSRoles.CAJERO.name(), "timbrar", "Timbrar CFDI"));
 			this.actions=actions.toArray(new Action[actions.size()]);
 		}
 		return actions;
@@ -243,31 +243,44 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 
 	@Override
 	protected List<Pedido> findData() {
-		return getManager().buscarFacturables(Services.getInstance().getConfiguracion().getSucursal());
+		String hql="from Pedido p where p.sucursal.clave=? " +
+				"and  date(p.fecha) between ? and ? and p.totalFacturado=0 and p.facturable=true";
+		System.out.println("Localizando pedidos pendientes para sucursal: "+getSucursal());
+		Date f2=new Date();
+		Date f1=DateUtils.addDays(f2, -30);
+		Object[] params=new Object[]{getSucursal().getClave(),f1,f2};
+		List res= Services.getInstance().getHibernateTemplate().find(hql, params);
+		System.out.println("Pedidos encontrados: "+res.size());
+		return res;
 	}
 	
 	
 	
-	public void facturar(){
+	public void generarVenta(){
 		if(getSelectedPedido()!=null){
 			Pedido target=getManager().get(getSelectedPedido().getId());
-			facturacionController.facturarPedido(target);
+			CFDIVenta cfdiVenta=facturacionController.generarVenta(target);
+			Services.getCFDITimbrador().timbrar(cfdiVenta.getCfdi());
 			load();
 		}	
 	}
 	
-	public void generarCFDI(){
+	public void timbrar(){
 		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
 		if(venta==null)
 			return;
-		if(venta.getCfdi()!=null){
+		if( (venta.getCfdi()!=null) && (venta.getTimbrado()!=null)){
 			MessageUtils.showMessage("CFDI ya generado para la venta", "CFDI");
 		}
 		if(venta!=null){
-			venta=Services.getInstance().getFacturasManager().buscarVentaInicializada(venta.getId());
-			CFDI cfdi=Services.getCFDIManager().generarFactura(venta);
-			logger.info("CFD generado: "+cfdi);
-			cfdi=Services.getCFDIManager().timbrar(cfdi);
+			CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
+			try {
+				logger.info("Timbrando CFDI: "+cfdi);
+				cfdi=Services.getCFDIManager().timbrar(cfdi);
+			} catch (Exception e) {
+				MessageUtils.showMessage(ExceptionUtils.getRootCauseMessage(e), "Timbrado de CFDI");
+				return;
+			}
 			if(cfdi.getTimbrado()!=null){
 				String[] tantos;
 				if(venta.getOrigen().equals(OrigenDeOperacion.CRE)){
@@ -372,12 +385,12 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	}
 	
 	/**
-	 * Predicate para controlar la accion de facturar en funcion del pedido seleccionado
+	 * Verifica si se puede generar una venta a partir de un pedido
 	 * 
 	 * @author Ruben Cancino Ramos
 	 *
 	 */
-	private class FacturarPredicate implements Predicate{
+	private class VentaPredicate implements Predicate{
 		public boolean evaluate(Object bean) {
 			if(getSelectedPedido()!=null){
 				if(getSelectedPedido().isFacturable())
@@ -388,6 +401,14 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 		
 	}
 	
+	
+	
+	public Sucursal getSucursal() {
+		if(sucursal==null){
+			sucursal=Services.getInstance().getConfiguracion().getSucursal();
+		}
+		return sucursal;
+	}
 	private Timer timer;
 	
 	TimerTask task=new TimerTask() {

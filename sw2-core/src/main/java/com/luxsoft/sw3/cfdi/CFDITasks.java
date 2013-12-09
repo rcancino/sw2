@@ -30,10 +30,8 @@ public class CFDITasks {
 		FileInputStream is=new FileInputStream(file);
 		is.read(data);
 		is.close();
-		
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setCfdiPrivateKey(data);
-		empresa.setNumeroDeCertificado("TEST");
 		hibernateTemplate.merge(empresa);
 		
 	}
@@ -51,9 +49,17 @@ public class CFDITasks {
 		
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setCertificadoDigital(data);
-		empresa.setNumeroDeCertificado("TEST");
+		empresa.setNumeroDeCertificado("00001000000202171318");
 		hibernateTemplate.merge(empresa);
 		
+	}
+	
+	public void inicializar() throws Exception{
+		subirLlavePrivada();
+		subirCertificado();
+		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
+		empresa.setTipoDeComprobante(Empresa.TipoComprobante.CFDI);
+		hibernateTemplate.merge(empresa);
 	}
 	
 	public static void main(String[] args) throws Exception{

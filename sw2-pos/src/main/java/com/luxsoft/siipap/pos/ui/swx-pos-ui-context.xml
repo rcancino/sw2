@@ -29,6 +29,7 @@
      		<list>
      			<ref bean="pedidosPanel"/>
      			<ref bean="pedidosEspecialesPanel"/> 
+     			<ref bean="facturacionCreditoCFDIPanel"/>
      			<ref bean="facturacionCreditoPanel"/>
      			<ref bean="devolucionesPanel"/>
      			<ref bean="preDevolucionesPanel"/>
@@ -64,6 +65,10 @@
      	class="com.luxsoft.siipap.pos.ui.consultas.FacturacionCreditoPanel"
      	p:title="Facturación Crédito"
      	/>
+     <bean id="facturacionCreditoCFDIPanel"
+     	class="com.luxsoft.siipap.pos.ui.cfdi.CFDIFacturacionCreditoPanel"
+     	p:title="Facturación CFDI"
+     	/>
      <bean id="devolucionesPanel"
         class="com.luxsoft.siipap.pos.ui.consultas.almacen.DevolucionesPanel"
         lazy-init="true"
@@ -78,9 +83,12 @@
         class="com.luxsoft.siipap.pos.ui.consultas.FacturasGeneradasPanel"
         p:title="Facturas (Todas)"/>
         
-        <bean id="cfdPanel"
+      <bean id="cfdPanel"
         class="com.luxsoft.siipap.pos.ui.consultas.CFDPanel"
          p:title="Comprobantes XML CFD"/>
+     
+     <bean id="cfdiPanel" class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPanel"
+    	p:title="CFDI's"/>
      
      <bean id="comprasView" 
      	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
@@ -168,7 +176,7 @@
      
      <bean id="cajaPanel" class="com.luxsoft.siipap.pos.ui.consultas.caja.CajaPanel"
      		p:title="Facturación Contado"
-     		p:defaultPanel="true"/>
+     		p:defaultPanel="false"/>
      
      <bean id="cobroPanel" class="com.luxsoft.siipap.pos.ui.consultas.caja.CajaPanel"
      		p:title="Facturación Contado"
@@ -179,7 +187,10 @@
      	p:resizeWeightForView=".2">
      	<property name="panels">
      		<list>
-     			
+     			 <bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDICajaPanel"
+     			 	p:title="Facturación CFDI"
+     			 	p:defaultPanel="true"/>
+     			 <ref bean="cfdiPanel"/>
      			<ref bean="cajaPanel"/>
      			 <bean class="com.luxsoft.siipap.pos.ui.consultas.caja.CobranzaPagoContraEntregaPanel"
      			    p:title="Cobranza PCE"/> 
@@ -189,8 +200,7 @@
      			    p:title="Depositos"/>
      			 <bean class="com.luxsoft.siipap.pos.ui.consultas.caja.CortesDeCajaPanel"
      			    p:title="Cortes de Caja"/>
-     			 <bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDICajaPanel"
-     			 	p:title="Facturación CFDI"/>
+     			
      			 
      		</list>
      	</property>

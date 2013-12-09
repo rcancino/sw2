@@ -456,8 +456,8 @@ public class CajaPanel extends FilteredBrowserPanel<Pedido>{
 	TimerTask task=new TimerTask() {
 		@Override
 		public void run() {
-			System.out.println("Cargando datos en timer......");
-			load();
+			//System.out.println("Cargando datos en timer......");
+			//load();
 		}
 	};
 	

@@ -223,6 +223,7 @@
         <mapping class="com.luxsoft.sw3.solicitudes.SolicitudDeModificacion"/>
         <mapping class="com.luxsoft.siipap.model.TipoDeCambio"/>
         <mapping class="com.luxsoft.sw3.ventas.EstadoDeVenta"/>
+        <mapping class="com.luxsoft.sw3.cfdi.model.CFDI"/>
     
     </session-factory>
 </hibernate-configuration>

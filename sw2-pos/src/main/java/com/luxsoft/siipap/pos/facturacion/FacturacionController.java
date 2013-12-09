@@ -16,6 +16,7 @@ import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
 
 import com.luxsoft.siipap.cxc.model.FormaDePago;
+import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.pos.ui.consultas.caja.CajaController;
 import com.luxsoft.siipap.pos.ui.venta.forms.CheckplusVentaForm;
@@ -26,6 +27,7 @@ import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfd.CFDPrintServices;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.services.FacturasManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.CheckPlusVenta;
@@ -43,6 +45,8 @@ public class FacturacionController {
 	
 	@Autowired
 	private CajaController cajaController;
+	
+	private Empresa empresa;
 	
 	public void facturarPedidoSinExistencia(final Pedido pedido){
 		throw new UnsupportedOperationException("Por implementar");
@@ -73,7 +77,9 @@ public class FacturacionController {
 		if(facturas!=null){
 			for(Venta fac:facturas){
 				MessageUtils.showMessage("Factura generada: "+fac.getDocumento(), "Facturación");
-				generarCompbobanteEImprimir(fac);
+				if(getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFD)){
+					generarCompbobanteEImprimir(fac);
+				}
 				generarRegsitroRastreo(fac);
 				//fac=getManager().buscarVentaInicializada(fac.getId());
 //				ReportUtils2.imprimirFactura(fac);
@@ -81,6 +87,9 @@ public class FacturacionController {
 			}
 		}
 	}
+	
+	
+	
 	
 	public void generarRegsitroRastreo(Venta fac){
 		try {
@@ -273,6 +282,57 @@ public class FacturacionController {
 	public void setCajaController(CajaController cajaController) {
 		this.cajaController = cajaController;
 	}
+
+	public Empresa getEmpresa() {
+		if(empresa==null){
+			empresa= (Empresa)Services.getInstance().getHibernateTemplate().find("from Empresa e").get(0);
+		}
+		return empresa;
+	}
+	
+	/**
+	 * Genera la venta a partir del pedido 
+	 * 
+	 * @param pedido
+	 */
+	public CFDIVenta generarVenta(Pedido pedido){	
+		
+		Assert.isTrue(!pedido.isFacturado(),"Este pedido ya ha sido facturado");
+		List<Venta> facturas;
+		if(pedido.isDeCredito())
+			facturas=facturarPedidoDeCredito(pedido);
+		else
+			facturas=facturarPedidoDeContado(pedido);
+		if(facturas!=null){
+			Venta venta=facturas.get(0);
+			MessageUtils.showMessage("Venta generada: "+venta.getDocumento(), "Ventas");
+			CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
+			generarRegsitroRastreo(venta);
+			return new CFDIVenta(venta,cfdi);
+		}
+		return null;
+	}
+
+	
+	public static class CFDIVenta{
+		private final Venta venta;
+		private final CFDI cfdi;
+		public CFDIVenta(Venta venta, CFDI cfdi) {
+			super();
+			this.venta = venta;
+			this.cfdi = cfdi;
+		}
+		public Venta getVenta() {
+			return venta;
+		}
+		public CFDI getCfdi() {
+			return cfdi;
+		}
+		
+		
+		
+	}
+	
 
 	/**
 	 * Prueba local en el EDT

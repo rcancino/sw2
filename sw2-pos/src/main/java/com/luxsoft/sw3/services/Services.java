@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,6 +17,7 @@ import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.dao.UniversalDao;
 import com.luxsoft.siipap.inventarios.dao.ExistenciaDao;
 import com.luxsoft.siipap.model.Configuracion;
+import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.service.AutorizacionesManager;
 import com.luxsoft.siipap.service.LoginManager;
@@ -24,6 +26,7 @@ import com.luxsoft.siipap.service.core.ProveedorManager;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIManager;
+import com.luxsoft.sw3.cfdi.CFDITimbrador;
 
 /**
  * Service locator para accesar los beans administrados por Spring
@@ -126,7 +129,32 @@ public final class Services {
 		return (ExistenciaDao)getContext().getBean("existenciaDao");
 	}
 	
+	private Configuracion configuracion;
+	
+	
+	
 	public  Configuracion getConfiguracion(){
+		
+		if(configuracion==null){
+			configuracion=loadConfiguracion();
+		}
+		return configuracion;
+		/*
+		try {
+			Long id=Configuracion.getSucursalLocalId();
+			String hql="from Configuracion  c where c.sucursal.id=?";
+			List<Configuracion> data=getInstance().getHibernateTemplate().find(hql,id);
+			if(!data.isEmpty())
+				return data.get(0);
+			System.err.println( "*********************"+data.get(0));
+			return null;
+		} catch (Exception e) {
+			logger.error(e);
+			return null;
+		}*/
+	}
+	
+	private Configuracion loadConfiguracion(){
 		try {
 			Long id=Configuracion.getSucursalLocalId();
 			String hql="from Configuracion  c where c.sucursal.id=?";
@@ -222,6 +250,16 @@ public final class Services {
 		return (CFDIManager)getInstance().getContext().getBean("cfdiManager");
 	}
 	
+	public synchronized static  CFDITimbrador getCFDITimbrador(){
+		return (CFDITimbrador)getInstance().getContext().getBean("cfdiTimbrador");
+	}
+	
+	
+	
+	public Empresa getEmpresa() {
+		return getConfiguracion().getSucursal().getEmpresa();
+	}
+
 	public static void main(String[] args) {
 		//getInstance().getPedidosManager().buscarPendientes(getInstance().getConfiguracion().getSucursal());
 		/*User user=getInstance().getLoginManager().autentificar("admin","sysadmin");
@@ -229,8 +267,18 @@ public final class Services {
 		System.out.println("Password: "+user.getPassword());
 		*/
 		//Services.getInstance().getSolicitudDeDepositosManager();
-		Venta venta=Services.getInstance().getFacturasManager().buscarVentaInicializada("8a8a8783-36f97b1a-0136-f9861d93-0001");
-		Services.getInstance().getComprobantesDigitalManager().generarComprobante(venta);
+		//Venta venta=Services.getInstance().getFacturasManager().buscarVentaInicializada("8a8a8783-36f97b1a-0136-f9861d93-0001");
+		//Services.getInstance().getComprobantesDigitalManager().generarComprobante(venta);
+		/*String hql="from Pedido p where p.sucursal.clave=? " +
+				"and  date(p.fecha) between ? and ? and p.totalFacturado=0 and p.facturable=true";
+				*/
+		Date f1=new Date();
+		Date f2=DateUtils.addDays(f1, -30);
+		String hql="from Pedido p where p.sucursal.clave=? and p.fecha between ? and ?";
+		//Object[] params=new Object[]{Services.getInstance().getConfiguracion().getSucursal().getClave(),f1,f2};
+		Object[] params=new Object[]{Services.getInstance().getConfiguracion().getSucursal().getClave(),f2,f1};
+		List res= Services.getInstance().getHibernateTemplate().find(hql, params);
+		System.out.println("Pedidos encontrados: "+res.size());
 		
 	}
 

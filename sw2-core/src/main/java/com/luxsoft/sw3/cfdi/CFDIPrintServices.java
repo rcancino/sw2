@@ -55,7 +55,8 @@ public class CFDIPrintServices {
 		parametros.put("DESTINATARIO", destinatario);
 		JasperPrint jasperPrint = null;
 		DefaultResourceLoader loader = new DefaultResourceLoader();
-		Resource res = loader.getResource(getJasperReport("FacturaCFDI.jasper"));
+		String jasper=cfdi.getTimbrado()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
+		Resource res = loader.getResource(getJasperReport(jasper));
 		System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
 		try {
 			java.io.InputStream io = res.getInputStream();

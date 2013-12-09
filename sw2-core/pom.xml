@@ -66,6 +66,19 @@
     		<artifactId>bcprov-jdk14</artifactId>
     		<version>1.45</version>
 		</dependency>
+		
+		<dependency>
+  			<groupId>axis</groupId>
+  			<artifactId>axis</artifactId>
+  			<version>1.4</version>
+  		</dependency>
+
+  		<dependency>
+  			<groupId>com.edicom.ediwinws</groupId>
+  			<artifactId>cfdiClient</artifactId>
+  			<version>1.0</version>
+  		</dependency>
+  	
 		<!-- XStream support -->
 		<dependency>
       		<groupId>com.thoughtworks.xstream</groupId>

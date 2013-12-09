@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -58,6 +59,8 @@ import com.luxsoft.siipap.ventas.model.Cobrador;
 import com.luxsoft.siipap.ventas.model.Vendedor;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.siipap.ventas.model.VentaDet;
+import com.luxsoft.sw3.cfdi.CFDIManager;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.inventarios.ExistenciasAgotadasException;
 import com.luxsoft.sw3.ventas.CheckPlusVenta;
 import com.luxsoft.sw3.ventas.Pedido;
@@ -84,6 +87,9 @@ public class FacturasManagerImpl  implements FacturasManager{
 	
 	@Autowired
 	private HibernateTemplate hibernateTemplate;
+	
+	@Autowired
+	private CFDIManager cfdiManager;
 	
 	private Logger logger=Logger.getLogger(getClass());
 	
@@ -598,8 +604,8 @@ public class FacturasManagerImpl  implements FacturasManager{
 			hibernateTemplate.merge(ce);
 		}
 		actualizarInventario(res);
-		
-		
+		CFDI cfdi=cfdiManager.generarFactura(res);
+		res.setDocumento(NumberUtils.toLong(cfdi.getFolio()) );
 		return res;
 	}
 	

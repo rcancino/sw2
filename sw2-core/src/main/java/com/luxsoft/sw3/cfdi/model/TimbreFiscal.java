@@ -23,18 +23,20 @@ public class TimbreFiscal {
 	public TimbreFiscal(Comprobante cfdi){
 		
 		Complemento complemento=cfdi.getComplemento();
-		String queryExpression =
-			    "declare namespace tfd='http://www.sat.gob.mx/TimbreFiscalDigital';" +
-			    "$this/tfd:TimbreFiscalDigital";
-		XmlObject[] res=complemento.selectPath(queryExpression);
-		if(res.length>0){
-			XmlObject timbre=res[0];
-			version=timbre.getDomNode().getAttributes().getNamedItem("version").getNodeValue();
-			UUID=timbre.getDomNode().getAttributes().getNamedItem("UUID").getNodeValue();
-			FechaTimbrado=timbre.getDomNode().getAttributes().getNamedItem("FechaTimbrado").getNodeValue();
-			selloCFD=timbre.getDomNode().getAttributes().getNamedItem("selloCFD").getNodeValue();
-			selloSAT=timbre.getDomNode().getAttributes().getNamedItem("selloSAT").getNodeValue();
-			noCertificadoSAT=timbre.getDomNode().getAttributes().getNamedItem("noCertificadoSAT").getNodeValue();
+		if(complemento!=null){
+			String queryExpression =
+				    "declare namespace tfd='http://www.sat.gob.mx/TimbreFiscalDigital';" +
+				    "$this/tfd:TimbreFiscalDigital";
+			XmlObject[] res=complemento.selectPath(queryExpression);
+			if(res.length>0){
+				XmlObject timbre=res[0];
+				version=timbre.getDomNode().getAttributes().getNamedItem("version").getNodeValue();
+				UUID=timbre.getDomNode().getAttributes().getNamedItem("UUID").getNodeValue();
+				FechaTimbrado=timbre.getDomNode().getAttributes().getNamedItem("FechaTimbrado").getNodeValue();
+				selloCFD=timbre.getDomNode().getAttributes().getNamedItem("selloCFD").getNodeValue();
+				selloSAT=timbre.getDomNode().getAttributes().getNamedItem("selloSAT").getNodeValue();
+				noCertificadoSAT=timbre.getDomNode().getAttributes().getNamedItem("noCertificadoSAT").getNodeValue();
+			}
 		}
 	}
 	

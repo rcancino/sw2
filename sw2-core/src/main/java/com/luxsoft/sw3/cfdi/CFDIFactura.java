@@ -72,7 +72,7 @@ public class CFDIFactura implements InitializingBean,IFactura{
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public CFDI generar(Venta venta){
-		
+		Assert.notNull(getEmpresa().getTipoDeComprobante(),"No esta definido el tipo de comprobante en: Empresa.tipoDeCombrobante");
 		Assert.isTrue(getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI),"No esta configudada la emrpesa para trabajar con CFDI");
 		
 		//Preparamos el cfdi del SAT
