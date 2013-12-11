@@ -34,7 +34,8 @@ public class Proc_NotaDeCreditoDevolucionCxC implements IProcesador{
 		NotaDeCreditoDevolucion nota=(NotaDeCreditoDevolucion)entidad;
 		Devolucion dev=nota.getDevolucion();
 		
-		BigDecimal total=nota.getTotal();
+		BigDecimal tc=new BigDecimal(nota.getTc());
+		BigDecimal total=nota.getTotal().multiply(tc);		
 		BigDecimal importe=PolizaUtils.calcularImporteDelTotal(total);
 		BigDecimal iva=PolizaUtils.calcularImpuesto(importe);
 		total=PolizaUtils.redondear(total);

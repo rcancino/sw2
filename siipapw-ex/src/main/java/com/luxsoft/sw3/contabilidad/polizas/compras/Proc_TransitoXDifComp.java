@@ -78,7 +78,8 @@ public class Proc_TransitoXDifComp implements IProcesador {
 						
 						System.err.println("proveedor "+fac.getClave()+" "+fac.getNombre()+"fac moneda "+fac.getDocumento()+" "+fac.getMoneda());
 						
-						if(fac.getMoneda().equals("USD")){
+						if(fac.getMoneda().toString().equals("USD")){
+						
 							clv="201";
 						}
 						
@@ -87,8 +88,8 @@ public class Proc_TransitoXDifComp implements IProcesador {
 
 						PolizaDetFactory.generarPolizaDet(poliza, "119","ITNS04", true, diferencia, desc2, ref1,"TODAS", asiento);
 						// Abono a proveedor
-						PolizaDetFactory.generarPolizaDet(poliza, clv, fac.getClave(), false, fac.getTotalMN().amount(),desc3, ref1, "TODAS", asiento+" Aqui E");
-
+						PolizaDetFactory.generarPolizaDet(poliza, clv, fac.getClave(), false, fac.getTotalMN().amount(),desc3, ref1, "TODAS", asiento);
+						
 					} else {
 						// abono a Transito
 						PolizaDetFactory.generarPolizaDet(poliza, "119","ITNS04", false, a.getImporteMN().amount(), desc2,ref1, "TODAS", asiento);
