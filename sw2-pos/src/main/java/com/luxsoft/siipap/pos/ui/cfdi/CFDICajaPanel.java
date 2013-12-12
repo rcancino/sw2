@@ -308,9 +308,12 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 		}else
 			tantos=new String[]{"CLIENTE","ARCHIVO"};
 		Date time=Services.getInstance().obtenerFechaDelSistema();
+		Venta venta=Services.getInstance().getFacturasManager().buscarVentaInicializada(cfdiVenta.getVenta().getId());
 		for(String destino:tantos){
 			CFDIPrintUI.impripirComprobante(
-					cfdiVenta.getVenta(), cfdiVenta.getCfdi(), destino
+					venta
+					, cfdiVenta.getCfdi()
+					, destino
 					,time,Services.getInstance().getHibernateTemplate()
 					, false)
 					;
