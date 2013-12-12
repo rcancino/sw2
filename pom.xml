@@ -26,6 +26,11 @@
 			<name>Luxsoft Repository</name>
 			<url>http://luxsoftnet.com/m2/repository</url>
 		</repository>
+		<repository>
+      		<id>QRGen</id>
+      		<name>QRGen Repo</name>
+      		<url>http://kenglxn.github.com/QRGen/repository</url>
+    	</repository>
 	</repositories>
 	<name>ERP SiipapWin 2</name>
 	<url>http://siipap.luxsoftnet.com</url>

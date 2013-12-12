@@ -1,9 +1,15 @@
 package com.luxsoft.sw3.cfdi.model;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -25,6 +31,7 @@ import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.xmlbeans.XmlOptions;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.Length;
@@ -462,6 +469,9 @@ public class CFDI implements Replicable{
 		 }
 		 return this.timbre;
 	 }
+	 public void setTimbre(TimbreFiscal timbre) {
+		this.timbre = timbre;
+	}
 	
 	@Override
 	public int hashCode() {
@@ -502,5 +512,35 @@ public class CFDI implements Replicable{
 		.append("Folio:",getFolio())
 		.toString();
 	}
+	
+	public void salvarArchivoTimbradoXml() throws IOException{
+		String path=System.getProperty("cfd.dir.path")+"/cfdi/timbrados/"+getXmlFilePath();
+		File xml=new File(path);
+		FileOutputStream out=new FileOutputStream(xml);
+		out.write(getXml());
+		out.flush();
+		out.close();
+		
+	}
+	
+	/*
+	public void salvarArchivoSinTimbrar()throws IOException{
+		if((getTimbreFiscal()!=null) && (getTimbreFiscal().getFechaTimbrado()!=null)){
+			XmlOptions options = new XmlOptions();
+			options.setCharacterEncoding("UTF-8");
+	        options.put( XmlOptions.SAVE_INNER );
+	        options.put( XmlOptions.SAVE_PRETTY_PRINT );
+	        options.put( XmlOptions.SAVE_AGGRESSIVE_NAMESPACES );
+	        options.put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE );
+	        options.put(XmlOptions.SAVE_NAMESPACES_FIRST);
+	        Map suggestedPrefix=new HashMap();
+			suggestedPrefix.put("", "");
+			String path=System.getProperty("cfd.dir.path")+"/"+getXmlFilePath();
+			File xml=new File(path);
+			//FileOutputStream out=new FileOutputStream(xml);
+			getComprobanteDocument().save(xml, options);
+		}
+		
+	}*/
 
 }

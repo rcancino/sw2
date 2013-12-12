@@ -13,6 +13,7 @@ import javax.swing.JSplitPane;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.jdesktop.swingx.JXTable;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -258,12 +259,23 @@ public class CFDIFacturacionCreditoPanel extends FilteredBrowserPanel<Pedido>{
 			if(index!=-1){
 				facturacionController.facturarPedido(pedido);
 				CFDIVenta cfdiVenta=facturacionController.generarVenta(pedido);
-				Services.getCFDITimbrador().timbrar(cfdiVenta.getCfdi());
 				pedido=getManager().get(pedido.getId());
 				source.set(index, pedido);
-				facturasBrowser.load();
+				//facturasBrowser.load();
+				timbrar(cfdiVenta);
 			}			
 		}
+	}
+	
+	public void timbrar(CFDIVenta cfdiVenta){
+		try {
+			Services.getCFDITimbrador().timbrar(cfdiVenta.getCfdi());
+		} catch (Exception e) {
+			MessageUtils.showMessage("Error al timbrar factura: "+ExceptionUtils.getMessage(e), "Facturación credito");
+		}finally{
+			facturasBrowser.load();
+		}
+		
 	}
 	
 	

@@ -29,6 +29,7 @@ import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.siipap.ventas.model.VentaDet;
 import com.luxsoft.sw3.cfd.ImporteALetra;
 import com.luxsoft.sw3.cfdi.model.CFDI;
+import com.luxsoft.sw3.cfdi.model.TimbreFiscal;
 
 public class CFDIPrintServices {
 	
@@ -208,6 +209,19 @@ public class CFDIPrintServices {
 			parametros.put("EXPEDIDO_DIRECCION", "SNA");
 		if (venta.getAnticipoAplicado()!= null)
 		parametros.put("ANTICIPO", MonedasUtils.calcularImporteSinIva(venta.getAnticipoAplicado()));
+		
+		
+		//Especiales para CFDI
+		if(cfdi.getTimbreFiscal()!=null){
+			parametros.put("QR_CODE", QRCodeUtils.generarQR(cfdi.getComprobante()));
+			TimbreFiscal timbre=cfdi.getTimbreFiscal();
+			parametros.put("FECHA_TIMBRADO", timbre.FechaTimbrado);
+			parametros.put("FOLIO_FISCAL", timbre.UUID);
+			parametros.put("SELLO_DIGITAL_SAT", timbre.selloSAT);
+			parametros.put("CERTIFICADO_SAT", timbre.noCertificadoSAT);
+			parametros.put("CADENA_ORIGINAL_SAT", timbre.cadenaOriginal());
+		}
+		
 		
 		return parametros;
 	}

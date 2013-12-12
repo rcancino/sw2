@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
@@ -517,6 +518,18 @@ public class FacturasManagerImpl  implements FacturasManager{
 		}
 		this.ventaDao.save(cargo);
 		hibernateTemplate.save(cancelacion);
+		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",cargo.getId());
+		if(!res.isEmpty()){
+			CFDI cfdi=res.get(0);
+			if(cfdi.getTimbreFiscal()!=null){
+				try {
+					cfdiManager.cancelar(cfdi);
+				} catch (Exception e) {
+					throw new RuntimeException(ExceptionUtils.getMessage(e),e);
+				}
+				
+			}
+		}
 		return getFactura(cargo.getId());
 	}
 	

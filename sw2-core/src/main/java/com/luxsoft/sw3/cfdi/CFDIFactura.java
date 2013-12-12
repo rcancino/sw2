@@ -4,16 +4,6 @@ package com.luxsoft.sw3.cfdi;
 import static com.luxsoft.sw3.cfdi.CFDIUtils.getFecha;
 import static com.luxsoft.sw3.cfdi.CFDIUtils.registrarDatosDeEmisor;
 import static com.luxsoft.sw3.cfdi.CFDIUtils.registrarReceptor;
-
-import java.io.ByteArrayOutputStream;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.security.cert.CertificateEncodingException;
-import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import mx.gob.sat.cfd.x3.ComprobanteDocument;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Conceptos;
@@ -46,6 +36,14 @@ import com.luxsoft.sw3.cfd.dao.FolioFiscalDao;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscalCreationException;
 import com.luxsoft.sw3.cfd.model.FolioFiscal;
 import com.luxsoft.sw3.cfdi.model.CFDI;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.security.cert.CertificateEncodingException;
+import java.text.MessageFormat;
+import java.util.Date;
 /**
  * Genera CFDI para Venta
  * 
@@ -201,15 +199,19 @@ public class CFDIFactura implements InitializingBean,IFactura{
 	        options.put( XmlOptions.SAVE_AGGRESSIVE_NAMESPACES );
 	        options.put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE );
 	        options.put(XmlOptions.SAVE_NAMESPACES_FIRST);
-			Map suggestedPrefix=new HashMap();
-			suggestedPrefix.put("", "");
+			
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
 			document.save(os, options);
 			cf.setXml(os.toByteArray());
+			cf.setXmlFilePath(cf.getSerie()+"-"+cf.getFolio()+".xml");
 			//Salvamos el xml en la base de datos
 			
 			System.out.println(CFDIUtils.validarPersistencia(cf));
 			cf=(CFDI)hibernateTemplate.merge(cf);
+			
+			String path=System.getProperty("cfd.dir.path")+"/cfdi/"+cf.getXmlFilePath();
+			File xmlFile=new File(path);
+			document.save(xmlFile,options);
 			return cf;
 		} catch (Exception e) {
 			throw new ComprobanteFiscalCreationException("",e);

@@ -1,18 +1,5 @@
 package com.luxsoft.siipap.pos.ui.cfdi;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.PredicateUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -36,7 +23,6 @@ import com.luxsoft.siipap.pos.POSActions;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.facturacion.FacturacionController;
 import com.luxsoft.siipap.pos.facturacion.FacturacionController.CFDIVenta;
-
 import com.luxsoft.siipap.pos.ui.reports.AplicacionDeSaldosReportForm;
 import com.luxsoft.siipap.pos.ui.reports.ArqueoCaja;
 import com.luxsoft.siipap.pos.ui.reports.CierreCaja;
@@ -52,14 +38,27 @@ import com.luxsoft.siipap.pos.ui.venta.forms.PedidoFormView;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
-import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Venta;
-
 import com.luxsoft.sw3.cfdi.model.CFDI;
+import com.luxsoft.sw3.pedidos.PedidoUtils;
 import com.luxsoft.sw3.services.PedidosManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.Pedido;
 import com.luxsoft.sw3.ventas.PedidoPendiente;
+import com.luxsoft.sw3.ventas.PedidoRow;
+
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Panel para el mantenimiento y control de los procesos de Caja
@@ -67,9 +66,10 @@ import com.luxsoft.sw3.ventas.PedidoPendiente;
  * @author Ruben Cancino Ramos
  *
  */
-public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
+@SuppressWarnings("rawtypes")
+public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	
-	//private FacturasPanel facturasBrowser;
+	
 	private CFDIVentasPanel facturasBrowser;
 	
 	
@@ -79,13 +79,15 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	private Sucursal sucursal;
 
 	public CFDICajaPanel() {
-		super(Pedido.class);
+		super(PedidoRow.class);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected void init(){
-		Comparator c1=GlazedLists.beanPropertyComparator(Pedido.class, "contraEntrega");
+		
+		Comparator c1=GlazedLists.beanPropertyComparator(PedidoRow.class, "contraEntrega");
 		c1=GlazedLists.reverseComparator(c1);
-		Comparator c2=GlazedLists.beanPropertyComparator(Pedido.class, "folio");
+		Comparator c2=GlazedLists.beanPropertyComparator(PedidoRow.class, "folio");
 		c1=GlazedLists.chainComparators(c1,c2);
 		
 		setDefaultComparator(c1);
@@ -130,11 +132,12 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void installEditors(EventList editors) {
 		super.installEditors(editors);
-		MatcherEditor editor1=GlazedLists.fixedMatcherEditor(Matchers.beanPropertyMatcher(Pedido.class, "facturable", Boolean.TRUE));
-		MatcherEditor editor2=GlazedLists.fixedMatcherEditor(Matchers.beanPropertyMatcher(Pedido.class, "deCredito", Boolean.FALSE));
+		MatcherEditor editor1=GlazedLists.fixedMatcherEditor(Matchers.beanPropertyMatcher(PedidoRow.class, "facturable", Boolean.TRUE));
+		MatcherEditor editor2=GlazedLists.fixedMatcherEditor(Matchers.beanPropertyMatcher(PedidoRow.class, "deCredito", Boolean.FALSE));
 		editors.add(editor1);
 		editors.add(editor2);
 	}
@@ -242,55 +245,75 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	}
 
 	@Override
-	protected List<Pedido> findData() {
+	protected List<PedidoRow> findData() {
+		/**
 		String hql="from Pedido p where p.sucursal.clave=? " +
 				"and  date(p.fecha) between ? and ? and p.totalFacturado=0 and p.facturable=true";
 		System.out.println("Localizando pedidos pendientes para sucursal: "+getSucursal());
 		Date f2=new Date();
 		Date f1=DateUtils.addDays(f2, -30);
 		Object[] params=new Object[]{getSucursal().getClave(),f1,f2};
-		List res= Services.getInstance().getHibernateTemplate().find(hql, params);
-		System.out.println("Pedidos encontrados: "+res.size());
-		return res;
+		return Services.getInstance().getHibernateTemplate().find(hql, params);
+		*/
+		Date today=new Date();
+		Date f1=DateUtils.addDays(today, -30);
+		return PedidoUtils.findPendientesPorFacturar(new Periodo(f1,today));
+		
 	}
 	
 	
 	
 	public void generarVenta(){
-		if(getSelectedPedido()!=null){
-			Pedido target=getManager().get(getSelectedPedido().getId());
+		Pedido target=getSelectedPedido();
+		if(target!=null){
 			CFDIVenta cfdiVenta=facturacionController.generarVenta(target);
-			Services.getCFDITimbrador().timbrar(cfdiVenta.getCfdi());
+			timbrar(cfdiVenta);
 			load();
 		}	
 	}
+	
+	public void timbrar(CFDIVenta cfdiVenta){
+		try {
+			logger.info("Timbrando CFDI: "+cfdiVenta.getCfdi());
+			Services.getCFDIManager().timbrar(cfdiVenta.getCfdi());
+			facturasBrowser.load();
+			//Mandar imprimir
+			imprimirJuegos(cfdiVenta);
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageUtils.showMessage(ExceptionUtils.getRootCauseMessage(e), "Timbrado de CFDI");
+			return;
+		}
+	}
+	
 	
 	public void timbrar(){
 		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
 		if(venta==null)
 			return;
-		if( (venta.getCfdi()!=null) && (venta.getTimbrado()!=null)){
+		CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
+		
+		if(cfdi.getTimbreFiscal()!=null){
 			MessageUtils.showMessage("CFDI ya generado para la venta", "CFDI");
+			return;
 		}
-		if(venta!=null){
-			CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
-			try {
-				logger.info("Timbrando CFDI: "+cfdi);
-				cfdi=Services.getCFDIManager().timbrar(cfdi);
-			} catch (Exception e) {
-				MessageUtils.showMessage(ExceptionUtils.getRootCauseMessage(e), "Timbrado de CFDI");
-				return;
-			}
-			if(cfdi.getTimbrado()!=null){
-				String[] tantos;
-				if(venta.getOrigen().equals(OrigenDeOperacion.CRE)){
-					tantos=new String[]{"CLIENTE","ARCHIVO"};
-				}else
-					tantos=new String[]{"CLIENTE","ARCHIVO"};
-				for(String destino:tantos){
-					CFDIPrintUI.impripirComprobante(venta, cfdi, destino, false);
-				}
-			}
+		CFDIVenta cfdiVenta=new CFDIVenta(venta, cfdi);
+		timbrar(cfdiVenta);
+	}
+	
+	public void imprimirJuegos(CFDIVenta cfdiVenta){
+		String[] tantos;
+		if(cfdiVenta.getVenta().getOrigen().equals(OrigenDeOperacion.CRE)){
+			tantos=new String[]{"CLIENTE","ARCHIVO"};
+		}else
+			tantos=new String[]{"CLIENTE","ARCHIVO"};
+		Date time=Services.getInstance().obtenerFechaDelSistema();
+		for(String destino:tantos){
+			CFDIPrintUI.impripirComprobante(
+					cfdiVenta.getVenta(), cfdiVenta.getCfdi(), destino
+					,time,Services.getInstance().getHibernateTemplate()
+					, false)
+					;
 		}
 	}
 	
@@ -300,11 +323,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	}
 	
 	public void cancelar(){
-		//controller.cancelar(getSelectedFactura());
-		Venta venta=getSelectedFactura();
-		if(venta!=null){
-			throw new RuntimeException("NO ESTA LISTA LA CANCELACION DE CFDI");
-		}
+		facturasBrowser.cancelar();
 	}
 	
 	public void regresarPendiente(){
@@ -372,8 +391,15 @@ public class CFDICajaPanel extends FilteredBrowserPanel<Pedido>{
 	}
 	
 	public Pedido getSelectedPedido(){
-		return (Pedido)getSelectedObject();
+		Pedido pedido = null;
+		if(getSelectedObject()!=null){
+			PedidoRow row=(PedidoRow)getSelectedObject();
+			pedido=getManager().get(row.getId());
+		}
+		
+		return pedido;
 	}
+	
 	public Venta getSelectedFactura(){
 		return (Venta)this.facturasBrowser.getSelectedObject();
 	}

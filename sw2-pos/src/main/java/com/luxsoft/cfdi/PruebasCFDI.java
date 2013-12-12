@@ -14,7 +14,7 @@ import com.luxsoft.sw3.services.Services;
 public class PruebasCFDI {
 	
 	
-	public static void main(String[] args) throws IOException {
+	public static void test1() throws IOException{
 		CFDI cfdi=Services.getCFDIManager().getCFDI("8a8a8161-42c4f4e5-0142-c4f6a272-0005");
 		File xml=new File("c:\\basura\\facturaCfdi3.xml");
 		
@@ -31,6 +31,12 @@ public class PruebasCFDI {
 		cfdi.getComprobanteDocument().save(xml,options);
 		CFDIUtils.validarDocumento(cfdi.getComprobanteDocument());
 		System.out.println("XML: "+xml.getAbsolutePath());
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		CFDI cfdi=Services.getCFDIManager().getCFDI("402881c6-42e05111-0142-e0580e1c-0009");
+		cfdi.salvarArchivoTimbradoXml();
 	}
 
 }

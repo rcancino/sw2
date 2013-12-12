@@ -1,6 +1,9 @@
 package com.luxsoft.cfdi;
 
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
 import java.awt.Dimension;
+import java.util.Date;
 
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
@@ -22,7 +25,7 @@ public class CFDIPrintUI {
 	 * 
 	 * @param venta
 	 */
-	public static  void impripirComprobante(Venta venta,CFDI cfdi,String destinatario,boolean printPreview){
+	public static  void impripirComprobante(Venta venta,CFDI cfdi,String destinatario,Date time,HibernateTemplate hibernateTemplate,boolean printPreview){
 		try {
 			JasperPrint jasperPrint = CFDIPrintServices.impripirComprobante(venta, cfdi, destinatario, printPreview);
 			if(printPreview){
@@ -33,6 +36,10 @@ public class CFDIPrintUI {
 				dialog.open();
 			}else{
 				JasperPrintManager.printReport(jasperPrint, false);
+			}
+			if(venta.getImpreso()==null){
+				venta.setImpreso(time);
+				hibernateTemplate.merge(venta);
 			}
 		} catch (Exception ioe) {
 			ioe.printStackTrace();

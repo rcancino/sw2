@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
+
 /**
  * JavaBean / Entidad que es la abstraccion basica de lo que es un pedido de 
  * venta
@@ -43,10 +45,12 @@ public class PedidoRow {
 	private String pendiente;
 	private Long pendienteId;
 	private boolean especial=false;
-	private Currency moneda;
+	//private Currency moneda;
+	private String moneda;
 	private String operador;
 	private String pendienteDesc;
 	private boolean deCredito;
+	private String origen;
 	
 	
 	public PedidoRow(){}
@@ -73,9 +77,10 @@ public class PedidoRow {
 		setTipo(p.getOrigen());
 		setTotal(p.getTotal());
 		setTotalFacturado(p.getTotalFacturado());
-		setMoneda(p.getMoneda());
+		setMoneda(p.getMoneda().getCurrencyCode());
 		setOperador(p.getOperador());
 		setPendienteDesc(p.getPendienteDesc());
+		setOrigen(p.getOrigen());
 		//setContraEntrega(p.isContraEntrega());
 		
 	
@@ -287,16 +292,17 @@ public class PedidoRow {
 	}
 	
 
-	public Currency getMoneda() {
-		return moneda;
-	}
-
-	public void setMoneda(Currency moneda) {
-		this.moneda = moneda;
-	}
 	
 
 
+
+	public String getMoneda() {
+		return moneda;
+	}
+
+	public void setMoneda(String moneda) {
+		this.moneda = moneda;
+	}
 
 	@Override
 	public int hashCode() {
@@ -346,7 +352,12 @@ public class PedidoRow {
 	public void setDeCredito(boolean deCredito) {
 		this.deCredito = deCredito;
 	}
-	
+	public String getOrigen() {
+		return origen;
+	}
+	public void setOrigen(String origen) {
+		this.origen = origen;
+	}
 	
 	
 	

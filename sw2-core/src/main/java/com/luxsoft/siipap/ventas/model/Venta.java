@@ -837,13 +837,13 @@ public class Venta extends Cargo implements Replicable{
 	}
 	
 	//@Column(name="CFDI_TIMBRADO")
-	//@Formula("(select X.TIMBRADO FROM SX_CFDI X where X.ORIGEN=CARGO_ID)")
-	@Transient
+	@Formula("(select X.TIMBRADO FROM SX_CFDI X where X.ORIGEN_ID=CARGO_ID)")
+	//@Transient
 	private Date timbrado;
 	
 	//@Column(name="CFDI")
-	//@Formula("(select X.ID FROM SX_CFDI X where X.ORIGEN=CARGO_ID)")
-	@Transient
+	@Formula("(select X.CFD_ID FROM SX_CFDI X where X.ORIGEN_ID=CARGO_ID)")
+	//@Transient
 	private String cfdi;
 
 	public Date getTimbrado() {

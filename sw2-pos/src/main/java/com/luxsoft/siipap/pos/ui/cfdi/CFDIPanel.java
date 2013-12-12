@@ -1,5 +1,6 @@
 package com.luxsoft.siipap.pos.ui.cfdi;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.Action;
@@ -87,7 +88,8 @@ public class CFDIPanel extends FilteredBrowserPanel<CFDI>{
 		if(cfdi.getTipo().equals("FACTURA")){
 			//FacturaForm.show(cfdi.getOrigen());
 			Venta venta=Services.getInstance().getFacturasManager().buscarVentaInicializada(cfdi.getOrigen());
-			CFDIPrintUI.impripirComprobante(venta, cfdi, "DESTINATARIO ?", true);
+			Date time=Services.getInstance().obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(venta, cfdi, "DESTINATARIO ?", time,Services.getInstance().getHibernateTemplate(),true);
 		}
 		
 	}

@@ -56,7 +56,8 @@ public class PedidoUtils {
 				",Z.ID as pendienteId " +
 				",Z.COMENTARIO  AS PENDIENTE" +
 				",S.AUT_COMMENTARIO AS comentarioAutorizacion" +
-				" ,X.MODIFICADO_USR AS operador"+
+				" ,X.MODIFICADO_USR AS operador " +
+				",X.MONEDA as moneda"+
 				" FROM SX_PEDIDOS X " +
 				" LEFT JOIN SX_PEDIDOS_PAGOCE Y ON(X.PEDIDO_ID=Y.PEDIDO_ID)" +
 				" LEFT JOIN SX_PEDIDOS_PENDIENTES Z ON(X.PEDIDO_ID=Z.PEDIDO_ID)" +

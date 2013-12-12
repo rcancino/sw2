@@ -65,7 +65,8 @@ public class CFDITasks {
 	public static void main(String[] args) throws Exception{
 		CFDITasks tasks=new CFDITasks(ServiceLocator2.getHibernateTemplate());
 		///tasks.subirLlavePrivada();
-		tasks.subirCertificado();
+		//tasks.subirCertificado();
+		tasks.inicializar();
 	}
 	
 

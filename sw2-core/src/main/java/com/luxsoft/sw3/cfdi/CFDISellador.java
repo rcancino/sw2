@@ -41,7 +41,7 @@ public class CFDISellador implements InitializingBean{
 		
 		try {
 			final byte[] cadena=cadenaOrignal.getBytes("UTF-8");
-			String algoritmo="MD5withRSA";
+			String algoritmo="SHA1withRSA";
 			Signature signature=Signature.getInstance(algoritmo,"BC");
 			signature.initSign(getPrivateKey());
 			signature.update(cadena);
@@ -59,7 +59,7 @@ public class CFDISellador implements InitializingBean{
 	
 	public boolean validarSello(final String cadenaOriginal,final String selloDigital){
 		try {
-			String algoritmo="MD5withRSA";
+			String algoritmo="SHA1withRSA";
 			Signature signature=Signature.getInstance(algoritmo,"BC");
 			signature.initVerify(getCertificado());
 			signature.update(cadenaOriginal.getBytes("UTF-8"));
