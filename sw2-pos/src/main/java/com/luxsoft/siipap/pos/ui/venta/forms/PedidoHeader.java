@@ -40,7 +40,7 @@ public class PedidoHeader extends JPanel implements PropertyChangeListener{
 				header.setDescripcion(c.getNombreRazon());
 				return;
 			}
-			header.setTitulo(c.getNombreRazon()+ " ( "+c.getClave()+" )");
+			header.setTitulo(c.getNombreRazon()+ " ( "+c.getClave()+" )"+ "  RFC: "+c.getRfc());
 			if (c.getDireccionFiscal() != null) {
 				String pattern = "" +
 						"Calle  : {0}  #       {1} Int  : {8} 		Crédito{2} \n"+

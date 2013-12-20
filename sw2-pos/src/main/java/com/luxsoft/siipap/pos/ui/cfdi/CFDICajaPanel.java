@@ -195,6 +195,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			buscarAction.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/page_find.png"));
 			List<Action> actions=ListUtils.predicatedList(new ArrayList<Action>(), PredicateUtils.notNullPredicate());
 			actions.add(addRoleBasedContextAction(new VentaPredicate(), POSRoles.CAJERO.name(),this, "generarVenta", "Generar venta"));
+			actions.add(addAction(null, "reimprimir", "Re-Imprimir"));
 			actions.add(addRoleBasedContextAction(null, POSRoles.CAJERO.name(),this, "cancelar", "Cancelar"));
 			actions.add(buscarAction);
 			actions.add(getLoadAction());
@@ -225,6 +226,8 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			periodo=Periodo.getPeriodoDelMesActual();
 		cambiarPeriodo();
 	}
+	
+	
 	
 	/**
 	 * Necesario para evitar NPE por la etiqueta de periodo
@@ -267,8 +270,10 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 		Pedido target=getSelectedPedido();
 		if(target!=null){
 			CFDIVenta cfdiVenta=facturacionController.generarVenta(target);
-			timbrar(cfdiVenta);
-			load();
+			if(cfdiVenta!=null){
+				timbrar(cfdiVenta);
+				load();
+			}
 		}	
 	}
 	
@@ -293,12 +298,21 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			return;
 		CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
 		
-		if(cfdi.getTimbreFiscal()!=null){
-			MessageUtils.showMessage("CFDI ya generado para la venta", "CFDI");
+		if(cfdi.getTimbreFiscal().getUUID()!=null){
+			MessageUtils.showMessage("CFDI ya generado para la venta UUID: "+cfdi.getTimbreFiscal().getUUID(), "CFDI");
 			return;
 		}
 		CFDIVenta cfdiVenta=new CFDIVenta(venta, cfdi);
 		timbrar(cfdiVenta);
+	}
+	
+	public void reimprimir(){
+		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
+		if(venta!=null){
+			CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
+			CFDIVenta cfdiVenta=new CFDIVenta(venta, cfdi);
+			imprimirJuegos(cfdiVenta);
+		}
 	}
 	
 	public void imprimirJuegos(CFDIVenta cfdiVenta){
@@ -330,14 +344,14 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	}
 	
 	public void regresarPendiente(){
-		List<Pedido> selected=new ArrayList<Pedido>(getSelected());
-		for(Pedido p:selected){
-			if(!p.isFacturable())
+		List<PedidoRow> selected=new ArrayList<PedidoRow>(getSelected());
+		for(PedidoRow row:selected){
+			if(!row.isFacturable())
 				continue;
 			
-			int index=source.indexOf(p);
+			int index=source.indexOf(row);
 			if(index!=-1){
-				p=getManager().get(p.getId());				
+				Pedido p=getManager().get(row.getId());				
 				final PedidoPendiente pendiente=p.getPendiente();				
 				p.setPendiente(null);
 				p.setFacturable(false);
@@ -346,7 +360,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 				if(pendiente!=null){
 					Services.getInstance().getUniversalDao().remove(PedidoPendiente.class, pendiente.getId());
 				}
-				source.set(index, p);
+				source.set(index, new PedidoRow(p));
 			}
 		}
 	}
@@ -430,6 +444,9 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 		
 	}
 	
+	public void cargarPedido(){
+		super.load();
+	}
 	
 	
 	public Sucursal getSucursal() {
@@ -443,15 +460,15 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	TimerTask task=new TimerTask() {
 		@Override
 		public void run() {
-			System.out.println("Cargando datos en timer......");
-			//load();
+			System.out.println("Cargando pedidos de contado pendientes para facturar CFDI......");
+			cargarPedido();
 		}
 	};
 	
 	@Override
 	public void open() {		
 		timer=new Timer();
-		timer.schedule(task, 1000, 30000);
+		timer.schedule(task, 1000, 60000);
 		
 	}
 	@Override

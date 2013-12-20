@@ -81,6 +81,7 @@ public class PolizaDeVentasPanel extends PolizaDinamicaPanel{
 				getLoadAction()
 				,addAction(null,"generar","Generar poliza")
 				,addAction(null, "salvar", "Salvar póliza")
+				,getEditAction()
 				//,addAction(null, "cuadrar", "Otros (Ingreso/Gasto)")
 				,getDeleteAction()
 				,CommandUtils.createPrintAction(this, "imprimirPoliza")

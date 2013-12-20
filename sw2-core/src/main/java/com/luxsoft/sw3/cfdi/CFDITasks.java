@@ -32,6 +32,7 @@ public class CFDITasks {
 		is.close();
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setCfdiPrivateKey(data);
+		empresa.setNumeroDeCertificado("00001000000202171318");
 		hibernateTemplate.merge(empresa);
 		
 	}

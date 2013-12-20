@@ -3,6 +3,8 @@ package com.luxsoft.sw3.replica;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.util.Assert;
+
 public class AuditUtils {
 	
 	public static final Map<String,String> classTableMap;
@@ -14,7 +16,9 @@ public class AuditUtils {
 	 * @return
 	 */
 	public static String getTableName(String entityName){
-		return classTableMap.get(entityName);
+		String res= classTableMap.get(entityName);
+		//Assert.notNull(res,"No pudo resolver el nombre de la tabla para la clase: "+entityName+ " se requiere para la replica");
+		return res;
 	}
 	
 	static{
@@ -218,6 +222,12 @@ public class AuditUtils {
 		classTableMap.put("CheckPlusDocumento", "SX_CHECKPLUS_DOCTOS");
 		classTableMap.put("SolicitudDeModificacion", "SX_SOLICITUD_MODIFICACIONES");
 		classTableMap.put("EstadoDeVenta", "SX_VENTA_ESTADO");
+		classTableMap.put("CFDI", "SX_CFDI");
+		classTableMap.put("CFDIClienteMails", "SX_CLIENTES_CFDI_MAILS");
+		classTableMap.put("Gasto", "SX_GASTOS");
+		
+		
+		
 
 	}	
 

@@ -33,7 +33,7 @@ public class ParcheGenerico extends HibernateDaoSupport{
 		List res=ServiceLocator2.getJdbcTemplate().queryForList(
 				//"");
 				
-		"select * from sw_trequisicion where date(fecha)=\'2013-11-22\' order by fecha desc ");
+		"select * from sw_trequisicion where date(fecha)=\'2013-12-18\' order by fecha desc ");
 		//CARGOABONO_ID=970640
 		int row=0;
 		for(Object o:res){

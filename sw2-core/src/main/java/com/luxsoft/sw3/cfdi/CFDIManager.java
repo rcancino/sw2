@@ -38,6 +38,11 @@ public class CFDIManager {
 		return res.get(0);
 	}
 	
+	public CFDI existe(Venta venta){
+		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",venta.getId());
+		return res.isEmpty()?null:res.get(0);
+	}
+	
 	public CFDI generarFactura(Venta venta){
 		return getiFactura().generar(venta);
 		

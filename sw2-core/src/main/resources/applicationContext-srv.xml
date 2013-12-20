@@ -534,6 +534,11 @@
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
     	<property name="sellador" ref="cfdiSellador"/>
     </bean>
+    
+    <bean id="cfdi_MailServices" class="com.luxsoft.sw3.cfdi.CFDI_MailServices">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="mailSender" ref="mailSender"/>
+    </bean>
  
 </beans>
 

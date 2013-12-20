@@ -47,8 +47,8 @@
 		<value>PedidoDet</value>
 		<value>Folio</value>
 		<value>FolioFiscal</value>
-		<value>CFDI</value>
- 	   <!--  <value>ExistenciaConteo</value>
+		<!--<value>CFDI</value>
+ 	     <value>ExistenciaConteo</value>
 		<value>Conteo</value>
 		<value>ConteoDet</value>
 		--> 

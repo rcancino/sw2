@@ -24,22 +24,21 @@ import ca.odell.glazedlists.matchers.Matchers;
 
 import com.jgoodies.uif.builder.ToolBarBuilder;
 import com.jgoodies.uif.panel.SimpleInternalFrame;
+import com.luxsoft.cfdi.CFDIPrintUI;
+import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.pos.POSActions;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.facturacion.FacturacionController;
-import com.luxsoft.siipap.pos.facturacion.FacturacionDeAnticiposController;
 import com.luxsoft.siipap.pos.facturacion.FacturacionController.CFDIVenta;
-import com.luxsoft.siipap.pos.ui.consultas.caja.FacturasPanel;
+import com.luxsoft.siipap.pos.facturacion.FacturacionDeAnticiposController;
 import com.luxsoft.siipap.pos.ui.reports.AplicacionAnticiposReport;
-
 import com.luxsoft.siipap.pos.ui.reports.RelacionAnticiposReport;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
-import com.luxsoft.sw3.cfd.CFDPrintServices;
-import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.services.PedidosManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.Pedido;
@@ -158,13 +157,13 @@ public class CFDIFacturacionCreditoPanel extends FilteredBrowserPanel<Pedido>{
 			
 			List<Action> actions=ListUtils.predicatedList(new ArrayList<Action>(), PredicateUtils.notNullPredicate());
 			actions.add(addRoleBasedContextAction(new FacturarPredicate(), POSRoles.CAJERO.name(),this, "generarVenta", "Generar venta"));
-			
+			actions.add(addAction(null, "reimprimir", "Re-Imprimir"));
 			
 			actions.add(buscarAction);
 			actions.add(getLoadAction());
 			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"regresarPendiente", "Regresar a Pendiente"));
 			
-			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"generarCFD", "Generar factura (CFD)"));
+			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"timbrar", "Timbrar CFDI"));
 			
 			actions.add(addAction(null,"generarVentaConAnticipo", "Venta con anticipo)"));
 			this.actions=actions.toArray(new Action[actions.size()]);
@@ -237,47 +236,83 @@ public class CFDIFacturacionCreditoPanel extends FilteredBrowserPanel<Pedido>{
 		//return getManager().buscarFacturables(Services.getInstance().getConfiguracion().getSucursal(),Pedido.Tipo.CREDITO);
 	}
 	
-	public void generarCFD(){
-		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
-		if(venta!=null){
-			venta=Services.getInstance().getFacturasManager().buscarVentaInicializada(venta.getId());
-			ComprobanteFiscal cfd=Services.getInstance().getComprobantesDigitalManager().cargarComprobante(venta);
-			if(cfd==null){
-				cfd=Services.getInstance().getComprobantesDigitalManager().generarComprobante(venta);
-				logger.info("CFD generado: "+cfd);
-			}
-			CFDPrintServices.imprimirFacturaEnMostrador(venta, cfd);	
-			
-		}
-	}
-	
 	public void generarVenta(){
 		if(getSelectedObject()!=null){
 			Pedido pedido=(Pedido)getSelectedObject();
 			pedido=getManager().get(pedido.getId());
 			int index=source.indexOf(pedido);
 			if(index!=-1){
-				facturacionController.facturarPedido(pedido);
+				//facturacionController.facturarPedido(pedido);
 				CFDIVenta cfdiVenta=facturacionController.generarVenta(pedido);
-				pedido=getManager().get(pedido.getId());
-				source.set(index, pedido);
-				//facturasBrowser.load();
-				timbrar(cfdiVenta);
+				if(cfdiVenta!=null){
+					pedido=getManager().get(pedido.getId());
+					source.set(index, pedido);
+					//facturasBrowser.load();
+					timbrar(cfdiVenta);
+				}
 			}			
 		}
 	}
 	
-	public void timbrar(CFDIVenta cfdiVenta){
-		try {
-			Services.getCFDITimbrador().timbrar(cfdiVenta.getCfdi());
-		} catch (Exception e) {
-			MessageUtils.showMessage("Error al timbrar factura: "+ExceptionUtils.getMessage(e), "Facturación credito");
-		}finally{
-			facturasBrowser.load();
-		}
+	public void timbrar(){
+		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
+		if(venta==null)
+			return;
+		CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
 		
+		if(cfdi.getTimbreFiscal().getUUID()!=null){
+			MessageUtils.showMessage("CFDI ya generado para la venta UUID: "+cfdi.getTimbreFiscal().getUUID(), "CFDI");
+			return;
+		}
+		CFDIVenta cfdiVenta=new CFDIVenta(venta, cfdi);
+		timbrar(cfdiVenta);
 	}
 	
+	
+	
+	
+	public void timbrar(CFDIVenta cfdiVenta){
+		try {
+			logger.info("Timbrando CFDI: "+cfdiVenta.getCfdi());
+			Services.getCFDIManager().timbrar(cfdiVenta.getCfdi());
+			facturasBrowser.load();
+			//Mandar imprimir
+			imprimirJuegos(cfdiVenta);
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageUtils.showMessage(ExceptionUtils.getRootCauseMessage(e), "Timbrado de CFDI");
+			return;
+		}
+	}
+	
+	public void reimprimir(){
+		Venta venta=(Venta)this.facturasBrowser.getSelectedObject();
+		if(venta!=null){
+			CFDI cfdi=Services.getCFDIManager().buscarCFDI(venta);
+			CFDIVenta cfdiVenta=new CFDIVenta(venta, cfdi);
+			imprimirJuegos(cfdiVenta);
+		}
+	}
+	
+	
+	public void imprimirJuegos(CFDIVenta cfdiVenta){
+		String[] tantos;
+		if(cfdiVenta.getVenta().getOrigen().equals(OrigenDeOperacion.CRE)){
+			tantos=new String[]{"CLIENTE","ARCHIVO"};
+		}else
+			tantos=new String[]{"CLIENTE","ARCHIVO"};
+		Date time=Services.getInstance().obtenerFechaDelSistema();
+		Venta venta=Services.getInstance().getFacturasManager().buscarVentaInicializada(cfdiVenta.getVenta().getId());
+		for(String destino:tantos){
+			CFDIPrintUI.impripirComprobante(
+					venta
+					, cfdiVenta.getCfdi()
+					, destino
+					,time,Services.getInstance().getHibernateTemplate()
+					, false)
+					;
+		}
+	}
 	
 	public void generarVentaConAnticipo(){
 		String sel=JOptionPane.showInputDialog("Número de pedido:");

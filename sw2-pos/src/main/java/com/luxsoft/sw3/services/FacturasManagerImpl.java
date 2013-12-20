@@ -523,7 +523,7 @@ public class FacturasManagerImpl  implements FacturasManager{
 			CFDI cfdi=res.get(0);
 			if(cfdi.getTimbreFiscal()!=null){
 				try {
-					cfdiManager.cancelar(cfdi);
+					//cfdiManager.cancelar(cfdi);
 				} catch (Exception e) {
 					throw new RuntimeException(ExceptionUtils.getMessage(e),e);
 				}

@@ -30,6 +30,7 @@ import ca.odell.glazedlists.matchers.Matchers;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.panel.HeaderPanel;
+import com.luxsoft.cfdi.CFDIMandarFacturarForm;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.core.Cliente;
@@ -55,6 +56,7 @@ import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
+import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
 import com.luxsoft.sw3.services.PedidosManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.forms.PedidoDolaresController;
@@ -388,7 +390,16 @@ public class PedidosPanel2 extends FilteredBrowserPanel<PedidoRow> implements Pr
 	
 	public void mandarFacturar(Pedido p,final int index){
 		
-		User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+		//User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+		//if(user==null)
+			//return;
+		User user;
+		if(p.getClave().equals("U050008")){
+			user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+		}else{
+			CFDIClienteMails mails=CFDIMandarFacturarForm.showForm(p.getClave());
+			user=mails.getUsuario();
+		}
 		if(user==null)
 			return;
 		p.getLog().setUpdateUser(user.getUsername());

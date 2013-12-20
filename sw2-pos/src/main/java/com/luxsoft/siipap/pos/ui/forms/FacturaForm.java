@@ -11,6 +11,7 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -42,6 +43,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.panel.HeaderPanel;
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.luxor.utils.Bean;
 import com.luxsoft.siipap.cxc.model.Aplicacion;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
@@ -54,6 +56,7 @@ import com.luxsoft.siipap.swing.utils.SWExtUIManager;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.siipap.ventas.model.VentaDet;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.Pedido;
 
@@ -370,7 +373,14 @@ public class FacturaForm extends SXAbstractDialog{
 	
 	public void print(){
 		//Buscar si tiene comprobante fisacal
-		ReportUtils2.imprimirFacturaCopia(getFacturaId());
+		Venta venta=getFactura();
+		CFDI cfdi=Services.getCFDIManager().existe(venta);
+		if(cfdi!=null){
+			Date time=Services.getInstance().obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(venta, cfdi, "DESTINATARIO", time,Services.getInstance().getHibernateTemplate(),true);
+		}else{
+			ReportUtils2.imprimirFacturaCopia(getFacturaId());
+		}
 		doClose();
 	}
 	

@@ -37,7 +37,7 @@ public class CFDIPrintUI {
 			}else{
 				JasperPrintManager.printReport(jasperPrint, false);
 			}
-			if(venta.getImpreso()==null){
+			if(venta.getImpreso()==null && (cfdi!=null)){
 				venta.setImpreso(time);
 				hibernateTemplate.merge(venta);
 			}

@@ -35,7 +35,7 @@ import org.hibernate.validator.Length;
 import org.hibernate.validator.Max;
 import org.hibernate.validator.NotNull;
 
-import com.lowagie.toolbox.plugins.Concat;
+
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.model.BaseBean;
 import com.luxsoft.siipap.model.CantidadMonetaria;

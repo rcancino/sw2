@@ -13,6 +13,7 @@ import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Traslados;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Traslados.Traslado;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Receptor;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.TipoDeComprobante;
+import mx.gob.sat.cfd.x3.TUbicacion;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.xmlbeans.XmlOptions;
@@ -26,12 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.service.KernellSecurity;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.siipap.ventas.model.VentaDet;
+import com.luxsoft.sw3.cfd.CFDUtils;
 import com.luxsoft.sw3.cfd.dao.FolioFiscalDao;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscalCreationException;
 import com.luxsoft.sw3.cfd.model.FolioFiscal;
@@ -91,7 +94,22 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		
 		// Emisor,regimen fiscal,domicilioFiscal
 		registrarDatosDeEmisor(cfdi, getEmpresa());
-		cfdi.setLugarExpedicion(venta.getSucursal().getDireccion().getPais());
+		cfdi.setLugarExpedicion(venta.getSucursal().getDireccion().getPais());		
+		
+		// Expedido en
+		TUbicacion domicilio=cfdi.getEmisor().addNewExpedidoEn();
+		Direccion direccion=venta.getSucursal().getDireccion();
+		domicilio.setCalle(StringUtils.defaultString(direccion.getCalle()));
+		domicilio.setCodigoPostal(StringUtils.defaultString(direccion.getCp()));
+		domicilio.setColonia(StringUtils.defaultString(direccion.getColonia()));
+		//domicilio.setEstado(StringUtils.defaultString(direccion.getEstado()));
+		domicilio.setEstado(StringUtils.defaultIfEmpty(direccion.getEstado(),"."));
+		domicilio.setMunicipio(StringUtils.defaultString(direccion.getMunicipio()));
+		domicilio.setNoExterior(StringUtils.defaultIfEmpty(direccion.getNumero(),"."));
+		domicilio.setNoInterior(StringUtils.defaultIfEmpty(direccion.getNumeroInterior(),"."));
+		domicilio.setPais(CFDUtils.limpiarCodigoPostal(direccion.getPais()));
+		
+		
 		
 		//Receptor
 		Receptor rec=registrarReceptor(cfdi, venta.getCliente());

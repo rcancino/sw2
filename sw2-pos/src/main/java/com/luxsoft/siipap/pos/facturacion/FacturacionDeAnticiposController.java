@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.consultas.caja.CajaController;
@@ -45,6 +46,11 @@ public class FacturacionDeAnticiposController {
 		Assert.isTrue(!pedido.isFacturado(),"Este pedido ya ha sido facturado");
 		Assert.isTrue(!pedido.isDeCredito(),"El pedido debe ser de contado");
 		User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+		if(Services.getInstance().getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI)
+				&& (!pedido.getCliente().getClave().equals("U050008"))){
+			MessageUtils.showMessage("Solo se pueden generar comprobantes tipo CFDI", "Comprobantes fiscales");
+			return;
+		}
 		if(user==null)
 			return;
 		//User user=KernellUtils.buscarUsuario();

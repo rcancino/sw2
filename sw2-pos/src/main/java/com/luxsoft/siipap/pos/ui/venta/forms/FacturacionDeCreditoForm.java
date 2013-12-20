@@ -211,10 +211,10 @@ public class FacturacionDeCreditoForm extends SXAbstractDialog implements KeyEve
 	 }
 
 	public void facturar(){
-		/*int res=JOptionPane.showConfirmDialog(this, "Prepare su impresor y verifique el consecutivo","Facturando",JOptionPane.OK_CANCEL_OPTION);
+		int res=JOptionPane.showConfirmDialog(this, "Prepare su impresor y verifique el consecutivo","Facturando",JOptionPane.OK_CANCEL_OPTION);
 		if(JOptionPane.OK_OPTION==res){
 			doAccept();
-		}*/
+		}
 	}
 	
 	AnticipoModel anticipo;

@@ -34,4 +34,10 @@ CFD_ID varchar(255) not null
 , TX_IMPORTADO datetime, TX_REPLICADO datetime
 , primary key (CFD_ID)) ENGINE=InnoDB
 
-select * from sx_cfdi
+create table SX_CLIENTES_CFDI_MAILS (
+CFD_ID varchar(255) not null
+, CLIENTE_ID bigint not null unique
+, EMAIL1 varchar(100) not null
+, EMAIL2 varchar(100)
+, CREADO datetime, CREADO_USR varchar(255), MODIFICADO datetime, MODIFICADO_USR varchar(255), version integer not null
+, primary key (CFD_ID)) ENGINE=InnoDB

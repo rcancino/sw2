@@ -66,6 +66,7 @@ import com.luxsoft.sw3.cfd.dao.CertificadoDeSelloDigitalDao;
 import com.luxsoft.sw3.cfd.services.CFDMailServices;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIFactura;
+import com.luxsoft.sw3.cfdi.CFDI_MailServices;
 import com.luxsoft.sw3.cfdi.IFactura;
 import com.luxsoft.sw3.contabilidad.model.CuentaContable;
 import com.luxsoft.sw3.contabilidad.services.CierreAnualManager;
@@ -436,6 +437,10 @@ public  class ServiceLocator2 {
 	
 	public static CFDMailServices getCFDMailServices(){
 		return (CFDMailServices)instance().getContext().getBean("cfdMailServices");
+	}
+	
+	public static CFDI_MailServices getCFDIMailServices(){
+		return (CFDI_MailServices)instance().getContext().getBean("cfdi_MailServices");
 	}
 	
 	public static CheckplusManager getCheckplusManager(){

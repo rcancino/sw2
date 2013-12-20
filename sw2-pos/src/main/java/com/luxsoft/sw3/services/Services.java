@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.luxsoft.siipap.cxc.service.DepositosManager;
@@ -258,6 +259,10 @@ public final class Services {
 	
 	public Empresa getEmpresa() {
 		return getConfiguracion().getSucursal().getEmpresa();
+	}
+	
+	public synchronized static JavaMailSender getMailSender(){
+		return (JavaMailSender)getInstance().getContext().getBean("mailSender");
 	}
 
 	public static void main(String[] args) {

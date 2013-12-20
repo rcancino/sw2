@@ -140,6 +140,13 @@ public class CFDI implements Replicable{
 	@Column(name="TIMBRADO",nullable=true,length=50)
 	private String timbrado;
 	
+	
+	@Column(name="UUID",nullable=true,length=300)
+	private String UUID;
+	
+	@Column(name="COMENTARIO",nullable=true,length=300)
+	private String comentario;
+	
 	@Embedded
 	@AttributeOverrides({
 	       @AttributeOverride(name="createUser",	column=@Column(name="CREADO_USR"	,nullable=true,insertable=true,updatable=false)),
@@ -154,6 +161,8 @@ public class CFDI implements Replicable{
 	
 	@Transient
 	private TimbreFiscal timbre;
+	
+	 
 	
 	public CFDI(){}
 	
@@ -454,7 +463,7 @@ public class CFDI implements Replicable{
 			this.document=ComprobanteDocument.Factory.parse(is);
 		} catch (Exception e) {
 			//e.printStackTrace();
-			String msg=MessageFormat.format("Error al cargar XML de comprobante fiscal digital {0}", ExceptionUtils.getRootCauseMessage(e));
+			String msg=MessageFormat.format("Error al cargar XML de comprobante fiscal digital cfdi:{0}  Err:{1}",getId(), ExceptionUtils.getRootCauseMessage(e));
 			throw new CFDException(msg,e);
 		}
 	} 
@@ -472,7 +481,23 @@ public class CFDI implements Replicable{
 	 public void setTimbre(TimbreFiscal timbre) {
 		this.timbre = timbre;
 	}
+	 public void setUUID(String uUID) {
+		UUID = uUID;
+	}
+	 public String getUUID() {
+		return UUID;
+	}
+	 
+	 
 	
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

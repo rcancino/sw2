@@ -33,8 +33,19 @@ public class CFDITimbrador implements InitializingBean{
 	
 	public CFDI timbrar(CFDI cfdi) throws Exception{
 		
-		byte[] zipFile=utils.comprimeArchivo(cfdi.getId()+".xml", cfdi.getXml());
-		byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		String nombre=cfdi.getXmlFilePath();
+		byte[] xml=cfdi.getXml();
+		byte[] zipFile=utils.comprimeArchivo(nombre, xml);
+		/*
+		byte[] res=null;
+		if(modoCfdi.startsWith("PRUEBA")){
+			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		}else{
+			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		}*/
+		
+		//byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		byte[] res=cfdiClient.getCfdi("PAP830101CR3", "yqjvqfofb", zipFile);
 		
 		Map<String, byte[]> map =utils.descomprimeArchivo(res);
 		Map.Entry<String, byte[]> entry=map.entrySet().iterator().next();
@@ -42,6 +53,7 @@ public class CFDITimbrador implements InitializingBean{
 		cfdi.setXmlFilePath(entry.getKey());
 		cfdi.setXml(entry.getValue());
 		cfdi.setTimbre(new TimbreFiscal(cfdi.getComprobante()));
+		cfdi.setUUID(cfdi.getTimbreFiscal().getUUID());
 		cfdi.cargarTimbrado();
 		cfdi=(CFDI)hibernateTemplate.merge(cfdi);
 		salvarArchivoXml(cfdi);
@@ -56,6 +68,10 @@ public class CFDITimbrador implements InitializingBean{
 			logger.error(e);
 		}
 		
+	}
+	
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
 	}
 	
 	public void afterPropertiesSet() throws Exception {

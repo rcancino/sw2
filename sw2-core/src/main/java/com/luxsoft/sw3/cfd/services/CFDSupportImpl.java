@@ -103,6 +103,7 @@ public abstract class CFDSupportImpl  implements CFDSupport{
 	 * @see com.luxsoft.sw3.cfd.services.CFDSupport#registrarEmisor(mx.gob.sat.cfd.x2.ComprobanteDocument.Comprobante)
 	 */
 	public void registrarEmisor(Comprobante cfd){
+		
 		Emisor emisor=cfd.addNewEmisor();
 		emisor.setNombre(getEmpresa().getNombre());
 		emisor.setRfc(getEmpresa().getRfc());
@@ -147,6 +148,11 @@ public abstract class CFDSupportImpl  implements CFDSupport{
 		else{
 			TUbicacion ub=receptor.addNewDomicilio();
 			ub.setPais("MEXICO");
+		}
+		
+		if(getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI) &&
+				!(receptor.getRfc().equals("UCI840109JU0")) ){
+			throw new RuntimeException("Solo se pueden generar comprobantes tipo CFDI");
 		}
 	}
 	

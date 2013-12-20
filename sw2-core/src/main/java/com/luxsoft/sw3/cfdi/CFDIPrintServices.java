@@ -56,7 +56,7 @@ public class CFDIPrintServices {
 		parametros.put("DESTINATARIO", destinatario);
 		JasperPrint jasperPrint = null;
 		DefaultResourceLoader loader = new DefaultResourceLoader();
-		String jasper=cfdi.getTimbrado()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
+		String jasper=cfdi.getTimbreFiscal().getUUID()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
 		Resource res = loader.getResource(getJasperReport(jasper));
 		System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
 		try {
@@ -186,15 +186,14 @@ public class CFDIPrintServices {
 				);
 		parametros.put("EMISOR_DIRECCION", direccionEmisor);
 		
-		if (emisor.getExpedidoEn() != null)
-		{
-		TUbicacion expedido=emisor.getExpedidoEn();
+		if (emisor.getExpedidoEn() != null){
+			TUbicacion expedido=emisor.getExpedidoEn();
 		
-		String pattern2="{0} {1}  {2}" +
+			String pattern2="{0} {1}  {2}" +
 				"\n{3}" +
 				"\n{4}" +
 				"\n{5}  {6}";
-		String expedidoDir=MessageFormat.format(pattern2
+			String expedidoDir=MessageFormat.format(pattern2
 				,expedido.getCalle()
 				,expedido.getNoExterior()
 				,StringUtils.defaultIfEmpty(expedido.getNoInterior(),"")
@@ -203,7 +202,7 @@ public class CFDIPrintServices {
 				,expedido.getCodigoPostal()
 				,expedido.getEstado()
 				);
-		parametros.put("EXPEDIDO_DIRECCION", expedidoDir);
+			parametros.put("EXPEDIDO_DIRECCION", expedidoDir);
 		}
 		else
 			parametros.put("EXPEDIDO_DIRECCION", "SNA");

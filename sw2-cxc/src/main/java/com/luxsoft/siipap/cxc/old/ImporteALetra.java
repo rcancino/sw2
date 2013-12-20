@@ -339,7 +339,8 @@ import com.luxsoft.siipap.util.MonedasUtils;
 		final String svalor=String.valueOf(valor);
 		final String ok=StringUtils.leftPad(svalor,2,'0');
 		num_letras = decmillon(importe.amount().intValue());
-		if(importe.getCurrency().equals(MonedasUtils.DOLARES)){
+		//if(importe.getCurrency().equals(MonedasUtils.DOLARES)){
+		if(importe.getCurrency().toString().equals("USD")){
 			num_letras+=" DOLARES AMERICANOS {0}/100 USD";
 		}else{
 			num_letras+=" PESOS {0}/100 M.N.";
