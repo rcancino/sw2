@@ -74,7 +74,7 @@
         <property name="from" value="${mail.default.from}"/>
     </bean> -->
   <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${mail.host}"/> 
+        <property name="host" value="smtp.gmail.com"/> 
         
          <property name="username" value="${mail.username}"/>
         <property name="password" value="${mail.password}"/>
@@ -83,6 +83,7 @@
                 mail.smtp.auth=true
                 mail.smtp.starttls.enable=true
                 mail.smtp.port=587
+                mail.debug=true
             </value>
         </property>
    </bean>

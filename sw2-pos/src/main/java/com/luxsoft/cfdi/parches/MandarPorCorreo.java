@@ -1,9 +1,6 @@
 package com.luxsoft.cfdi.parches;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,8 +9,6 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
@@ -37,7 +32,7 @@ public class MandarPorCorreo {
 	}
 	
 	public void email(CFDI cfdi){
-		String to="creditopaplesa1@gmail.com";
+		String to="cpradoglez@gmail.com";
 		String cc="soporte_sist@papelsa.com.mx";
 		try {
 			JavaMailSender mailSender=Services.getMailSender();

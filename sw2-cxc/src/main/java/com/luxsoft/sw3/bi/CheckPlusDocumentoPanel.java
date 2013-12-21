@@ -41,7 +41,7 @@ import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.sw3.ventas.CheckPlusDocumento;
-import com.sun.pdfview.PDFViewer;
+//import com.sun.pdfview.PDFViewer;
 
 
 

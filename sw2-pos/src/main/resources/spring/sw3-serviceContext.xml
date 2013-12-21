@@ -126,7 +126,7 @@
   		<property name="queueCapacity" value="25" />
 	</bean>
 	
-	
+	<!-- 
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		
 		<property name="host"><value>smtp.gmail.com</value></property>
@@ -144,6 +144,21 @@
                 <prop key="mail.smtp.socketFactory.fallback">false</prop>
                 <prop key="mail.debug">true</prop>
             </props>
+        </property>
+   </bean>
+    -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/> 
+        
+         <property name="username" value="creditopapelsa@gmail.com"/>
+        <property name="password" value="creditopapelsahijk"/>
+        <property name="javaMailProperties">
+            <value>
+                mail.smtp.auth=true
+                mail.smtp.starttls.enable=true
+                mail.smtp.port=587
+                mail.debug=true
+            </value>
         </property>
    </bean>
     

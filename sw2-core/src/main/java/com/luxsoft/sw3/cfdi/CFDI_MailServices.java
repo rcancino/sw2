@@ -207,20 +207,21 @@ public class CFDI_MailServices {
 					}
 				});
 				if(jp!=null){
-					/*
+					
 					byte[] pdf=JasperExportManager.exportReportToPdf(jp);
 					InputStreamSource sourcePdf=new ByteArrayResource(pdf);
 					String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
 					messageHelper.addAttachment(pdfName,sourcePdf);
-					*/
+					
+					/*
 					String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
 					String pdfPath=System.getProperty("user.home")+"/"+pdfName;
 					
 					File dest=new File(pdfPath);
 					FileOutputStream fout=new FileOutputStream(dest);
 					JasperExportManager.exportReportToPdfFile(jp, pdfPath);
-					
-					messageHelper.addAttachment(pdfName,dest);
+					*/
+					//messageHelper.addAttachment(pdfName,dest);
 				}
 				
 			}
