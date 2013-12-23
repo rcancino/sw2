@@ -181,8 +181,7 @@
 					<componentProperties>
 						<drop>true</drop>
 						<jdk5>true</jdk5>
-						<!-- <propertyfile>target/test-classes/swx-jdbc.properties</propertyfile> -->
-						<propertyfile>target/classes/swx-jdbc.properties</propertyfile>
+						<propertyfile>target/test-classes/swx-jdbc.properties</propertyfile>
 						<skip>${maven.test.skip}</skip>
 						<export>false</export>
 						<format>true</format>

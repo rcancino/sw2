@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.mail.internet.MimeMessage;
@@ -27,6 +28,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -181,6 +183,17 @@ public class CFDI_MailServices {
 		
 		Assert.notNull(cfd,"El comprobante no puede ser nulo");
 		try {
+			/*
+			JavaMailSenderImpl mailSender=new JavaMailSenderImpl();
+			mailSender.setHost("smtp.gmail.com");
+			mailSender.setUsername("creditopapelsa1@gmail.com");
+			mailSender.setPassword("papelsahijk");
+			Properties props=new Properties();
+			props.setProperty("mail.smtp.auth", "true");
+			props.setProperty("mail.smtp.starttls.enable", "true");
+			props.setProperty("mail.smtp.port", "587");
+			props.setProperty("mail.debug", "true");
+			*/
 			MimeMessage mimeMessage=mailSender.createMimeMessage();
 			
 			MimeMessageHelper messageHelper=new MimeMessageHelper(mimeMessage,true);

@@ -83,7 +83,7 @@
                 mail.smtp.auth=true
                 mail.smtp.starttls.enable=true
                 mail.smtp.port=587
-                mail.debug=true
+                mail.debug=false
             </value>
         </property>
    </bean>

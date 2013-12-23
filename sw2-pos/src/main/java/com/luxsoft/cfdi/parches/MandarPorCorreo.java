@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -14,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import com.luxsoft.sw3.cfdi.model.CFDI;
@@ -26,6 +28,23 @@ import freemarker.template.TemplateException;
 
 public class MandarPorCorreo {
 	
+	private final JavaMailSenderImpl mailSender;
+	
+	public MandarPorCorreo(){
+		mailSender=new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setUsername("creditopapelsa1@gmail.com");
+		mailSender.setPassword("papelsahijk");
+		Properties props=new Properties();
+		props.setProperty("mail.smtp.auth", "true");
+		props.setProperty("mail.smtp.starttls.enable", "true");
+		props.setProperty("mail.smtp.port", "587");
+		props.setProperty("mail.debug", "true");
+		
+                
+		mailSender.setJavaMailProperties(props);
+	}
+	
 	public void mandar(String id) throws Exception{
 		CFDI cfdi=Services.getCFDIManager().getCFDI(id);
 		email(cfdi);
@@ -35,7 +54,7 @@ public class MandarPorCorreo {
 		String to="cpradoglez@gmail.com";
 		String cc="soporte_sist@papelsa.com.mx";
 		try {
-			JavaMailSender mailSender=Services.getMailSender();
+			//JavaMailSender mailSender=Services.getMailSender();
 			MimeMessage mimeMessage=mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper=new MimeMessageHelper(mimeMessage,true);
 			messageHelper.setFrom("ventas@papelsa.com.mx");
