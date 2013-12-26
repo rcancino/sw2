@@ -24,10 +24,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
+import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.service.ServiceLocator2;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.CFDIPrintServices;
 import com.luxsoft.sw3.cfdi.model.CFDI;
+import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -36,14 +39,24 @@ import freemarker.template.TemplateException;
 
 public class CorreoDeTimbradosErroneos {
 	
+	
+	public String getDestino(CFDI cfdi){
+		Venta v=ServiceLocator2.getVentasManager().get(cfdi.getOrigen());
+		Cliente c=v.getCliente();
+		List<CFDIClienteMails> mails=ServiceLocator2.getHibernateTemplate().find("from CFDIClienteMails c where c.cliente.id=?",c.getId());
+		return mails.isEmpty()?c.getEmai3():mails.get(0).getEmail1();
+				
+	}
+	
 	public  void run(){
 		List<CFDI> list=ServiceLocator2.getHibernateTemplate().find("from CFDI c where c.comentario=?","RE PROGRAMAR ENVIO");
 		int count=0;
 		for(final CFDI cfdi:list){
 			
 			try {
-				String to="cpradoglez@gmail.com";
+				String to=getDestino(cfdi);
 				String cc="soporte_sist@papelsa.com.mx";
+				String ccc="cpradoglez@gmail.com";
 				
 				JavaMailSender mailSender=ServiceLocator2.getCFDIMailServices().getMailSender();//.mandarPorCorreo(cfdi.getId());
 				MimeMessage mimeMessage=mailSender.createMimeMessage();
@@ -87,10 +100,15 @@ public class CorreoDeTimbradosErroneos {
 				}
 				
 				mailSender.send(msg);
-				System.out.println("Correo enviado para cfdi: "+cfdi.getUUID());
+				cfdi.setComentario("Correo enviado "+DateUtil.getDateTime("dd/MM/yyyy hh:mm:ss", new Date())+" To:"+to );
+				ServiceLocator2.getHibernateTemplate().merge(cfdi);
+				System.out.println("Correo enviado para cfdi: "+cfdi.getUUID()+"  email:"+to);
 				count++;
 			} catch (Exception e) {
-				System.out.println("Error: "+ExceptionUtils.getRootCauseMessage(e));
+				String msg=ExceptionUtils.getRootCauseMessage(e);
+				//cfdi.setComentario("Correo enviado "+DateUtil.getDateTime("dd/MM/yyyy hh:mm:ss", new Date()));
+				//ServiceLocator2.getHibernateTemplate().merge(cfdi);
+				System.out.println("Error: "+msg);
 			}
 		}
 		System.out.println("Correos de correccion enviados: "+count);

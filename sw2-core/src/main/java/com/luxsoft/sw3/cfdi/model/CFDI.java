@@ -147,6 +147,15 @@ public class CFDI implements Replicable{
 	@Column(name="COMENTARIO",nullable=true,length=300)
 	private String comentario;
 	
+	@Column(name="CANCELACION",nullable=true)
+	private Date cancelacion;
+	
+	@Column(name="CANCELACION_RESPONSE",nullable=true,length=300)
+	private String cancelacionResponse;
+	
+	@Column(name="CANCELACION_RESPONSE_AKA",nullable=true,length=400)
+	private String cancelacionResponseAka;
+	
 	@Embedded
 	@AttributeOverrides({
 	       @AttributeOverride(name="createUser",	column=@Column(name="CREADO_USR"	,nullable=true,insertable=true,updatable=false)),
@@ -567,5 +576,23 @@ public class CFDI implements Replicable{
 		}
 		
 	}*/
+	public void setCancelacion(Date cancelacion) {
+		this.cancelacion = cancelacion;
+	}
+	public Date getCancelacion() {
+		return cancelacion;
+	}
+	public void setCancelacionResponse(String cancelacionResponse) {
+		this.cancelacionResponse = cancelacionResponse;
+	}
+	public String getCancelacionResponse() {
+		return cancelacionResponse;
+	}
+	public String getCancelacionResponseAka() {
+		return cancelacionResponseAka;
+	}
+	public void setCancelacionResponseAka(String cancelacionResponseAka) {
+		this.cancelacionResponseAka = cancelacionResponseAka;
+	}
 
 }

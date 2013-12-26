@@ -44,8 +44,8 @@ public class CFDITimbrador implements InitializingBean{
 			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
 		}*/
 		
-		//byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
-		byte[] res=cfdiClient.getCfdi("PAP830101CR3", "yqjvqfofb", zipFile);
+		byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		//byte[] res=cfdiClient.getCfdi("PAP830101CR3", "yqjvqfofb", zipFile);
 		
 		Map<String, byte[]> map =utils.descomprimeArchivo(res);
 		Map.Entry<String, byte[]> entry=map.entrySet().iterator().next();

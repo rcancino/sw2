@@ -20,8 +20,8 @@ public class CFDITasks {
 		this.hibernateTemplate=template;
 	}
 	
-	public void subirLlavePrivada() throws IOException{
-		String path="sat/PAPEL_CFD.key";
+	public void subirLlavePrivada(String path) throws IOException{
+		//String path="sat/PAPEL_CFD.key";
 		ClassPathResource resource=new ClassPathResource(path);
 		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
 		
@@ -37,8 +37,8 @@ public class CFDITasks {
 		
 	}
 	
-	public void subirCertificado() throws IOException{
-		String path="sat/00001000000202171318.cer";
+	public void subirCertificado(String path,String certName) throws IOException{
+		//String path="sat/00001000000202171318.cer";
 		ClassPathResource resource=new ClassPathResource(path);
 		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
 		
@@ -50,14 +50,35 @@ public class CFDITasks {
 		
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setCertificadoDigital(data);
-		empresa.setNumeroDeCertificado("00001000000202171318");
+		//empresa.setNumeroDeCertificado("00001000000202171318");
+		empresa.setNumeroDeCertificado(certName);
+		hibernateTemplate.merge(empresa);
+		
+	}
+	
+	public void subirCertificadoPfx(String path) throws IOException{
+		//String path="sat/PAPEL_CFDI_CERT.pfx";
+		ClassPathResource resource=new ClassPathResource(path);
+		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
+		
+		File file=resource.getFile();
+		byte[] data=new byte[(int)file.length()];
+		FileInputStream is=new FileInputStream(file);
+		is.read(data);
+		is.close();
+		
+		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
+		empresa.setCertificadoDigitalPfx(data);
+		//empresa.setNumeroDeCertificado("00001000000202171318");
+		//empresa.setNumeroDeCertificado(certName);
 		hibernateTemplate.merge(empresa);
 		
 	}
 	
 	public void inicializar() throws Exception{
-		subirLlavePrivada();
-		subirCertificado();
+		subirCertificado("sat/00001000000202466134.cer","00001000000202466134");
+		subirLlavePrivada("sat/papelsabajio2012.key");
+		//subirCertificadoPfx("c://queretaro//");
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setTipoDeComprobante(Empresa.TipoComprobante.CFDI);
 		hibernateTemplate.merge(empresa);

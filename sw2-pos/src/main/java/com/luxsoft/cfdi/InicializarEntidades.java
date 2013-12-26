@@ -7,7 +7,7 @@ public class InicializarEntidades {
 	
 	public static void inicializar() throws Exception{
 		CFDITasks tasks=new CFDITasks(Services.getInstance().getHibernateTemplate());
-		tasks.inicializar();
+		//tasks.subirCertificadoPfx();
 	}
 	
 	

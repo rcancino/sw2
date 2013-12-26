@@ -90,6 +90,9 @@
      			<ref bean="carteraDeChequesDevueltosPanel"/>
      			<ref bean="carteraDeJuridicoPanel"/>
      			<ref bean="cfdPanel"/>
+     			<bean class="com.luxsoft.sw3.cfdi.CFDICentralizadosPanel">
+     				<property name="title" value="CFDI's"/>
+     			</bean>
      			<ref bean="clientesCreditoPanel"/>
      			<ref bean="checkplusPanel"/>
      		</list>

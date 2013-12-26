@@ -60,6 +60,9 @@ public class Empresa extends BaseBean{
 	@Column(name = "CERTIFICADO_DIGITAL",  nullable = true, length = 100000)
 	private byte[] certificadoDigital;
 	
+	@Column(name = "CERTIFICADO_DIGITAL_PFX",  nullable = true, length = 100000)
+	private byte[] certificadoDigitalPfx;
+	
 	public Empresa() {}
 	
 
@@ -204,7 +207,12 @@ public class Empresa extends BaseBean{
 		this.certificadoDigital = certificadoDigital;
 	}
 
-
+	public void setCertificadoDigitalPfx(byte[] certificadoDigitalPfx) {
+		this.certificadoDigitalPfx = certificadoDigitalPfx;
+	}
+	public byte[] getCertificadoDigitalPfx() {
+		return certificadoDigitalPfx;
+	}
 
 
 	public static enum TipoComprobante{

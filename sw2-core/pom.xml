@@ -90,6 +90,12 @@
 	<artifactId>commons-compress</artifactId>
 	<version>1.1</version>
 </dependency>
+
+		<dependency>
+			<artifactId>commons-codec</artifactId>
+			<groupId>commons-codec</groupId>
+			<version>1.8</version>
+		</dependency>
   	
 		<!-- XStream support -->
 		<dependency>

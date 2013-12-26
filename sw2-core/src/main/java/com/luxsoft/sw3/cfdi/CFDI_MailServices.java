@@ -271,7 +271,7 @@ public class CFDI_MailServices {
 		root.put("cfds", cfds);
 		root.put("fecha", creado);
 		root.put("cid:papelLogo", resource);
-		final Template temp=cfg.getTemplate("correoAutomaticoDeCFD.ftl");			
+		final Template temp=cfg.getTemplate("correoCFDI.ftl");			
 		StringWriter out=new StringWriter();
 		temp.process(root, out);			
 		return out.toString();

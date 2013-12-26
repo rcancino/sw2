@@ -58,7 +58,7 @@ public class CFDIPrintServices {
 		DefaultResourceLoader loader = new DefaultResourceLoader();
 		String jasper=cfdi.getTimbreFiscal().getUUID()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
 		Resource res = loader.getResource(getJasperReport(jasper));
-		System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
+		//System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
 		try {
 			java.io.InputStream io = res.getInputStream();
 			String[] columnas= {"cantidadEnUnidad","clave","descripcion","kilosMillar","producto.gramos","precio","importe","instruccionesDecorte","producto.modoDeVenta","clave","producto.modoDeVenta","producto.unidad.unidad","ordenp","precioConIva","importeConIva"};
@@ -97,8 +97,8 @@ public class CFDIPrintServices {
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
 		parametros.put("CUENTA", 		comprobante.getNumCtaPago());
 		parametros.put("METODO_PAGO", 		comprobante.getMetodoDePago());
-		System.out.println("Metodo de pago: "+comprobante.getMetodoDePago());
-		System.out.println("Cuenta de pago: "+comprobante.getNumCtaPago());
+		//System.out.println("Metodo de pago: "+comprobante.getMetodoDePago());
+	//	System.out.println("Cuenta de pago: "+comprobante.getNumCtaPago());
 		//Datos tomado de la aplicacion
 		parametros.put("CARGO_ID", 			venta.getId());
 		parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(venta.getTotalCM()));

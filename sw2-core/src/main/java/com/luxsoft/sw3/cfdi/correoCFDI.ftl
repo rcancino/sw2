@@ -4,7 +4,7 @@
   
   Fecha: 		${fecha?date}
   Atención: 	${cliente}
-  Asunto: 	Comprobante fiscal digital CFD de ${emisor}
+  Asunto: 	Comprobante fiscal digital CFDI de ${emisor}
   	
 
   Para cualquier aclaracion, favor de comunicarse a la sucursal que le facturo.  
@@ -14,4 +14,4 @@
   ${emisor} 
   
   
-  El envío de este correo es un proceso automático de nuestro sistema de CFD, favor de no responder.
+  El envío de este correo es un proceso automático de nuestro sistema de CFDI, favor de no responder.
