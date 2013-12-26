@@ -41,6 +41,7 @@ import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDI;
+import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
 import com.luxsoft.utils.LoggerHelper;
 
 import freemarker.template.Configuration;
@@ -311,6 +312,11 @@ public class CFDI_MailServices {
 		StringWriter out=new StringWriter();
 		temp.process(root, out);			
 		return out.toString();
+	}
+	
+	public String localizarEmail(Cliente c){
+		List<CFDIClienteMails> mails=getHibernateTemplate().find("from CFDIClienteMails c where c.cliente.id=?",c.getId());
+		return mails.isEmpty()?c.getEmai3():mails.get(0).getEmail1();
 	}
 
 	public JavaMailSender getMailSender() {
