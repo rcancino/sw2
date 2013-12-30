@@ -5,6 +5,6 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
 
 public interface INotaDeCredito {
 	
-	public CFDI generar(NotaDeCredito venta);
+	public CFDI generar(NotaDeCredito nota);
 
 }

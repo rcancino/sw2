@@ -6,6 +6,7 @@ import static com.luxsoft.sw3.cfdi.CFDIUtils.registrarDatosDeEmisor;
 import static com.luxsoft.sw3.cfdi.CFDIUtils.registrarReceptor;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.cert.CertificateEncodingException;
@@ -165,7 +166,7 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 		comprobanteFiscal.setOrigen(nota.getId());	
 		comprobanteFiscal.setNumeroDeCertificado(document.getComprobante().getNoCertificado());
 		comprobanteFiscal.setCadenaOriginal(cadena);
-		//CFDIUtils.validarDocumento(document);
+		CFDIUtils.validarDocumento(document);
 		comprobanteFiscal=salvar(document,comprobanteFiscal);
 		return comprobanteFiscal;
 	}
@@ -209,7 +210,6 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 			registrarBitacora(cf);
 			cf.getLog().setCreado(comprobante.getFecha().getTime());
 			
-			
 			XmlOptions options = new XmlOptions();
 			options.setCharacterEncoding("UTF-8");
 	        options.put( XmlOptions.SAVE_INNER );
@@ -217,15 +217,19 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 	        options.put( XmlOptions.SAVE_AGGRESSIVE_NAMESPACES );
 	        options.put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE );
 	        options.put(XmlOptions.SAVE_NAMESPACES_FIRST);
-			Map suggestedPrefix=new HashMap();
-			suggestedPrefix.put("", "");
+			
 			ByteArrayOutputStream os=new ByteArrayOutputStream();
 			document.save(os, options);
 			cf.setXml(os.toByteArray());
+			cf.setXmlFilePath(cf.getSerie()+"-"+cf.getFolio()+".xml");
 			//Salvamos el xml en la base de datos
 			
 			System.out.println(CFDIUtils.validarPersistencia(cf));
 			cf=(CFDI)hibernateTemplate.merge(cf);
+			
+			String path=System.getProperty("cfd.dir.path")+"/cfdi/"+cf.getXmlFilePath();
+			File xmlFile=new File(path);
+			document.save(xmlFile,options);
 			return cf;
 		} catch (Exception e) {
 			throw new ComprobanteFiscalCreationException("",e);
@@ -334,6 +338,9 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 
 	public void setCadenaBuilder(CFDICadenaOriginalBuilder cadenaBuilder) {
 		this.cadenaBuilder = cadenaBuilder;
+	}
+	public void setSellador(CFDISellador sellador) {
+		this.sellador = sellador;
 	}
 
 	public void afterPropertiesSet() throws Exception {

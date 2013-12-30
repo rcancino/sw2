@@ -25,8 +25,8 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 
 
-import com.luxsoft.siipap.compras.dao.ListaDePreciosDao;
 
+import com.luxsoft.siipap.compras.dao.ListaDePreciosDao;
 import com.luxsoft.siipap.cxc.service.CXCManager;
 import com.luxsoft.siipap.cxc.service.ClienteServices;
 import com.luxsoft.siipap.cxc.service.DepositosManager;
@@ -68,12 +68,12 @@ import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIFactura;
 import com.luxsoft.sw3.cfdi.CFDI_MailServices;
 import com.luxsoft.sw3.cfdi.IFactura;
+import com.luxsoft.sw3.cfdi.INotaDeCredito;
 import com.luxsoft.sw3.contabilidad.model.CuentaContable;
 import com.luxsoft.sw3.contabilidad.services.CierreAnualManager;
 import com.luxsoft.sw3.contabilidad.services.CuentasContablesManager;
 import com.luxsoft.sw3.contabilidad.services.PolizasManager;
 import com.luxsoft.sw3.contabilidad.services.SaldoDeCuentasManager;
-
 import com.luxsoft.sw3.cxc.services.CXCMailServices;
 import com.luxsoft.sw3.replica.ReplicaMessageCreator;
 import com.luxsoft.sw3.replica.ReplicaMessageCreator2;
@@ -455,6 +455,9 @@ public  class ServiceLocator2 {
 	}
 	public static IFactura getCFDIFactura(){
 		return (IFactura)instance().getContext().getBean("cfdiFactura");
+	}
+	public static INotaDeCredito getCFDINotaDeCredito(){
+		return (INotaDeCredito)instance().getContext().getBean("cfdiNotaDeCredito");
 	}
 	
 	public static void main(String[] args) {

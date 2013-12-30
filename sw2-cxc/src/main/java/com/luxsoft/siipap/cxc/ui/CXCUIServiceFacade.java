@@ -1,5 +1,6 @@
 package com.luxsoft.siipap.cxc.ui;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,9 @@ import javax.swing.SwingWorker;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.Assert;
 
 import ca.odell.glazedlists.BasicEventList;
@@ -24,6 +28,7 @@ import com.luxsoft.siipap.cxc.model.CargoPorDiferencia;
 import com.luxsoft.siipap.cxc.model.Juridico;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCargoDet;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDescuento;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
@@ -372,7 +377,7 @@ public class CXCUIServiceFacade {
 		if(res!=null){
 			res=(NotaDeCreditoBonificacion)ServiceLocator2.getCXCManager().salvarNota(res);
 			//ImpresionUtils.imprimirNotaBonificacion(res.getId());
-			CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
+			//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
 			return res;
 		}
 		return null;
@@ -405,9 +410,10 @@ public class CXCUIServiceFacade {
 		if(res!=null){
 			res.setOrigen(origen);
 			res=(NotaDeCreditoBonificacion)ServiceLocator2.getCXCManager().salvarNota(res);
-			CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
+			//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
 			//ImpresionUtils.imprimirNotaBonificacion(res.getId());
-			return res;
+			return (NotaDeCreditoBonificacion)buscarNotaDeCreditoInicializada(res.getId());
+			//return res;
 		}
 		return null;
 		
@@ -690,11 +696,36 @@ public class CXCUIServiceFacade {
 		return null;
 	}
 	
-	//public static void 
+	public static NotaDeCredito buscarNotaDeCreditoInicializada(final String id){
+		
+		return (NotaDeCredito)ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback(){
+
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				NotaDeCredito res=(NotaDeCredito)session.get(NotaDeCredito.class, id);
+				res.getCliente().getTelefonosRow();
+				if(res.getConceptos()!=null && !res.getConceptos().isEmpty()){
+					res.getConceptos().iterator().next();
+				}
+				if(!res.getAplicaciones().isEmpty()){
+					res.getAplicaciones().iterator().next();
+				}
+				if(res instanceof NotaDeCreditoDevolucion){
+					NotaDeCreditoDevolucion ndev=(NotaDeCreditoDevolucion)res;
+					ndev.getDevolucion().getPartidas().iterator().next();
+					ndev.getDevolucion().isTotal();
+				}
+				return res;
+			}
+			
+		});
+		
+	} 
 	
 	public static CXCManager getManager(){
 		return ServiceLocator2.getCXCManager();
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		DBUtils.whereWeAre();

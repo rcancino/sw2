@@ -21,6 +21,7 @@ import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.util.Assert;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.TextFilterator;
@@ -34,6 +35,8 @@ import com.luxsoft.siipap.cxc.CXCRoles;
 import com.luxsoft.siipap.cxc.model.Cargo;
 import com.luxsoft.siipap.cxc.model.ChequeDevuelto;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
+import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.cxc.old.ImporteALetra;
@@ -286,9 +289,25 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 				CargoRow2 row=(CargoRow2)o;
 				cargos.add(getManager().getCargo(row.getId()));
 			}
-			CXCUIServiceFacade.generarNotaDeBonificacion(OrigenDeOperacion.CRE,cargos);
-			refreshSelection();	
+			NotaDeCreditoBonificacion target=CXCUIServiceFacade.generarNotaDeBonificacion(OrigenDeOperacion.CRE,cargos);
+			timbrar(target);
+			
 		}		
+	}
+	
+	public void timbrar(NotaDeCredito nota){
+		Assert.notNull(nota,"Parametro nulo. Debe ser una Nota de Credito");
+		try {
+			NotaDeCredito target=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(nota.getId());
+			MessageUtils.showMessage("Mandando timbrar Nota: "+target.getFolio(), "CFDI");
+			MessageUtils.showMessage("Nota de bonificación generada: "+target.getFolio(), "Notas de crédito");
+		} catch (Exception e) {
+			e.printStackTrace();
+			refreshSelection();	
+		}
+		
+		
+		
 	}
 	
 	public void generarNotaDevolucion(){

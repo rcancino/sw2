@@ -77,6 +77,7 @@ import com.luxsoft.siipap.ventas.model.Cobrador;
 import com.luxsoft.siipap.ventas.model.ListaDePreciosCliente;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
+import com.luxsoft.sw3.cfdi.INotaDeCredito;
 
 /**
  * Implementacion de {@link CXCManager}
@@ -94,7 +95,8 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	private ClienteServices clienteServices;
 	private NotaDeCargoDao notaDeCargoDao;
 	
-	private ComprobantesDigitalesManager comprobanteDigitalManager;
+	//private ComprobantesDigitalesManager comprobanteDigitalManager;
+	private INotaDeCredito cfdiNotaDeCredito;
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Cargo getCargo(String id) {
@@ -138,9 +140,11 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Cargo save(Cargo bean) {
 		if(bean instanceof NotaDeCargo){
-			NotaDeCargo notaDeCargo=(NotaDeCargo)getHibernateTemplate().merge(bean);
-			getComprobanteDigitalManager().generarComprobante(notaDeCargo);
-			return notaDeCargo;
+			//NotaDeCargo notaDeCargo=(NotaDeCargo)getHibernateTemplate().merge(bean);
+			//getComprobanteDigitalManager().generarComprobante(notaDeCargo);
+			//cfdiNota.generar(notaDeCargo);
+			//return notaDeCargo;
+			return null;
 		}
 		return (Cargo)getHibernateTemplate().merge(bean);
 	}
@@ -364,7 +368,8 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		nota.setImportado(null);
 		registrarBitacora(nota);
 		NotaDeCredito res= (NotaDeCredito)getHibernateTemplate().merge(nota);
-		getComprobanteDigitalManager().generarComprobante(res);
+		//getComprobanteDigitalManager().generarComprobante(res);
+		cfdiNotaDeCredito.generar(nota);
 		return res;
 	}
 	
@@ -1053,9 +1058,12 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	public void setNotaDeCargoDao(NotaDeCargoDao notaDeCargoDao) {
 		this.notaDeCargoDao = notaDeCargoDao;
 	}
+	public void setCfdiNotaDeCredito(INotaDeCredito cfdiNotaDeCredito) {
+		this.cfdiNotaDeCredito = cfdiNotaDeCredito;
+	}
 	
 	
-
+/*
 	public ComprobantesDigitalesManager getComprobanteDigitalManager() {
 		return comprobanteDigitalManager;
 	}
@@ -1064,7 +1072,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 			ComprobantesDigitalesManager comprobanteDigitalManager) {
 		this.comprobanteDigitalManager = comprobanteDigitalManager;
 	}
-
+*/
 	private void registrarBitacora(NotaDeCredito bean){
 		Date time=new Date();		
 		String user=KernellSecurity.instance().getCurrentUserName();	

@@ -93,6 +93,9 @@
      			<bean class="com.luxsoft.sw3.cfdi.CFDICentralizadosPanel">
      				<property name="title" value="CFDI's"/>
      			</bean>
+     			<bean class="com.luxsoft.sw3.cfdi.CFDINotasCentralizadasPanel">
+     				<property name="title" value="CFDI's (Notas)"/>
+     			</bean>
      			<ref bean="clientesCreditoPanel"/>
      			<ref bean="checkplusPanel"/>
      		</list>

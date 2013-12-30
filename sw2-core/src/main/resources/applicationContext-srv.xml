@@ -294,7 +294,8 @@
     	<property name="clienteServices" ref="clienteServices"/>
     	<property name="notaDeCargoDao" ref="notaDeCargoDao"/>
     	<property name="estadoDeCuentaManager" ref="estadoDeCuentaManager"/>
-    	<property name="comprobanteDigitalManager" ref="cfdManager"/>
+    	<!-- <property name="comprobanteDigitalManager" ref="cfdManager"/> -->
+    	<property name="cfdiNotaDeCredito" ref="cfdiNotaDeCredito"/>
     	<property name="taskExecutor" ref="taskExecutor"/>
     </bean>
     
@@ -530,6 +531,12 @@
     <bean id="cfdiCadenaBuilder" class="com.luxsoft.sw3.cfdi.CFDICadenaOriginalBuilder"/>
     
     <bean id="cfdiFactura" class="com.luxsoft.sw3.cfdi.CFDIFactura">
+    	<property name="cadenaBuilder" ref="cfdiCadenaBuilder"/>
+    	<property name="folioFiscalDao" ref="folioFiscalDao"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="sellador" ref="cfdiSellador"/>
+    </bean>
+    <bean id="cfdiNotaDeCredito" class="com.luxsoft.sw3.cfdi.CFDINotaDeCredito">
     	<property name="cadenaBuilder" ref="cfdiCadenaBuilder"/>
     	<property name="folioFiscalDao" ref="folioFiscalDao"/>
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>

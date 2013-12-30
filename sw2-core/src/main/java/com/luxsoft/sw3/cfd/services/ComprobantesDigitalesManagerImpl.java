@@ -355,6 +355,7 @@ public class ComprobantesDigitalesManagerImpl extends CFDSupportImpl implements 
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	public ComprobanteFiscal generarComprobante(NotaDeCredito nota) {
+		
 		final ComprobanteDocument document=inicializar();
 		Comprobante cfd=document.getComprobante();
 		
@@ -448,7 +449,8 @@ public class ComprobantesDigitalesManagerImpl extends CFDSupportImpl implements 
 			nota.setReplicado(null);
 		}else
 			getHibernateTemplate().update(nota);
-		return cf;
+		throw new RuntimeException("Ya no es valido generar CFDI");
+		//return cf;
 	}
 	
 	public ComprobanteFiscal cargarComprobante(final NotaDeCredito cargo){
@@ -537,7 +539,8 @@ public class ComprobantesDigitalesManagerImpl extends CFDSupportImpl implements 
 		//actualizarOrigen("SX_VENTAS");
 		notaDeCargo.setDocumento(new Long(cf.getFolio()));
 		getHibernateTemplate().update(notaDeCargo);
-		return cf;
+		throw new RuntimeException("Ya no es valido generar CFDI");
+		//return cf;
 		
 	}
 	
