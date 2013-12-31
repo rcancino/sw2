@@ -66,6 +66,7 @@ import com.luxsoft.sw3.cfd.dao.CertificadoDeSelloDigitalDao;
 import com.luxsoft.sw3.cfd.services.CFDMailServices;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIFactura;
+import com.luxsoft.sw3.cfdi.CFDIManager;
 import com.luxsoft.sw3.cfdi.CFDI_MailServices;
 import com.luxsoft.sw3.cfdi.IFactura;
 import com.luxsoft.sw3.cfdi.INotaDeCredito;
@@ -458,6 +459,9 @@ public  class ServiceLocator2 {
 	}
 	public static INotaDeCredito getCFDINotaDeCredito(){
 		return (INotaDeCredito)instance().getContext().getBean("cfdiNotaDeCredito");
+	}
+	public static synchronized CFDIManager getCFDIManager(){
+		return(CFDIManager)instance().getContext().getBean("cfdiManager");
 	}
 	
 	public static void main(String[] args) {

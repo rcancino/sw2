@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import com.edicom.ediwinws.cfdi.client.CfdiClient;
 import com.edicom.ediwinws.service.cfdi.CancelaResponse;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDI;
@@ -39,6 +40,12 @@ public class CFDIManager {
 	public CFDI buscarCFDI(Venta venta){
 		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",venta.getId());
 		Assert.notEmpty(res,"No localizo el CFDI origen: "+venta.getId());
+		return res.get(0);
+	}
+	
+	public CFDI buscarCFDI(NotaDeCredito nota){
+		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",nota.getId());
+		Assert.notEmpty(res,"No localizo el CFDI origen: "+nota.getId());
 		return res.get(0);
 	}
 	
@@ -123,7 +130,9 @@ public class CFDIManager {
 		this.cfdiTimbrador = cfdiTimbrador;
 	}
 	
-	
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
+	}
 	
 
 }

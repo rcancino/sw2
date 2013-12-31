@@ -2,10 +2,13 @@ package com.luxsoft.sw3.cfdi;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante;
+import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Conceptos.Concepto;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Emisor;
 import mx.gob.sat.cfd.x3.TUbicacion;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -16,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
@@ -23,9 +27,13 @@ import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventTableModel;
 
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
+import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
+import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.util.MonedasUtils;
+import com.luxsoft.siipap.ventas.model.Devolucion;
+import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfd.ImporteALetra;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.cfdi.model.TimbreFiscal;
@@ -46,20 +54,32 @@ public class CFDINotaPrintServices {
 	 * @param venta
 	 */
 	public static JasperPrint impripirComprobante(NotaDeCredito nota,CFDI cfdi){
+		
+		Assert.notNull(nota,"Nota nula");
+		Assert.notNull(cfdi,"CFDI nulo");
+		
+		String reporte="NotaDevDigitalCFDI.jasper";
+		if(nota instanceof NotaDeCreditoBonificacion){
+			reporte="NotaBonDigitalCFDI.jasper";
+		}
 		//final EventList<VentaDet> conceptos=GlazedLists.eventList(venta.getPartidas());
-		final EventList conceptos=null;
+		List<Concepto> conceptosArray=Arrays.asList(cfdi.getComprobante().getConceptos().getConceptoArray());
+		final EventList conceptos=GlazedLists.eventList(conceptosArray);
 		Map parametros=resolverParametros(nota,cfdi);
 		
 		JasperPrint jasperPrint = null;
 		DefaultResourceLoader loader = new DefaultResourceLoader();
-		String jasper=cfdi.getTimbreFiscal().getUUID()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
+		String jasper="CXC/"+reporte;
 		Resource res = loader.getResource(getJasperReport(jasper));
-		//System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
+		System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
 		try {
 			java.io.InputStream io = res.getInputStream();
-			String[] columnas= {"cantidadEnUnidad","clave","descripcion","kilosMillar","producto.gramos","precio","importe","instruccionesDecorte","producto.modoDeVenta","clave","producto.modoDeVenta","producto.unidad.unidad","ordenp","precioConIva","importeConIva"};
-			String[] etiquetas={"CANTIDAD","CLAVE","DESCRIPCION","KXM","GRAMOS","PRECIO","IMPORTE","CORTES_INSTRUCCION","MDV","GRUPO","MDV","UNIDAD","ORDENP","PRECIO_IVA","IMPORTE_IVA"};
+			String[] columnas= {"cantidad","unidad","descripcion","valorUnitario","importe","descripcion"};
+			String[] etiquetas={"CANTIDAD","UNIDAD","DESCRIPCION","PRECIO","IMPORTE","GRUPO"};
 			final TableFormat tf=GlazedLists.tableFormat(columnas, etiquetas);
+			//String[] columnas= {"cantidadEnUnidad","clave","descripcion","kilosMillar","producto.gramos","precio","importe","instruccionesDecorte","producto.modoDeVenta","clave","producto.modoDeVenta","producto.unidad.unidad","ordenp","precioConIva","importeConIva"};
+			//String[] etiquetas={"CANTIDAD","CLAVE","DESCRIPCION","KXM","GRAMOS","PRECIO","IMPORTE","CORTES_INSTRUCCION","MDV","GRUPO","MDV","UNIDAD","ORDENP","PRECIO_IVA","IMPORTE_IVA"};
+			//final TableFormat tf=GlazedLists.tableFormat(columnas, etiquetas);
 			final EventTableModel tableModel=new EventTableModel(conceptos,tf);
 			final JRTableModelDataSource tmDataSource=new JRTableModelDataSource(tableModel);
 			jasperPrint = JasperFillManager.fillReport(io, parametros,tmDataSource);
@@ -92,67 +112,57 @@ public class CFDINotaPrintServices {
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
 		parametros.put("CUENTA", 		comprobante.getNumCtaPago());
 		parametros.put("METODO_PAGO", 		comprobante.getMetodoDePago());
-		/*
-		parametros.put("CARGO_ID", 			venta.getId());
-		parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(venta.getTotalCM()));
-		parametros.put("SUCURSAL", 			venta.getSucursal().getId()); 		
-		parametros.put("CLAVCTE", 			venta.getClave()); 		
-		parametros.put("SUC", 				venta.getSucursal().getClave()); 
-		parametros.put("TEL", 				venta.getCliente().getTelefonosRow());		
-		parametros.put("D_REV", 			venta.getDiaRevision());
-		parametros.put("D_PAG", 			venta.getDiaDelPago());
-		parametros.put("COB", 				venta.getCobrador()!=null?venta.getCobrador().getId():null);
-		parametros.put("VEND", 				venta.getVendedor()!=null?venta.getVendedor().getId():null);
-		parametros.put("PLAZO", 			venta.getPlazo());
-		parametros.put("FREV", 				venta.isRevision()?"R":"");
-		parametros.put("SOCIO", 			venta.getSocio()!=null?venta.getSocio().getNombre():null); 
-		parametros.put("TIPO", 				venta.getOrigen().equals(OrigenDeOperacion.CRE)?"CREDITO":"CONTADO");
-		parametros.put("DOCTO", 			venta.getDocumento());		
-		parametros.put("TAR_COM_IMP", 		venta.getCargos());
-		parametros.put("COMENTARIO", 		venta.getComentario()); 
-		parametros.put("PCE", 				venta.isContraEntrega()?"COD":"PAGADO CON"); 
-		parametros.put("ENVIO", 		venta.getPedidoFormaDeEntrega().equals("LOCAL")?"PASAN":"ENVIO");
-		parametros.put("PEDIDO", 		venta.getPedidoFolio());
-		parametros.put("IP", 			venta.getPedidoCreatedIp());
-		parametros.put("ELAB_VTA",		venta.getPedidoCreateUser());
-		parametros.put("PUESTO", 		venta.getPuesto()?"**PUESTO**":"");
-		parametros.put("DIR_ENTREGA", 	venta.getMisma()?"***MISMA***":venta.getInstruccionDeEntrega());
-		if(venta.getSocio()!=null && venta.getMisma()){
-			parametros.put("DIR_ENTREGA", 	venta.getSocio().getDireccion());
-		}
-		parametros.put("KILOS", 		venta.getKilosCalculados());
-		parametros.put("MONEDA", 		venta.getMoneda().getCurrencyCode());
-		parametros.put("IMP_DESC", 		venta.getSubTotal2());
-		parametros.put("CORTES", 		venta.getImporteCortes());
-		parametros.put("FLETE", 		venta.getFlete()); // venta
-		parametros.put("CARGOS", 		venta.getCargos()); // venta
-		parametros.put("FPAGO", 		venta.getFormaDePago().name());
-		parametros.put("ELAB_FAC", 		venta.getLog().getUpdateUser());
-		parametros.put("SURTIDOR", 		venta.getSurtidor()); 
-		parametros.put("IMPORTE_BRUTO", venta.getImporteBruto());
-		parametros.put("SUBTOTAL_2", 	venta.getImporteBruto().subtract(venta.getImporteDescuento())); 
-		parametros.put("DESCUENTO", 	BigDecimal.valueOf(venta.getDescuentoGlobal())); 
-		parametros.put("DESCUENTOS", 	venta.getImporteDescuento());
-		parametros.put("PINT_IVA",		MonedasUtils.IVA.multiply(BigDecimal.valueOf(100)));
-		parametros.put("TIPOX", 		venta.getOrigen().equals(OrigenDeOperacion.CRE)?"CREDITO":"CONTADO");
-		//parametros.put("DESTINATARIO", "CLIENTE");
 		
-		if(venta.getClave().equals("1")){			
-			CantidadMonetaria factor=CantidadMonetaria.pesos(1).add(CantidadMonetaria.pesos(MonedasUtils.IVA));
-			parametros.put("IMPORTE_BRUTO", factor.multiply(venta.getImporteBruto()).amount());
-			parametros.put("DESCUENTOS", 	factor.multiply(venta.getImporteDescuento()).amount());
-			parametros.put("SUBTOTAL_2", 	factor.multiply(venta.getImporteBruto().subtract(venta.getImporteDescuento())).amount());
-			parametros.put("IMP_DESC", 		factor.multiply(venta.getSubTotal2()).amount());
-			parametros.put("CORTES", 		factor.multiply(venta.getImporteCortes()).amount());
-			parametros.put("FLETE", 		factor.multiply(venta.getFlete()).amount()); 
-			parametros.put("CARGOS", 		factor.multiply(venta.getCargos()).amount());
-			
-			parametros.put("IMPORTE", 			comprobante.getTotal()); 
-			
-			//parametros.put("ANTICIPO", MonedasUtils.calcularImporteSinIva(venta.getAnticipoAplicado()));
+		//Datos tomado de la aplicacion
 		
-		}
-		*/
+				parametros.put("CARGO_ID", 			nota.getId());
+				parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(nota.getTotalCM()));
+				parametros.put("SUCURSAL", 			nota.getSucursal().getId()); 		
+				parametros.put("CLAVCTE", 			nota.getClave()); 		
+				parametros.put("SUC", 				nota.getSucursal().getClave()); 
+				
+				parametros.put("TEL", 				nota.getCliente().getTelefonosRow());
+				if(nota.getCliente().isDeCredito()){
+					parametros.put("D_REV", 			nota.getCliente().getCredito().getDiarevision());
+					parametros.put("D_PAG", 			nota.getCliente().getCredito().getDiacobro());
+					parametros.put("COB", 				nota.getCliente().getCobrador()!=null?nota.getCliente().getCobrador().getId():null);
+					
+					parametros.put("PLAZO", 			nota.getCliente().getPlazo());
+					parametros.put("FREV", 				nota.getCliente().getCredito().isRevision()?"R":"");
+				}
+				String prefix="BON ";
+				if(nota instanceof NotaDeCreditoDevolucion)
+					prefix="DEV ";
+				parametros.put("TIPO", 				prefix+nota.getOrigen().toString());
+				parametros.put("COMENTARIO_NCRE", 		nota.getComentario());
+				parametros.put("ELAB_FAC", 		nota.getLog().getCreateUser());
+				parametros.put("PINT_IVA",		MonedasUtils.IVA.multiply(BigDecimal.valueOf(100)));
+				
+				if(nota instanceof NotaDeCreditoDevolucion){
+					NotaDeCreditoDevolucion ndevo=(NotaDeCreditoDevolucion)nota;
+					Devolucion devo=ndevo.getDevolucion();
+					Venta venta=devo.getVenta();
+					parametros.put("DESCUENTO", 	BigDecimal.valueOf(venta.getDescuentoGlobal()));
+					
+					if(devo.isTotal()){				
+						parametros.put("COMENTARIO_NCRE", 		"Devolución total de la factura: "+venta.getDocumento()+ " Suc: "+venta.getSucursal().getNombre());				
+						parametros.put("CORTES", 		venta.getImporteCortes());	
+						parametros.put("CARGOS", 		venta.getCargos());
+						parametros.put("FLETE", 		venta.getFlete());
+						parametros.put("IMPORTE_BRUTO", venta.getImporteBruto());
+						parametros.put("SUBTOTAL_2", 	venta.getImporteBruto().subtract(venta.getImporteDescuento()));
+						//parametros.put("IMP_DESC", 		venta.getSubTotal2());
+						parametros.put("DESCUENTOS", 	venta.getImporteDescuento());
+						
+					}else{
+						parametros.put("COMENTARIO_NCRE","Devolución parcial de la factura: "+venta.getDocumento()+ " Suc: "+venta.getSucursal().getNombre());				
+						parametros.put("IMPORTE_BRUTO", devo.getImporteBruto());
+						parametros.put("SUBTOTAL_2", 	devo.getImporteBruto().subtract(devo.getImporteDescuento()));
+						//parametros.put("IMP_DESC", 		devo.getImporteDescuento());
+						parametros.put("DESCUENTOS", 	devo.getImporteDescuento());
+					}
+				}
+		
 		Emisor emisor=comprobante.getEmisor();
 		parametros.put("EMISOR_NOMBRE", 	emisor.getNombre());
 		parametros.put("EMISOR_RFC", 		emisor.getRfc());

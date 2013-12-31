@@ -132,9 +132,9 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 			msg.setSubject("Comprobantes fiscales digitales");
 			msg.setText(getHtml(),true);
 			//msg.addInline("cid:papelLogo", resource);
-			//ServiceLocator2.getCXCMailServices().mandarCorreo(msg);
-			System.out.println("Correo enviado..");
-			ServiceLocator2.getCFDMailServices().getMailSender().send(msg.getMimeMessage());
+			
+			ServiceLocator2.getCFDIMailServices().getMailSender().send(msg.getMimeMessage());
+			System.out.println("Correo enviado...");
 			for(CFDI cfdi:cfds){
 				cfdi.setComentario("Enviado: "+DateUtil.getDateTime("dd/MM/yyyy hh:mm:ss",new Date()));
 				ServiceLocator2.getHibernateTemplate().merge(cfdi);

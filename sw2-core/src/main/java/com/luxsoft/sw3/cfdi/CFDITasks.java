@@ -76,8 +76,8 @@ public class CFDITasks {
 	}
 	
 	public void inicializar() throws Exception{
-		subirCertificado("sat/00001000000202466134.cer","00001000000202466134");
-		subirLlavePrivada("sat/papelsabajio2012.key");
+		subirCertificado("sat/00001000000202171318.cer","00001000000202171318");
+		subirLlavePrivada("sat/PAPEL_CFD.key");
 		//subirCertificadoPfx("c://queretaro//");
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setTipoDeComprobante(Empresa.TipoComprobante.CFDI);

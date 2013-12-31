@@ -1,6 +1,7 @@
 package com.luxsoft.siipap.cxc.ui;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.swing.SwingWorker;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -21,6 +23,7 @@ import org.springframework.util.Assert;
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
 
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.siipap.cxc.model.Abono;
 import com.luxsoft.siipap.cxc.model.AutorizacionesCxC;
 import com.luxsoft.siipap.cxc.model.Cargo;
@@ -39,6 +42,7 @@ import com.luxsoft.siipap.cxc.model.PagoConEfectivo;
 import com.luxsoft.siipap.cxc.model.PagoConTarjeta;
 import com.luxsoft.siipap.cxc.model.PagoDeDiferencias;
 import com.luxsoft.siipap.cxc.model.PagoEnEspecie;
+import com.luxsoft.siipap.cxc.old.ImpresionUtils;
 import com.luxsoft.siipap.cxc.rules.CXCUtils;
 import com.luxsoft.siipap.cxc.rules.NotaDescuentoRules;
 import com.luxsoft.siipap.cxc.service.CXCManager;
@@ -72,6 +76,7 @@ import com.luxsoft.siipap.ventas.model.DescuentoEspecial;
 import com.luxsoft.siipap.ventas.model.Devolucion;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 
 
 /**
@@ -340,7 +345,7 @@ public class CXCUIServiceFacade {
 	 */
 	public static List<NotaDeCreditoDevolucion> generarNotasDeDevolucion(){
 		List<Devolucion> devs=SelectorDeRMD2.seleccionar(OrigenDeOperacion.CRE);
-		//List<Devolucion> devs=SelectorDeRMD2.seleccionar(OrigenDeOperacion.CRE);
+		
 		if(!devs.isEmpty()){
 			NotaDevolucionFormModel fmodel=new NotaDevolucionFormModel(devs.get(0));
 			fmodel.asignarFolio();
@@ -350,8 +355,8 @@ public class CXCUIServiceFacade {
 				List<NotaDeCreditoDevolucion> notas=new ArrayList<NotaDeCreditoDevolucion>();
 				for(NotaDeCreditoDevolucion n:fmodel.procesar()){
 					NotaDeCreditoDevolucion nres=(NotaDeCreditoDevolucion)ServiceLocator2.getCXCManager().salvarNota(n);
-					//ImpresionUtils.imprimirNotaDevolucion(nres.getId());
-					CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nres.getId());
+					timbrar(nres);
+					//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nres.getId());
 					notas.add(nres);
 				}
 				return notas;
@@ -376,8 +381,9 @@ public class CXCUIServiceFacade {
 		NotaDeCreditoBonificacion res=NotaDeCreditoBonificacionForm2.showForm(model, origen);
 		if(res!=null){
 			res=(NotaDeCreditoBonificacion)ServiceLocator2.getCXCManager().salvarNota(res);
-			//ImpresionUtils.imprimirNotaBonificacion(res.getId());
-			//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
+			// Timbrando
+			timbrar(res);
+			
 			return res;
 		}
 		return null;
@@ -410,13 +416,33 @@ public class CXCUIServiceFacade {
 		if(res!=null){
 			res.setOrigen(origen);
 			res=(NotaDeCreditoBonificacion)ServiceLocator2.getCXCManager().salvarNota(res);
-			//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
-			//ImpresionUtils.imprimirNotaBonificacion(res.getId());
-			return (NotaDeCreditoBonificacion)buscarNotaDeCreditoInicializada(res.getId());
-			//return res;
+			timbrar(res);
 		}
 		return null;
 		
+	}
+	
+	public static void timbrar(NotaDeCredito nota){
+		nota=buscarNotaDeCreditoInicializada(nota.getId());
+		// Timbrando
+		CFDI cfdi=ServiceLocator2.getCFDIManager().buscarCFDI(nota);
+								
+		try {
+			cfdi=ServiceLocator2.getCFDIManager().timbrar(cfdi);
+			String message=MessageFormat.format("Nota generada: {0} a favor de:{1} UUID:{2}"
+					,cfdi.getFolio()
+					,nota.getCliente().getNombreRazon()
+					,cfdi.getUUID());
+			MessageUtils.showMessage(message, "CFDI");
+			CFDIPrintUI.impripirComprobante(nota, cfdi,"", new Date(), true);
+			//ImpresionUtils.imprimirNotaBonificacion(res.getId());
+			//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(res.getId());
+		} catch (Exception e) {
+			String msg=MessageFormat.format("Error timbrando o imprimiendo CFDI: {0} Causa:{1}"
+					,cfdi.getFolio()
+					,ExceptionUtils.getRootCauseMessage(e));
+			MessageUtils.showMessage(msg, "Timbrando CFDI");
+		}
 	}
 	
 	/**

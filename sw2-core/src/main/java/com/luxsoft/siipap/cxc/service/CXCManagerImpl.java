@@ -369,7 +369,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		registrarBitacora(nota);
 		NotaDeCredito res= (NotaDeCredito)getHibernateTemplate().merge(nota);
 		//getComprobanteDigitalManager().generarComprobante(res);
-		cfdiNotaDeCredito.generar(nota);
+		cfdiNotaDeCredito.generar(res);
 		return res;
 	}
 	

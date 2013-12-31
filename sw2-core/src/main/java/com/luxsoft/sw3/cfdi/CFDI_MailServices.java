@@ -39,6 +39,7 @@ import com.luxsoft.siipap.cxc.model.Cargo;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.service.ServiceLocator2;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
@@ -163,10 +164,19 @@ public class CFDI_MailServices {
 		List<Cliente> data=getHibernateTemplate().find("from Cliente c where c.rfc=?",cfd.getRfc());
 		Assert.notEmpty(data,"No existe el cliente del CFD: "+cfdId);
 		Cliente c=data.get(0);
-		if(StringUtils.isNotBlank(c.getEmai3())){
+		
+		List<String> mailCte=getHibernateTemplate().find("select email1 from CFDIClienteMails c where c.cliente.id=?",c.getId());
+		Assert.notEmpty(mailCte,"No existe el mail del Cte: "+c.getNombre());
+		 String mailEnv=mailCte.get(0);
+		
+		System.out.println("Enviando correo a:-----------------------  "+mailEnv + " CFDI   "  + cfd.getFolio() +" Cliente: " +cfd.getReceptor()+" Origen_id: "+cfd.getOrigen());
+		//if(StringUtils.isNotBlank(c.getEmai3())){
+		if(mailEnv!=null){	
 			if(enviar){
 				//madarPorCorreo(cfd,c.getEmai3(),"cfd_auxiliar@papelsa.com.mx");
-				madarPorCorreo(cfd,"cpradoglez@gmail.com","cfd_auxiliar@papelsa.com.mx");
+				//madarPorCorreo(cfd,"cpradoglez@gmail.com","cfd_auxiliar@papelsa.com.mx");
+				
+				madarPorCorreo(cfd,mailEnv,"cfd_auxiliar@papelsa.com.mx");
 			}else{
 				System.out.println("El Documento esta cancelado  "+ cfd.getFolio() +" Cliente: " +cfd.getReceptor()+" Origen_id: "+cfd.getOrigen());
 			}
@@ -339,13 +349,13 @@ public class CFDI_MailServices {
 	
 	public static void main(String[] args) throws Exception{
 		final CFDI_MailServices service=ServiceLocator2.getCFDIMailServices();
-		String id="8a8a8199-4301c863-0143-01e30dc0-000b";
-		service.mandarPorCorreo(id);
+		//String id="8a8a8199-4301c863-0143-01e30dc0-000b";
+		//service.mandarPorCorreo(id);
 		//service.madarPorCorreo(DateUtil.toDate("03/07/2012"));
 		//service.madarPorCorreo("20/08/2012","20/08/2012");
-		//service.madarPorCorreoPorOrigen(DateUtil.toDate("28/09/2013"), "CRE");
-		//service.madarPorCorreoPorOrigen(DateUtil.toDate("28/09/2013"), "CAM");
-		//service.madarPorCorreoPorOrigen(DateUtil.toDate("10/12/2013"), "MOS");		
+		//service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "CRE");
+		//service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "CAM");
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "MOS");		
 	}
 
 }

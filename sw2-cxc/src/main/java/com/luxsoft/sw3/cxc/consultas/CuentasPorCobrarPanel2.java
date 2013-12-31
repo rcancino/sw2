@@ -281,34 +281,19 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 	}
 	
 	public void generarBonificacion(){
-		if(getSelected().isEmpty())
+		if(getSelected().isEmpty()){
 			CXCUIServiceFacade.generarNotaDeBonificacion(OrigenDeOperacion.CRE);
+		}
 		else{
 			List<Cargo> cargos=new ArrayList<Cargo>();
 			for(Object o:getSelected()){
 				CargoRow2 row=(CargoRow2)o;
 				cargos.add(getManager().getCargo(row.getId()));
 			}
-			NotaDeCreditoBonificacion target=CXCUIServiceFacade.generarNotaDeBonificacion(OrigenDeOperacion.CRE,cargos);
-			timbrar(target);
-			
+			CXCUIServiceFacade.generarNotaDeBonificacion(OrigenDeOperacion.CRE,cargos);
 		}		
 	}
 	
-	public void timbrar(NotaDeCredito nota){
-		Assert.notNull(nota,"Parametro nulo. Debe ser una Nota de Credito");
-		try {
-			NotaDeCredito target=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(nota.getId());
-			MessageUtils.showMessage("Mandando timbrar Nota: "+target.getFolio(), "CFDI");
-			MessageUtils.showMessage("Nota de bonificación generada: "+target.getFolio(), "Notas de crédito");
-		} catch (Exception e) {
-			e.printStackTrace();
-			refreshSelection();	
-		}
-		
-		
-		
-	}
 	
 	public void generarNotaDevolucion(){
 		CXCUIServiceFacade.generarNotasDeDevolucion();
@@ -577,8 +562,9 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 				//nota.setFolio(Integer.valueOf(cf.getFolio()));
 				//ServiceLocator2.getHibernateTemplate().merge(nota);
 				//ServiceLocator2.getCXCManager().salvarNota(nota);
-				CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
+				//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
 				//ImpresionUtils.imprimirNotaDevolucion(nres.getId());
+				CXCUIServiceFacade.timbrar(nota);
 			}
 		}		
 	}

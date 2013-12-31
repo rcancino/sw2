@@ -46,7 +46,7 @@ public class FacturacionDeAnticiposController {
 		Assert.isTrue(!pedido.isFacturado(),"Este pedido ya ha sido facturado");
 		Assert.isTrue(!pedido.isDeCredito(),"El pedido debe ser de contado");
 		User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
-		if(Services.getInstance().getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI)
+		if(!Services.getInstance().getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI)
 				&& (!pedido.getCliente().getClave().equals("U050008"))){
 			MessageUtils.showMessage("Solo se pueden generar comprobantes tipo CFDI", "Comprobantes fiscales");
 			return;
@@ -115,7 +115,7 @@ public class FacturacionDeAnticiposController {
 			facturas=getManager().facturar(facturas,anticipo,MonedasUtils.calcularTotal(partidaDeAnticipo.getPrecio()));
 			if(facturas!=null){
 				for(Venta fac:facturas){					
-					generarCompbobanteEImprimir(fac);
+					//generarCompbobanteEImprimir(fac);
 					fac=getManager().buscarVentaInicializada(fac.getId());
 					MessageUtils.showMessage("Factura generada: "+fac.getDocumento(), "Facturación");
 				}
@@ -123,13 +123,13 @@ public class FacturacionDeAnticiposController {
 		}
 		
 	}
-	
+	/*
 	public void generarCompbobanteEImprimir(Venta venta){
 		venta=getManager().buscarVentaInicializada(venta.getId());
 		ComprobanteFiscal cf=Services.getInstance().getComprobantesDigitalManager().generarComprobante(venta);
-		CFDPrintServices.imprimirFacturaEnMostrador(venta, cf);
+		//CFDPrintServices.imprimirFacturaEnMostrador(venta, cf);
 		//ReportUtils2.imprimirFactura(fac);
-	}
+	}*/
 	
 		
 	

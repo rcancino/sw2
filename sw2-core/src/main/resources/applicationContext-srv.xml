@@ -543,6 +543,16 @@
     	<property name="sellador" ref="cfdiSellador"/>
     </bean>
     
+    <bean id="cfdiTimbrador" class="com.luxsoft.sw3.cfdi.CFDITimbrador">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
+    <bean id="cfdiManager" class="com.luxsoft.sw3.cfdi.CFDIManager">
+    	<property name="iFactura" ref="cfdiFactura"/>
+    	<property name="cfdiTimbrador" ref="cfdiTimbrador"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    </bean>
+    
     <bean id="cfdi_MailServices" class="com.luxsoft.sw3.cfdi.CFDI_MailServices">
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
     	<property name="mailSender" ref="mailSender"/>

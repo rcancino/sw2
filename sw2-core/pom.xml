@@ -297,6 +297,7 @@
 					<excludes>
 						<exclude>**/swx-jdbc.properties</exclude>
 						<exclude>**/log4*.*</exclude>
+						<exclude>**/empresa*.jpg</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

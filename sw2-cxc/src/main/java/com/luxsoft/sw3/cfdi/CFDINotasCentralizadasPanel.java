@@ -76,8 +76,19 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 	@Override
 	protected List<Action> createProccessActions(){
 		List<Action> res=super.createProccessActions();
+		res.add(addAction(null, "timbrar", "Timbrar"));
 		res.add(addAction(null, "mandarPorCorreoElectronico", "Mandar por Correo"));
 		return res;
+	}
+	
+	public void timbrar(){
+		if(!getSelected().isEmpty()){
+			CFDI selected=(CFDI)getSelectedObject();
+			if(selected.getTipo().startsWith("NOTA_CREDITO")){
+				NotaDeCredito nota=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(selected.getOrigen());
+				CXCUIServiceFacade.timbrar(nota);
+			}
+		}
 	}
 
 	@Override
