@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import com.edicom.ediwinws.cfdi.client.CfdiClient;
 import com.edicom.ediwinws.service.cfdi.CancelaResponse;
+import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.ventas.model.Venta;
@@ -31,6 +32,9 @@ public class CFDIManager {
 	private IFactura iFactura;
 	
 	@Autowired
+	private INotaDeCargo iNotaDeCargo;
+	
+	@Autowired
 	private CFDITimbrador cfdiTimbrador;
 	
 	public CFDI getCFDI(String id){
@@ -43,7 +47,14 @@ public class CFDIManager {
 		return res.get(0);
 	}
 	
+	
 	public CFDI buscarCFDI(NotaDeCredito nota){
+		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",nota.getId());
+		Assert.notEmpty(res,"No localizo el CFDI origen: "+nota.getId());
+		return res.get(0);
+	}
+	
+	public CFDI buscarCFDI(NotaDeCargo nota){
 		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",nota.getId());
 		Assert.notEmpty(res,"No localizo el CFDI origen: "+nota.getId());
 		return res.get(0);
@@ -51,6 +62,11 @@ public class CFDIManager {
 	
 	public CFDI buscarPorUUID(String uuid){
 		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.UUID=?",uuid);
+		return res.isEmpty()?null:res.get(0);
+	}
+	
+	public CFDI buscarPorOrigen(String origenId){
+		List<CFDI> res=hibernateTemplate.find("from CFDI c where c.origen=?",origenId);
 		return res.isEmpty()?null:res.get(0);
 	}
 	
@@ -133,6 +149,8 @@ public class CFDIManager {
 	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
 		this.hibernateTemplate = hibernateTemplate;
 	}
-	
+	public void setiNotaDeCargo(INotaDeCargo iNotaDeCargo) {
+		this.iNotaDeCargo = iNotaDeCargo;
+	}
 
 }

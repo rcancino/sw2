@@ -21,7 +21,6 @@ import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.util.Assert;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.TextFilterator;
@@ -31,12 +30,9 @@ import ca.odell.glazedlists.event.ListEventListener;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.luxsoft.siipap.cxc.CXCActions;
-import com.luxsoft.siipap.cxc.CXCRoles;
 import com.luxsoft.siipap.cxc.model.Cargo;
 import com.luxsoft.siipap.cxc.model.ChequeDevuelto;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
-import com.luxsoft.siipap.cxc.model.NotaDeCredito;
-import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.cxc.old.ImporteALetra;
@@ -62,7 +58,8 @@ import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.util.SQLUtils;
 import com.luxsoft.siipap.ventas.model.Devolucion;
 import com.luxsoft.siipap.ventas.model.Venta;
-import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
+import com.luxsoft.sw3.cfdi.CFDINotaDeCargoPrintServices;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.cxc.forms.LocalizadorDeRMDForm;
 import com.luxsoft.sw3.cxc.utils.CXCUtils2;
 
@@ -77,7 +74,7 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 	
 	private final DateFormat df=new SimpleDateFormat("dd/MM/yyyy");
 	
-	//private final CuentasPorCobrarModel model;
+	
 	
 	
 	public CuentasPorCobrarPanel2() {
@@ -383,12 +380,18 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 	}
 	
 	public void imprimirNotaDeCargo(){
-		Cargo c=(Cargo)getSelectedCargo();
+		NotaDeCargo c=(NotaDeCargo)getSelectedCargo();
 		if(c!=null){
 			int index=source.indexOf(getSelectedObject());
 			if(index!=-1){
-				ImpresionUtils.imprimirNotaDeCargo(c.getId());
-				c=ServiceLocator2.getCXCManager().getCargo(c.getId());
+				CFDI cfdi=ServiceLocator2.getCFDIManager().buscarPorOrigen(c.getId());
+				if(cfdi!=null){
+					CFDINotaDeCargoPrintServices.impripirComprobante(c, cfdi);
+				}else{
+					ImpresionUtils.imprimirNotaDeCargo(c.getId());
+				}
+				
+				c=(NotaDeCargo)ServiceLocator2.getCXCManager().getCargo(c.getId());
 				source.set(index, c);
 				selectionModel.clearSelection();
 				selectionModel.setSelectionInterval(index, index);
@@ -557,29 +560,8 @@ public class CuentasPorCobrarPanel2 extends FilteredBrowserPanel<CargoRow2> {
 				nota=(NotaDeCreditoDevolucion)ServiceLocator2.getCXCManager().salvarNota(nota);
 				MessageUtils.showMessage("Nota de credito por devolución generada folio:"+nota.getFolio()+"\ngenerando Comprobante fiscal digital...."
 						, "Generación de Notas");
-				//ComprobanteFiscal cf=ServiceLocator2.getCFDManager().generarComprobante(nota);
-				//MessageUtils.showMessage("Comprobante generado: "+cf.getXmlPath()+ " Folio CFD: "+cf.getFolio(), "Generación de comprobantes");
-				//nota.setFolio(Integer.valueOf(cf.getFolio()));
-				//ServiceLocator2.getHibernateTemplate().merge(nota);
-				//ServiceLocator2.getCXCManager().salvarNota(nota);
-				//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
-				//ImpresionUtils.imprimirNotaDevolucion(nres.getId());
 				CXCUIServiceFacade.timbrar(nota);
 			}
 		}		
-	}
-	
-	
-	
-	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-
-			public void run() {
-				com.luxsoft.siipap.swing.utils.SWExtUIManager.setup();
-				
-				System.exit(0);
-			}
-
-		});
 	}
 }

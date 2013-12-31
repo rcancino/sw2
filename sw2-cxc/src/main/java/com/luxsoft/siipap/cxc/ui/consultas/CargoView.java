@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +41,13 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.panel.HeaderPanel;
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.luxor.utils.Bean;
 import com.luxsoft.siipap.cxc.model.Aplicacion;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCargoDet;
 import com.luxsoft.siipap.cxc.old.ImporteALetra;
+import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.binding.Binder;
 import com.luxsoft.siipap.swing.controls.SXAbstractDialog;
@@ -57,6 +60,7 @@ import com.luxsoft.siipap.util.DBUtils;
 //import com.luxsoft.siipap.ventas.model.VentaDet;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 
 /**
  * Forma que presenta informacion de la factura solo para lectura
@@ -286,16 +290,24 @@ public class CargoView extends SXAbstractDialog{
 	
 	
 	public void print(){
-		ComprobanteFiscal cf=ServiceLocator2.getCFDManager().cargarComprobante(getCargo());
-		if(cf==null){
-			final Map parameters=new HashMap();
-			String total=ImporteALetra.aLetra(getCargo().getTotalCM());
-			parameters.put("CARGO_ID", String.valueOf(getCargo().getId()));
-			parameters.put("IMP_CON_LETRA", total);
-			ReportUtils.viewReport(ReportUtils.toReportesPath("cxc/NotaDeCargoCopia.jasper"), parameters);
+		CFDI cfdi=ServiceLocator2.getCFDIManager().buscarPorOrigen(getCargo().getId());
+		if(cfdi!=null){
+			NotaDeCargo nota=CXCUIServiceFacade.buscarNotaDeCargoInicializada(getCargo().getId());
+			CFDIPrintUI.impripirComprobante(nota, cfdi, "", new Date(), true);
 		}else{
-			CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(getCargo().getId());
-		}		
+			ComprobanteFiscal cf=ServiceLocator2.getCFDManager().cargarComprobante(getCargo());
+			
+			if(cf==null){
+				final Map parameters=new HashMap();
+				String total=ImporteALetra.aLetra(getCargo().getTotalCM());
+				parameters.put("CARGO_ID", String.valueOf(getCargo().getId()));
+				parameters.put("IMP_CON_LETRA", total);
+				ReportUtils.viewReport(ReportUtils.toReportesPath("cxc/NotaDeCargoCopia.jasper"), parameters);
+			}else{
+				CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(getCargo().getId());
+			}
+		}
+				
 		doClose();
 	}
 	

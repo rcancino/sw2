@@ -7,6 +7,7 @@ import javax.swing.Action;
 import javax.swing.JPopupMenu;
 
 import com.luxsoft.cfdi.CFDIPrintUI;
+import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.service.ServiceLocator2;
@@ -94,11 +95,16 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 	@Override
 	protected void doSelect(Object bean) {
 		CFDI cfdi=(CFDI)bean;
-		if(cfdi.getTipo().startsWith("NOTA")){
+		if(cfdi.getTipo().startsWith("NOTA_CREDITO")){
 			//FacturaForm.show(cfdi.getOrigen());
 			NotaDeCredito nota=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(cfdi.getOrigen());
 			Date time=ServiceLocator2.obtenerFechaDelSistema();
 			CFDIPrintUI.impripirComprobante(nota, cfdi, " ", time,true);
+		}
+		if(cfdi.getTipo().equals("NOTA_CARGO")){
+			NotaDeCargo nota=CXCUIServiceFacade.buscarNotaDeCargoInicializada(cfdi.getOrigen());
+			Date time=ServiceLocator2.obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(nota, cfdi, "", time, true);
 		}
 		
 	}

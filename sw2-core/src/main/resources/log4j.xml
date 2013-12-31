@@ -34,19 +34,19 @@
     </logger>
    
     <logger name="com.luxsoft.siipap">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
     
     <logger name="com.luxsoft.siipap.service">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
 
     <logger name="com.luxsoft.siipap.security">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
     
 	<logger name="com.luxsoft.siipap.compras">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
     
     <logger name="org.apache.activemq">
@@ -63,7 +63,7 @@
     </logger>
     
     <logger name="com.luxsoft.siipap.cxp.ui.form">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
     
     <logger name="com.luxsoft.sw3.replica">
@@ -91,15 +91,15 @@
         <level value="info"/>
     </logger>
 	<logger name="com.luxsoft.sw3.cxp">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
     
      <logger name="com.luxsoft.sw3.cxp.forms">
-        <level value="debug"/>
+        <level value="INFO"/>
     </logger>
     
     <logger name="com.luxsoft.sw3.contabilidad.services">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
     
     

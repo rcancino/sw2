@@ -445,6 +445,28 @@ public class CXCUIServiceFacade {
 		}
 	}
 	
+	public static void timbrar(NotaDeCargo nota){
+		
+		nota=buscarNotaDeCargoInicializada(nota.getId());
+		// Timbrando
+		CFDI cfdi=ServiceLocator2.getCFDIManager().buscarCFDI(nota);
+								
+		try {
+			cfdi=ServiceLocator2.getCFDIManager().timbrar(cfdi);
+			String message=MessageFormat.format("Nota generada: {0} a favor de:{1} UUID:{2}"
+					,cfdi.getFolio()
+					,nota.getCliente().getNombreRazon()
+					,cfdi.getUUID());
+			MessageUtils.showMessage(message, "CFDI");
+			CFDIPrintUI.impripirComprobante(nota, cfdi,"", new Date(), true);
+		} catch (Exception e) {
+			String msg=MessageFormat.format("Error timbrando o imprimiendo CFDI: {0} Causa:{1}"
+					,cfdi.getFolio()
+					,ExceptionUtils.getRootCauseMessage(e));
+			MessageUtils.showMessage(msg, "Timbrando CFDI");
+		}
+	}
+	
 	/**
 	 * Genera Notas de descuento y sus aplicaciones para los cargos calificados
 	 * relacionados con el abono 
@@ -592,7 +614,8 @@ public class CXCUIServiceFacade {
 				res.setComentario(comentario);
 			}
 			res=(NotaDeCargo)getManager().save(res);
-			CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
+			timbrar(res);
+			//CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
 			//ImpresionUtils.imprimirNotaDeCargo(res.getId(),especial);
 			return res;
 		}
@@ -609,7 +632,8 @@ public class CXCUIServiceFacade {
 			res.setOrigen(origen);
 			//NotaDeCargoForm.showObject(res);
 			res=(NotaDeCargo)getManager().save(res);
-			CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
+			timbrar(res);
+			//CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
 			//ImpresionUtils.imprimirNotaDeCargo(res.getId());
 			return res;
 		}
@@ -638,8 +662,9 @@ public class CXCUIServiceFacade {
 			NotaDeCargo res=model.commit();
 			//NotaDeCargoForm.showObject(res);
 			res=(NotaDeCargo)getManager().save(res);
-			CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
+			//CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
 			//ImpresionUtils.imprimirNotaDeCargo(res.getId());
+			timbrar(res);
 			return res;
 		}
 		return null;
@@ -740,6 +765,27 @@ public class CXCUIServiceFacade {
 					ndev.getDevolucion().getPartidas().iterator().next();
 					ndev.getDevolucion().isTotal();
 				}
+				return res;
+			}
+			
+		});
+		
+	} 
+	
+	public static NotaDeCargo buscarNotaDeCargoInicializada(final String id){
+		
+		return (NotaDeCargo)ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback(){
+
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				NotaDeCargo res=(NotaDeCargo)session.load(NotaDeCargo.class, id);
+				res.getCliente().getTelefonosRow();
+				if(res.getConceptos()!=null && !res.getConceptos().isEmpty()){
+					res.getConceptos().iterator().next();
+				}
+				if(!res.getAplicaciones().isEmpty()){
+					res.getAplicaciones().iterator().next();
+				}
+				
 				return res;
 			}
 			

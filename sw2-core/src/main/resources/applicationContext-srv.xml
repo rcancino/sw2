@@ -296,6 +296,7 @@
     	<property name="estadoDeCuentaManager" ref="estadoDeCuentaManager"/>
     	<!-- <property name="comprobanteDigitalManager" ref="cfdManager"/> -->
     	<property name="cfdiNotaDeCredito" ref="cfdiNotaDeCredito"/>
+    	<property name="cfdiNotaDeCargo" ref="cfdiNotaDeCargo"/>
     	<property name="taskExecutor" ref="taskExecutor"/>
     </bean>
     
@@ -542,6 +543,12 @@
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
     	<property name="sellador" ref="cfdiSellador"/>
     </bean>
+    <bean id="cfdiNotaDeCargo" class="com.luxsoft.sw3.cfdi.CFDINotaDeCargo">
+    	<property name="cadenaBuilder" ref="cfdiCadenaBuilder"/>
+    	<property name="folioFiscalDao" ref="folioFiscalDao"/>
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="sellador" ref="cfdiSellador"/>
+    </bean>
     
     <bean id="cfdiTimbrador" class="com.luxsoft.sw3.cfdi.CFDITimbrador">
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
@@ -549,6 +556,7 @@
     
     <bean id="cfdiManager" class="com.luxsoft.sw3.cfdi.CFDIManager">
     	<property name="iFactura" ref="cfdiFactura"/>
+    	<property name="iNotaDeCargo" ref="cfdiNotaDeCargo"/>
     	<property name="cfdiTimbrador" ref="cfdiTimbrador"/>
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
     </bean>

@@ -49,7 +49,7 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
  * @author Ruben Cancino 
  *
  */
-@Service("cfdiNotaDeCredito")
+@Service("cfdiNotaDeCargo")
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 	

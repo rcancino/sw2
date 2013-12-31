@@ -77,6 +77,7 @@ import com.luxsoft.siipap.ventas.model.Cobrador;
 import com.luxsoft.siipap.ventas.model.ListaDePreciosCliente;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
+import com.luxsoft.sw3.cfdi.INotaDeCargo;
 import com.luxsoft.sw3.cfdi.INotaDeCredito;
 
 /**
@@ -97,6 +98,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	
 	//private ComprobantesDigitalesManager comprobanteDigitalManager;
 	private INotaDeCredito cfdiNotaDeCredito;
+	private INotaDeCargo cfdiNotaDeCargo;
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Cargo getCargo(String id) {
@@ -140,11 +142,11 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Cargo save(Cargo bean) {
 		if(bean instanceof NotaDeCargo){
-			//NotaDeCargo notaDeCargo=(NotaDeCargo)getHibernateTemplate().merge(bean);
+			NotaDeCargo notaDeCargo=(NotaDeCargo)getHibernateTemplate().merge(bean);
 			//getComprobanteDigitalManager().generarComprobante(notaDeCargo);
-			//cfdiNota.generar(notaDeCargo);
-			//return notaDeCargo;
-			return null;
+			cfdiNotaDeCargo.generar(notaDeCargo);
+			return notaDeCargo;
+			//return null;
 		}
 		return (Cargo)getHibernateTemplate().merge(bean);
 	}
@@ -526,6 +528,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		
 		getNotaDeCargoDao().save(cargo);
 		getHibernateTemplate().save(cancelacion);
+		//Cancelacion de CFDI
 	}
 	
 	
@@ -893,6 +896,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		nota.setPlazo(0);
 		nota.setCheque(cargo.getCheque());
 		nota=(NotaDeCargo)save(nota);
+		cfdiNotaDeCargo.generar(nota);
 		//getComprobanteDigitalManager().generarComprobante(nota);
 		return nota;
 	}
@@ -1061,7 +1065,9 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 	public void setCfdiNotaDeCredito(INotaDeCredito cfdiNotaDeCredito) {
 		this.cfdiNotaDeCredito = cfdiNotaDeCredito;
 	}
-	
+	public void setCfdiNotaDeCargo(INotaDeCargo cfdiNotaDeCargo) {
+		this.cfdiNotaDeCargo = cfdiNotaDeCargo;
+	}
 	
 /*
 	public ComprobantesDigitalesManager getComprobanteDigitalManager() {
