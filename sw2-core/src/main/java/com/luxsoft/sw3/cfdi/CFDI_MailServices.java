@@ -353,9 +353,9 @@ public class CFDI_MailServices {
 		//service.mandarPorCorreo(id);
 		//service.madarPorCorreo(DateUtil.toDate("03/07/2012"));
 		//service.madarPorCorreo("20/08/2012","20/08/2012");
-		//service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "CRE");
-		//service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "CAM");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("17/12/2013"), "MOS");		
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "CRE");
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "CAM");
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "MOS");		
 	}
 
 }

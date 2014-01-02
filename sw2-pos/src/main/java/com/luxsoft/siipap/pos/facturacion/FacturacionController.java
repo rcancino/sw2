@@ -69,11 +69,10 @@ public class FacturacionController {
 	public void facturarPedido( Pedido pedido){	
 		
 		Assert.isTrue(!pedido.isFacturado(),"Este pedido ya ha sido facturado");
-		if(Services.getInstance().getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI)
-				&& (!pedido.getCliente().getClave().equals("U050008"))){
-			MessageUtils.showMessage("Solo se pueden generar comprobantes tipo CFDI", "Comprobantes fiscales");
-			return;
-		}
+		Assert.isTrue(
+				Services.getInstance().getEmpresa().getTipoDeComprobante().equals(Empresa.TipoComprobante.CFDI)
+				,"Solo se pueden generar comprobantes tipo CFDI");
+		
 		List<Venta> facturas;
 		if(pedido.isDeCredito())
 			facturas=facturarPedidoDeCredito(pedido);
@@ -303,10 +302,8 @@ public class FacturacionController {
 	public CFDIVenta generarVenta(Pedido pedido){	
 		
 		Assert.isTrue(!pedido.isFacturado(),"Este pedido ya ha sido facturado");
-		if(pedido.getClave().equals("U050008")){
-			MessageUtils.showMessage("Para la Unión de credito se requiere generar CFD", "Facturación");
-			return null;
-		}
+		
+		
 		List<Venta> facturas;
 		if(pedido.isDeCredito())
 			facturas=facturarPedidoDeCredito(pedido);

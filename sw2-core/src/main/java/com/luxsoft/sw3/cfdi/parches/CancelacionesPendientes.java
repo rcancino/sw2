@@ -40,14 +40,23 @@ public class CancelacionesPendientes {
 	public void run(){
 		DBUtils.whereWeAre();
 		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
-		System.out.println("Cancelando pendientes para sucursal: "+ServiceLocator2.getConfiguracion().getSucursal());
+		System.out.println("Cancelando pendientes para sucursal: "+ServiceLocator2.getConfiguracion().getSucursalLocalId());
 		try {
 			client=new CfdiClient();
-			String sql="";
-			Object args[]=new Object[]{};
-			List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(sql, args, String.class);
+			String sql="SELECT x.uuid FROM sx_cxc_cargos_cancelados c join sx_cfdi x on(x.origen_id=c.cargo_id) where  X.UUID is not null and x.cancelacion is null";
+			//Object args[]=new Object[]{};
+			List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(
+					sql
+					//, args
+					, String.class);
 			for(String uuid:rows){
-				System.out.println("Cancelando uuid: "+uuid);
+				//System.out.println("Cancelando uuid: "+uuid);
+				try {
+					cancelar(uuid);
+				} catch (Exception e) {
+					System.out.println("Error cancelando: "+uuid+ " Error: "+ExceptionUtils.getRootCause(e));
+				}
+				
 			}
 		} catch (CfdiException e) {
 			e.printStackTrace();
@@ -59,11 +68,10 @@ public class CancelacionesPendientes {
 		String[] uuidList=new String[]{uuid};
 		System.out.println("Mandando canclera CFDIS: "+ArrayUtils.toString(uuidList));
 		
-		String dirPath=System.getProperty("cfd.dir.path")+"/cfdi/cancelados";
+		String dirPath="Z:\\CFDI\\cancelaciones";
 		File dir=new File(dirPath);
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
-		
 		
 		
 		CancelaResponse res=client.cancelCfdi(
