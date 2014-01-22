@@ -101,7 +101,8 @@ public class CostosPanel extends AbstractMasterDatailFilteredBrowserPanel<CostoP
 			String clave=form.getProductoClave();
 			if("%".equals(clave)){
 				ActualizarCostosPromedios task=new ActualizarCostosPromedios(year,mes);
-				TaskUtils.executeSwingWorker(task);
+				//TaskUtils.executeSwingWorker(task);
+				TaskUtils.executeSwingWorkerInDialog(task, "Costos", "Actualizando costos promedio");
 			}
 			else{
 				ActualizarCostosPorClave taks=new ActualizarCostosPorClave(clave,year,mes);

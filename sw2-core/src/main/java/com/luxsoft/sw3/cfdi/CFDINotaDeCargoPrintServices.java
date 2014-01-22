@@ -99,38 +99,32 @@ public class CFDINotaDeCargoPrintServices {
 		parametros.put("FECHA", 			comprobante.getFecha().getTime());
 		parametros.put("NFISCAL", 			comprobante.getSerie()+" - "+comprobante.getFolio());		
 		
-		//parametros.put("IMPORTE", 			nota.getImporteBruto().subtract(venta.getImporteDescuento()));
+		parametros.put("IMPORTE", 			comprobante.getSubTotal());
 		parametros.put("IMPUESTO", 			comprobante.getImpuestos().getTotalImpuestosTrasladados()); 
 		parametros.put("TOTAL", 			comprobante.getTotal()); 
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
 		parametros.put("CUENTA", 		comprobante.getNumCtaPago());
 		parametros.put("METODO_PAGO", 		comprobante.getMetodoDePago());
+		parametros.put("CARGO_ID", 			nota.getId());
+		parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(nota.getTotalCM()));
+		parametros.put("SUCURSAL", 			nota.getSucursal().getId()); 		
+		parametros.put("CLAVCTE", 			nota.getClave()); 		
+		parametros.put("SUC", 				nota.getSucursal().getClave()); 
 		
-		//Datos tomado de la aplicacion
+		parametros.put("TEL", 				nota.getCliente().getTelefonosRow());		
+		parametros.put("D_REV", 			nota.getDiaRevision());
+		parametros.put("D_PAG", 			nota.getDiaDelPago());
+		parametros.put("COB", 				nota.getCobrador()!=null?nota.getCobrador().getId():null);
+		parametros.put("PLAZO", 			nota.getPlazo());
+		parametros.put("FREV", 				nota.isRevision()?"R":"");
 		
-				parametros.put("CARGO_ID", 			nota.getId());
-				parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(nota.getTotalCM()));
-				parametros.put("SUCURSAL", 			nota.getSucursal().getId()); 		
-				parametros.put("CLAVCTE", 			nota.getClave()); 		
-				parametros.put("SUC", 				nota.getSucursal().getClave()); 
-				
-				parametros.put("TEL", 				nota.getCliente().getTelefonosRow());		
-				parametros.put("D_REV", 			nota.getDiaRevision());
-				parametros.put("D_PAG", 			nota.getDiaDelPago());
-				parametros.put("COB", 				nota.getCobrador()!=null?nota.getCobrador().getId():null);
-				
-				parametros.put("PLAZO", 			nota.getPlazo());
-				parametros.put("FREV", 				nota.isRevision()?"R":"");
-				 
-				parametros.put("TIPO", 				nota.getOrigen().toString());
-				parametros.put("DOCTO", 			nota.getDocumento());		
-				parametros.put("TAR_COM_IMP", 		nota.getCargos());
-				parametros.put("COMENTARIO", 		nota.getComentario());
-				parametros.put("COMENTARIO_CAR", 		nota.getComentario());
-				
-				
-				parametros.put("ELAB_FAC", 		nota.getLog().getCreateUser());
-				parametros.put("PINT_IVA",		MonedasUtils.IVA.multiply(BigDecimal.valueOf(100)));
+		parametros.put("TIPO", 				nota.getOrigen().toString());
+		parametros.put("DOCTO", 			nota.getDocumento());		
+		parametros.put("TAR_COM_IMP", 		nota.getCargos());
+		parametros.put("COMENTARIO", 		nota.getComentario());
+		parametros.put("COMENTARIO_CAR", 		nota.getComentario());
+		parametros.put("ELAB_FAC", 		nota.getLog().getCreateUser());
+		parametros.put("PINT_IVA",		MonedasUtils.IVA.multiply(BigDecimal.valueOf(100)));
 		
 		Emisor emisor=comprobante.getEmisor();
 		parametros.put("EMISOR_NOMBRE", 	emisor.getNombre());
@@ -142,12 +136,9 @@ public class CFDINotaDeCargoPrintServices {
 		String direccionEmisor=MessageFormat.format(pattern
 				,emisor.getDomicilioFiscal().getCalle()
 				,emisor.getDomicilioFiscal().getNoExterior()
-				,StringUtils.defaultIfEmpty(emisor.getDomicilioFiscal().getNoInterior(),"")
-				
-				,emisor.getDomicilioFiscal().getColonia()
-				
+				,StringUtils.defaultIfEmpty(emisor.getDomicilioFiscal().getNoInterior(),"")				
+				,emisor.getDomicilioFiscal().getColonia()				
 				,emisor.getDomicilioFiscal().getMunicipio()
-				
 				,emisor.getDomicilioFiscal().getCodigoPostal()
 				,emisor.getDomicilioFiscal().getEstado()
 				);
@@ -173,8 +164,6 @@ public class CFDINotaDeCargoPrintServices {
 		}
 		else
 			parametros.put("EXPEDIDO_DIRECCION", "SNA");
-		
-		
 		//Especiales para CFDI
 		if(cfdi.getTimbreFiscal()!=null){
 			parametros.put("QR_CODE", QRCodeUtils.generarQR(cfdi.getComprobante()));
@@ -185,8 +174,6 @@ public class CFDINotaDeCargoPrintServices {
 			parametros.put("CERTIFICADO_SAT", timbre.noCertificadoSAT);
 			parametros.put("CADENA_ORIGINAL_SAT", timbre.cadenaOriginal());
 		}
-		
-		
 		return parametros;
 	}
 	

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +42,11 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.panel.HeaderPanel;
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.luxor.utils.Bean;
 import com.luxsoft.siipap.cxc.model.Aplicacion;
 import com.luxsoft.siipap.cxc.old.ImporteALetra;
+
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.binding.Binder;
 import com.luxsoft.siipap.swing.controls.SXAbstractDialog;
@@ -56,6 +59,8 @@ import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.siipap.ventas.model.VentaDet;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
+
 
 /**
  * Forma que presenta informacion de la factura solo para lectura
@@ -300,7 +305,7 @@ public class FacturaForm extends SXAbstractDialog{
 		
 	}
 	
-	public void print(){
+	/*public void print(){
 		ComprobanteFiscal cf=ServiceLocator2.getCFDManager().cargarComprobante(getFactura());
 		if(cf==null){
 			final Map parameters=new HashMap();
@@ -312,9 +317,21 @@ public class FacturaForm extends SXAbstractDialog{
 			CFDPrintServicesCxC.impripirComprobante(getFactura(), cf, null, true);
 		}
 		doClose();
+	}*/
+	
+	public void print(){
+		//Buscar si tiene comprobante fisacal
+		Venta venta=getFactura();
+		CFDI cfdi=ServiceLocator2.getCFDIManager().existe(venta);
+		if(cfdi!=null){
+			Date time=ServiceLocator2.obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(venta, cfdi, "DESTINATARIO", time,ServiceLocator2.getHibernateTemplate(),true);
+		}else{
+			ComprobanteFiscal cf=ServiceLocator2.getCFDManager().cargarComprobante(getFactura());
+			CFDPrintServicesCxC.impripirComprobante(getFactura(), cf, null, true);
+		}
+		doClose();
 	}
-	
-	
 	/**
 	 * 
 	 * @param ventaId

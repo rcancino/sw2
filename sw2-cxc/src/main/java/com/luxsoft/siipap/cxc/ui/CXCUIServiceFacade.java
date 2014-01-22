@@ -597,7 +597,7 @@ public class CXCUIServiceFacade {
 		final NotaDeCargoFormModel model=new NotaDeCargoFormModel();
 		//model.asignarFolio(); 
 		final NotaDeCargoForm form=new NotaDeCargoForm(model);
-		model.setOrigen(OrigenDeOperacion.CRE);
+		//model.setOrigen(OrigenDeOperacion.CRE);
 		form.open();
 		if(!form.hasBeenCanceled()){
 			NotaDeCargo res=model.commit();
@@ -630,11 +630,8 @@ public class CXCUIServiceFacade {
 		if(!form.hasBeenCanceled()){
 			NotaDeCargo res=model.commit();
 			res.setOrigen(origen);
-			//NotaDeCargoForm.showObject(res);
 			res=(NotaDeCargo)getManager().save(res);
 			timbrar(res);
-			//CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(res.getId());
-			//ImpresionUtils.imprimirNotaDeCargo(res.getId());
 			return res;
 		}
 		return null;

@@ -1,22 +1,26 @@
 package com.luxsoft.sw3.cxc.consultas;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.cxc.old.ImpresionUtils;
+import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.cxc.ui.form.NotaDevolucionFormModel;
 import com.luxsoft.siipap.cxc.ui.form.NotaDevoucionForm;
 import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeDevoluciones;
@@ -30,6 +34,7 @@ import com.luxsoft.siipap.util.SQLUtils;
 import com.luxsoft.siipap.ventas.model.Devolucion;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 
 public class CuentasPorCobrarContadoController {
 	
@@ -59,24 +64,17 @@ public class CuentasPorCobrarContadoController {
 				//nota.setFolio(Integer.valueOf(cf.getFolio()));
 				//ServiceLocator2.getHibernateTemplate().merge(nota);
 				//ServiceLocator2.getCXCManager().salvarNota(nota);
-				CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
+				CXCUIServiceFacade.timbrar(nota);
+				//CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
 				//ImpresionUtils.imprimirNotaDevolucion(nres.getId());
 			}
 		}		
 	}	
-	
+	/*
 	public void imprimirNotaDeMostrador(){
 		NotaDeCreditoDevolucion nota=SelectorNotasDevolucionPorImprimir.seleccionar();
 		if(nota!=null){
 			nota=buscarNotaDeCreditoInicializada(nota.getId());
-			/*
-			Date fecha=SelectorDeFecha.seleccionar(nota.getFecha());
-			String folio=JOptionPane.showInputDialog("Folio: ");
-			if(!NumberUtils.isNumber(folio)){
-				MessageUtils.showMessage("Folio incorrecto", "Impresión de Notas");
-				return;
-			}
-			*/
 			ComprobanteFiscal cf=ServiceLocator2.getCFDManager().cargarComprobante(nota);
 			if(cf==null){
 				cf=ServiceLocator2.getCFDManager().generarComprobante(nota);
@@ -84,12 +82,32 @@ public class CuentasPorCobrarContadoController {
 				nota.setReplicado(null);
 				ServiceLocator2.getHibernateTemplate().merge(nota);
 				MessageUtils.showMessage("Comprobante generado: "+cf.getXmlPath(), "Generación de comprobantes");
+			}else{
+				CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
 			}
-			//nota.setFolio(Integer.valueOf(cf.getFolio()));
-			//nota.setFecha(fecha);
-			//nota.setReplicado(null);
-			//ServiceLocator2.getHibernateTemplate().merge(nota);
-			CFDPrintServicesCxC.imprimirNotaDeCreditoElectronica(nota.getId());
+		}		
+	}*/
+	
+	public void generarCfdiMostrador(){
+		NotaDeCreditoDevolucion nota=SelectorNotasDevolucionPorImprimir.seleccionar();
+		if(nota!=null){
+			nota=buscarNotaDeCreditoInicializada(nota.getId());
+			CFDI cfdi=ServiceLocator2.getCFDINotaDeCredito().generar(nota);
+			try {
+				cfdi=ServiceLocator2.getCFDIManager().timbrar(cfdi);
+				String message=MessageFormat.format("Nota generada: {0} a favor de:{1} UUID:{2}"
+						,cfdi.getFolio()
+						,nota.getCliente().getNombreRazon()
+						,cfdi.getUUID());
+				MessageUtils.showMessage(message, "CFDI");
+				CFDIPrintUI.impripirComprobante(nota, cfdi,"", new Date(), true);
+			} catch (Exception e) {
+				String msg=MessageFormat.format("Error timbrando o imprimiendo CFDI: {0} Causa:{1}"
+						,cfdi.getFolio()
+						,ExceptionUtils.getRootCauseMessage(e));
+				MessageUtils.showMessage(msg, "Timbrando CFDI");
+			}
+			
 		}		
 	}
 	

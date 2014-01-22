@@ -395,7 +395,7 @@ public class RevisionCobroPanel extends FilteredBrowserPanel<CargoRow2> {
 	 */
 	protected void persistir(Cargo cargo){
 		try {
-			getManager().save(cargo);
+				getManager().save(cargo);
 		} catch (Exception e) {
 			logger.error(ExceptionUtils.getRootCause(e),e);
 		}

@@ -32,7 +32,7 @@
      			<ref bean="facturacionCreditoCFDIPanel"/>
      			<bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPanel"
     				p:title="CFDI's"/>
-     			<ref bean="facturacionCreditoPanel"/>
+     		<!-- 	<ref bean="facturacionCreditoPanel"/> -->
      			<ref bean="devolucionesPanel"/>
      			<ref bean="preDevolucionesPanel"/>
      			<ref bean="facturasGeneradasPanel"/>
@@ -63,10 +63,10 @@
      	class="com.luxsoft.siipap.pos.ui.consultas.PedidosEspecialesPanel"
      	p:title="Especiales"/>
      	
-     <bean id="facturacionCreditoPanel"
+     <!-- <bean id="facturacionCreditoPanel"
      	class="com.luxsoft.siipap.pos.ui.consultas.FacturacionCreditoPanel"
      	p:title="Facturación Crédito CFD"
-     	/>
+     	/> -->
      <bean id="facturacionCreditoCFDIPanel"
      	class="com.luxsoft.siipap.pos.ui.cfdi.CFDIFacturacionCreditoPanel"
      	p:title="Facturación CFDI Crédito "

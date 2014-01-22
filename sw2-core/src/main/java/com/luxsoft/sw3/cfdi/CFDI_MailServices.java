@@ -101,6 +101,7 @@ public class CFDI_MailServices {
 	
 	@SuppressWarnings("unchecked")
 	public void madarPorCorreoPorOrigen(Date dia,String origen){
+		
 		String hql="";
 		fallidos=new HashSet();
 		exitosos=new HashSet();
@@ -130,6 +131,7 @@ public class CFDI_MailServices {
 					, new Object[]{ dia}
 					);
 		totalCfds=cfds.size();
+		
 		for(String cfd:cfds){
 			try {
 				mandarPorCorreo(cfd);
@@ -295,6 +297,7 @@ public class CFDI_MailServices {
 			MimeMessageHelper messageHelper=new MimeMessageHelper(mimeMessage,true);
 			messageHelper.setFrom("cfd_auxiliar@papelsa.com.mx");
 			messageHelper.setTo(new String[]{"lgodines@papelsa.com.mx"});
+		//	messageHelper.setTo(new String[]{"luzmam_papelsabjio@prodigy.net.mx"});
 		//	messageHelper.setTo(new String[]{"soporte_sist@papelsa.com.mx"});
 			messageHelper.setCc("soporte_sist@papelsa.com.mx");
 			messageHelper.setSubject("Reporte diario de envio de (CFD) de ");
@@ -353,9 +356,9 @@ public class CFDI_MailServices {
 		//service.mandarPorCorreo(id);
 		//service.madarPorCorreo(DateUtil.toDate("03/07/2012"));
 		//service.madarPorCorreo("20/08/2012","20/08/2012");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "CRE");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "CAM");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("18/12/2013"), "MOS");		
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("10/01/2014"), "CRE");
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("10/01/2014"), "CAM");
+		service.madarPorCorreoPorOrigen(DateUtil.toDate("10/01/2014"), "MOS");		
 	}
 
 }

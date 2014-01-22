@@ -68,7 +68,8 @@ public class AnalisisDeBalanzaPorCuentaPanel extends FilteredBrowserPanel<Poliza
 	
 	public void init(){
 		addProperty(
-				"id"
+				"mes"
+				,"id"
 				,"poliza.folio"
 				,"poliza.clase"
 				,"poliza.tipo.nombre"
@@ -84,7 +85,8 @@ public class AnalisisDeBalanzaPorCuentaPanel extends FilteredBrowserPanel<Poliza
 				,"asiento"
 				,"tipo");
 		addLabels(
-				"Id"
+				"Mes"
+				,"Id"
 			,"Poliza"
 				,"Clase"
 				,"Tipo"
@@ -192,10 +194,10 @@ public class AnalisisDeBalanzaPorCuentaPanel extends FilteredBrowserPanel<Poliza
 		}else{
 			String hql="from PolizaDet det where year(det.poliza.fecha)=? " +
 					" and month(det.poliza.fecha)=? " +
-					" and det.cuenta.clave=?";
+					" and det.cuenta.clave=? and det.poliza.clase!=?";
 			return ServiceLocator2.getHibernateTemplate().find(hql
 					,new Object[]{
-						year,mes,cuenta
+						year,mes,cuenta,"CIERRE_ANUAL"
 						}
 			);
 		}

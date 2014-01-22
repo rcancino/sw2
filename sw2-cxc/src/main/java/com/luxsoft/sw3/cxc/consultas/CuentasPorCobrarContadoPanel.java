@@ -117,7 +117,7 @@ public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPor
 				,getViewAction()
 				,addAction(CXCRoles.COBRANZA_CONTADO.name(),"aplicarPago", "Aplicar abono")
 				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "generarNotaDevolucionCam", "Devolución (CAM)" )
-				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "imprimirNotaDeDevolucionMos", "Devolución (MOS)" )
+				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "generarCfdiMostrador", "CFDI Devolución (MOS)" )
 				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "generarBonificacion", "Bonificacion" )
 				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "generarNotaCargo", "Generar N.Cargo" )
 				,addAction(CXCRoles.COBRANZA_CONTADO.name(), "pagarDiferencias", "Pago de Diferencias")
@@ -197,10 +197,11 @@ public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPor
 	
 	public void generarNotaDevolucionCam(){
 		controller.generarNotasDeDevolucion();
+		
 	}
 	
-	public void imprimirNotaDeDevolucionMos(){
-		controller.imprimirNotaDeMostrador();
+	public void generarCfdiMostrador(){
+		controller.generarCfdiMostrador();
 	}
 	
 	public void cargoPorTesoreria(){

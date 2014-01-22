@@ -144,6 +144,10 @@ public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 		comprobanteFiscal.setCadenaOriginal(cadena);
 		CFDIUtils.validarDocumento(document);
 		comprobanteFiscal=salvar(document,comprobanteFiscal);
+		
+		nota.setDocumento(new Long(comprobanteFiscal.getFolio()));
+		getHibernateTemplate().update(nota);
+		
 		return comprobanteFiscal;
 	}
 	

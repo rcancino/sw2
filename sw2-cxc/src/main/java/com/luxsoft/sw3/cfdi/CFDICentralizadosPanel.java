@@ -10,11 +10,16 @@ import javax.swing.JPopupMenu;
 
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 
 import com.luxsoft.cfdi.CFDIPrintUI;
+import com.luxsoft.siipap.cxc.CXCRoles;
+import com.luxsoft.siipap.cxc.model.NotaDeCargo;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
+import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeClientes;
 import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.core.Cliente;
@@ -23,9 +28,11 @@ import com.luxsoft.siipap.service.ServiceLocator2;
 //import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.Header;
+import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 //import com.luxsoft.sw3.services.Services;
+
 
 
 
@@ -111,6 +118,7 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 			actions=new Action[]{
 				getLoadAction()
 				,getViewAction()
+				,addAction("", "timbrar", "Timbrar")
 				};
 		return actions;
 	}
@@ -168,6 +176,14 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 			Venta venta=ServiceLocator2.getFacturasManager().buscarVentaInicializada(cfdi.getOrigen());
 			Date time=ServiceLocator2.obtenerFechaDelSistema();
 			CFDIPrintUI.impripirComprobante(venta, cfdi, " ", time,ServiceLocator2.getHibernateTemplate(),true);
+		}else if(cfdi.getTipo().equals("NOTA_CREDITO")){
+			NotaDeCredito nota=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(cfdi.getOrigen());
+			Date time=ServiceLocator2.obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(nota, cfdi, "", time, true);
+		}else if(cfdi.getTipo().equals("NOTA_CARGO")){
+			NotaDeCargo nota=CXCUIServiceFacade.buscarNotaDeCargoInicializada(cfdi.getOrigen());
+			Date time=ServiceLocator2.obtenerFechaDelSistema();
+			CFDIPrintUI.impripirComprobante(nota, cfdi, "", time, true);
 		}
 		
 	}
@@ -183,7 +199,28 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 		
 	}
 	
-	
+	public void timbrar(){
+		CFDI cfdi=(CFDI)getSelectedObject();
+			if(cfdi!=null){
+				if(cfdi.getTimbreFiscal().getUUID()!=null){
+					MessageUtils.showMessage("CFDI ya generado para la venta UUID: "+cfdi.getTimbreFiscal().getUUID(), "CFDI");
+					return;
+				}
+				int index=source.indexOf(cfdi);
+				try {
+					logger.info("Timbrando CFDI: "+cfdi);
+					CFDI res=ServiceLocator2.getCFDIManager().timbrar(cfdi);
+					if(index!=-1){
+						source.set(index, res);
+					}
+					doSelect(res);
+				} catch (Exception e) {
+					e.printStackTrace();
+					MessageUtils.showMessage(ExceptionUtils.getRootCauseMessage(e), "Timbrado de CFDI");
+					return;
+				}
+			}
+	}
 	
 
 }

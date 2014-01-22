@@ -249,9 +249,17 @@
      	lazy-init="true"
      	p:resizeWeightForView=".08">
      	<property name="panels">
-     		<bean class="com.luxsoft.sw3.cxc.consultas.CuentasPorCobrarContadoPanel"
-     			p:title="Cuentas por cobrar">
-     		</bean>
+     		<list>
+     			<bean class="com.luxsoft.sw3.cxc.consultas.CuentasPorCobrarContadoPanel"
+     				p:title="Cuentas por cobrar">
+     			</bean>
+     			<bean class="com.luxsoft.sw3.cfdi.CFDICentralizadosPanel">
+     				<property name="title" value="CFDI's"/>
+     			</bean>
+     			<bean class="com.luxsoft.sw3.cfdi.CFDINotasCentralizadasPanel">
+     				<property name="title" value="CFDI's (Notas)"/>
+     			</bean>
+     		</list>
      	</property>
      </bean>
      

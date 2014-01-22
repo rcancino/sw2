@@ -31,6 +31,9 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.Assert;
 
 import com.luxsoft.luxor.utils.Bean;
+import com.luxsoft.siipap.cxc.model.NotaDeCargo;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
+import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
@@ -164,24 +167,40 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 					byte[] xml=cfd.getXml();
 					InputStreamSource source=new ByteArrayResource(xml);
 					messageHelper.addAttachment(cfd.getXmlFilePath(),source);
+					
 					//PDF
-					if(cfd.getTipo().equals("FACTURA")){
-						JasperPrint jp=(JasperPrint)ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback() {
-							public Object doInHibernate(Session session) throws HibernateException,SQLException {
-								Venta venta=(Venta)session.get(Venta.class, cfd.getOrigen());
-								JasperPrint jp=CFDIPrintServices.impripirComprobante(venta, cfd, "", false);
-								return jp;
-							}
-						});
-						if(jp!=null){
+				//	if(cfd.getTipo().equals("FACTURA")){
+						
+						JasperPrint jp=null;
+						
+						if(cfd.getTipo().equals("FACTURA")){
+							jp=(JasperPrint)ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback() {
+								public Object doInHibernate(Session session) throws HibernateException,SQLException {
+									Venta venta=(Venta)session.get(Venta.class, cfd.getOrigen());
+									System.err.println("enviando la fac" + venta);
+									JasperPrint jp=CFDIPrintServices.impripirComprobante(venta, cfd, "", false);
+									return jp;
+								}
+							});
+						}else if(cfd.getTipo().equals("NOTA_CREDITO")){
+							NotaDeCredito nota=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(cfd.getOrigen());
+							System.err.println("enviando la nota Credito" + nota);
+							 jp=CFDINotaPrintServices.impripirComprobante(nota, cfd);
+						}else if(cfd.getTipo().equals("NOTA_CARGO")){
+							NotaDeCargo nota=CXCUIServiceFacade.buscarNotaDeCargoInicializada(cfd.getOrigen());
+							System.err.println("enviando la nota Cargo" + nota);
+							jp=CFDINotaDeCargoPrintServices.impripirComprobante(nota, cfd);
+						} 
 							
+						
+						if(jp!=null){
 							byte[] pdf=JasperExportManager.exportReportToPdf(jp);
 							InputStreamSource sourcePdf=new ByteArrayResource(pdf);
 							String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
 							messageHelper.addAttachment(pdfName,sourcePdf);
 						}
 						
-					}
+					//}
 					
 				} catch (Exception e) {
 					e.printStackTrace();

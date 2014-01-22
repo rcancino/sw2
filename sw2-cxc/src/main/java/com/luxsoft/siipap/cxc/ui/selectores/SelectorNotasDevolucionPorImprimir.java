@@ -23,9 +23,8 @@ public class SelectorNotasDevolucionPorImprimir extends AbstractSelector<NotaDeC
 	protected List<NotaDeCreditoDevolucion> getData() {
 		String hql3="from NotaDeCreditoDevolucion n where " +
 		" n.fecha>?" +
-		" and n.impreso=null" +
 		" and n.origen=\'MOS\' " +
-		" and n.id not in (select cf.origen from ComprobanteFiscal cf where cf.tipo=?)";		
+		" and n.id not in (select cf.origen from CFDI cf where cf.tipo=?)";		
 		return ServiceLocator2
 			.getHibernateTemplate()
 			.find(hql3,new Object[]{DateUtil.toDate("28/02/2010"),"NOTA_CREDITO"});

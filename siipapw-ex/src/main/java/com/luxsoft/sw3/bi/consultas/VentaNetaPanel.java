@@ -366,7 +366,7 @@ public class VentaNetaPanel extends FilteredBrowserPanel<VentaNetaMensualRow>{
 			sql=sql.replaceAll("@INVENTARIO", "'LIN' AS TIPO,L.LINEA_ID AS origenId,L.NOMBRE");
 		}
 		if(seleccionado.equals("CLIENTE")){
-			sql=sql.replaceAll("@DESCRIPCION",  "'EXI' AS TIPO,D.CLIENTE_ID AS origenId,D.CLIENTE");	
+			sql=sql.replaceAll("@DESCRIPCION",  "'EXI' AS TIPO,D.CLIENTE_ID AS origenId,(CASE WHEN D.CLIENTE_ID=8 THEN '1 MOSTRADOR' ELSE D.CLIENTE END)");	
 			sql=sql.replaceAll("@INVENTARIO", "'EXI' AS TIPO,8 AS origenId,'1 MOSTRADOR'");
 		}
 		if(seleccionado.equals("PRODUCTO")){

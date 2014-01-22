@@ -144,7 +144,8 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		if(bean instanceof NotaDeCargo){
 			NotaDeCargo notaDeCargo=(NotaDeCargo)getHibernateTemplate().merge(bean);
 			//getComprobanteDigitalManager().generarComprobante(notaDeCargo);
-			cfdiNotaDeCargo.generar(notaDeCargo);
+			if(bean.getId()==null)
+				cfdiNotaDeCargo.generar(notaDeCargo);
 			return notaDeCargo;
 			//return null;
 		}
@@ -895,8 +896,7 @@ public class CXCManagerImpl extends HibernateDaoSupport implements CXCManager{
 		nota.setVencimiento(nota.getFecha());
 		nota.setPlazo(0);
 		nota.setCheque(cargo.getCheque());
-		nota=(NotaDeCargo)save(nota);
-		cfdiNotaDeCargo.generar(nota);
+		nota=(NotaDeCargo)save(nota);		
 		//getComprobanteDigitalManager().generarComprobante(nota);
 		return nota;
 	}

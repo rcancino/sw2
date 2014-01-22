@@ -84,7 +84,7 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		cfdi.setFecha(getFecha());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
-		cfdi.setMetodoDePago("NO IDENTIFICADO");
+		cfdi.setMetodoDePago(venta.getFormaDePago().name());
 		if(StringUtils.isNotBlank(venta.getComentarioCancelacionDBF()))
 			cfdi.setNumCtaPago(venta.getComentarioCancelacionDBF());
 		cfdi.setMoneda(venta.getMoneda().getCurrencyCode());
@@ -167,6 +167,10 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		comprobanteFiscal.setCadenaOriginal(cadena);
 		
 		comprobanteFiscal=salvar(document,comprobanteFiscal);
+		
+		//Actualizar el folio en la venta
+		venta.setDocumento(new Long(comprobanteFiscal.getFolio()));
+		getHibernateTemplate().update(venta);
 		return comprobanteFiscal;
 	}
 	

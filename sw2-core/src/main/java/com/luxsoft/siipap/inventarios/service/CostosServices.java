@@ -3,6 +3,8 @@ package com.luxsoft.siipap.inventarios.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import com.luxsoft.siipap.inventarios.dao.ExistenciaDao;
 import com.luxsoft.siipap.inventarios.model.CostoPromedio;
 import com.luxsoft.siipap.inventarios.procesos.AjusteDeCostoParaTransformaciones;
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.util.DBUtils;
@@ -121,12 +124,19 @@ public class CostosServices extends HibernateDaoSupport{
 	 */
 	public void actualizarMovimientosPromedio(int year,int mes){
 		logger.info("Actualizando movimientos de inventarios del periodo: "+year+ "/"+mes+ " a COSTO PROMEDIO");
-		
-		final String sq= " update @TABLA x set x.costop=ifnull((select a.costop from sx_costos_p a where a.clave=x.clave and a.year=? and a.mes=?),0) where year(x.fecha)=? and month(x.fecha)=?";
-						
+		/*
+		final String sq= " update @TABLA x " +
+				"set x.costop=ifnull((select a.costop from sx_costos_p a where a.clave=x.clave and a.year=? and a.mes=?),0) " +
+				" where x.fecha between @FECHA_INI and @FECHA_FIN ?";
+			*/
+		final String sq="update @TABLA t1,sx_costos_p t2 " +
+				" set t1.costop= t2.costop " +
+				" where t1.producto_id=t2.producto_id " +
+				"   and t1.fecha BETWEEN \'@FECHA_INI 00:00:00\' and \'@FECHA_FIN 23:59:00\' " +
+				"   and t2.year=? and t2.mes=?";
 		String[] tablas={
-				"SX_VENTASDET"
-				,"SX_INVENTARIO_MOV"
+				"SX_VENTASDET",
+				"SX_INVENTARIO_MOV"
 				,"SX_INVENTARIO_DEV"
 				,"SX_INVENTARIO_KIT"
 				,"SX_INVENTARIO_TRS"
@@ -135,11 +145,17 @@ public class CostosServices extends HibernateDaoSupport{
 				,"SX_INVENTARIO_MAQ"
 				,"SX_INVENTARIO_DEC"
 				};
+		DateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+		Periodo periodo=Periodo.getPeriodoEnUnMes(mes-1, year);
 		
 		for(String tabla:tablas){			
 			String sql=sq.replaceAll("@TABLA", tabla);
+			sql=sql.replaceAll("@FECHA_INI", df.format(periodo.getFechaInicial()));
+			sql=sql.replaceAll("@FECHA_FIN", df.format(periodo.getFechaFinal()));
 			logger.info("Actualizando: "+tabla);
-			int res=getJdbcTemplate().update(sql, new Object[]{year,mes,year,mes});
+			logger.info(sql);
+			//int res=getJdbcTemplate().update(sql, new Object[]{year,mes,year,mes});
+			int res=getJdbcTemplate().update(sql, new Object[]{year,mes});
 			logger.info("Costos promedios actualizados: "+res);
 		}
 	}
@@ -153,8 +169,8 @@ public class CostosServices extends HibernateDaoSupport{
 				
 						
 		String[] tablas={
-				"SX_VENTASDET"
-				,"SX_INVENTARIO_MOV"
+				"SX_VENTASDET",
+				"SX_INVENTARIO_MOV"
 				,"SX_INVENTARIO_DEV"
 				,"SX_INVENTARIO_KIT"
 				,"SX_INVENTARIO_TRS"
@@ -186,8 +202,8 @@ public class CostosServices extends HibernateDaoSupport{
 		final String sq=" update @TABLA x set x.costou=ifnull((select a.costou from sx_costos_p a where a.clave=x.clave and a.year=? and a.mes=?),0) where year(x.fecha)=? and month(x.fecha)=?";
 				
 		String[] tablas={
-				"SX_VENTASDET"
-				,"SX_INVENTARIO_MOV"
+				"SX_VENTASDET",
+				"SX_INVENTARIO_MOV"
 				,"SX_INVENTARIO_DEV"
 				,"SX_INVENTARIO_KIT"
 				,"SX_INVENTARIO_TRS"
@@ -213,8 +229,8 @@ public class CostosServices extends HibernateDaoSupport{
 				
 				
 		String[] tablas={
-				"SX_VENTASDET"
-				,"SX_INVENTARIO_MOV"
+				"SX_VENTASDET",
+				"SX_INVENTARIO_MOV"
 				,"SX_INVENTARIO_DEV"
 				,"SX_INVENTARIO_KIT"
 				,"SX_INVENTARIO_TRS"
@@ -241,10 +257,17 @@ public class CostosServices extends HibernateDaoSupport{
 	 */
 	public void actualizarCostoDeInventarioAPromedio(int year,int mes){
 		logger.info("Actualizando existencias  del periodo: "+year+ "/"+mes + "  (Costo del inventario)");
-		String sql="update SX_EXISTENCIAS x " +
-				"    set x.costop=ifnull((select a.costop from sx_costos_p a where a.clave=x.clave and a.year=? and a.mes=?),0) " +
+		String sql="update sx_existencias t1,sx_costos_p t2 " +
+				" set t1.costop= t2.costop,t1.costo=t2.costop " +
+				" where t1.producto_id=t2.producto_id " +
+				"   and t1.year=? " +
+				"   and t1.mes=? " +
+				"   and t2.year=? " +
+				"   and t2.mes=?";
+/*		String sql="update SX_EXISTENCIAS x " +
+				"    set x.costop=ifnul2l((select a.costop from sx_costos_p a where a.clave=x.clave and a.year=? and a.mes=?),0) " +
 				"	,x.costo=ifnull((select a.costop from sx_costos_p a where a.clave=x.clave and a.year=x.year and a.mes=x.mes),0) " +
-				"	where x.year=? and x.mes=?";		
+				"	where x.year=? and x.mes=?";*/		
 		int res=getJdbcTemplate().update(sql,new Object[]{year,mes,year,mes});
 		logger.info("Inventario a costo promedio actualizado: "+res);
 	}
@@ -444,7 +467,8 @@ public class CostosServices extends HibernateDaoSupport{
 		//AjusteDeCostoParaTransformaciones transofor=new AjusteDeCostoParaTransformaciones();
 		//transofor.actualizarCostoOrigen(2010, 3);
 		
-		ServiceLocator2.getCostosServices().actualizarCostosAPromedio(2012,6);
+		//ServiceLocator2.getCostosServices().actualizarCostosAPromedio(2012,6);
+		ServiceLocator2.getCostosServices().actualizarCostoDeInventarioAPromedio(2013, 12);
 		//ServiceLocator2.getCostosServices().actualizarCostosPromedio("R4MB141", 2011, 11);
 	}
 	

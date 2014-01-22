@@ -88,6 +88,9 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 			if(selected.getTipo().startsWith("NOTA_CREDITO")){
 				NotaDeCredito nota=CXCUIServiceFacade.buscarNotaDeCreditoInicializada(selected.getOrigen());
 				CXCUIServiceFacade.timbrar(nota);
+			}else if(selected.getTipo().startsWith("NOTA_CARGO")){
+				NotaDeCargo nc=CXCUIServiceFacade.buscarNotaDeCargoInicializada(selected.getOrigen());
+				CXCUIServiceFacade.timbrar(nc);
 			}
 		}
 	}

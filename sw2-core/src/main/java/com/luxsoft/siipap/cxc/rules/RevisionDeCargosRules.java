@@ -135,6 +135,7 @@ public class RevisionDeCargosRules {
 			cuenta.setVencimiento(vto);
 			if(cuenta.getCliente().getCredito().isVencimientoFactura()){
 				cuenta.setRevisada(true);
+				cuenta.setFechaRecepcionCXC(cuenta.getFecha());
 			}
 		}else{
 			//Si el cliente es de credito

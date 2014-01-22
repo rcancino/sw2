@@ -8,12 +8,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.TextFilterator;
 import ca.odell.glazedlists.CollectionList.Model;
 import ca.odell.glazedlists.gui.TableFormat;
 
+import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.siipap.cxc.CXCActions;
 import com.luxsoft.siipap.cxc.model.Aplicacion;
 import com.luxsoft.siipap.cxc.model.ChequeDevuelto;
@@ -35,6 +37,7 @@ import com.luxsoft.siipap.swing.dialog.SelectorDeFecha;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 
 /**
  * Browser con los pagos registrados
@@ -165,7 +168,19 @@ public class PagosPanel extends AbstractMasterDatailFilteredBrowserPanel<Pago, A
 			List<NotaDeCargo> res=ServiceLocator2.getHibernateTemplate().find("from NotaDeCargo n where n.cheque.id=?",pp.getId());
 			if(!res.isEmpty()){
 				NotaDeCargo nc=res.get(0);
-				CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(nc.getId());
+				//CFDPrintServicesCxC.imprimirNotaDeCargoElectronica(nc.getId());
+				CFDI cfdi=ServiceLocator2.getCFDIManager().buscarCFDI(nc);
+				MessageUtils.showMessage("Timbrando CFDI para Nota de cargo", "CFDI");
+				try {
+					ServiceLocator2.getCFDIManager().timbrar(cfdi);
+					nc=CXCUIServiceFacade.buscarNotaDeCargoInicializada(nc.getId());
+					CFDIPrintUI.impripirComprobante(nc, cfdi, "", new Date(), true);
+				} catch (Exception e) {
+					MessageUtils.showMessage("Error de timbrado: "
+							+ExceptionUtils.getMessage(e)+" \n Intente mas tarde timbrar la nota de cargo: "+nc.getDocumento()
+							, "CFDI");
+				}
+				
 			}
 			
 		}
