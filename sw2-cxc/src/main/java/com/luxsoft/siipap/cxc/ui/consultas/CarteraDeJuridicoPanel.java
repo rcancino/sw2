@@ -223,8 +223,10 @@ public class CarteraDeJuridicoPanel extends FilteredBrowserPanel<Cargo>{
 			if(!res.getCliente().isFrecuente()){
 				res.setOrigen(OrigenDeOperacion.CAM);
 			}
-			res=(NotaDeCargo)getManager().save(res);			
-			ImpresionUtils.imprimirNotaDeCargo(res.getId(),especial);
+			res=(NotaDeCargo)getManager().save(res);
+			// Linea agregada por Luis para mandar a Timbra las notas hechas en Juridico
+			CXCUIServiceFacade.timbrar(res);
+			//ImpresionUtils.imprimirNotaDeCargo(res.getId(),especial);
 			source.add(res);
 			if(res.getOrigen().equals(OrigenDeOperacion.JUR)){
 				CXCUIServiceFacade.generarJuridico(res);

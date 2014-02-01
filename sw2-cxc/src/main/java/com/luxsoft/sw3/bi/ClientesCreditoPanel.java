@@ -28,9 +28,9 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 	}
 	
 	protected void init(){
-		String[] props={"clave","nombre","rfc","linea","plazo","saldo","atrasoMaximo","permitirCheque","suspendido","postfechado","checkplus","modificado","usuario"};
+		String[] props={"clave","nombre","rfc","linea","plazo","saldo","atrasoMaximo","permitirCheque","suspendido","postfechado","checkplus","vencimientoFechaFactura","modificado","usuario"};
 		addProperty(props);
-		addLabels("Clave","Cliente","RFC","Línea","Plazo","Saldo","Atraso","Cheque","Suspendido","Posfechado","Checkplus","Modificado","Usuario");
+		addLabels("Clave","Cliente","RFC","Línea","Plazo","Saldo","Atraso","Cheque","Suspendido","Posfechado","Checkplus","VTO Fac","Modificado","Usuario");
 		installTextComponentMatcherEditor("Nombre", "nombre");
 		installTextComponentMatcherEditor("RFC", "rfc");
 		//manejarPeriodo();
@@ -54,6 +54,7 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 				,addRoleBasedAction(CXCRoles.MODIFICACION_LINEA_DE_CREDITO.name(),"modificarSuspendido", "Suspender")
 				,addRoleBasedAction(CXCRoles.MODIFICACION_LINEA_DE_CREDITO.name(),"modificacionSuspendidoCredito", "Suspender Credito")
 				,addRoleBasedAction(CXCRoles.DESBLOQUEO_POR_SALDO_CHEQUES_DEVUELTOS.name(),"desbloquearClientePorSaldoEnCheque", "Desbloqueo Cheque dev")
+				,addRoleBasedAction(CXCRoles.MODIFICACION_TIPO_VENCIMIENTO.name(),"modificacionDeVencimientoFactura", "Cambio Vencimiento")
 				,addRoleBasedAction(CXCRoles.MODIFICACION_LINEA_DE_CREDITO.name(),"bitacora", "Bitácora")
 				
 				
@@ -64,7 +65,8 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 	@Override
 	protected List<ClienteCreditoRow> findData() {
 		String sql="select a.cliente_id,a.clave,a.nombre,a.rfc,b.linea,b.plazo,b.saldo,b.ATRASO_MAX as atrasoMaximo,PERMITIR_CHEQUE as permitirCheque" +
-				",b.POSTFECHADO as postfechado,b.checkplus as checkplus,b.CRED_SUSPENDIDO as suspendido,b.modificado,b.MODIFICADO_USR as usuario " +
+				",b.POSTFECHADO as postfechado,b.checkplus as checkplus ,b.VENCE_FACTURA as vencimientoFechaFactura" +
+				",b.CRED_SUSPENDIDO as suspendido,b.modificado,b.MODIFICADO_USR as usuario " +
 				"from sx_clientes a join sx_clientes_credito b on (a.CREDITO_ID=b.CREDITO_ID) order by a.nombre";
 		return ServiceLocator2.getJdbcTemplate().query(sql, new BeanPropertyRowMapper(ClienteCreditoRow.class));
 		
@@ -187,6 +189,15 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 		}
 	}
 	
+	public void modificacionDeVencimientoFactura(){
+		ClienteCreditoRow row=(ClienteCreditoRow)getSelectedObject();
+		if(row!=null){
+			final Cliente res=ModificacionClienteForm.modificarVencimientoFactura(row.getClave());
+			if(res!=null){
+				refresh(res);
+			}
+		}
+	}
 	
 	public void bitacora(){
 		BitacoraClientesCredito.show();

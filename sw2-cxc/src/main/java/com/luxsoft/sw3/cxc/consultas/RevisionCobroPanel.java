@@ -246,9 +246,11 @@ public class RevisionCobroPanel extends FilteredBrowserPanel<CargoRow2> {
 		for(Object o:getSelected()){
 			CargoRow2 row=(CargoRow2)o;
 			Cargo cargo=getManager().getCargo(row.getId());
-			selected.add(cargo);
-			
+			if(!cargo.isRevisada()){
+				selected.add(cargo);
+			}	
 		}
+		
 		selected=RevisionDeCargosForm.showForm(selected);
 		if(selected==null)
 			return;

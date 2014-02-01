@@ -63,12 +63,11 @@ public class CFDIPanel extends FilteredBrowserPanel<CFDI>{
 
 	@Override
 	protected List<CFDI> findData() {
-		String hql="from CFDI c where date(c.log.creado) " +
-				"between ? and ? " +
+		String hql="from CFDI c where date(c.log.creado) = ? " +
+				//"between ? and ? " +
 				" and c.origen not in(select cc.cargo.id from CancelacionDeCargo cc)";
 		return Services.getInstance().getHibernateTemplate().find(hql
-				, new Object[]{periodo.getFechaInicial()
-				,periodo.getFechaFinal()}
+				, new Object[]{new Date()}
 				);
 	}
 	
@@ -78,7 +77,7 @@ public class CFDIPanel extends FilteredBrowserPanel<CFDI>{
 	@Override
 	protected List<Action> createProccessActions(){
 		List<Action> res=super.createProccessActions();
-		res.add(addAction(null, "mandarPorCorreoElectronico", "Mandar por Correo"));
+		//res.add(addAction(null, "mandarPorCorreoElectronico", "Mandar por Correo"));
 		return res;
 	}
 

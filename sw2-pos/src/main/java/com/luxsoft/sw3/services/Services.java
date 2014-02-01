@@ -262,6 +262,7 @@ public final class Services {
 	}
 	
 	public synchronized static JavaMailSender getMailSender(){
+		System.err.println("Estoy en el mailsender");
 		return (JavaMailSender)getInstance().getContext().getBean("mailSender");
 	}
 

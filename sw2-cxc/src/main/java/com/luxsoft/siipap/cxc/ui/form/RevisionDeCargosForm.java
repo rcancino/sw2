@@ -109,14 +109,17 @@ public class RevisionDeCargosForm extends AbstractForm{
 		return super.createCustomComponent(property);
 	}
 
-	public static List showForm(final List<Cargo> cxcs){		
-		RevisionDeCargosModel model=new RevisionDeCargosModel(cxcs);
-		final RevisionDeCargosForm form=new RevisionDeCargosForm(model);
-		form.open();
-		if(!form.hasBeenCanceled()){
-			model.aplicarCambios();
-			return model.getCuentas();
+	public static List showForm(final List<Cargo> cxcs){
+		if(!cxcs.isEmpty()){
+			RevisionDeCargosModel model=new RevisionDeCargosModel(cxcs);
+			final RevisionDeCargosForm form=new RevisionDeCargosForm(model);
+			form.open();
+			if(!form.hasBeenCanceled()){
+				model.aplicarCambios();
+				return model.getCuentas();
+			}	
 		}
+		
 		return null;
 	}
 	

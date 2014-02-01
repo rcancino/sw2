@@ -86,6 +86,9 @@ public class ModificacionClienteForm extends AbstractForm{
 		}else if("credito.suspendido".equals(property)){
 			ValueModel valueModel=getClienteModel().getCreditoModel().getComponentModel("suspendido");
 			return BasicComponentFactory.createCheckBox(valueModel, "");
+		}else if("credito.vencimientoFactura".equals(property)){
+			ValueModel valueModel=getClienteModel().getCreditoModel().getComponentModel("vencimientoFactura");
+			return BasicComponentFactory.createCheckBox(valueModel, "");
 		}
 		return null;
 	}
@@ -123,6 +126,12 @@ public class ModificacionClienteForm extends AbstractForm{
 	public static Cliente modificarDescuentoFijoCredito(String clave ){
 		Cliente c=ServiceLocator2.getClienteManager().buscarPorClave(clave);
 		ModificacionClienteFormModel model=ModificacionClienteFormModel.getDescuentoFijoModel(c);
+		return modificarClienteCredito(model);
+	}
+	
+	public static Cliente modificarVencimientoFactura(String clave ){
+		Cliente c=ServiceLocator2.getClienteManager().buscarPorClave(clave);
+		ModificacionClienteFormModel model=ModificacionClienteFormModel.getVenceFacturaModel(c);
 		return modificarClienteCredito(model);
 	}
 	

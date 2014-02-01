@@ -25,6 +25,7 @@ public enum CXCRoles {
 	,FACTURACION_DOLARES("Facturacion en Dolares")
 	,DIRECCION_COMERCIAL("Direccion comercial")
 	,LISTA_DE_PRECIOS_CLIENTES("Consulta a lista de precios cliente")
+	,MODIFICACION_TIPO_VENCIMIENTO("Cambia en tipo de vencimiento de un cliente")
 	;
 	
 private final String descripcion;

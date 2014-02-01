@@ -32,6 +32,8 @@
      			<ref bean="facturacionCreditoCFDIPanel"/>
      			<bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPanel"
     				p:title="CFDI's"/>
+    			<bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPorClientesPanel"
+    				p:title="CFDI's por Cliente"/>
      		<!-- 	<ref bean="facturacionCreditoPanel"/> -->
      			<ref bean="devolucionesPanel"/>
      			<ref bean="preDevolucionesPanel"/>
@@ -91,6 +93,9 @@
      
      <bean id="cfdiPanel" class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPanel"
     	p:title="CFDI's"/>
+    	
+    <bean id="cfdiPorClientesPanel" class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPorClientesPanel"
+    	p:title="CFDI's Por Cliente"/>
      
      <bean id="comprasView" 
      	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"

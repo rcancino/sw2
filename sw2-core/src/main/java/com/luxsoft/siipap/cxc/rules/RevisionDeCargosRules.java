@@ -48,8 +48,10 @@ public class RevisionDeCargosRules {
 		Assert.isTrue(res,"La seleccion no corresponde al mismo cliente ");
 		
 		res=CXCUtils.validarMismoFechaRevision(cuentas);
-		Assert.isTrue(res,"La seleccion no corresponde al la misma fecha de revisión");		
+		Assert.isTrue(res,"La seleccion no corresponde a la misma fecha de revisión");		
 		validarRecibidasCxC(cuentas);
+		
+		
 	}
 	
 	
@@ -135,7 +137,7 @@ public class RevisionDeCargosRules {
 			cuenta.setVencimiento(vto);
 			if(cuenta.getCliente().getCredito().isVencimientoFactura()){
 				cuenta.setRevisada(true);
-				cuenta.setFechaRecepcionCXC(cuenta.getFecha());
+				cuenta.setFechaRevisionCxc(cuenta.getFecha());
 			}
 		}else{
 			//Si el cliente es de credito

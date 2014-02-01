@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.luxsoft.siipap.cxc.model.FormaDePago;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.Empresa;
@@ -84,9 +85,22 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		cfdi.setFecha(getFecha());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
-		cfdi.setMetodoDePago(venta.getFormaDePago().name());
-		if(StringUtils.isNotBlank(venta.getComentarioCancelacionDBF()))
-			cfdi.setNumCtaPago(venta.getComentarioCancelacionDBF());
+		
+	
+	
+		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.isContraEntrega()){
+	    	cfdi.setMetodoDePago("NO IDENTIFICADO");
+		}else if(venta.getFormaDePago().equals(FormaDePago.CHECKPLUS) || venta.getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO) ){
+			cfdi.setMetodoDePago("CHEQUE");
+		}
+		else
+		   cfdi.setMetodoDePago(venta.getFormaDePago().name());
+		
+		if(StringUtils.isNotBlank(venta.getComentarioCancelacionDBF()) ){
+			if(!(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.isContraEntrega()))
+			    cfdi.setNumCtaPago(venta.getComentarioCancelacionDBF());
+		}
+			
 		cfdi.setMoneda(venta.getMoneda().getCurrencyCode());
 		cfdi.setTipoCambio(BigDecimal.valueOf(venta.getTc()).toString());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);

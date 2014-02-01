@@ -21,6 +21,7 @@ public class ClienteCreditoRow {
 	private Date modificado;
 	private String usuario;
 	private Boolean checkplus;
+	private Boolean vencimientoFechaFactura;
 	
 	public ClienteCreditoRow(){
 		
@@ -42,6 +43,7 @@ public class ClienteCreditoRow {
 			
 		}
 		setUsuario(c.getLog().getUpdateUser());
+		setVencimientoFechaFactura(c.getCredito().isVencimientoFactura());
 	}
 	
 	public Long getCliente_id() {
@@ -135,6 +137,16 @@ public class ClienteCreditoRow {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
+	
+	
+	public Boolean getVencimientoFechaFactura() {
+		return vencimientoFechaFactura;
+	}
+
+	public void setVencimientoFechaFactura(Boolean vencimientoFechaFactura) {
+		this.vencimientoFechaFactura = vencimientoFechaFactura;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

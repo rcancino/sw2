@@ -69,6 +69,10 @@ public class ModificacionClienteFormModel extends ClienteFormModel{
 		return new ModificacionClienteFormModel(c, "Suspendido", "credito.suspendido", "Modificar Suspendido");
 	}
 	
+	public static ModificacionClienteFormModel getVenceFacturaModel(Cliente c){
+		return new ModificacionClienteFormModel(c, "vencimientoFactura", "credito.vencimientoFactura", "Vencimiento Factura");
+	}
+	
 	
 	public ModificacionClienteFormModel(Cliente bean,String message,String property,String label) {
 		super(bean);

@@ -184,8 +184,13 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	
 	@Override
 	protected void doSelect(Object bean) {
+		/*
 		Pedido pedido=(Pedido)bean;
-		PedidoFormView.showPedido(pedido.getId());
+		PedidoFormView.showPedido(pedido.getId());*/
+		Pedido pedido=getSelectedPedido();
+		if(pedido!=null){
+			PedidoFormView.showPedido(pedido.getId());
+		}
 	}
 
 	@Override

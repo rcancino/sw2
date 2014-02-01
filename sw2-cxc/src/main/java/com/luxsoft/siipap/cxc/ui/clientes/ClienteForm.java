@@ -105,7 +105,7 @@ public class ClienteForm extends GenericAbstractForm<Cliente>{
 		builder.append("http://www:",getControl("www"),5);
 		if(KernellSecurity.instance().hasRole(CXCRoles.GERENCIA_DE_CREDITO.name())){
 			builder.append("Suspendido",getControl("suspendido"),true);
-			builder.append("Permitir cheque",getControl("permitirCheque"),true);
+			builder.append("Permitir cheque",addReadOnly("permitirCheque"),true);
 		}else{
 			builder.append("Suspendido",addReadOnly("suspendido"),true);
 			builder.append("Permitir cheque",addReadOnly("permitirCheque"),true);
@@ -213,6 +213,7 @@ public class ClienteForm extends GenericAbstractForm<Cliente>{
 		builder.appendSeparator("A revisión y cobro");
 		creditoRevision=BasicComponentFactory.createCheckBox(getClienteModel().getCreditoModel().getComponentModel("revision"), "");
 		creditoVencimientoFactura=BasicComponentFactory.createCheckBox(getClienteModel().getCreditoModel().getComponentModel("vencimientoFactura"), "Fecha factura");
+		creditoVencimientoFactura.setEnabled(false);
 		creditoDiaRevision=Binder.createDiaDeLaSemanaBinding(getClienteModel().getCreditoModel().getComponentModel("diarevision"));
 		creditoDiaCobro=Binder.createDiaDeLaSemanaBinding(getClienteModel().getCreditoModel().getComponentModel("diacobro"));
 		builder.append("Mandar a revisión",creditoRevision);
@@ -404,7 +405,7 @@ public class ClienteForm extends GenericAbstractForm<Cliente>{
 		creditoRevision.setEnabled(val);
 		creditoDiaRevision.setEnabled(val);
 		creditoDiaCobro.setEnabled(val);
-		creditoVencimientoFactura.setEnabled(val);
+		//creditoVencimientoFactura.setEnabled(val);
 		operadorField.setEnabled(val);
 		chequePostFechado.setEnabled(val);
 		cobradorBox.setEditable(val);

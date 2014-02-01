@@ -94,6 +94,8 @@ public final class CXCUtils {
 		
 	}
 	
+
+	
 	
 	/**
 	 * Genera una copia de las cuentas,cargando desde la base de datos
