@@ -106,7 +106,7 @@ public class Configuracion extends BaseBean{
 	 */
 	public static Long getSucursalLocalId(){
 		String sucursal=System.getProperty("sw3.sucursal.local","1");
-		System.err.println("-------------------"+sucursal);
+		//System.err.println("-------------------"+sucursal);
 		Long id=Long.valueOf(sucursal);
 		return id;
 	}

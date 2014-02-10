@@ -207,7 +207,7 @@ public class TrasladoForm extends AbstractForm {
 				SolicitudDeTraslado sol=(SolicitudDeTraslado)Services
 						.getInstance().getHibernateTemplate()
 						.get(SolicitudDeTraslado.class
-								,"8a8a8161-4200b9ec-0142-00becd9d-0004");
+								,"8a8a81e9-3268382c-0132-689e06e2-0017");
 				TrasladoController controller=new TrasladoController(sol);
 				TrasladoForm form=new TrasladoForm(controller);
 				form.open();
@@ -215,6 +215,7 @@ public class TrasladoForm extends AbstractForm {
 					System.out.println(
 							ToStringBuilder.reflectionToString(controller.getBaseBean())
 					);
+					controller.persistir();
 				}
 				System.exit(0);
 			}

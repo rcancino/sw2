@@ -160,6 +160,9 @@ public class Traslado extends BaseBean implements Replicable{
 	@Column(name="SUPERVISO",nullable=true,length=150)
 	private String superviso;
 	
+	@Formula("(select X.CFD_ID FROM SX_CFDI X where X.ORIGEN_ID=TRASLADO_ID )")
+	private String cfdi;
+	
 	public String getTipo() {
 		return tipo;
 	}
@@ -424,5 +427,11 @@ public class Traslado extends BaseBean implements Replicable{
 		String pattern="{0} {1} {2}";
 		return MessageFormat.format(pattern, id,fecha,comentario);
 	}
+
+	public String getCfdi() {
+		return cfdi;
+	}
+	
+	
 
 }

@@ -88,7 +88,7 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		
 	
 	
-		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.isContraEntrega()){
+		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.isContraEntrega()||venta.getFormaDePago().equals(FormaDePago.EFECTIVO)){
 	    	cfdi.setMetodoDePago("NO IDENTIFICADO");
 		}else if(venta.getFormaDePago().equals(FormaDePago.CHECKPLUS) || venta.getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO) ){
 			cfdi.setMetodoDePago("CHEQUE");

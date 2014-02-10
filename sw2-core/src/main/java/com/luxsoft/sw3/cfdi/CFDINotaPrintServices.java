@@ -1,5 +1,6 @@
 package com.luxsoft.sw3.cfdi;
 
+import java.awt.Image;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -26,10 +27,12 @@ import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventTableModel;
 
+
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
+import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.siipap.ventas.model.Devolucion;
@@ -112,7 +115,7 @@ public class CFDINotaPrintServices {
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
 		parametros.put("CUENTA", 		comprobante.getNumCtaPago());
 		parametros.put("METODO_PAGO", 		comprobante.getMetodoDePago());
-		
+		parametros.put("TIPO_CFDI", comprobante.getTipoDeComprobante().toString());
 		//Datos tomado de la aplicacion
 		
 				parametros.put("CARGO_ID", 			nota.getId());
@@ -220,6 +223,11 @@ public class CFDINotaPrintServices {
 		
 		return parametros;
 	}
+	
+	
+	
+	
+	
 	
 	
 }

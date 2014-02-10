@@ -13,6 +13,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.util.Assert;
 
 import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.dao.UniversalDao;
@@ -28,6 +29,8 @@ import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIManager;
 import com.luxsoft.sw3.cfdi.CFDITimbrador;
+import com.luxsoft.sw3.cfdi.CFDITraslado;
+import com.luxsoft.sw3.cfdi.ITraslado;
 
 /**
  * Service locator para accesar los beans administrados por Spring
@@ -160,10 +163,8 @@ public final class Services {
 			Long id=Configuracion.getSucursalLocalId();
 			String hql="from Configuracion  c where c.sucursal.id=?";
 			List<Configuracion> data=getInstance().getHibernateTemplate().find(hql,id);
-			if(!data.isEmpty())
-				return data.get(0);
-			System.err.println( "*********************"+data.get(0));
-			return null;
+			Assert.notEmpty(data,"No existe registro de configucacion para la sucursal: "+id+ " Tabla SX_CONFIGURACION");
+			return data.get(0);
 		} catch (Exception e) {
 			logger.error(e);
 			return null;
@@ -254,7 +255,9 @@ public final class Services {
 	public synchronized static  CFDITimbrador getCFDITimbrador(){
 		return (CFDITimbrador)getInstance().getContext().getBean("cfdiTimbrador");
 	}
-	
+	public synchronized static ITraslado getCFDITraslado(){
+		return (ITraslado)getInstance().getContext().getBean("cfdiTraslado");
+	}
 	
 	
 	public Empresa getEmpresa() {

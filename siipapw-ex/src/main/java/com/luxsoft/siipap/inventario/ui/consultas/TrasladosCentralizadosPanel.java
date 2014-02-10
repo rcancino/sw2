@@ -23,8 +23,10 @@ import ca.odell.glazedlists.swing.TextComponentMatcherEditor;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.inventarios.model.TrasladoDet;
+
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
+import com.luxsoft.siipap.swing.reports.ReportUtils;
 import com.luxsoft.siipap.swing.utils.CommandUtils;
 
 
@@ -146,6 +148,9 @@ public class TrasladosCentralizadosPanel extends AbstractMasterDatailFilteredBro
 			Map params=new HashMap();
 			params.put("TRALADO_ID", m.getId());
 			//ReportUtils2.runReport("invent/SalidaDeTraslado.jasper", params);
+			
+			ReportUtils.viewReport(ReportUtils.toReportesPath("invent/SalidaDeTraslado.jasper"), params);
+			
 		}
 	}
 

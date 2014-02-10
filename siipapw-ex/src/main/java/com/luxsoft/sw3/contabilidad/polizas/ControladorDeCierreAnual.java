@@ -10,6 +10,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 
+import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.sw3.contabilidad.model.Poliza;
 import com.luxsoft.sw3.contabilidad.model.SaldoDeCuentaPorConcepto;
 
@@ -46,7 +47,7 @@ public class ControladorDeCierreAnual extends ControladorDinamico{
 		poliza.setDescripcion(getClase()+ " - "+referencia);
 		poliza.setDescripcion("ELIMINACION DE CUENTAS DE IETU "+poliza.getYear());
 		
-		final Integer year=2012;
+		final Integer year=Periodo.obtenerYear(fecha);
 		
 		final List<SaldoDeCuentaPorConcepto> saldos=getHibernateTemplate().executeFind(new HibernateCallback() {			
 			public Object doInHibernate(Session session) throws HibernateException,SQLException {
@@ -88,7 +89,7 @@ public class ControladorDeCierreAnual extends ControladorDinamico{
 		poliza.setDescripcion(getClase()+ " - "+referencia);
 		poliza.setDescripcion("Cierre del ejercicio "+poliza.getYear());
 		
-		final Integer year=2012;
+		final Integer year=Periodo.obtenerYear(fecha);
 		
 		final List<SaldoDeCuentaPorConcepto> saldos=getHibernateTemplate().executeFind(new HibernateCallback() {			
 			public Object doInHibernate(Session session) throws HibernateException,SQLException {

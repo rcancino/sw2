@@ -36,6 +36,8 @@ import org.springframework.util.Assert;
 
 import com.luxsoft.siipap.cxc.model.Abono;
 import com.luxsoft.siipap.cxc.model.Cargo;
+import com.luxsoft.siipap.cxc.model.NotaDeCargo;
+import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.service.ServiceLocator2;
@@ -224,31 +226,44 @@ public class CFDI_MailServices {
 			InputStreamSource source=new ByteArrayResource(xml);
 			messageHelper.addAttachment(cfd.getXmlFilePath(),source);
 			
+			JasperPrint jp=null;
+			
 			if(cfd.getTipo().equals("FACTURA")){
-				JasperPrint jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
+				jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
 					public Object doInHibernate(Session session) throws HibernateException,SQLException {
 						Venta venta=(Venta)session.get(Venta.class, cfd.getOrigen());
 						JasperPrint jp=CFDIPrintServices.impripirComprobante(venta, cfd, "", false);
 						return jp;
 					}
+				});	
+			}
+			
+			if(cfd.getTipo().equals("NOTA_CARGO")){
+				jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
+					public Object doInHibernate(Session session) throws HibernateException,SQLException {
+						NotaDeCargo nota=(NotaDeCargo)session.get(NotaDeCargo.class, cfd.getOrigen());
+						//JasperPrint jp=CFDIPrintServices.impripirComprobante(venta, cfd, "", false);
+						JasperPrint jp=CFDINotaDeCargoPrintServices.impripirComprobante(nota, cfd);
+						return jp;
+					}
 				});
-				if(jp!=null){
-					
-					byte[] pdf=JasperExportManager.exportReportToPdf(jp);
-					InputStreamSource sourcePdf=new ByteArrayResource(pdf);
-					String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
-					messageHelper.addAttachment(pdfName,sourcePdf);
-					
-					/*
-					String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
-					String pdfPath=System.getProperty("user.home")+"/"+pdfName;
-					
-					File dest=new File(pdfPath);
-					FileOutputStream fout=new FileOutputStream(dest);
-					JasperExportManager.exportReportToPdfFile(jp, pdfPath);
-					*/
-					//messageHelper.addAttachment(pdfName,dest);
-				}
+			}
+			if(cfd.getTipo().equals("NOTA_CREDITO")){
+				jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
+					public Object doInHibernate(Session session) throws HibernateException,SQLException {
+						NotaDeCredito nota=(NotaDeCredito)session.get(NotaDeCredito.class, cfd.getOrigen());
+						JasperPrint jp=CFDINotaPrintServices.impripirComprobante(nota, cfd);
+						return jp;
+					}
+				});
+			}
+			
+			if(jp!=null){
+				
+				byte[] pdf=JasperExportManager.exportReportToPdf(jp);
+				InputStreamSource sourcePdf=new ByteArrayResource(pdf);
+				String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
+				messageHelper.addAttachment(pdfName,sourcePdf);
 				
 			}
 			

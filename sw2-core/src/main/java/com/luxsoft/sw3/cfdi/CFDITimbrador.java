@@ -36,22 +36,25 @@ public class CFDITimbrador implements InitializingBean{
 		String nombre=cfdi.getXmlFilePath();
 		byte[] xml=cfdi.getXml();
 		byte[] zipFile=utils.comprimeArchivo(nombre, xml);
-		/*
-		byte[] res=null;
-		if(modoCfdi.startsWith("PRUEBA")){
-			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
-		}else{
-			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
-		}*/
 		
 		//byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
-		byte[] res=cfdiClient.getCfdi("PAP830101CR3", "yqjvqfofb", zipFile);
+		byte[] res=null;
+		String modo=System.getProperty("cfdi.timbrado", "test");
+		if(modo.equals("test")){
+			System.out.println("Timbrando en modo de prueba...");
+			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
+		}else{
+			System.out.println("Timbrando en modo produccion...");
+			res=cfdiClient.getCfdi("PAP830101CR3", "yqjvqfofb", zipFile);
+		}
+		 
 		
 		Map<String, byte[]> map =utils.descomprimeArchivo(res);
 		Map.Entry<String, byte[]> entry=map.entrySet().iterator().next();
 		
 		cfdi.setXmlFilePath(entry.getKey());
 		cfdi.setXml(entry.getValue());
+		//cfdi.setDocument(null);
 		cfdi.setTimbre(new TimbreFiscal(cfdi.getComprobante()));
 		cfdi.setUUID(cfdi.getTimbreFiscal().getUUID());
 		cfdi.cargarTimbrado();

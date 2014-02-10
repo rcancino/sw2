@@ -85,13 +85,13 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 		CFDIUtils.depurar(document);
 		cfdi.setVersion("3.2");
 		cfdi.setFecha(getFecha());
-		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
+		
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
 		cfdi.setMetodoDePago("NO IDENTIFICADO");
 		
 		cfdi.setMoneda(nota.getMoneda().getCurrencyCode());
 		cfdi.setTipoCambio(BigDecimal.valueOf(nota.getTc()).toString());
-		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
+		cfdi.setTipoDeComprobante(TipoDeComprobante.EGRESO);
 		
 		
 		// Emisor,regimen fiscal,domicilioFiscal

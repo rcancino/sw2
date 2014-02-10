@@ -27,6 +27,7 @@ import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.embarque.Chofer;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.services.KernellUtils;
@@ -210,8 +211,11 @@ public class TrasladoController extends DefaultFormModel {
 				cortador=cortadorHolder.getValue().toString();
 			Traslado[] t=Services.getInstance().getInventariosManager()
 					.generarSalidaPorTraslado(getSolicitud(),fecha,chofer.getNombre(),getUser(),surtidor,supervisor,cortador);
-			MessageUtils.showMessage("Traslado generado:\n "+t[0].getDocumento()
+			MessageUtils.showMessage("Traslado generado:\n "+t[0].getDocumento()+"\n Generando CFDI para TPS"
 					, "Atención  de traslados");
+			Traslado tps=t[0];
+			CFDI cfdi=Services.getCFDITraslado().generar(tps);
+			MessageUtils.showMessage("CFDI generado: "+cfdi, "Sistema CFDI");
 			return t;
 		}
 		return null;

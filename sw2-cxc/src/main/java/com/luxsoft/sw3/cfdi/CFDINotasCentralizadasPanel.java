@@ -26,10 +26,11 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 	
 	public void init(){
 		addProperty(
-				"serie","tipo","folio","receptor","log.creado","total","estado","timbreFiscal.fechaTimbrado","timbreFiscal.UUID","rfc"
+				"serie","tipo","folio","receptor","log.creado","total","estado","timbreFiscal.fechaTimbrado","timbreFiscal.UUID"
+				,"rfc","comentario","cancelacion"
 				);
 		addLabels(
-				"Serie","Tipo","Folio","Cliente","Fecha","Total","Estado","Timbrado","UUID","RFC"
+				"Serie","Tipo","Folio","Cliente","Fecha","Total","Estado","Timbrado","UUID","RFC","Comentario","Cancelacion"
 				);
 		installTextComponentMatcherEditor("Serie", "serie");
 		installTextComponentMatcherEditor("Folio", "folio");
