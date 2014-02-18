@@ -190,7 +190,7 @@
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="exportadorDeProductosTrigger"/>			
+			<!-- 	<ref bean="exportadorDeProductosTrigger"/>			
 				<ref bean="exportadorDeClientesTrigger"/>
 				<ref bean="exportadorDeProveedoresTrigger"/>
 				<ref bean="exportadorDeListaDePreciosClienteTrigger"/>
@@ -202,7 +202,7 @@
 				<ref bean="actualizadorDeAtrasoMaximoTrigger"/>
 				<ref bean="ventasPorFacturistaTrigger"/>
 				<ref bean="actualizadorDeDocumentoTrigger"/>
-				<ref bean="eliminadorDeSolicitudDeTrasladoTrigger"/>
+				<ref bean="eliminadorDeSolicitudDeTrasladoTrigger"/> -->
 			</list>			
 		</property>
 	</bean>

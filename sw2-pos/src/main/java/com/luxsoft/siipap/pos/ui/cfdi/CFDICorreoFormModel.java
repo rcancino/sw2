@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
+//import org.apache.axis.transport.mail.MailSender;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -24,9 +25,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
+
+
+
+
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.Assert;
@@ -47,6 +54,8 @@ import freemarker.template.Template;
 
 
 public class CFDICorreoFormModel extends DefaultFormModel{
+	
+	
 	
 	private List<CFDI> cfds;
 	
@@ -109,6 +118,7 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 				htmlText="Error en template: "+ExceptionUtils.getRootCauseMessage(e);
 			}
 		}
+		 System.err.println("ya casi regreso el html");
 		return htmlText;
 					
 	}
@@ -141,8 +151,10 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 			msg.setText(getHtml(),true);
 			//msg.addInline("cid:papelLogo", resource);
 			
-			
-			Services.getMailSender().send(msg.getMimeMessage());
+			System.out.println("Casi para enviar...");
+			JavaMailSender sender=Services.getCFDIMailServicesPOS().getMailSender();
+			sender.send(msg.getMimeMessage());
+			//Services.getCFDIMailServicesPOS().getMailSender().se
 			System.out.println("Correo enviado...");
 			for(CFDI cfdi:cfds){
 				cfdi.setComentario("Enviado: "+DateUtil.getDateTime("dd/MM/yyyy hh:mm:ss",new Date()));
@@ -161,7 +173,8 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 		Assert.notEmpty(cfds,"La lista de CFDIs a enviar esta vacia");
 		
 		try {
-			MimeMessage mimeMessage=Services.getMailSender().createMimeMessage();
+			//MimeMessage mimeMessage=Services.getMailSender().createMimeMessage();
+			MimeMessage mimeMessage=Services.getCFDIMailServicesPOS().getMailSender().createMimeMessage();
 			MimeMessageHelper messageHelper=new MimeMessageHelper(mimeMessage,true);
 			messageHelper.setFrom(from);
 			messageHelper.setTo(to);
@@ -218,7 +231,8 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 		return mails.isEmpty()?c.getEmai3():mails.get(0).getEmail1();
 	}
 
-	
+
+
 	
 	
 	public static class CorreoModel {

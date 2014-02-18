@@ -40,11 +40,12 @@ public class CorreccionDeTimbradosPruebas {
 	}
 	
 	
-	public void guardarErroneos() throws Exception{
+	public void guardarErroneos(String sucursal) throws Exception{
 		
 		List<String> lineas=new ArrayList<String>();
 		@SuppressWarnings("unchecked")
-		List<CFDI> rows=hibernateTemplate.find("from CFDI c ");
+		List<CFDI> rows=hibernateTemplate.find("from CFDI c where c.UUID like ?","%-7E57-%");
+		System.out.println("CFDIs a corregir: "+rows.size());
 		for(CFDI cfdi:rows){
 			if(cfdi.getTimbreFiscal().getUUID()!=null){
 				String uuid=cfdi.getTimbreFiscal().getUUID();
@@ -53,7 +54,8 @@ public class CorreccionDeTimbradosPruebas {
 					String correo="";
 					Venta venta=(Venta)hibernateTemplate.get(Venta.class, cfdi.getOrigen());
 					if(venta!=null){
-						List data=hibernateTemplate.find("from CFDIClienteMails c where c.cliente.id=?",venta.getCliente().getId());
+						List data=hibernateTemplate.find("from CFDIClienteMails c where c.cliente.id=?"
+								,venta.getCliente().getId());
 						if(!data.isEmpty()){
 							CFDIClienteMails cc=(CFDIClienteMails)data.get(0);
 							correo=cc.getEmail1();
@@ -68,7 +70,9 @@ public class CorreccionDeTimbradosPruebas {
 				}
 			}
 		}
-		Writer out=new FileWriter("C:\\basura\\cfdiErrors.csv", false);
+		String pattern="C:\\cfdi\\xml\\correcciones\\{0}\\{1}";
+		String target=MessageFormat.format(pattern, sucursal,"erroresDeTimbrado.csv");
+		Writer out=new FileWriter(target, false);
 		BufferedWriter writer=new BufferedWriter(out);
 		
 		for(String line:lineas){
@@ -82,10 +86,11 @@ public class CorreccionDeTimbradosPruebas {
 		
 	}
 	
-	public void corregirErrores(String file)throws Exception{
+	public void corregirErrores(String sucursal)throws Exception{
 		List<String> rows=new ArrayList<String>();
-		
-		Reader in=new FileReader(file);
+		String pattern="C:\\cfdi\\xml\\correcciones\\{0}\\{1}";
+		String target=MessageFormat.format(pattern, sucursal.toLowerCase(),"erroresDeTimbrado.csv");
+		Reader in=new FileReader(target);
 		BufferedReader reader=new BufferedReader(in);
 		String line=reader.readLine();
 		while(line!=null){
@@ -96,7 +101,7 @@ public class CorreccionDeTimbradosPruebas {
 		
 		for(String row:rows){
 			try {
-				limpiarTimbrado(row);
+				limpiarTimbrado(sucursal,row);
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Error limpiando timbrando : "+row+ " Error: "+ExceptionUtils.getRootCauseMessage(e));
@@ -105,10 +110,8 @@ public class CorreccionDeTimbradosPruebas {
 		System.out.println("Registros a reparar: "+rows.size());
 	}
 	
-	public void limpiarTimbrado(String row) throws Exception{
+	public void limpiarTimbrado(final String sucursal,String row) throws Exception{
 		String[] data=StringUtils.split(row, ';');
-		
-		//System.out.println("Parsed row: "+data.length+ "  "+row);
 		
 		String pattern="Limpiando timbrado para cfdi {0}-{1} cfdi:{2}";
 		final String cfdiId=data[5];
@@ -122,7 +125,9 @@ public class CorreccionDeTimbradosPruebas {
 				Assert.isTrue(StringUtils.contains(cfdi.getTimbreFiscal().getUUID(), "-7E57-"),"El timbrado no es de prueba");
 				
 				String xmlName=StringUtils.removeStart(cfdi.getXmlFilePath(), "SIGN_");
-				String xmlPath="c:\\basura\\cfditac\\"+xmlName;
+				String pattern="C:\\cfdi\\xml\\correcciones\\{0}\\{1}";
+				String xmlPath=MessageFormat.format(pattern, sucursal,xmlName);
+				//String xmlPath="c:\\correcciones\\sintimbrar\\"+sucursal+"\\"+xmlName;
 				Resource resource=new FileSystemResource(xmlPath);
 				Assert.isTrue(resource.exists(),"No existe el archivo xml: "+xmlPath);
 				try {
@@ -149,40 +154,7 @@ public class CorreccionDeTimbradosPruebas {
 		});
 	}
 	
-	public void limpiarTimbradoIndividual(final String  cfdiId) throws Exception {
-		
-		hibernateTemplate.execute(new HibernateCallback() {
-			
-			public Object doInHibernate(Session session) throws HibernateException,SQLException {
-				CFDI cfdi=(CFDI)session.load(CFDI.class, cfdiId);
-				Assert.isTrue(StringUtils.contains(cfdi.getTimbreFiscal().getUUID(), "-7E57-"),"El timbrado no es de prueba");
-				
-				String xmlName=StringUtils.removeStart(cfdi.getXmlFilePath(), "SIGN_");
-				String xmlPath="c:\\basura\\cfditac\\"+xmlName;
-				Resource resource=new FileSystemResource(xmlPath);
-				Assert.isTrue(resource.exists(),"No existe el archivo xml: "+xmlPath);
-				try {
-					File xml=resource.getFile();
-					byte[] data=new byte[(int)xml.length()];
-					FileInputStream is=new FileInputStream(xml);
-					is.read(data);
-					is.close();
-					
-					cfdi.setXml(data);
-					cfdi.setTimbre(null);
-					cfdi.cargarTimbrado();
-					cfdi.setXmlFilePath(xmlName);
-					cfdi.setUUID("REPROGRAMADO PARA TIMBRADO");
-					cfdi.setComentario("RE PROGRAMAR ENVIO");
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-				
-				return null;
-			}
-		});
-	}
+	
 	
 	public void reTimbrar() throws Exception{
 		final CFDITimbrador timbrador=new CFDITimbrador();
@@ -194,7 +166,7 @@ public class CorreccionDeTimbradosPruebas {
 		for(CFDI cfdi:list){
 			try {
 				//System.out.println("Re timbrando: "+cfdi.getId()+" XML: "+cfdi.getComprobante().toString());
-				timbrador.timbrar(cfdi);
+				//timbrador.timbrar(cfdi);
 				System.out.println("Re Timbrado OK: "+cfdi.getId()+" UUID: "+cfdi.getUUID());
 				//cfdi.setComentario("RE PROGRAMAR ENVIO");
 				//hibernateTemplate.merge(cfdi);

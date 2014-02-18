@@ -37,11 +37,18 @@ public class BuscadorDeCargos extends AbstractAction{
 			if((res.getDocumento()!=null)&& (res.getDocumento().intValue()>0))
 				props.add("documento");
 			if((res.getNumeroFiscal()!=null)&& (res.getNumeroFiscal().intValue()>0))
-				props.add(0,"numeroFiscal");
+				props.add("numeroFiscal");
 			if(res.getSucursal()!=null)
 				props.add("sucursal");
-			Cargo found=SelectorDeCargos.buscar(res, props.toArray(new String[0]));
-			//Cargo found=SelectorDeCargos.buscar(res.getSucursal().getId(),res.getDocumento(),res.getNumeroFiscal());
+			Cargo found=null;
+			if(res.getDocumento()!=null && res.getSucursal()!=null){
+				 found=SelectorDeCargos.buscar(res.getDocumento(), res.getSucursal().getId(), res.getNumeroFiscal());
+			}else{
+				 found=SelectorDeCargos.buscar(res, props.toArray(new String[1]));
+				//Cargo found=SelectorDeCargos.buscar(res.getSucursal().getId(),res.getDocumento(),res.getNumeroFiscal());
+			}
+			
+			
 			if(found instanceof Venta){
 				FacturaForm.show(found.getId());
 			}else if(found instanceof NotaDeCargo){

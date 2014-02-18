@@ -1,4 +1,4 @@
-package com.luxsoft.sw3.cfdi;
+package com.luxsoft.siipap.pos.ui.cfdi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,11 +40,13 @@ import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.core.Cliente;
-import com.luxsoft.siipap.service.ServiceLocator2;
+//import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Venta;
+import com.luxsoft.sw3.cfdi.CFDIPrintServices;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
+import com.luxsoft.sw3.services.Services;
 import com.luxsoft.utils.LoggerHelper;
 
 import freemarker.template.Configuration;
@@ -52,7 +54,7 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 
 
-public class CFDI_MailServices {
+public class CFDI_MailServicesPOS {
 	
 	
 	
@@ -89,7 +91,7 @@ public class CFDI_MailServices {
 		String hql="select c.id from CFDI c where date(c.log.creado)=? and c.rfc!='XAXX010101000'"
 				+"  and c.serie like \'%FACCRE\' ";
 		
-		List<String> cfds=ServiceLocator2.getHibernateTemplate().find(hql, new Object[]{dia});
+		List<String> cfds=Services.getInstance().getHibernateTemplate().find(hql, new Object[]{dia});
 		totalCfds=cfds.size();
 		for(String cfd:cfds){
 			try {
@@ -129,7 +131,7 @@ public class CFDI_MailServices {
 		 
 		  
 		  
-		 List<String> cfds=ServiceLocator2.getHibernateTemplate().find(hql
+		 List<String> cfds=Services.getInstance().getHibernateTemplate().find(hql
 					, new Object[]{ dia}
 					);
 		totalCfds=cfds.size();
@@ -238,7 +240,7 @@ public class CFDI_MailServices {
 				});	
 			}
 			
-			if(cfd.getTipo().equals("NOTA_CARGO")){
+			/*if(cfd.getTipo().equals("NOTA_CARGO")){
 				jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
 					public Object doInHibernate(Session session) throws HibernateException,SQLException {
 						NotaDeCargo nota=(NotaDeCargo)session.get(NotaDeCargo.class, cfd.getOrigen());
@@ -247,8 +249,8 @@ public class CFDI_MailServices {
 						return jp;
 					}
 				});
-			}
-			if(cfd.getTipo().equals("NOTA_CREDITO")){
+			}*/
+			/*if(cfd.getTipo().equals("NOTA_CREDITO")){
 				jp=(JasperPrint)hibernateTemplate.execute(new HibernateCallback() {
 					public Object doInHibernate(Session session) throws HibernateException,SQLException {
 						NotaDeCredito nota=(NotaDeCredito)session.get(NotaDeCredito.class, cfd.getOrigen());
@@ -265,7 +267,7 @@ public class CFDI_MailServices {
 				String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
 				messageHelper.addAttachment(pdfName,sourcePdf);
 				
-			}
+			}*/
 			
 			
 			//messageHelper.addAttachment(fileName+".xml",xml);
@@ -366,14 +368,14 @@ public class CFDI_MailServices {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		final CFDI_MailServices service=ServiceLocator2.getCFDIMailServices();
+		//final CFDI_MailServices service=ServiceLocator2.getCFDIMailServices();
 		//String id="8a8a8199-4301c863-0143-01e30dc0-000b";
 		//service.mandarPorCorreo(id);
 		//service.madarPorCorreo(DateUtil.toDate("03/07/2012"));
 		//service.madarPorCorreo("20/08/2012","20/08/2012");
 		//service.madarPorCorreoPorOrigen(DateUtil.toDate("04/02/2014"), "CRE");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("04/02/2014"), "CAM");
-		service.madarPorCorreoPorOrigen(DateUtil.toDate("04/02/2014"), "MOS");		
+//		service.madarPorCorreoPorOrigen(DateUtil.toDate("04/02/2014"), "CAM");
+//		service.madarPorCorreoPorOrigen(DateUtil.toDate("04/02/2014"), "MOS");		
 	}
 
 }

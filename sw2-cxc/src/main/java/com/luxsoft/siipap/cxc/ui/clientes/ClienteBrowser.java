@@ -240,6 +240,11 @@ public class ClienteBrowser extends SXAbstractDialog{
 				cacnelpagoCOE.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/money_delete.png"));
 				cacnelpagoCOE.putValue(Action.SHORT_DESCRIPTION, "Cancelar pago contra entrega");
 				
+				Action actualizaCorreo=addAction(CXCActions.MantenimientoClientes.getId(), "actualizarCorreo", "Actualizar Correo");
+				actualizaCorreo.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/vcard_edit.png"));
+				actualizaCorreo.putValue(Action.SHORT_DESCRIPTION, "Actualizar correo");
+				
+				
 				actions=new Action[]{
 					getLoadAction()
 					,getInsertAction()
@@ -249,10 +254,23 @@ public class ClienteBrowser extends SXAbstractDialog{
 					,printInfoReport
 					,pagoCOE
 					,cacnelpagoCOE
+					,actualizaCorreo
 					};
 				
 			return actions;
 		}
+	
+		public void actualizarCorreo() {
+			
+			if(!selectionModel.getSelected().isEmpty()){
+				Object selected=selectionModel.getSelected().get(0);
+				Cliente c=(Cliente)selected;
+				String clave=c.getClave();
+				CFDIMailsClienteForm.showForm(clave);
+			}
+		}
+		
+		
 		
 		private Action printInfoReport;
 		

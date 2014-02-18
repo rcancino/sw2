@@ -1,19 +1,24 @@
 package com.luxsoft.sw3.bi;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.Action;
 
+import org.apache.activemq.thread.Task;
 import org.jdesktop.swingx.JXTable;
 import org.jfree.ui.DateCellRenderer;
 
 import com.luxsoft.siipap.cxc.CXCRoles;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
+import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.Renderers;
+import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.siipap.swing.utils.Renderers.ToHourConverter;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacion;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacionForm;
@@ -55,9 +60,28 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 				getLoadAction()
 				,getViewAction()
 				,addRoleBasedAction(CXCRoles.AUTORIZAR_MODIFICACIONES_DE_DATOS.name(),"atender", "Atender")
-				,addRoleBasedAction(CXCRoles.AUTORIZAR_MODIFICACIONES_DE_DATOS.name(),"reporte", "Reporte")
+				,addRoleBasedAction(CXCRoles.AUTORIZAR_MODIFICACIONES_DE_DATOS.name(),"reporte", "Reporte")				
+				
 				};
 		}
+		return actions;
+	}
+	
+	private Action prenderActualizacion;
+	private Action apagarActualizacion;
+	
+	@Override
+	protected List<Action> createProccessActions(){
+		
+		prenderActualizacion=addAction("", "prenderActualizacionAutomatica", "Encender Actualizacion automática");
+		
+		apagarActualizacion=addAction("", "apagarActualizacionAutomatica", "Apagar Actualizacion automática");
+		apagarActualizacion.setEnabled(false);
+		
+		List<Action> actions=new ArrayList<Action>();
+		actions.add(addAction(null, "actualizarExistencias", "Actualizar Exist."));
+		actions.add(prenderActualizacion);
+		actions.add(apagarActualizacion);
 		return actions;
 	}
 
@@ -72,7 +96,10 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		//load();
 		timer=new Timer();
 		timer.schedule(task, 1000, 30000);
+		
 	}
+	
+	
 	
 	private Timer timer;
 	
@@ -91,6 +118,29 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		task.cancel();
 		timer.purge();
 	}
+	
+	private Timer timerActualizar;
+	
+	TimerTask actualizar=new TimerTask() {
+			public void run() {
+			actualizarExistenciasAutomatico();
+		}
+	};
+	
+	 public void start() {
+		 System.out.println("Arrancando Actualizacion de Existencias automatico");
+		 timerActualizar=new Timer();
+         timerActualizar.schedule(actualizar,1000, 3600000 );
+     
+     }
+
+     public void cancel() {
+
+    	 System.out.println("Deteniendo Actualizacion de Existencias automatico");
+    	 actualizar.cancel();
+         timerActualizar.purge();
+
+     }
 	
 
 	@Override
@@ -121,6 +171,30 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		}
 	}
 	
+	
+	public void actualizarExistencias(){
+		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
+		sync.addSucursal(2L,3L,5L,6L,9L,11L).actualizarExistenciasOficinas(new Date());
+		MessageUtils.showMessage("Existencias Actualizadas", "Actualizacion de Existencias");
+	}
+	
+	public void actualizarExistenciasAutomatico(){
+		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
+		sync.addSucursal(2L,3L,5L,6L,9L,11L).actualizarExistenciasOficinas(new Date());
+		System.out.println("Existencias Actualizadas");
+	}
+	
+	
+	public void apagarActualizacionAutomatica(){
+		cancel();
+		prenderActualizacion.setEnabled(true);
+		apagarActualizacion.setEnabled(false);
+	}
+	public void prenderActualizacionAutomatica(){		
+		start();
+		prenderActualizacion.setEnabled(false);
+		apagarActualizacion.setEnabled(true);
+	}
 		
 	public void reporte(){
 		//BitacoraClientesCredito.show();

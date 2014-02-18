@@ -27,9 +27,32 @@ public class VentaNetaMensualRow implements Serializable{
 	private Double porcentajeUtilidad;
 	private BigDecimal porcentajeAportacion;
 	private Double inventarioCosteado;
-	private String nacional;
+	//private String nacional;
 	private BigDecimal kilos;
 	private BigDecimal precio_kilos;
+	private BigDecimal porcentajePartVN;
+	private BigDecimal costoKilos;
+	
+	
+	
+	public BigDecimal getCostoKilos() {
+		return costoKilos;
+	}
+
+	public void setCostoKilos(BigDecimal costoKilos) {
+		this.costoKilos = costoKilos;
+	}
+
+	public BigDecimal getKilosInv() {
+		return kilosInv;
+	}
+
+	public void setKilosInv(BigDecimal kilosInv) {
+		this.kilosInv = kilosInv;
+	}
+
+	private BigDecimal kilosInv;
+	
 	
 	
 	
@@ -127,13 +150,13 @@ public class VentaNetaMensualRow implements Serializable{
 		return true;
 	}
 
-	public String getNacional() {
+/*	public String getNacional() {
 		return nacional;
 	}
 
 	public void setNacional(String nacional) {
 		this.nacional = nacional;
-	}
+	}*/
 
 	public String getOrigenId() {
 		return origenId;
@@ -149,6 +172,14 @@ public class VentaNetaMensualRow implements Serializable{
 
 	public void setPeriodo(String periodo) {
 		this.periodo = periodo;
+	}
+
+	public BigDecimal getPorcentajePartVN() {
+		return porcentajePartVN;
+	}
+
+	public void setPorcentajePartVN(BigDecimal porcentajePartVN) {
+		this.porcentajePartVN = porcentajePartVN;
 	}
 
 

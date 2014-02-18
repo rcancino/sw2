@@ -162,4 +162,6 @@
         
     <bean id="analisisDeMaterialDao" class="com.luxsoft.sw3.maquila.dao.AnalisisDeMaterialDaoImpl"
         p:sessionFactory-ref="sessionFactory"/>
+        
+        
 </beans>

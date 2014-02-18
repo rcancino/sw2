@@ -27,6 +27,7 @@ public class VentaNetaAcumuladalRow implements Serializable{
 	private String nacional;
 	private BigDecimal kilos;
 	private BigDecimal precio_kilos;
+	private BigDecimal porcentajePartVN;
 	
 	
 	
@@ -144,6 +145,14 @@ public class VentaNetaAcumuladalRow implements Serializable{
 
 	public void setPeriodo(String periodo) {
 		this.periodo = periodo;
+	}
+
+	public BigDecimal getPorcentajePartVN() {
+		return porcentajePartVN;
+	}
+
+	public void setPorcentajePartVN(BigDecimal porcentajePartVN) {
+		this.porcentajePartVN = porcentajePartVN;
 	}
 
 

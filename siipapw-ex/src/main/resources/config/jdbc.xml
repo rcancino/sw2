@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:p="http://www.springframework.org/schema/p"
+       	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       	xmlns:util="http://www.springframework.org/schema/util"
+       	xmlns:context="http://www.springframework.org/schema/context"
+       	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-2.5.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+		default-lazy-init="false"
+		>  
+
+	 <bean id="abstracDataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:username="root"
+        p:password="sys"
+        p:initialSize="1"
+        p:maxActive="3"
+        p:maxWait="20000"
+	/>	
+	<!-- 
+	<bean id="abstracDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		destroy-method="close"
+		p:driverClassName="com.mysql.jdbc.Driver"
+        p:username="root"
+        p:password="sys"
+        abstract="true"/>	 -->
+	 
+	 <bean id="calle4_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.5.1/produccion"/>	
+	 <bean id="bolivar_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.4.1/produccion"/>
+	 <bean id="andrade_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.2.1/produccion"/>
+	 <bean id="tacuba_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.1.101/produccion"/>
+	 <bean id="cincoFebrero_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.7.1/produccion"/>
+	 <bean id="vertiz176_dataSource" parent="abstracDataSource" p:url="jdbc:mysql://10.10.2.100/produccion"/>
+	
+	<bean id="calle4_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="calle4_dataSource"/>
+	
+	<bean id="bolivar_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="bolivar_dataSource"/>
+	
+	<bean id="andrade_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="andrade_dataSource"/>
+		
+    <bean id="tacuba_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="tacuba_dataSource"/>
+		
+    <bean id="cincoFebrero_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="cincoFebrero_dataSource"/>
+		
+		<bean id="vertiz176_jdbcTemplate"	class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="vertiz176_dataSource"/>
+    
+</beans>

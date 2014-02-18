@@ -139,7 +139,9 @@ public class CFDITraslado implements InitializingBean,ITraslado{
 		CFDIUtils.validarDocumento(document);
 		comprobanteFiscal=salvar(document,comprobanteFiscal);
 		
-		
+		//Actualizar el folio en la venta
+		tps.setDocumento(new Long(comprobanteFiscal.getFolio()));
+		getHibernateTemplate().update(tps);
 		
 		return comprobanteFiscal;
 	}

@@ -72,8 +72,8 @@ public class ProductoCosteadoDetPanel extends FilteredBrowserPanel<ProductoCoste
 	}
 	
 	protected void init(){
-		String[] props=new String[]{"tipo","cliente","docto","fechad","origen","suc","ventaNeta","costo","importeUtilidad","porcentajeUtilidad","kilos","precio_kilos"};
-		String[] names=new String[]{"Tipo","Cliente","Docto","Fecha","Venta","Sucursal","Vta. Neta","Costo","Imp. Ut.","% Ut.","Kilos","Precio/K"};
+		String[] props=new String[]{"tipo","cliente","docto","fechad","origen","suc","ventaNeta","kilos","precio_kilos","costo","importeUtilidad","porcentajeUtilidad"};
+		String[] names=new String[]{"Tipo","Cliente","Docto","Fecha","Venta","Kilos","Precio/K","Sucursal","Vta. Neta","Costo","Imp. Ut.","% Ut."};
 		addProperty(props);
 		addLabels(names);
 		installTextComponentMatcherEditor("Tipo", "tipo");

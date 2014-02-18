@@ -31,8 +31,8 @@ public class ControladorDeCierreAnual extends ControladorDinamico{
 	
 	public List<Poliza> generar(Date fecha) {
 		List<Poliza> polizas=new ArrayList<Poliza>();
-		polizas.add(generarEliminacionIetu(fecha, "CANCELACION_IETU"));
-		polizas.add(generarCierreAnual(fecha, "CIERRE_ANUAL"));
+		polizas.add(generarEliminacionIetu(fecha, "CANCELACION_IETU "+Periodo.obtenerYear(fecha)));
+		polizas.add(generarCierreAnual(fecha, "CIERRE_ANUAL "+Periodo.obtenerYear(fecha)));
 		return polizas;
 	}
 	

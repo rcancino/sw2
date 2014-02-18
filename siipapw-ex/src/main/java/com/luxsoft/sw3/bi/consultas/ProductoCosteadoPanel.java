@@ -69,18 +69,19 @@ public class ProductoCosteadoPanel extends FilteredBrowserPanel<ProductoCosteado
 	}
 	
 	protected void init(){
-		String[] props=new String[]{"linea","clase","marca","clave","descripcion","kilosMillar","gramos","calibre","caras","deLinea","nacional","ventaNeta","costo","importeUtilidad","porcentajeUtilidad","kilos","precio_kilos"};
-		String[] names=new String[]{"Linea","Clase","Marca","Clave","Descripcion","KxMll","Grs","Cal.","Caras","De Linea","Tipo","Vta. Neta","Costo","Imp. Ut.","% Ut.","Kilos","Precio/K"};
+		String[] props=new String[]{"nacional","linea","clave","descripcion","ventaNeta","kilos","precio_kilos","costo","importeUtilidad","porcentajeUtilidad","clase","marca","kilosMillar","gramos","calibre","caras","deLinea"};
+		String[] names=new String[]{"Proced.","Linea","Clave","Descripcion","Vta. Neta","Kilos","Precio/K","Costo","Imp. Ut.","% Ut.","Clase","Marca","KxMll","Grs","Cal.","Caras","De Linea"};
 		addProperty(props);
 		addLabels(names);
 		installTextComponentMatcherEditor("Producto", "linea","clave","descripcion");
+		installTextComponentMatcherEditor("Procedencia", "nacional");
 		installTextComponentMatcherEditor("Clase", "clase");
 		installTextComponentMatcherEditor("Marca", "marca");
 		installTextComponentMatcherEditor("Kilos", "kilosMillar");
 		installTextComponentMatcherEditor("Gramos", "gramos");
 		installTextComponentMatcherEditor("Calibre", "calibre");
 		installTextComponentMatcherEditor("Caras", "caras");
-		installTextComponentMatcherEditor("Tipo", "nacional");
+		
 		//installTextComponentMatcherEditor("Total", "total");
 		/*
 		CheckBoxMatcher<ProductoCosteadoRow> m1=new CheckBoxMatcher<ProductoCosteadoRow>(){

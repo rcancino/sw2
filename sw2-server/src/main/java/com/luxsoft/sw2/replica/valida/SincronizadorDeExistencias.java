@@ -28,6 +28,7 @@ public class SincronizadorDeExistencias {
 	
 	public SincronizadorDeExistencias(){
 		insert=new SimpleJdbcInsert(ServiceLocator2.getJdbcTemplate()).withTableName("SX_EXISTENCIAS");
+		   
 	}
 	
 	public void sincronizar(){
@@ -71,6 +72,13 @@ public class SincronizadorDeExistencias {
 			exportarFaltantes(rows, fecha, sucursalId);
 		}				
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	public void exportarFaltantes(List<Map<String,Object>> rows,Date fecha,Long sucursalOrigen){
 		
@@ -160,13 +168,99 @@ public class SincronizadorDeExistencias {
 		this.todo = todo;
 		return this;
 	}
+
+	
+	
+	
+	public void actualizarExistenciasOficinas(Date fecha){
+		for(Long sucursalId:sucursales){
+	 logger.info("Validando Existencias para Sucursal: "+sucursalId +" Del Dia :" +fecha);
+			actualizarExistenciasOficinas(fecha, sucursalId);
+			
+		}
+	}
+
+	public void actualizarExistenciasOficinas(final Date fecha,Long sucursalId){
+
+		JdbcTemplate template=ConnectionServices.getInstance().getJdbcTemplate(sucursalId);
+
+		String sqlSucursales="SELECT NOMBRE FROM SW_SUCURSALES WHERE SUCURSAL_ID NOT IN (?,1,12,4,8,10,7) ";
+		Object[] arguments=new Object[]{sucursalId};
+		List<Map<String,Object>> sucs=ServiceLocator2.getJdbcTemplate().queryForList(sqlSucursales, arguments);
+
+
+
+		String sql="SELECT * FROM SX_EXISTENCIAS where date(modificado)=? and SUCURSAL_ID=?";
+		Object[] args=new Object[]{ValUtils.getPamaeter(fecha),sucursalId};
+		List<Map<String,Object>> rows=template.queryForList(sql,args);
+		//updateLog("TX_IMPORTADO", rows.toArray(new Map[0]));
+		for(Map<String,Object> row:rows){
+			try {
+				String exiSuc=(String)row.get("INVENTARIO_ID");
+				Double cantSuc=(Double)row.get("CANTIDAD");
+
+				String sqlLocal="SELECT * FROM SX_EXISTENCIAS WHERE INVENTARIO_ID=?";
+				Object[] argumentos=new Object[]{exiSuc};
+
+				//Map<String,Object> rowOfi=ServiceLocator2.getJdbcTemplate().queryForMap(sqlLocal, argumentos);
+				List<Map<String,Object>> rowOfi=ServiceLocator2.getJdbcTemplate().queryForList(sqlLocal, argumentos);
+				if(rowOfi.isEmpty()|| rowOfi==null){ 
+					logger.info("No existe registro insertando:  "+row.get("INVENTARIO_ID"));
+					//System.out.println("'"+row.get("INVENTARIO_ID")+"', --INSERT "+sucursalId);
+					insert.execute(row);
+					for(Map<String,Object> sucursal:sucs){
+						String sucur=(String)	sucursal.get("NOMBRE");
+						//						logger.info("AuditLog para INSERT : "+sucur);
+
+						String inserAuditIns="INSERT INTO AUDIT_LOG (entityId,entityName,action,tableName,ip,SUCURSAL_ORIGEN,SUCURSAL_DESTINO,dateCreated,lastUpdated,replicado,message,version)" +
+								"  VALUES (?,\'Existencia\',\'INSERT\',\'SX_EXISTENCIAS\',\'10.10.1.1\',\'OFICINAS\',?,now(),now(),null,\'\',0)";
+						Object[] argsAuditIns=new Object[]{row.get("INVENTARIO_ID"),sucur};
+						ServiceLocator2.getJdbcTemplate().update(inserAuditIns, argsAuditIns);
+					}
+				}else{
+					Double cantOfi=(Double) rowOfi.get(0).get("CANTIDAD");
+					if(!cantOfi.equals(cantSuc)){
+
+					//	logger.info("Hay que actualizar:"+exiSuc +" Por que La cantidad de Oficinas: "+cantOfi + " Es diferente a la cantidad de sucursal: "+ cantSuc);
+						logger.info("Actualizando:  " +row.get("INVENTARIO_ID"));
+					//	System.out.println("'"+row.get("INVENTARIO_ID")+"', --UPDATE " +sucursalId);
+						String update="UPDATE SX_EXISTENCIAS SET CANTIDAD=?, RECORTE=?, RECORTE_COMENTARIO=?, RECORTE_FECHA=?, MODIFICADO=? WHERE INVENTARIO_ID=?";
+						Object[] argsUpdate=new Object[]{row.get("CANTIDAD"),row.get("RECORTE"),row.get("RECORTE_COMENTARIO"),row.get("RECORTE_FECHA"),row.get("MODIFICADO"),row.get("INVENTARIO_ID")};
+						ServiceLocator2.getJdbcTemplate().update(update, argsUpdate);
+						for(Map<String,Object> sucursal:sucs){
+
+							String sucur=(String)	sucursal.get("NOMBRE");
+							//							logger.info("AuditLog para UPDATE : "+sucur);
+							String inserAuditUp="INSERT INTO AUDIT_LOG (entityId,entityName,action,tableName,ip,SUCURSAL_ORIGEN,SUCURSAL_DESTINO,dateCreated,lastUpdated,replicado,message,version)" +
+									"  VALUES (?,\'Existencia\',\'UPDATE\',\'SX_EXISTENCIAS\',\'10.10.1.1\',\'OFICINAS\',?,now(),now(),null,\'\',0)";
+							Object[] argsAuditUp=new Object[]{row.get("INVENTARIO_ID"),sucur};
+							ServiceLocator2.getJdbcTemplate().update(inserAuditUp, argsAuditUp);
+						}
+
+					}
+				}
+
+				/*logger.info("Exis actualizado Suc: "+row);
+					logger.info("Exis actualizado Ofi: "+rowOfi);*/
+			} catch (Exception e) {
+				logger.error("Error importando exis: "+row+ " Causa: "+ExceptionUtils.getRootCauseMessage(e));
+			}
+
+		}
+		//exportarFaltantes(rows, fecha, sucursalId);
+
+	}
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		new SincronizadorDeExistencias()
 		.addSucursal(2L,3L,5L,6L,9L)
-		//.setTodo(true)
-		//.sincronizar(DateUtil.toDate("31/05/2012"));
-		.sincronizarFaltantes();
+		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
+		.actualizarExistenciasOficinas(new Date());
+		
 	}
 	
 

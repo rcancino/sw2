@@ -11,9 +11,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.Assert;
+
+
 
 import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.dao.UniversalDao;
@@ -21,6 +23,7 @@ import com.luxsoft.siipap.inventarios.dao.ExistenciaDao;
 import com.luxsoft.siipap.model.Configuracion;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.Sucursal;
+import com.luxsoft.siipap.pos.ui.cfdi.CFDI_MailServicesPOS;
 import com.luxsoft.siipap.service.AutorizacionesManager;
 import com.luxsoft.siipap.service.LoginManager;
 import com.luxsoft.siipap.service.core.ClienteManager;
@@ -30,6 +33,7 @@ import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIManager;
 import com.luxsoft.sw3.cfdi.CFDITimbrador;
 import com.luxsoft.sw3.cfdi.CFDITraslado;
+import com.luxsoft.sw3.cfdi.CFDI_MailServices;
 import com.luxsoft.sw3.cfdi.ITraslado;
 
 /**
@@ -264,9 +268,13 @@ public final class Services {
 		return getConfiguracion().getSucursal().getEmpresa();
 	}
 	
-	public synchronized static JavaMailSender getMailSender(){
+	/*public synchronized static JavaMailSender getMailSender(){
 		System.err.println("Estoy en el mailsender");
 		return (JavaMailSender)getInstance().getContext().getBean("mailSender");
+	}*/
+	
+	public static CFDI_MailServicesPOS getCFDIMailServicesPOS(){
+		return (CFDI_MailServicesPOS)getInstance().getContext().getBean("cfdi_MailServicesPOS");
 	}
 
 	public static void main(String[] args) {
@@ -281,14 +289,16 @@ public final class Services {
 		/*String hql="from Pedido p where p.sucursal.clave=? " +
 				"and  date(p.fecha) between ? and ? and p.totalFacturado=0 and p.facturable=true";
 				*/
-		Date f1=new Date();
+		/*Date f1=new Date();
 		Date f2=DateUtils.addDays(f1, -30);
 		String hql="from Pedido p where p.sucursal.clave=? and p.fecha between ? and ?";
 		//Object[] params=new Object[]{Services.getInstance().getConfiguracion().getSucursal().getClave(),f1,f2};
 		Object[] params=new Object[]{Services.getInstance().getConfiguracion().getSucursal().getClave(),f2,f1};
 		List res= Services.getInstance().getHibernateTemplate().find(hql, params);
 		System.out.println("Pedidos encontrados: "+res.size());
-		
+		*/
+		CFDI_MailServicesPOS s=getCFDIMailServicesPOS();
+		Assert.notNull(s,"No existe....");
 	}
 
 }

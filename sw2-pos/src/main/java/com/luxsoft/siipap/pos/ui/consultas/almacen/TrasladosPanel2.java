@@ -1,6 +1,7 @@
 package com.luxsoft.siipap.pos.ui.consultas.almacen;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,16 +82,27 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 			actions=new Action[]{
 				getLoadAction()
 				,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "atender", "Atender Sol.")
-				,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "generarCfdi", "Generar CFDI")
+				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "generarCfdi", "Generar CFDI")
 				
 				//,getViewAction()
 				,CommandUtils.createPrintAction(this, "print")
-				,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
+				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
 				,addAction(null, "printCfdi", "Imprimir CFDI")
 				};
 		return actions;
 	}	
 
+	
+	
+	@Override
+	protected List<Action> createProccessActions(){
+		List<Action> actions=new ArrayList<Action>();
+		actions.add(addAction("","generarCfdi", "Generar CFDI"));
+		actions.add(addAction("",  "timbrar", "Timbrar CFDI"));
+		return actions;
+	}
+	
+	
 	@Override
 	protected List<Traslado> findData() {
 		String hql="from Traslado s where " +

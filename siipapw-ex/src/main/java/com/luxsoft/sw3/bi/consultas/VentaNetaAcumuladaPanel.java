@@ -67,6 +67,7 @@ public class VentaNetaAcumuladaPanel extends FilteredBrowserPanel<VentaNetaAcumu
 	private Date fecha;
 	public static String seleccionado;
 	public static String seleccionTipo;
+	public static String seleccionTipoProd;
 	public static String fechaInicial;
 	public static String fechaFinal;
 	public static int yearStr;
@@ -81,15 +82,17 @@ public class VentaNetaAcumuladaPanel extends FilteredBrowserPanel<VentaNetaAcumu
 	}
 	
 	protected void init(){
-		String[] props=new String[]{"periodo","origenId","descripcion","ventaNeta","costo","importeUtilidad","porcentajeUtilidad","porcentajeAportacion","kilos","precio_kilos","nacional"};
-		String[] names=new String[]{"Periodo","OrigenId","Descripcion","Vta. Neta","Costo","Imp. Ut.","% Ut.","% Aport.","Kilos","Precio/K","Nal"};
+	//	String[] props=new String[]{"periodo","origenId","descripcion","ventaNeta","costo","importeUtilidad","porcentajeUtilidad","porcentajeAportacion","kilos","precio_kilos","nacional"};
+	//	String[] names=new String[]{"Periodo","OrigenId","Descripcion","Vta. Neta","Costo","Imp. Ut.","% Ut.","% Part.U","Kilos","Precio/K","Nal"};
+		String[] props=new String[]{"periodo","origenId","descripcion","ventaNeta","kilos","precio_kilos","porcentajePartVN","costo","importeUtilidad","porcentajeUtilidad","porcentajeAportacion"};
+		String[] names=new String[]{"Periodo","OrigenId","Descripcion","Vta. Neta","Kilos","Precio/K","% Part.VN","Costo","Imp. Ut.","% Ut.","% Part.U"};
 		addProperty(props);
 		addLabels(names);
 		manejarPeriodo();
 		descripcionField=new JTextField();
 		tipoField=new JTextField();
 		installTextComponentMatcherEditor("Descripcion",descripcionField, "descripcion");
-		installTextComponentMatcherEditor("Tipo Prod.",tipoField, "nacional");
+		//installTextComponentMatcherEditor("Tipo Prod.",tipoField, "nacional");
 		
 		
 	}
@@ -162,6 +165,7 @@ protected void installFilters(final DefaultFormBuilder builder){
 	builder.appendSeparator("Para Generar Consulta");
 	builder.append("Selector", createSeleComboBox());
 //	builder.append("Tipo", createTipoComboBox());
+	 builder.append("Procedencia", createTipoProductoComboBox());
 	builder.append("Venta", createTipoVentaComboBox());
 	builder.appendSeparator("Filtros");
 	super.installFilters(builder);
@@ -216,6 +220,19 @@ protected void installFilters(final DefaultFormBuilder builder){
 		if(seleccionTipo.equals("CONTADO")){
 			sql=sql.replaceAll("@VENTA", " AND (CASE WHEN D.ORIGEN='CRE' THEN 'CREDITO' ELSE 'CONTADO' END) IN('CONTADO') ");
 		}	
+		
+		//Envio de paramentros al sql para tipo de Producto, NAL, IMP y TOD
+		
+		if(seleccionTipoProd.equals("TODOS")){
+			sql=sql.replaceAll("@TIPO_PROD", "");
+		}
+		if(seleccionTipoProd.equals("NACIONAL")){
+			sql=sql.replaceAll("@TIPO_PROD", " AND  D.NACIONAL IS TRUE  ");
+		}
+		if(seleccionTipoProd.equals("IMPORTADO")){
+			sql=sql.replaceAll("@TIPO_PROD", " AND  D.NACIONAL IS FALSE ");
+		}
+		
 		return sql;
 		
 	}
@@ -277,6 +294,27 @@ protected void installFilters(final DefaultFormBuilder builder){
 		return box;
 	}
 	
+	private JComboBox tipoProducto;
+	
+	private JComboBox createTipoProductoComboBox () {
+		String[] data={"TODOS","IMPORTADO","NACIONAL"};
+		tipoProducto = new JComboBox(data);
+		
+			
+		tipoProducto.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent evt) {
+				JComboBox combo = (JComboBox) evt.getSource() ;
+
+			       seleccionTipoProd =(String) combo.getSelectedItem() ;
+				
+			}
+		});
+		if(seleccionTipoProd == null)
+			seleccionTipoProd=(String) tipoProducto.getSelectedItem();
+		return tipoProducto;
+	}
+	
 	
 	@Override
 	protected void doSelect(Object bean) {
@@ -302,7 +340,7 @@ private Action imprimirAction;
 		map.put("FECHA_INI", periodo.getFechaInicial());
 		map.put("FECHA_FIN", periodo.getFechaFinal());
 		map.put("DESCRIPCION",descripcionField.getText());
-		map.put("TIPO_PROD", tipoField.getText());
+		map.put("TIPO_PROD", tipoProducto.getSelectedItem());
 		map.put("FORMATO", "VENTA NETA (ACUMULADA)");
 		ReportUtils.viewReport(ReportUtils.toReportesPath("bi/VentaNetaAcumulada.jasper"), map,grid.getModel());
 	}
@@ -399,12 +437,19 @@ private TotalesPanel totalPanel=new TotalesPanel();
 			
 			for(Object  r:getFilteredSource()){
 				BigDecimal porcentajeAp=BigDecimal.ZERO;
+				BigDecimal porcentajePartVN=BigDecimal.ZERO;
+				
 				VentaNetaAcumuladalRow an=(VentaNetaAcumuladalRow)r;
 				
 				 if(! new BigDecimal(an.getImporteUtilidad()).equals(BigDecimal.ZERO))
 				      porcentajeAp=new BigDecimal(an.getImporteUtilidad()).divide(impUt,3,RoundingMode.HALF_EVEN).multiply(new BigDecimal(100));
 				 
-			  an.setPorcentajeAportacion(porcentajeAp);			
+			  an.setPorcentajeAportacion(porcentajeAp);	
+			  
+			  if(! new BigDecimal(an.getVentaNeta()).equals(BigDecimal.ZERO))
+			      porcentajePartVN=new BigDecimal(an.getVentaNeta()).divide(ventaNeta,3,RoundingMode.HALF_EVEN).multiply(new BigDecimal(100));
+						 
+		        an.setPorcentajePartVN(porcentajePartVN);	
 			}
 			String pattern="{0}";
 			

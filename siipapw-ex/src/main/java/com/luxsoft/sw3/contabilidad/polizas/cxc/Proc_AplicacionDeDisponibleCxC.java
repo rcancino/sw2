@@ -61,8 +61,13 @@ public class Proc_AplicacionDeDisponibleCxC implements IProcesador{
 				String ref2=pago.getSucursal().getNombre();
 				String asiento="COBRANZA APLICACION SAF";
 				
+				Double tipo=pago.getTc();
+				BigDecimal tipoDeCambio=new BigDecimal(tipo);
+				
 				BigDecimal totalAplicado=pago.getAplicado(poliza.getFecha());
 				BigDecimal importeAplicado=PolizaUtils.calcularImporteDelTotal(totalAplicado);
+				System.err.println("------------"+totalAplicado+"---------------"+totalAplicado.multiply(tipoDeCambio)+"-----"+importeAplicado+"----"+importeAplicado.multiply(tipoDeCambio));
+
 				BigDecimal ivaAplicado=PolizaUtils.calcularImpuesto(importeAplicado);
 				totalAplicado=PolizaUtils.redondear(totalAplicado);
 				importeAplicado=PolizaUtils.redondear(importeAplicado);
@@ -94,18 +99,18 @@ public class Proc_AplicacionDeDisponibleCxC implements IProcesador{
 				BigDecimal ivaCar=MonedasUtils.calcularImpuestoDelTotal(aplCar);
 				
 				//Cargo acredores diversos		
-				PolizaDetFactory.generarPolizaDet(poliza, "203","DIVR02", true, importeAplicado, desc2, ref1, ref2, asiento);
+				PolizaDetFactory.generarPolizaDet(poliza, "203","DIVR02", true, importeAplicado.multiply(tipoDeCambio), desc2, ref1, ref2, asiento);
 				// Cargo Iva Pendiente de Trasladar  
-				PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV02", true, ivaAplicado.subtract(ivaCar),desc2, ref1, ref2, asiento);
+				PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV02", true, (ivaAplicado.subtract(ivaCar)).multiply(tipoDeCambio),desc2, ref1, ref2, asiento);
 				
 				//Cargo Iva en ventas por trasladar
 	//			PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV02", true, ivaFac, desc2, ref1, ref2, asiento);
 				
 				//Cargo Iva en Otros Ingresos por trasladar
-				PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAO01", true, ivaCar, desc2, ref1, ref2, asiento   );
+				PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAO01", true, ivaCar.multiply(tipoDeCambio), desc2, ref1, ref2, asiento   );
 				
 				//Abono a cliente credito
-				PolizaDetFactory.generarPolizaDet(poliza,"106", pago.getClave(), false, totalAplicado, desc2, ref1, ref2, asiento);
+				PolizaDetFactory.generarPolizaDet(poliza,"106", pago.getClave(), false, totalAplicado.multiply(tipoDeCambio), desc2, ref1, ref2, asiento);
 				
 				//Cancelacion de IETU
 				//PolizaDetFactory.generarPolizaDet(poliza, "902", "AIETU06", false, importeAplicado, "ACUMULABLE IETU SAF", ref1, ref2, asiento);

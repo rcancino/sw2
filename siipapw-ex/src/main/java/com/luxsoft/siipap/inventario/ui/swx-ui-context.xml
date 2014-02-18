@@ -29,6 +29,7 @@
      				<property name="title" value="Devoluciones de ventas"/>
      			</bean>
      			<bean class="com.luxsoft.siipap.inventario.ui.consultas.VentasCentralizadasDeVentasPanel"/>
+     			<bean class="com.luxsoft.siipap.inventario.ui.consultas.DisponibilidadPanel"/>
      		</list>
      		
      	</property>

@@ -57,8 +57,8 @@ public class CFDITasks {
 	}
 	
 	public void subirCertificadoPfx() throws IOException{
-		//String path="sat/PAPEL_CFDI_CERT.pfx";
-		String path="sat/papelsacfdikey.pfx";
+		String path="sat/PAPEL_CFDI_CERT.pfx";
+		//String path="sat/papelsacfdikey.pfx";
 		ClassPathResource resource=new ClassPathResource(path);
 		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
 		
@@ -89,9 +89,9 @@ public class CFDITasks {
 		CFDITasks tasks=new CFDITasks(ServiceLocator2.getHibernateTemplate());
 		///tasks.subirLlavePrivada();
 		//tasks.subirCertificado();
-		//tasks.inicializar();
+		tasks.inicializar();
 		//tasks.subirCertificadoPfx("c://queretaro//");
-		tasks.subirCertificadoPfx();
+		//tasks.subirCertificadoPfx();
 	}
 	
 
