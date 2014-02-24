@@ -18,6 +18,7 @@ import com.luxsoft.siipap.model.CantidadMonetaria;
 public class VentaNetaMensualRow implements Serializable{
 
 	
+	private int indice;
 	private String periodo;
 	private String origenId;
 	private String descripcion;
@@ -32,6 +33,7 @@ public class VentaNetaMensualRow implements Serializable{
 	private BigDecimal precio_kilos;
 	private BigDecimal porcentajePartVN;
 	private BigDecimal costoKilos;
+	private BigDecimal kilosInv;
 	
 	
 	
@@ -51,11 +53,7 @@ public class VentaNetaMensualRow implements Serializable{
 		this.kilosInv = kilosInv;
 	}
 
-	private BigDecimal kilosInv;
-	
-	
-	
-	
+		
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -180,6 +178,14 @@ public class VentaNetaMensualRow implements Serializable{
 
 	public void setPorcentajePartVN(BigDecimal porcentajePartVN) {
 		this.porcentajePartVN = porcentajePartVN;
+	}
+
+	public int getIndice() {
+		return indice;
+	}
+
+	public void setIndice(int indice) {
+		this.indice = indice;
 	}
 
 

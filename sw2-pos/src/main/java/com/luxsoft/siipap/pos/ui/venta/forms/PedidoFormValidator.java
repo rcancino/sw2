@@ -39,9 +39,10 @@ public class PedidoFormValidator {
 				support.getResult().addError( "El cliente tiene cheque(s) devueltos por un monto de: "+c.getChequesDevueltos()+" NO SE LE PUEDE FACTURAR.");
 			}
 		}
-		/*if(pedido.getTotal().doubleValue()<10){
-			support.getResult().addError("El monto mínimo para generar un pedido es de 10.00 pesos");
-		}*/
+		if(pedido.getTotal().doubleValue()<0){
+			//support.getResult().addError("El monto mínimo para generar un pedido es de 10.00 pesos");
+			support.getResult().addError("El montopara generar un pedido debe ser mayor a 0.00 pesos");
+		}
 		
 		// Papel: Modificacion al validador para salvar pedidos con anticipo y totales en cero
 		
@@ -62,12 +63,12 @@ public class PedidoFormValidator {
 						 support.getResult().addError("El monto para facturar no debe ser menor a 0");
 					 	}
 				 }
-				 else
+				 /*else
 				 {
 					 if(pedido.getTotal().doubleValue()<10){
 						 support.getResult().addError("El monto mnimo para generar un pedido es de 10.00 pesos");
 					 		}
-				 }
+				 }*/
 		
 		
 		if(getPedido().isDeCredito())

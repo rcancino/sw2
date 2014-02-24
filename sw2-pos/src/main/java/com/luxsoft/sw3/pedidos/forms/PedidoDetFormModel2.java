@@ -84,6 +84,11 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 					support.getResult().addError("Este producto se vende en multiplos de: "+getPedidoDet().getProducto().getPaquete()+ " Faltante: "+faltante);
 				}
 			}
+		// Modificacion para no permitir facturar sin existencia
+		
+		if(getPedidoDet().getCantidad()>this.existenciaTotal){
+			support.getResult().addError("No se puede facturar sin existencia por facturar : "+getPedidoDet().getCantidad() +" Existencia Total"+ this.existenciaTotal );
+		}
 	}
 
 	public void dispose(){

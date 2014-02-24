@@ -69,8 +69,8 @@ public class ProductoCosteadoPanel extends FilteredBrowserPanel<ProductoCosteado
 	}
 	
 	protected void init(){
-		String[] props=new String[]{"nacional","linea","clave","descripcion","ventaNeta","kilos","precio_kilos","costo","importeUtilidad","porcentajeUtilidad","clase","marca","kilosMillar","gramos","calibre","caras","deLinea"};
-		String[] names=new String[]{"Proced.","Linea","Clave","Descripcion","Vta. Neta","Kilos","Precio/K","Costo","Imp. Ut.","% Ut.","Clase","Marca","KxMll","Grs","Cal.","Caras","De Linea"};
+		String[] props=new String[]{"nacional","linea","clave","descripcion","ventaNeta","kilos","precio_kilos","costo","costo_kilos","importeUtilidad","porcentajeUtilidad","clase","marca","kilosMillar","gramos","calibre","caras","deLinea"};
+		String[] names=new String[]{"Proced.","Linea","Clave","Descripcion","Vta. Neta","Kilos","Precio/K","Costo","Costo/K","Imp. Ut.","% Ut.","Clase","Marca","KxMll","Grs","Cal.","Caras","De Linea"};
 		addProperty(props);
 		addLabels(names);
 		installTextComponentMatcherEditor("Producto", "linea","clave","descripcion");
@@ -272,7 +272,11 @@ private TotalesPanel totalPanel;
 				ventaNeta=ventaNeta.add(new BigDecimal(v.getVentaNeta()));
 				costo=costo.add(new BigDecimal(v.getCosto()));
 				utilidad=utilidad.add(new BigDecimal(v.getImporteUtilidad()));
-				porcUtilidad=utilidad.multiply(new BigDecimal(100)).divide(ventaNeta,3,RoundingMode.HALF_EVEN);
+				
+				if(!ventaNeta.equals(BigDecimal.ZERO)){
+					porcUtilidad=utilidad.multiply(new BigDecimal(100)).divide(ventaNeta,3,RoundingMode.HALF_EVEN);	
+				}
+				
 			}			
 			String pattern="{0}";
 			

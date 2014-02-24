@@ -34,6 +34,7 @@ public class ProductoCosteadoRow implements Serializable{
 	private Double porcentajeUtilidad;
 	private BigDecimal kilos;
 	private BigDecimal precio_kilos;
+	private BigDecimal costo_kilos;
 
 	
 	public String getLinea() {
@@ -192,6 +193,14 @@ public class ProductoCosteadoRow implements Serializable{
 			return false;
 		ProductoCosteadoRow other = (ProductoCosteadoRow) obj;
 		return true;
+	}
+
+	public BigDecimal getCosto_kilos() {
+		return costo_kilos;
+	}
+
+	public void setCosto_kilos(BigDecimal costo_kilos) {
+		this.costo_kilos = costo_kilos;
 	}
 
 

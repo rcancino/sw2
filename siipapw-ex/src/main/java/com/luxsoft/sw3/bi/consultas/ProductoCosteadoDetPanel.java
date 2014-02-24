@@ -72,8 +72,8 @@ public class ProductoCosteadoDetPanel extends FilteredBrowserPanel<ProductoCoste
 	}
 	
 	protected void init(){
-		String[] props=new String[]{"tipo","cliente","docto","fechad","origen","suc","ventaNeta","kilos","precio_kilos","costo","importeUtilidad","porcentajeUtilidad"};
-		String[] names=new String[]{"Tipo","Cliente","Docto","Fecha","Venta","Kilos","Precio/K","Sucursal","Vta. Neta","Costo","Imp. Ut.","% Ut."};
+		String[] props=new String[]{"tipo","cliente","docto","fechad","origen","suc","ventaNeta","kilos","precio_kilos","costo","costo_kilos","importeUtilidad","porcentajeUtilidad"};
+		String[] names=new String[]{"Tipo","Cliente","Docto","Fecha","Venta","Kilos","Precio/K","Sucursal","Vta. Neta","Costo","Costo/K","Imp. Ut.","% Ut."};
 		addProperty(props);
 		addLabels(names);
 		installTextComponentMatcherEditor("Tipo", "tipo");
@@ -302,7 +302,10 @@ private TotalesPanel totalPanel;
 				ventaNeta=ventaNeta.add(new BigDecimal(v.getVentaNeta()));
 				costo=costo.add(new BigDecimal(v.getCosto()));
 				utilidad=utilidad.add(new BigDecimal(v.getImporteUtilidad()));
-				porcUtilidad=utilidad.multiply(new BigDecimal(100)).divide(ventaNeta,3,RoundingMode.HALF_EVEN);
+				if(!ventaNeta.equals(BigDecimal.ZERO)){
+					porcUtilidad=utilidad.multiply(new BigDecimal(100)).divide(ventaNeta,3,RoundingMode.HALF_EVEN);
+				}
+				
 			}			
 			String pattern="{0}";
 			

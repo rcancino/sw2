@@ -80,11 +80,13 @@ import com.luxsoft.siipap.swing.binding.Binder;
 import com.luxsoft.siipap.swing.binding.Bindings;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.AbstractControl;
+import com.luxsoft.siipap.swing.matchers.RangoMatcherEditor;
 import com.luxsoft.siipap.swing.reports.ReportUtils;
 import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.siipap.util.SQLUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
+import com.luxsoft.sw3.alcances.Alcance;
 import com.luxsoft.sw3.bi.model.VentaNetaAcumuladalRow;
 import com.luxsoft.sw3.bi.model.VentaNetaMensualRow;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
@@ -112,6 +114,7 @@ public class VentaNetaPanel extends FilteredBrowserPanel<VentaNetaMensualRow>{
 	public static int yearStr;
 	public static int mesStr;
 	public static String descripcionPanel;
+	private RangoMatcherEditor<VentaNetaMensualRow> menorAEditor;
 	
 
 	
@@ -126,14 +129,20 @@ public class VentaNetaPanel extends FilteredBrowserPanel<VentaNetaMensualRow>{
 	protected void init(){
 
 		
-		addProperty("periodo","origenId","descripcion","ventaNeta","kilos","precio_kilos","porcentajePartVN","costo","costoKilos","importeUtilidad","porcentajeUtilidad","porcentajeAportacion","inventarioCosteado");
-		addLabels("Periodo","OrigenId","Descripcion","Vta. Neta","Kilos","Precio/K","% Part.VN","Costo","Costo Kg.","Imp. Ut.","% Ut.","% Part.U","Inv. Costo");
+		addProperty("indice","periodo","origenId","descripcion","ventaNeta","kilos","precio_kilos","porcentajePartVN","costo","costoKilos","importeUtilidad","porcentajeUtilidad","porcentajeAportacion","inventarioCosteado","kilosInv");
+		addLabels("No.","Periodo","OrigenId","Descripcion","Vta. Neta","Kilos","Precio/K","% Part.VN","Costo","Costo Kg.","Imp. Ut.","% Ut.","% Part.U","Inv. Costo","Inv. Kilos");
 		manejarPeriodo();
 		descripcionField=new JTextField();
 		tipoField=new JTextField();
 		installTextComponentMatcherEditor("Descripcion",descripcionField, "descripcion");
 	//	installTextComponentMatcherEditor("Tipo Prod.",tipoField, "nacional");
 	//  installCustomComponentsInFilterPanel(filterPanelBuilder);
+		menorAEditor=new RangoMatcherEditor<VentaNetaMensualRow>(){
+			public boolean evaluar(VentaNetaMensualRow item) {
+				return item.getIndice()<=getDoubleValue();
+			}
+		};
+		installCustomMatcherEditor("Numero <= a", menorAEditor.getField(), menorAEditor);	
 		
 			
 	}
@@ -502,6 +511,7 @@ public class VentaNetaPanel extends FilteredBrowserPanel<VentaNetaMensualRow>{
 		map.put("DESCRIPCION",descripcionField.getText());
 		map.put("TIPO_PROD", tipoProducto.getSelectedItem());
 		map.put("FORMATO", "VENTA NETA (MENSUAL)");
+		map.put("REGISTROS", menorAEditor.getDoubleValue());
 		ReportUtils.viewReport(ReportUtils.toReportesPath("bi/VentaNetaMensual.jasper"), map,grid.getModel());
 	}
 	//public VentaNetaAcumuladalRow getSelectedVentaneNetaAcumuladalRow(){
@@ -524,6 +534,10 @@ private TotalesPanel totalPanel=new TotalesPanel();
 		private JLabel porcUt=new JLabel();
 		private JLabel invCost=new JLabel();
 		private JLabel kilos=new JLabel();
+		private JLabel precioKgVta=new JLabel();
+		private JLabel costoKgVta=new JLabel();
+		private JLabel inventarioKilos=new JLabel();
+		private JLabel costoKg=new JLabel();
 		
 		
 
@@ -539,20 +553,39 @@ private TotalesPanel totalPanel=new TotalesPanel();
 			porcUt.setHorizontalAlignment(SwingConstants.RIGHT);
 			invCost.setHorizontalAlignment(SwingConstants.RIGHT);
 			kilos.setHorizontalAlignment(SwingConstants.RIGHT);
+			precioKgVta.setHorizontalAlignment(SwingConstants.RIGHT);
+			costoKgVta.setHorizontalAlignment(SwingConstants.RIGHT);
+			inventarioKilos.setHorizontalAlignment(SwingConstants.RIGHT);
+			costoKg.setHorizontalAlignment(SwingConstants.RIGHT);
 			
 			
-			builder.appendSeparator("Mensual");
+			builder.appendSeparator("Venta Neta");
 			builder.nextColumn();
-			builder.append("Venta Neta",ventaNeta);
-			builder.append("Costo",costo);
-			builder.append("Imp. Ut.",impUt);
-			builder.append("% Ut",porcUt);
-			builder.append("Inv. Cost",invCost);
-			builder.append("Kilos Vta", kilos);
-			panel.add(builder.getPanel(),BorderLayout.NORTH);
-				
-			builder.appendSeparator("Acumulado");
+			builder.append("Importe",ventaNeta);
+			builder.append("Kilos", kilos);
+			builder.append("Precio Kg ", precioKgVta);
+			
+			builder.appendSeparator("Costo Venta");
 			builder.nextLine();
+			
+			builder.append("Importe",costo);
+			builder.append("Precio Kg ", costoKgVta);
+			
+			builder.appendSeparator("Utilidad");
+			builder.nextLine();
+			
+			builder.append("Importe",impUt);
+			builder.append("Porcentaje",porcUt);
+			
+			builder.appendSeparator("Inventario");
+			builder.nextLine();
+			
+			builder.append("Costo",invCost);			
+			builder.append("Kilos", inventarioKilos);
+			builder.append("Costo Kg.", costoKg);
+			
+			panel.add(builder.getPanel(),BorderLayout.NORTH);
+			
 		//	panel.add(ventaNetaAcumuladaBrowser.getTotalesPanel1(),BorderLayout.SOUTH);
 
 			
@@ -582,8 +615,17 @@ private TotalesPanel totalPanel=new TotalesPanel();
 			BigDecimal porcUt=BigDecimal.ZERO;
 			BigDecimal invCost=BigDecimal.ZERO;
 			BigDecimal kilos=BigDecimal.ZERO;
+			BigDecimal precioKgVta=BigDecimal.ZERO;
+			BigDecimal precioKgCosto=BigDecimal.ZERO;
+			BigDecimal inventarioKilos=BigDecimal.ZERO;
+			BigDecimal costoKg=BigDecimal.ZERO;
 			
-		
+			
+			int indice=1;
+			for(Object  r:getFilteredSource()){
+				VentaNetaMensualRow an=(VentaNetaMensualRow)r;
+				an.setIndice(indice++);
+			}
 					
 			for(Object  r:getFilteredSource()){
 				VentaNetaMensualRow an=(VentaNetaMensualRow)r;
@@ -598,11 +640,32 @@ private TotalesPanel totalPanel=new TotalesPanel();
 				invCost=invCost.add(new BigDecimal(an.getInventarioCosteado()));
 				
 				kilos=kilos.add(an.getKilos());
+				inventarioKilos=inventarioKilos.add(an.getKilosInv());
+				
+				//if(!kilos.equals(BigDecimal.ZERO)){
+				if(kilos.doubleValue()!=0.00){
+
+					precioKgVta=ventaNeta.divide(kilos,3,RoundingMode.HALF_EVEN);
+					precioKgCosto=costo.divide(kilos,3,RoundingMode.HALF_EVEN);	
+					
+				}
+				
+				if(!inventarioKilos.equals(BigDecimal.ZERO)){
+					costoKg=invCost.divide(inventarioKilos,2,RoundingMode.HALF_EVEN);
+				}
+				
+				
 				
 				
 			}
 			
+			
+				
+			
+			
+			
 			for(Object  r:getFilteredSource()){
+				
 				BigDecimal porcentajeAp=BigDecimal.ZERO;
 				BigDecimal porcentajePartVN=BigDecimal.ZERO;
 				VentaNetaMensualRow an=(VentaNetaMensualRow)r;
@@ -616,7 +679,10 @@ private TotalesPanel totalPanel=new TotalesPanel();
 				      porcentajePartVN=new BigDecimal(an.getVentaNeta()).divide(ventaNeta,3,RoundingMode.HALF_EVEN).multiply(new BigDecimal(100));
 							 
 			  an.setPorcentajePartVN(porcentajePartVN);	
+			  
+			  
 			}
+			
 			String pattern="{0}";
 			
 			this.ventaNeta.setText(MessageFormat.format(pattern, ventaNeta));
@@ -625,6 +691,10 @@ private TotalesPanel totalPanel=new TotalesPanel();
 			this.porcUt.setText(MessageFormat.format(pattern, porcUt));
 			this.invCost.setText(MessageFormat.format(pattern, invCost));
 			this.kilos.setText(MessageFormat.format(pattern, kilos));
+			this.precioKgVta.setText(MessageFormat.format(pattern, precioKgVta));
+			this.costoKgVta.setText(MessageFormat.format(pattern,precioKgCosto));
+			this.inventarioKilos.setText(MessageFormat.format(pattern, inventarioKilos));
+			this.costoKg.setText(MessageFormat.format(pattern, costoKg));
 			
 		}
 		

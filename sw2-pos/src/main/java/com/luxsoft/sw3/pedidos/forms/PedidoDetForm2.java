@@ -64,7 +64,7 @@ public class PedidoDetForm2 extends AbstractForm{
 	public PedidoDetForm2(PedidoDetFormModel2 model) {
 		super(model);		
 		String tipo=model.isCredito()?"Crédito":"Contado";
-		setTitle("Detalle de pedido tipo:"+tipo);
+		setTitle("Detalle de pedido tipo :"+tipo);
 		model.getModel("producto").addValueChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent evt) {				
 				if(evt.getNewValue()!=null){

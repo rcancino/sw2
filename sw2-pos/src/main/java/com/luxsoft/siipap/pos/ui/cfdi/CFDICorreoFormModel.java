@@ -154,7 +154,7 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 			System.out.println("Casi para enviar...");
 			JavaMailSender sender=Services.getCFDIMailServicesPOS().getMailSender();
 			sender.send(msg.getMimeMessage());
-			//Services.getCFDIMailServicesPOS().getMailSender().se
+			
 			System.out.println("Correo enviado...");
 			for(CFDI cfdi:cfds){
 				cfdi.setComentario("Enviado: "+DateUtil.getDateTime("dd/MM/yyyy hh:mm:ss",new Date()));
