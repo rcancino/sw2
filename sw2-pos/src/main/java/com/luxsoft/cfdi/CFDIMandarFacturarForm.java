@@ -41,10 +41,10 @@ public class CFDIMandarFacturarForm extends AbstractForm{
 			,	"");
 		DefaultFormBuilder builder=new DefaultFormBuilder(layout);
 		builder.append("Cliente ",getControl("cliente"),true);
-		builder.append("Correo para CFDI (1)",getControl("email1"),true);
-		builder.append("Correo para CFDI (2)",getControl("email2"));
+		//builder.append("Correo para CFDI (2)",getControl("email2"));
 		builder.append("Contraseña",getControl("password"));
 		builder.append("Usuario",addReadOnly("usuario"));
+		builder.append("Correo para CFDI (1)",getControl("email1"),true);
 		ComponentUtils.decorateSpecialFocusTraversal(builder.getPanel());
 		return builder.getPanel();
 	}
@@ -80,22 +80,30 @@ public class CFDIMandarFacturarForm extends AbstractForm{
 		List<CFDIClienteMails> data=Services.getInstance().getHibernateTemplate()
 				.find("from CFDIClienteMails c where c.cliente.clave=?", clave);
 		
+		
+		boolean salvar=false;
 		if(!data.isEmpty()){			
-			return showForm(data.get(0));
+			return showForm(data.get(0),salvar);
 		}else{
+			salvar=true;
 			CFDIClienteMails mails=new CFDIClienteMails(cliente);
-			return showForm(mails);
+			return showForm(mails,salvar);
 		}
 	}
 	
-	public static CFDIClienteMails showForm(CFDIClienteMails mails){
+	public static CFDIClienteMails showForm(CFDIClienteMails mails,boolean salvar){
+		String email1=mails.getEmail1();
+		if(email1==null)
+			email1="";
 		final CFDIClienteMailsModel  model=new CFDIClienteMailsModel (mails);
 		final CFDIMandarFacturarForm form=new CFDIMandarFacturarForm(model);
 		form.open();
 		if(!form.hasBeenCanceled()){
-			CFDIClienteMails target=salvar(model.getTarget());
-			
-			return target;
+			if(!email1.equals(model.getValue("email1"))||salvar){
+				CFDIClienteMails target=salvar(model.getTarget());
+				return target;
+			}else
+				return mails;
 			
 		}
 		return null;

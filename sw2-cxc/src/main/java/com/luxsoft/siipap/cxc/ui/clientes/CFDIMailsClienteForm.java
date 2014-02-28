@@ -31,7 +31,7 @@ public class CFDIMailsClienteForm extends AbstractForm{
 	
 	public CFDIMailsClienteForm(IFormModel model) {
 		super(model);
-		setTitle("Mandar facturar");
+		setTitle("Mantenimiento Correo CFDI");
 	}
 	
 	@Override

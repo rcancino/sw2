@@ -86,9 +86,13 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
 		
+		boolean cod=true;
+		if(venta.isContraEntrega() && !venta.getCliente().getFormaDePago().equals(FormaDePago.EFECTIVO)){
+			cod =false;
+		}
 	
-	
-		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.isContraEntrega()||venta.getFormaDePago().equals(FormaDePago.EFECTIVO)){
+		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) ||venta.getFormaDePago().equals(FormaDePago.EFECTIVO) || cod){
+		
 	    	cfdi.setMetodoDePago("NO IDENTIFICADO");
 		}else if(venta.getFormaDePago().equals(FormaDePago.CHECKPLUS) || venta.getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO) ){
 			cfdi.setMetodoDePago("CHEQUE");

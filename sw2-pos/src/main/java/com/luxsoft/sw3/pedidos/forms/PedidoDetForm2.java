@@ -111,6 +111,7 @@ public class PedidoDetForm2 extends AbstractForm{
 		
 		builder.append("Cantidad",getControl("cantidad"));
 		builder.append("B.O.",addReadOnly("backOrder"));
+		builder.append("Cotizable",getControl("cotizable"));
 		builder.nextLine();
 		
 		builder.appendSeparator("Instrucción de corte");

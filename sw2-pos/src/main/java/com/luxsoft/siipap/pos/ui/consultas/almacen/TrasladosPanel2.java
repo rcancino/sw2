@@ -20,6 +20,7 @@ import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.inventarios.model.TrasladoDet;
 import com.luxsoft.siipap.pos.POSRoles;
+import com.luxsoft.siipap.pos.ui.reports.RelacionDeTPSReportForm;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeSolicitudesPendietes;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 
@@ -86,6 +87,8 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 				
 				//,getViewAction()
 				,CommandUtils.createPrintAction(this, "print")
+			//	,addAction(null, "imprimirRelacionTPS", "Imprimir Relacion TPS")
+				,addAction(null, "imprimirRelacionTPS","Imprimir Relación TPS")
 				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
 				,addAction(null, "printCfdi", "Imprimir CFDI")
 				};
@@ -247,14 +250,25 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 			
 	}
 	
+	public void imprimirRelacionTPS(){
+		RelacionDeTPSReportForm report=new RelacionDeTPSReportForm();
+		report.run();
+		
+	}
+	
 	public static void main(String[] args) {
-		CFDI cfdi=Services.getCFDIManager().getCFDI("8a8a8161-44034e57-0144-0350cbc2-0009");
+	/*	CFDI cfdi=Services.getCFDIManager().getCFDI("8a8a8161-44034e57-0144-0350cbc2-0009");
 		List<Traslado> found=Services.getInstance().getHibernateTemplate().find("from Traslado t left join fetch t.partidas where t.id=?"
 				,"8a8a8161-44034e57-0144-035088b9-0005");
 		for(Traslado tps :found){
 			CFDIPrintUI.impripirComprobante(tps,cfdi);
 		}
+	*/
+		RelacionDeTPSReportForm report=new RelacionDeTPSReportForm();
+		report.run();
 		
 	}
+		
+		
 
 }

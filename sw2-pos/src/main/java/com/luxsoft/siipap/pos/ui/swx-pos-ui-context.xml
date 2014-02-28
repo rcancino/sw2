@@ -283,5 +283,25 @@
      		</list>
      	</property>
      </bean>
+     
+     
+    <bean id="cancelacionAutorizadaPanel" 
+     	class="com.luxsoft.siipap.pos.ui.consultas.CancelacionAutorizadaPanel"
+     	p:title="Cancelacion Autorizada"
+     	p:defaultPanel="true"/>
+     	
+     	
+     	<bean id="cancelacionAutorizadaView" 
+     	class="com.luxsoft.siipap.swing.views2.AbstractTaskView"
+     	p:resizeWeightForView=".2">
+     	<property name="panels">
+     		<list>
+     			<ref bean="pedidosPanel"/>
+     				</list>
+     	</property>
+     </bean>
+     
+     
+    
     
 </beans>

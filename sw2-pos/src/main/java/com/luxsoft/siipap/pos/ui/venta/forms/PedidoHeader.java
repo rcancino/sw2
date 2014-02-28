@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.MessageFormat;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -11,7 +12,10 @@ import org.apache.commons.lang.StringUtils;
 
 import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.core.Cliente;
+import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.controls.Header;
+import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
+import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.Pedido;
 
 /**
@@ -28,22 +32,34 @@ public class PedidoHeader extends JPanel implements PropertyChangeListener{
 
 	public PedidoHeader() {
 		setLayout(new BorderLayout());
-		header = new Header("Seleccione un producto", "");
+		header = new Header("Seleccione un Cliente", "");
 		add(header.getHeader());
 	}	
 
 	public void updateHeader() {
-		Cliente c = getCliente();		
+		Cliente c = getCliente();	
+		
 		if (c != null) {
+			
+			
+			List<CFDIClienteMails> cfdiMail=Services.getInstance().getHibernateTemplate().find("from CFDIClienteMails c where  c.cliente.clave=?", c.getClave());
+			String emailEnv="";
+			if(!cfdiMail.isEmpty())
+			emailEnv=cfdiMail.get(0).getEmail1();
+			
+		
+			
 			if(c.getClave().equals("1")){
 				header.setTitulo("Venta Mostrador");
 				header.setDescripcion(c.getNombreRazon());
 				return;
 			}
+			
 			header.setTitulo(c.getNombreRazon()+ " ( "+c.getClave()+" )"+ "  RFC: "+c.getRfc());
+			
 			if (c.getDireccionFiscal() != null) {
 				String pattern = "" +
-						"Calle  : {0}  #       {1} Int  : {8} 		Crédito{2} \n"+
+						"Calle  : {0}  #       {1} Int  : {8} 		Crédito{2}                                                                                 CFDI Email: {11}   \n"+
 						"Col    : {3} CP:      {4} \n" +
 						"Del/Mpo: {5} Entidad: {6} 	Tel(s):{9}  {10}	Kilos: {7}";
 				Direccion df = c.getDireccionFiscal();
@@ -59,6 +75,7 @@ public class PedidoHeader extends JPanel implements PropertyChangeListener{
 						,StringUtils.trimToEmpty(df.getNumeroInterior())
 						,StringUtils.trimToEmpty(c.getTelefono1())
 						,c.getTelefono2()
+						,emailEnv
 							);
 				header.setDescripcion(msg);
 			}

@@ -71,9 +71,12 @@ public class CancelacionesDeCargos {
 		
 		String[] array=porCancelar.toArray(new String[0]);
 		System.out.println("Cargos por cancelar: : "+array.length);
-		
+		if(array.length==0){
+			System.out.println("No hay cargos cancelados en este dia");
+			return;
+		}
 		try {
-			cancelar(array);
+			cancelar(array,periodo);
 			for(String id:rows){
 				CFDI cfdi=ServiceLocator2.getCFDIManager().getCFDI(id);
 				cfdi.setCancelacion(new Date());
@@ -88,7 +91,7 @@ public class CancelacionesDeCargos {
 	
 	
 	
-	public void cancelar(String[] uuidList) throws Exception{
+	public void cancelar(String[] uuidList,Periodo periodo) throws Exception{
 		String dirPath="Z:\\CFDI\\cancelaciones";
 		File dir=new File(dirPath);
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
@@ -110,11 +113,14 @@ public class CancelacionesDeCargos {
 				, pfxPassword);
 		String msg=res.getText();
 		String aka=res.getAck();
-				
+			
+		//String msg=new String(Base64.encode("Prueba de cancelacion".getBytes()));
+		//String aka=new String(Base64.encode("Prueba de cancelacion".getBytes()));
 		try {
 			
-			String xmlFile="cancelacionCargos_"+new SimpleDateFormat("ddMMyymmss").format(new Date());
+			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
+			
 			FileOutputStream out1=new FileOutputStream(msgFile);
 			out1.write(Base64.decode(msg));
 			out1.close();
@@ -133,7 +139,12 @@ public class CancelacionesDeCargos {
 	
 	public static void main(String[] args) {
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
-		task.cancelacion(new Periodo("01/01/2014","31/01/2014"));
+		Periodo per=new Periodo("21/02/2014","26/02/2014");
+		//task.cancelacion(per);
+		for(Date dia:per.getListaDeDias()){
+			task.cancelacion(new Periodo(dia,dia));
+		}
+		
 	}
 
 }

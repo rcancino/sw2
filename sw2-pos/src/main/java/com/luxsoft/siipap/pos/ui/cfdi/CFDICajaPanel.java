@@ -207,6 +207,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"regresarPendiente", "Regresar a Pendiente"));
 			actions.add(addAction(POSRoles.CAJERO.name(),"consultarDisponibles", "Disponibles"));
 			actions.add(addAction(POSRoles.CAJERO.name(), "timbrar", "Timbrar CFDI"));
+			actions.add(addRoleBasedContextAction(new VentaPredicate(), POSRoles.CAJERO.name(),this, "generarVentaSinTimbrar", "Generar venta S/Timbrar"));
 			this.actions=actions.toArray(new Action[actions.size()]);
 		}
 		return actions;
@@ -277,6 +278,17 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			CFDIVenta cfdiVenta=facturacionController.generarVenta(target);
 			if(cfdiVenta!=null){
 				timbrar(cfdiVenta);
+				load();
+			}
+		}	
+	}
+	
+	
+	public void generarVentaSinTimbrar(){
+		Pedido target=getSelectedPedido();
+		if(target!=null){
+			CFDIVenta cfdiVenta=facturacionController.generarVenta(target);
+			if(cfdiVenta!=null){
 				load();
 			}
 		}	

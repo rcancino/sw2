@@ -166,6 +166,7 @@ public class CFDIFacturacionCreditoPanel extends FilteredBrowserPanel<Pedido>{
 			actions.add(addAction(POSActions.GeneracionDePedidos.getId(),"timbrar", "Timbrar CFDI"));
 			
 			actions.add(addAction(null,"generarVentaConAnticipo", "Venta con anticipo)"));
+			actions.add(addRoleBasedContextAction(new FacturarPredicate(), POSRoles.CAJERO.name(),this, "generarVentaSinTimbrar", "Generar venta S/Timbrar"));
 			this.actions=actions.toArray(new Action[actions.size()]);
 		}
 		return actions;
@@ -247,8 +248,28 @@ public class CFDIFacturacionCreditoPanel extends FilteredBrowserPanel<Pedido>{
 				if(cfdiVenta!=null){
 					pedido=getManager().get(pedido.getId());
 					source.set(index, pedido);
-					//facturasBrowser.load();
+			
 					timbrar(cfdiVenta);
+					
+					load();
+				}
+			}			
+		}
+	}
+	
+	public void generarVentaSinTimbrar(){
+		if(getSelectedObject()!=null){
+			Pedido pedido=(Pedido)getSelectedObject();
+			pedido=getManager().get(pedido.getId());
+			int index=source.indexOf(pedido);
+			if(index!=-1){
+				//facturacionController.facturarPedido(pedido);
+				CFDIVenta cfdiVenta=facturacionController.generarVenta(pedido);
+				if(cfdiVenta!=null){
+					pedido=getManager().get(pedido.getId());
+					source.set(index, pedido);
+					
+					load();
 				}
 			}			
 		}

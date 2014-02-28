@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import org.apache.commons.lang.StringUtils;
 
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.util.MonedasUtils;
 
 
 
@@ -330,7 +331,7 @@ import com.luxsoft.siipap.model.CantidadMonetaria;
 	}		
 
 	
-	public String convertirLetras(final CantidadMonetaria importe){
+/*	public String convertirLetras(final CantidadMonetaria importe){
 		double  val1=importe.amount().abs().doubleValue();		
 		int entero=importe.amount().intValue();
 		double cent=val1-(double)entero;
@@ -339,6 +340,23 @@ import com.luxsoft.siipap.model.CantidadMonetaria;
 		final String ok=StringUtils.leftPad(svalor,2,'0');
 		num_letras = decmillon(importe.amount().intValue());
 		num_letras+=" PESOS {0}/100 M.N.";
+		return MessageFormat.format(num_letras, ok);
+	}*/
+	
+	public String convertirLetras(final CantidadMonetaria importe){
+		double  val1=importe.amount().abs().doubleValue();		
+		int entero=importe.amount().intValue();
+		double cent=val1-(double)entero;
+		long valor=Math.round(cent*100);
+		final String svalor=String.valueOf(valor);
+		final String ok=StringUtils.leftPad(svalor,2,'0');
+		num_letras = decmillon(importe.amount().intValue());
+		if(importe.getCurrency().equals(MonedasUtils.DOLARES)){
+			num_letras+=" DOLARES AMERICANOS {0}/100 USD";
+		}else{
+			num_letras+=" PESOS {0}/100 M.N.";
+		}
+		
 		return MessageFormat.format(num_letras, ok);
 	}
 	

@@ -85,10 +85,27 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 				}
 			}
 		// Modificacion para no permitir facturar sin existencia
+		//
+		if( (getPedidoDet().getProducto()!=null) && getPedidoDet().getProducto().getLinea().getId().longValue()!= 106L){
+			if(getPedidoDet().getCantidad()>this.existenciaTotal){
+				if(getPedidoDet().getCantidad()>getExistencia()){
+					if(!getPedidoDet().isCotizable()){
+						support.getResult().addError("No hay existencia suficiente para facturar: "+getPedidoDet().getCantidad() +" Existencia Total"+ this.existenciaTotal +" Existencia sucursal: "+getExistencia());
+					}
+					
+				}
+			}
+		}
 		
-		if(getPedidoDet().getCantidad()>this.existenciaTotal){
+		
+		/*
+		if(getPedidoDet().getCantidad()>getExistencia() ){
 			support.getResult().addError("No se puede facturar sin existencia por facturar : "+getPedidoDet().getCantidad() +" Existencia Total"+ this.existenciaTotal );
 		}
+		
+		if(  (  getPedidoDet().getCantidad()>this.existenciaTotal) && getPedidoDet().getProducto().getLinea().getId().longValue()!= 106L ){
+			support.getResult().addError("No se puede facturar sin existencia por facturar : "+getPedidoDet().getCantidad() +" Existencia Total"+ this.existenciaTotal );
+		}*/
 	}
 
 	public void dispose(){
@@ -194,6 +211,7 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 					existenciaTotal+=e.getCantidad();
 				}
 				updateHeader();
+				validate();
 			}
 		};
 		worker.execute();
@@ -286,9 +304,12 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 			getPedidoDet().actualizar();
 		}else if("precioCorte".equals(evt.getPropertyName())){
 			getPedidoDet().actualizar();
-		}
+		}else if("cotizable".equals(evt.getPropertyName())){
+			getPedidoDet().actualizar();			
+		} 
 		
 	}
+	
 	
 	
 	public Sucursal getSucursal() {

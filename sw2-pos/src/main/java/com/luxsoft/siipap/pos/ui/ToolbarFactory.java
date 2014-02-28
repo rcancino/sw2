@@ -87,6 +87,24 @@ public class ToolbarFactory extends ToolbarFactoryImpl{
 	sal.putValue(Action.SMALL_ICON, CommandUtils.getIconFromResource("images/misc2/categories.png"));
 	builder.add(sal);
 	
+	
+/*	ShowViewAction cau=new ShowViewAction("CancelacionAutorizada"){
+		protected void execute() {
+			Action delegate=getActionManager().getAction("showCancelacionAutorizadaView");
+			User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+			if((user!=null) && user.hasRole(POSRoles.CONTROLADOR_DE_INVENTARIOS.name())){
+				delegate.actionPerformed(null);
+			}else{
+				MessageUtils.showMessage("No tiene los derechos apropiados", "CancelacionAutorizada");
+			}
+		}
+	};
+	
+	cau.putValue(Action.NAME, "CancelacionAutorizada");
+	cau.putValue(Action.SMALL_ICON, CommandUtils.getIconFromResource("images/misc2/categories.png"));
+	builder.add(cau);*/
+	
+	
         
 		ShowViewAction se=new ShowViewAction("Embarques"){
 			protected void execute() {
@@ -135,6 +153,8 @@ public class ToolbarFactory extends ToolbarFactoryImpl{
 		
 		return action;
 	}
+	
+	
 	
 	public Action buildBuscarVentaAction(){ 
 		/*Action action=new AbstractAction("Buscar Venta"){

@@ -112,7 +112,24 @@ public class PedidoFormValidator {
 				support.getResult().addError("No existe en el sistema el tipo de cambio para el dia ");
 			}
 		}
+		
+		validarIsCotizacion(support);
+		/*
+		for(PedidoDet det:getPedido().getPartidas()){
+			double existenciaTotal=0; //det
+			double existenciaSucursal=0;//det
+			if( (det.getProducto()!=null) && det.getProducto().getLinea().getId().longValue()!= 106L){
+				if(det.getCantidad()>existenciaTotal){
+					if(det.getCantidad()>existenciaSucursal){
+						support.getResult().addError("No hay existencia suficiente para facturar: "+det.getCantidad() 
+								+" Existencia Total"+ existenciaTotal +" Existencia sucursal: "+existenciaSucursal);
+					}
+				}
+			}
+		}*/
 	}
+	
+	
 	
 	private void validarFormaDePago(PropertyValidationSupport support){
 		Cliente c=getPedido().getCliente();
@@ -212,6 +229,26 @@ public class PedidoFormValidator {
 		}*/
 		
 	}
+	
+	
+	
+	private void validarIsCotizacion(PropertyValidationSupport support){
+		if(!getPedido().getPartidas().isEmpty()){
+			int valid=0;
+			
+			for(PedidoDet det : getPedido().getPartidas()){
+				if(det.isCotizable()){
+					valid=valid+1;
+				}
+			}
+			if(valid>0){
+				support.getResult().addError( "Existe un producto cotizable");
+			}
+			
+		}
+		
+	}
+	
 	
 	private void validarDireccion(PropertyValidationSupport support){
 		if(getPedido().getEntrega().equals(FormaDeEntrega.LOCAL))

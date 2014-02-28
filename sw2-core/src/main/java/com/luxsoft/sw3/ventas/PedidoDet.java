@@ -170,6 +170,20 @@ public class PedidoDet extends BaseBean{
 	@Length(max=17)
 	private String instruccionesDecorte;
 	
+	@Transient
+	private boolean cotizable=false;
+	
+	public boolean isCotizable() {
+		return cotizable;
+	}
+
+	public void setCotizable(boolean cotizable) {
+		boolean old=this.cotizable;
+        this.cotizable = cotizable;
+        firePropertyChange("cotizable", old, cotizable);
+	}
+	
+	
 	@Embedded
 	@AttributeOverrides({
 	       @AttributeOverride(name="createUser",	column=@Column(name="CREADO_USR"	,nullable=true,insertable=true,updatable=false)),

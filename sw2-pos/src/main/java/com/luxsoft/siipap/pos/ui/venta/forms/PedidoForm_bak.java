@@ -2,6 +2,7 @@ package com.luxsoft.siipap.pos.ui.venta.forms;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -60,6 +62,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.util.ActionLabel;
 import com.jgoodies.uifextras.util.UIFactory;
 import com.jgoodies.validation.view.ValidationResultViewFactory;
+import com.luxsoft.cfdi.CFDIMandarFacturarForm;
 import com.luxsoft.siipap.pos.ui.utils.UIUtils;
 import com.luxsoft.siipap.swing.actions.DispatchingAction;
 import com.luxsoft.siipap.swing.binding.Binder;
@@ -70,6 +73,7 @@ import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.Renderers;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
+import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
 import com.luxsoft.sw3.ui.selectores.SelectorDeDescuento;
 import com.luxsoft.sw3.ventas.InstruccionDeEntrega;
 import com.luxsoft.sw3.ventas.Pedido;
@@ -398,13 +402,25 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	}
 	
 	private JComponent buildClienteControl(){
-		FormLayout layout=new FormLayout("70dlu:g,2dlu,p,2dlu,p","");
+		//FormLayout layout=new FormLayout("10dlu:g,2dlu,p,2dlu,p","");
+		FormLayout layout = new FormLayout(
+			    "30dlu:g, 3dlu, pref, 3dlu, pref, 3dlu, pref,3dlu",     // columns
+			    ""); 
 		final DefaultFormBuilder builder=new DefaultFormBuilder(layout);
 		JButton bt1=new JButton(getLookupAction());
 		bt1.setFocusable(false);
 		JButton bt2=new JButton(getInsertCliente());
 		bt2.setFocusable(false);
-		builder.append(getControl("clave"),bt1,bt2);
+		JButton bt3=new JButton(getEditMail());
+		bt3.setFocusable(false);
+	
+	
+		//builder.append(getControl("clave"),bt1,bt2);
+		builder.append(getControl("clave"));
+		builder.append(bt1,bt2,bt3);
+		
+		
+	
 		return builder.getPanel();
 	}
 	
@@ -449,6 +465,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		
 	private Action lookupAction;
 	private Action insertCliente;
+	private Action editMail;
 	private Action imprimirAction;
 	private Action descuentoEspecialAction;	
 	private Action facturarAction;
@@ -461,6 +478,15 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			lookupAction.putValue(Action.NAME, "F2");
 		}
 		return lookupAction;
+	}
+	
+	public Action getEditMail(){
+		if(editMail==null){
+			editMail=new DispatchingAction(this,"editarMail");
+			editMail.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/vcard_edit.png"));
+			editMail.putValue(Action.NAME, "F8");
+		}
+		return editMail;
 	}
 	
 	public Action getInsertCliente(){
@@ -525,7 +551,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	private EventSelectionModel<PedidoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"clave","descripcion","producto.gramos"
+		String[] propertyNames={"cotizable","clave","descripcion","producto.gramos"
 				,"producto.calibre","cantidad"
 				//,"backOrder"
 				,"precio"
@@ -539,7 +565,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				,"log.creado"
 				};
 		
-		String[] columnLabels={"Clave","Producto","(g)","cal","Cant"
+		String[] columnLabels={"Cot","Clave","Producto","(g)","cal","Cant"
 				//,"B.O."
 				,"Precio"
 				//,"Precio Esps"
@@ -674,6 +700,14 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		getController().seleccionarCliente(this);
 	}
 	
+	public void editarMail(){
+		if(getController().getPedido().getClave()!=null){
+			CFDIClienteMails mails=CFDIMandarFacturarForm.showForm(getController().getPedido().getClave());
+			header.updateHeader();
+		}
+		
+	}
+	
 	public void consolidarCortes(){
 		JOptionPane.showMessageDialog(getContentPane(), "EN DESARROLLO");
 	}
@@ -724,6 +758,15 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 						if(isFocused()){
 							e.consume();
 							getController().insertarClienteNuevo();
+							return true;
+						}
+					}
+					
+				}else if(KeyStroke.getKeyStroke("F8").getKeyCode()==e.getKeyCode()){
+					if(getController().getPedido().getCliente()!=null){
+						if(isFocused()){
+							e.consume();
+							editarMail();
 							return true;
 						}
 					}
