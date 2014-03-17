@@ -76,34 +76,82 @@
 	"buffers":
 	[
 		{
-			"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
+			"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
 			"settings":
 			{
-				"buffer_size": 24521,
+				"buffer_size": 25958,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/main/java/com/luxsoft/siipap/inventarios/model/Existencia.java",
+			"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
 			"settings":
 			{
-				"buffer_size": 9689,
+				"buffer_size": 26293,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/sw3/cfdi/CFDIPrintServices.java",
+			"settings":
+			{
+				"buffer_size": 10878,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
+			"file": "src/main/java/com/luxsoft/sw3/cfdi/model/CFDI.java",
 			"settings":
 			{
-				"buffer_size": 25614,
+				"buffer_size": 13164,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main/resources/swx-jdbc.properties",
+			"settings":
+			{
+				"buffer_size": 970,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "src/main/java/com/luxsoft/siipap/model/core/Linea.java",
+			"file": "src/main/java/com/luxsoft/sw3/cfd/ImporteALetra.java",
 			"settings":
 			{
-				"buffer_size": 3830,
+				"buffer_size": 7791,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/siipap/util/MonedasUtils.java",
+			"settings":
+			{
+				"buffer_size": 5562,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/sw3/cfdi/CFDIFactura.java",
+			"settings":
+			{
+				"buffer_size": 11351,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/sw3/cfdi/QRCodeUtils.java",
+			"settings":
+			{
+				"buffer_size": 1505,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/java/com/luxsoft/siipap/model/CantidadMonetaria.java",
+			"settings":
+			{
+				"buffer_size": 8893,
 				"line_ending": "Windows"
 			}
 		}
@@ -188,6 +236,14 @@
 	},
 	"file_history":
 	[
+		"/Users/rcancino/github/sw2/sw2-core/src/main/java/com/luxsoft/sw3/cfdi/model/CFDI.java",
+		"/Users/rcancino/Downloads/print.css",
+		"/Users/rcancino/github/sw2/sw2-core/src/main/resources/sql/parches/CFDI.sql",
+		"/Users/rcancino/github/sw2/sw2-core/siipapex-core.sublime-project",
+		"/Users/rcancino/github/sw2/sw2-core/src/main/java/com/luxsoft/siipap/model/core/Producto.java",
+		"/Users/rcancino/github/sw2/sw2-core/src/main/java/com/luxsoft/siipap/inventarios/model/Existencia.java",
+		"/Users/rcancino/github/sw2/sw2-core/src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
+		"/Users/rcancino/github/sw2/sw2-core/src/main/java/com/luxsoft/siipap/model/core/Linea.java",
 		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/services/CFDSupportImpl.java",
 		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/CFDUtils.java",
 		"/Users/rubencancinoramos/desarrollo/siipapw-ex/ siipapw-ex/sw2-core/src/main/java/com/luxsoft/sw3/cfd/ImporteALetra.java",
@@ -271,6 +327,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Roun",
+			"Mat",
+			"calcular",
+			"QR",
 			"toString()",
 			"body",
 			"footer",
@@ -295,15 +355,15 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 9,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
+					"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
 					"settings":
 					{
-						"buffer_size": 24521,
+						"buffer_size": 25958,
 						"regions":
 						{
 						},
@@ -321,43 +381,17 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1701.0,
+						"translation.y": 7020.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "src/main/java/com/luxsoft/siipap/inventarios/model/Existencia.java",
+					"file": "src/main/java/com/luxsoft/siipap/model/core/Cliente.java",
 					"settings":
 					{
-						"buffer_size": 9689,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Java/Java.tmLanguage"
-						},
-						"translation.x": 2.0,
-						"translation.y": 456.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/main/java/com/luxsoft/siipap/model/core/Producto.java",
-					"settings":
-					{
-						"buffer_size": 25614,
+						"buffer_size": 26293,
 						"regions":
 						{
 						},
@@ -374,18 +408,152 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 874.0,
+						"translation.x": 3.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/main/java/com/luxsoft/sw3/cfdi/CFDIPrintServices.java",
+					"settings":
+					{
+						"buffer_size": 10878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10438,
+								10440
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 40.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "src/main/java/com/luxsoft/siipap/model/core/Linea.java",
+					"file": "src/main/java/com/luxsoft/sw3/cfdi/model/CFDI.java",
 					"settings":
 					{
-						"buffer_size": 3830,
+						"buffer_size": 13164,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1965,
+								1971
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1629.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/main/resources/swx-jdbc.properties",
+					"settings":
+					{
+						"buffer_size": 970,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								572,
+								572
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/JavaProperties.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/main/java/com/luxsoft/sw3/cfd/ImporteALetra.java",
+					"settings":
+					{
+						"buffer_size": 7791,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								163,
+								7787
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 1.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/main/java/com/luxsoft/siipap/util/MonedasUtils.java",
+					"settings":
+					{
+						"buffer_size": 5562,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5169,
+								5422
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2196.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/main/java/com/luxsoft/sw3/cfdi/CFDIFactura.java",
+					"settings":
+					{
+						"buffer_size": 11351,
 						"regions":
 						{
 						},
@@ -401,8 +569,63 @@
 							"syntax": "Packages/Java/Java.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
+						"translation.x": 7.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/main/java/com/luxsoft/sw3/cfdi/QRCodeUtils.java",
+					"settings":
+					{
+						"buffer_size": 1505,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								455,
+								555
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
 						"translation.x": 0.0,
-						"translation.y": 304.0,
+						"translation.y": 35.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/main/java/com/luxsoft/siipap/model/CantidadMonetaria.java",
+					"settings":
+					{
+						"buffer_size": 8893,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3592,
+								3614
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Java/Java.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 15.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -452,6 +675,58 @@
 		"selected_items":
 		[
 			[
+				"cantidadmo",
+				"java/com/luxsoft/siipap/model/CantidadMonetaria.java"
+			],
+			[
+				"moneda",
+				"java/com/luxsoft/siipap/util/MonedasUtils.java"
+			],
+			[
+				"qrcod",
+				"java/com/luxsoft/sw3/cfdi/QRCodeUtils.java"
+			],
+			[
+				"cfdipri",
+				"java/com/luxsoft/sw3/cfdi/CFDIPrintServices.java"
+			],
+			[
+				"cfdifa",
+				"java/com/luxsoft/sw3/cfdi/CFDIFactura.java"
+			],
+			[
+				"monedautils",
+				"java/com/luxsoft/siipap/util/MonedasUtils.java"
+			],
+			[
+				"imp",
+				"java/com/luxsoft/sw3/cfd/ImporteALetra.java"
+			],
+			[
+				"jdbc",
+				"resources/swx-jdbc.properties"
+			],
+			[
+				"cfdi.ja",
+				"java/com/luxsoft/sw3/cfdi/model/CFDI.java"
+			],
+			[
+				"cfdiprin",
+				"java/com/luxsoft/sw3/cfdi/CFDIPrintServices.java"
+			],
+			[
+				"cliente",
+				"java/com/luxsoft/siipap/model/core/Cliente.java"
+			],
+			[
+				"produ",
+				"java/com/luxsoft/siipap/model/core/Producto.java"
+			],
+			[
+				"cfdi",
+				"resources/sql/parches/CFDI.sql"
+			],
+			[
 				"linea",
 				"java/com/luxsoft/siipap/model/core/Linea.java"
 			],
@@ -462,10 +737,6 @@
 			[
 				"existen",
 				"java/com/luxsoft/siipap/inventarios/model/Existencia.java"
-			],
-			[
-				"cliente",
-				"java/com/luxsoft/siipap/model/core/Cliente.java"
 			],
 			[
 				"cfds",
@@ -682,10 +953,6 @@
 			[
 				"_fie",
 				"Views/_fields/default/_field.gsp"
-			],
-			[
-				"produ",
-				"Domain Objects/demonav/Producto.groovy"
 			],
 			[
 				"sc",
