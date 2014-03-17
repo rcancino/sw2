@@ -15,6 +15,7 @@ import org.hibernate.event.PostInsertEvent;
 import org.hibernate.event.PostInsertEventListener;
 import org.hibernate.event.PostUpdateEvent;
 import org.hibernate.event.PostUpdateEventListener;
+import org.jfree.util.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -194,11 +195,20 @@ public class AuditLogListener implements PostInsertEventListener
 			}
 			return new String[]{compra.getSucursal().getNombre()};
 		}else if(bean instanceof CompraUnitaria){
+			
 			CompraUnitaria com=(CompraUnitaria)bean;
 			//System.out.println("Resolviendo destino para compra unitaria: "+com);
+			System.out.println("generando Destino para compradet  "+com.getId());
+			System.out.println("-------"+com.getCompra()+"------------");
+			//System.out.println("-------"+com.getCompra().isImportacion()+"------------");
 			if( (com.getCompra()!=null) && com.getCompra().isImportacion()){
+				System.out.println("la compra es de importacion" +com.getId());
+				return getDestinos().toArray(new String[0]);
+			}if(com.getCompra()==null){
+				System.out.println("la compra es de importacion" +com.getId());
 				return getDestinos().toArray(new String[0]);
 			}else
+				System.out.println("La compra no es de importacion  "+com.getId()+"**********" );
 				return new String[]{com.getSucursal().getNombre()};
 		}else if(bean instanceof NotaDeCredito){
 			NotaDeCredito nota=(NotaDeCredito)bean;

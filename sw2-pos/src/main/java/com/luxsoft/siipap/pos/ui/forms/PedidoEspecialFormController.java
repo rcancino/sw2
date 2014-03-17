@@ -122,10 +122,10 @@ public class PedidoEspecialFormController extends DefaultFormModel {
 	 *      a otro lado
 	 */
 	public void insertarPartida(){	
-		if(getPedido().getId()==null){
+		/*if(getPedido().getId()==null){
 			insertarPartidaEspecial();
 			return;
-		}
+		}*/
 		boolean credito=getPedido().isDeCredito();
 		if(getPedido().getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO))
 			credito=false;
@@ -294,9 +294,15 @@ public class PedidoEspecialFormController extends DefaultFormModel {
 			setValue("tipo", Pedido.Tipo.CREDITO);
 			if(getPedido().getCliente().getCredito().isChequePostfechado()){
 				setValue("formaDePago", FormaDePago.CHEQUE_POSTFECHADO);
-			}else{
+			}if(getPedido().getCliente().getCredito().isCheckplus()){
+				setValue("formaDePago", FormaDePago.CHECKPLUS);
+			}if(getPedido().getCliente().getFormaDePago()==null)
 				setValue("formaDePago", FormaDePago.EFECTIVO);
-			}
+			else
+				setValue("formaDePago",getPedido().getCliente().getFormaDePago());
+		/*	else{
+				setValue("formaDePago", FormaDePago.EFECTIVO);
+			} */
 		}else{
 			setValue("tipo", Pedido.Tipo.CONTADO);			
 		}

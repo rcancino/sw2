@@ -219,6 +219,12 @@ public class ExistenciaDaoImpl extends GenericDaoHibernate<Existencia, Long> imp
 			String clave=(String)row.get("CLAVE");
 			Existencia target=buscar(clave, sucursalId, year,mes);
 			
+			String slq2="select IFNULL(SUM(ifnull(((X.SOLICITADO-X.DEPURADO))-IFNULL((SELECT SUM(I.CANTIDAD) FROM sx_inventario_com I WHERE I.COMPRADET_ID=X.COMPRADET_ID),0),0)),0) AS PENDTE"+
+		   			" from sx_compras2 C JOIN sx_compras2_det X  ON(C.COMPRA_ID=X.COMPRA_ID) WHERE X.CLAVE=? AND X.SUCURSAL_ID=?"+
+		   			" AND ((X.SOLICITADO-X.DEPURADO))-IFNULL((SELECT SUM(I.CANTIDAD) FROM sx_inventario_com I WHERE I.COMPRADET_ID=X.COMPRADET_ID),0)>0";
+
+		   	Double pendiente=(Double) getJdbcTemplate().queryForObject(slq2, new Object[]{clave,sucursalId}, Double.class);	
+			
 			int mesAnt,yearAnt;
 			
 			if(mes-1==0)
@@ -249,7 +255,7 @@ public class ExistenciaDaoImpl extends GenericDaoHibernate<Existencia, Long> imp
 				}
 					
 			}
-							
+			target.setPedidosPendientes(pendiente);					
 			target.setCantidad(cantidad.doubleValue());
 			target.setModificado(new Date());
 			
@@ -285,6 +291,12 @@ public class ExistenciaDaoImpl extends GenericDaoHibernate<Existencia, Long> imp
 	   	sql=sql.replaceAll("@CORTE_FIN",fecha1 );
 	   	sql=sql.replaceAll("@CORTE","2009/01/01" );
 	   	
+		String slq2="select IFNULL(SUM(ifnull(((X.SOLICITADO-X.DEPURADO))-IFNULL((SELECT SUM(I.CANTIDAD) FROM sx_inventario_com I WHERE I.COMPRADET_ID=X.COMPRADET_ID),0),0)),0) AS PENDTE"+
+	   			" from sx_compras2 C JOIN sx_compras2_det X  ON(C.COMPRA_ID=X.COMPRA_ID) WHERE X.CLAVE=? AND X.SUCURSAL_ID=?"+
+	   			" AND ((X.SOLICITADO-X.DEPURADO))-IFNULL((SELECT SUM(I.CANTIDAD) FROM sx_inventario_com I WHERE I.COMPRADET_ID=X.COMPRADET_ID),0)>0";
+
+	   	Double pendiente=(Double) getJdbcTemplate().queryForObject(slq2, new Object[]{clave,sucursalId}, Double.class);
+	   	
 		//System.out.println(sql);
 		final List<Map<String, Object>> rows=getJdbcTemplate().queryForList(sql);		
 		for(Map<String,Object> row:rows){			
@@ -300,6 +312,7 @@ public class ExistenciaDaoImpl extends GenericDaoHibernate<Existencia, Long> imp
 				target.setProducto(p);
 				target.setSucursal(s);
 			}
+			target.setPedidosPendientes(pendiente);
 			target.setCantidad(cantidad.doubleValue());
 			target.setModificado(new Date());
 			

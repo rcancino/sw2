@@ -282,13 +282,15 @@ public class ReporteDeSugerenciaDeTrasladoForm extends SWXAction{
 				int sucursalId=selected.getId().intValue();
 				switch (sucursalId) {
 				case 2:
-					return 15;
+					return 16;
 				case 3:
-					return 18;
+					return 19;
 				case 5:
-					return 12;
+					return 13;
 				case 6:
-					return 9;
+					return 10;
+				case 9:
+					return 22;
 				default:
 					return 0;
 				}

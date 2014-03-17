@@ -28,6 +28,8 @@
      			    p:defaultPanel="true"/>
      			 <bean class="com.luxsoft.sw3.cfd.ui.consultas.ComprobanteFiscalImpresosPanel"
      			    p:title="Comprobantes Impresos (SAT)"/>
+     			 <bean class="com.luxsoft.sw3.cfd.ui.consultas.CFDISATPanel"
+     			    p:title="CFDI (SAT)"/>
      		</list>
      	</property>
      </bean>

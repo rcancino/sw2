@@ -93,6 +93,9 @@ public class PedidoDetForm2 extends AbstractForm{
 
 	
 	protected JComponent buildFormMainPanel() {
+		JButton pendientesButton=new JButton(getbuscarPendiente());
+		setDefaultButton(pendientesButton);
+		
 		FormLayout layout=new FormLayout(
 				" p,2dlu,max(p;60dlu),2dlu" +
 				",p,2dlu,max(p;60dlu),2dlu" +
@@ -112,6 +115,7 @@ public class PedidoDetForm2 extends AbstractForm{
 		builder.append("Cantidad",getControl("cantidad"));
 		builder.append("B.O.",addReadOnly("backOrder"));
 		builder.append("Cotizable",getControl("cotizable"));
+		builder.append("Pedidos Pend.",pendientesButton);
 		builder.nextLine();
 		
 		builder.appendSeparator("Instrucción de corte");
@@ -218,6 +222,32 @@ public class PedidoDetForm2 extends AbstractForm{
 	}
 	
 	
+private Action buscarPendientes;
+	
+	public Action getbuscarPendiente(){
+		if(buscarPendientes==null){
+			buscarPendientes=new DispatchingAction(this,"buscarPedidosPendientes");
+			buscarPendientes.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images/misc2/page_find.png"));
+			buscarPendientes.putValue(Action.NAME, "F12");
+		}
+		return buscarPendientes;
+	}
+	
+	 
+	public void buscarPedidosPendientes() {
+		if(getDetModel().getPedidoDet().getClave()!=null){
+			System.err.println("Accion buscar Pendientes");
+			final PedidoDet det=getDetModel().getPedidoDet();
+			PedidoDetFormModel2 model=new PedidoDetFormModel2(det);
+			model.setSucursal(Services.getInstance().getConfiguracion().getSucursal());
+			final PedidosPendientesForm form=new PedidosPendientesForm(model);			
+			form.open();	
+		}
+		
+	}
+	
+	
+	
 	@Override
 	protected JComponent buildHeader() {
 		return getDetModel().getHeader().getHeader();
@@ -231,8 +261,8 @@ public class PedidoDetForm2 extends AbstractForm{
 
 	private JComponent buildDisponibilidadPanel(){		
 		final TableFormat tf=GlazedLists.tableFormat(Existencia.class
-				, new String[]{"sucursal.nombre","cantidad","recorte","disponible","recorteComentario"} //,"modificado","clave","year","mes"}
-				,new String[] {"Sucursal","Existencia","Recorte","Disponible","Recorte Comentario"} //,"Actualización","Clave","Año","Mes"}
+				, new String[]{"sucursal.nombre","cantidad","recorte","pedidosPendientes","disponible","recorteComentario"} //,"modificado","clave","year","mes"}
+				,new String[] {"Sucursal","Existencia","Recorte","Pedidos Pend.","Disponible","Recorte Comentario"} //,"Actualización","Clave","Año","Mes"}
 		);
 		EventTableModel tm=new EventTableModel(getDetModel().getExistencias(),tf);		
 		 JXTable grid=buildTable();

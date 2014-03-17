@@ -27,6 +27,7 @@ import com.luxsoft.siipap.cxc.ui.command.BuscadorDeCargos;
 import com.luxsoft.siipap.cxc.ui.consultas.FacturaForm;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reportes.RelacionDeTPSReportForm;
 import com.luxsoft.siipap.reports.ClientesNuevosBI;
 import com.luxsoft.siipap.reports.FacturasCanceladasBi;
 import com.luxsoft.siipap.reports.VentasDiariasBI;
@@ -130,6 +131,7 @@ public class FacturasCentralizadasPanel extends FilteredBrowserPanel<Venta>{
 		procesos.add(addAction("","reporteDeVentasDiarias", "Ventas Diarias"));
 		procesos.add(addAction("","reporteDeFacturasCanceladas", "Facturas Canceladas"));
 		procesos.add(addAction("","reporteClientesNuevos", "Clientes Nuevos"));
+		procesos.add(addAction("", "relacionTPS", "Relacion De TPS"));
 		procesos.add(ba);
 		return procesos;
 	}
@@ -148,6 +150,10 @@ public class FacturasCentralizadasPanel extends FilteredBrowserPanel<Venta>{
 		ClientesNuevosBI.run();
 	}
 
+	public void relacionTPS(){
+		RelacionDeTPSReportForm.run();  
+	}
+	
 	@Override
 	protected List<Venta> findData() {
 		return ServiceLocator2.getHibernateTemplate().find(

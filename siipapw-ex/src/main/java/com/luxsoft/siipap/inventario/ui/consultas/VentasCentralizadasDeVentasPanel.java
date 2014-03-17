@@ -22,6 +22,7 @@ import ca.odell.glazedlists.swing.TextComponentMatcherEditor;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reportes.RelacionDeTPSReportForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.reports.ReportUtils;
@@ -102,7 +103,7 @@ public class VentasCentralizadasDeVentasPanel extends AbstractMasterDatailFilter
 			actions=new Action[]{
 				getLoadAction()
 				,CommandUtils.createPrintAction(this, "imprimir")
-				
+				,addAction(null, "relacionTPS", "Relacion De TPS")
 				};
 		return actions;
 	}
@@ -136,6 +137,10 @@ public class VentasCentralizadasDeVentasPanel extends AbstractMasterDatailFilter
 			parameters.put("CARGO_ID", v.getId());
 			ReportUtils.viewReport(ReportUtils.toReportesPath("ventas/FacturaCopia.jasper"), parameters);
 		}
+	}
+	
+	public void relacionTPS(){
+		RelacionDeTPSReportForm.run();  
 	}
 	
 

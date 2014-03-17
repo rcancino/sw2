@@ -97,7 +97,8 @@ public class CancelacionesDeCargos {
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
 		byte[] pfxData=new byte[(int)pfx.getFile().length()];
@@ -119,6 +120,7 @@ public class CancelacionesDeCargos {
 		try {
 			
 			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
+			//String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			
 			FileOutputStream out1=new FileOutputStream(msgFile);
@@ -138,8 +140,14 @@ public class CancelacionesDeCargos {
 	}
 	
 	public static void main(String[] args) {
-		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
-		Periodo per=new Periodo("21/02/2014","26/02/2014");
+		/*System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
+		System.setProperty("sucursalOrigen", "OFICINAS");*/
+		
+		System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.1/produccion");
+		System.setProperty("sucursalOrigen", "QRQUERETARO");
+		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
+		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
+		Periodo per=new Periodo("28/02/2014","28/02/2014");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			task.cancelacion(new Periodo(dia,dia));

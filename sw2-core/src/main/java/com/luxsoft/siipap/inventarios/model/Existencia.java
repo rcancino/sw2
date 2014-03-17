@@ -151,6 +151,20 @@ public class Existencia implements Replicable ,Serializable{
 	
 	@Column(name="TX_REPLICADO",nullable=true)
 	private Date replicado;
+	
+	
+	@Column(name="PED_PENDTE",nullable=false)
+    private double pedidosPendientes=0;
+	
+	
+	public double getPedidosPendientes() {
+		return pedidosPendientes;
+	}
+
+	public void setPedidosPendientes(double pedidosPendientes) {
+		this.pedidosPendientes = pedidosPendientes;
+	}
+	
     
     public Existencia() {
     }

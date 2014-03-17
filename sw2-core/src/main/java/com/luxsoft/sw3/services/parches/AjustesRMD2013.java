@@ -18,13 +18,19 @@ public class AjustesRMD2013 {
 	public void run(){
 		ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback() {
 			public Object doInHibernate(Session session) throws HibernateException,SQLException {
-				
+				int buf=0;
+					
 				List<Devolucion> rmds=session.createQuery("from Devolucion d where date(d.fecha)=?")
 						.setParameter(0, DateUtil.toDate("31/12/2013"),Hibernate.DATE)
 						.list();
 				for(Devolucion d:rmds){
 					for(DevolucionDeVenta det:d.getPartidas()){
 						det.setDocumento(d.getNumero());
+						if(buf%10==0){
+							session.flush();
+							session.clear();
+						}
+						buf++;
 					}
 				}
 				

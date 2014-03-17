@@ -3,8 +3,6 @@ package com.luxsoft.sw3.replica;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.springframework.util.Assert;
-
 public class AuditUtils {
 	
 	public static final Map<String,String> classTableMap;
@@ -231,8 +229,6 @@ public class AuditUtils {
 
 	}	
 
-	public static void main(String[] args) {
-		
-	}
+	
 
 }

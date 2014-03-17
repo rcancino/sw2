@@ -109,7 +109,8 @@ public class CFDINotaPrintServices {
 		parametros.put("FECHA", 			comprobante.getFecha().getTime());
 		parametros.put("NFISCAL", 			comprobante.getSerie()+" - "+comprobante.getFolio());		
 		
-		//parametros.put("IMPORTE", 			nota.getImporteBruto().subtract(venta.getImporteDescuento()));
+		//parametros.put("IMPORTE", 			nota.getImporte();
+		parametros.put("IMPORTE", 			cfdi.getTotal().subtract(cfdi.getImpuesto()));
 		parametros.put("IMPUESTO", 			comprobante.getImpuestos().getTotalImpuestosTrasladados()); 
 		parametros.put("TOTAL", 			comprobante.getTotal()); 
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );

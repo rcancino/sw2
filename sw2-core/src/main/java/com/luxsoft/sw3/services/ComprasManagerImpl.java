@@ -357,6 +357,9 @@ return res.get(0)!=null?Math.abs(res.get(0).longValue())+1:1;
 				exis=existenciaDao.generar(det.getProducto(), hoy, det.getSucursal().getId());
 			}
 			exis.setCantidad(exis.getCantidad()+det.getCantidad());
+			if(det.getNacional()==true){
+				exis.setPedidosPendientes(exis.getPedidosPendientes()-det.getCantidad());
+			}
 			exis=existenciaDao.save(exis);
 			if(logger.isDebugEnabled()){
 				logger.debug("Existencia actualizada: "+exis);

@@ -160,6 +160,7 @@ public class CFDIPrintUI {
 		parametros.put("SUPERVISOR",tps.getSuperviso());
 		parametros.put("ELABORO", tps.getLog().getCreateUser());
 		parametros.put("CHOFER",tps.getChofer());
+		parametros.put("SOLICITO",tps.getSolicitud().getSucursal().getNombre());
 		
 		
 		
