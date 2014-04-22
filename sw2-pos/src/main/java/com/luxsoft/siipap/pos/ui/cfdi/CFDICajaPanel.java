@@ -16,6 +16,7 @@ import ca.odell.glazedlists.matchers.Matchers;
 import com.jgoodies.uif.builder.ToolBarBuilder;
 import com.jgoodies.uif.panel.SimpleInternalFrame;
 import com.luxsoft.cfdi.CFDIPrintUI;
+import com.luxsoft.cfdi.tasks.CancelacionesDeCargosPos;
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.Sucursal;
@@ -208,6 +209,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			actions.add(addAction(POSRoles.CAJERO.name(),"consultarDisponibles", "Disponibles"));
 			actions.add(addAction(POSRoles.CAJERO.name(), "timbrar", "Timbrar CFDI"));
 			actions.add(addRoleBasedContextAction(new VentaPredicate(), POSRoles.CAJERO.name(),this, "generarVentaSinTimbrar", "Generar venta S/Timbrar"));
+			actions.add(addAction(POSRoles.CAJERO.name(), "cancelacionesSat", "Cancelar CFDI's SAT"));
 			this.actions=actions.toArray(new Action[actions.size()]);
 		}
 		return actions;
@@ -292,6 +294,16 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 				load();
 			}
 		}	
+	}
+	
+	public void cancelacionesSat (){
+		if(MessageUtils.showConfirmationMessage("¿Cancelar CFDI's de hoy en el SAT ?",	"Cancelación CFDI SAT")){
+			Periodo per= new Periodo(new Date(), new Date());
+			CancelacionesDeCargosPos task=new CancelacionesDeCargosPos("certificadopapel");
+			task.cancelacion(per);
+		}else{
+			System.err.println("No Quiso cancelar");
+		}
 	}
 	
 	public void timbrar(CFDIVenta cfdiVenta){

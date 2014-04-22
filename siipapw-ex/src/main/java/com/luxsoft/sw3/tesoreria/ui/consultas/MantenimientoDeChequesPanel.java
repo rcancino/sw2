@@ -12,6 +12,7 @@ import com.luxsoft.siipap.model.tesoreria.CargoAbono;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.dialog.SelectorDeFecha;
+import com.luxsoft.siipap.swing.reports.ReportUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.sw3.tesoreria.TESORERIA_ROLES;
@@ -56,9 +57,9 @@ public class MantenimientoDeChequesPanel extends FilteredBrowserPanel<CargoAbono
 				);
 		
 		installTextComponentMatcherEditor("Id", "id");
-		installTextComponentMatcherEditor("Sucursal", "aFavor");
+	//	installTextComponentMatcherEditor("Sucursal", "aFavor");
 		installTextComponentMatcherEditor("Importe", "importe");
-		installTextComponentMatcherEditor("Folio", "referencia");
+		installTextComponentMatcherEditor("Referencia", "referencia");
 		manejarPeriodo();
 	}
 	
@@ -96,6 +97,8 @@ public class MantenimientoDeChequesPanel extends FilteredBrowserPanel<CargoAbono
 				,getViewAction()
 				,addAction(TESORERIA_ROLES.CONTROL_DE_INGRESOS.getId(), "cambiarFechaDeCobroDeCheque", "Cambiar fecha de cobro")
 				,addAction(TESORERIA_ROLES.CONTROL_DE_INGRESOS.getId(), "cancelarFechaDeCobroDeCheque", "Cancelar fecha de cobro")
+				,addAction(null,"pendientesDeCobro", "Cheques Pendientes")
+				
 				};
 		return actions;
 	}
@@ -138,6 +141,10 @@ public class MantenimientoDeChequesPanel extends FilteredBrowserPanel<CargoAbono
 				}
 			}
 		}
+	}
+	
+	public void pendientesDeCobro(){
+		ReportUtils.viewReport(ReportUtils.toReportesPath("TESORERIA/ChequesPendientesDeCobro.jasper"),null);
 	}
 	
 	public void cancelarFechaDeCobroDeCheque(){

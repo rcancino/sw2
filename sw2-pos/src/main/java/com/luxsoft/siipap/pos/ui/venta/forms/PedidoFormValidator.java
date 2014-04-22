@@ -199,27 +199,27 @@ public class PedidoFormValidator {
 		int atrasoMax=20;
 		switch (plazo) {
 		case 30:
-			atrasoMax=20;
+			atrasoMax=15;
 			break;
 		case 45:
-			atrasoMax=15;
+			atrasoMax=7;
 			break;
 		case 60:
-			atrasoMax=15;
+			atrasoMax=7;
 			break;
 		case 75:
-			atrasoMax=10;
+			atrasoMax=1;
 			break;
 		case 90:
-			atrasoMax=7;
+			atrasoMax=1;
 			break;
 		default:
 			break;
 		}
 		if(c.getCredito().getAtrasoMaximo()>atrasoMax){
-			//String pattern="El cliente tiene un atraso superior a {0} dias (Llamar a Crédito)";
-			String pattern="ENLAZAR LA LLAMADA DEL CLIENTE A CREDITO";
-			support.getResult().addError(MessageFormat.format(pattern, atrasoMax));
+			String pattern="El cliente tiene un atraso superior a {0} dias --";
+			String pattern2=pattern+"\nENLAZAR LA LLAMADA DEL CLIENTE A CREDITO";
+			support.getResult().addError(MessageFormat.format(pattern2, atrasoMax));
 		}
 		
 		/*

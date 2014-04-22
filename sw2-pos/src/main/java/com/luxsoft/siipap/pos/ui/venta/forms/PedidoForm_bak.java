@@ -15,7 +15,10 @@ import java.beans.EventHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.security.Provider.Service;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -37,11 +40,22 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JRViewer;
+
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
+import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventSelectionModel;
@@ -59,10 +73,13 @@ import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.uif.util.ScreenUtils;
 import com.jgoodies.uifextras.util.ActionLabel;
 import com.jgoodies.uifextras.util.UIFactory;
 import com.jgoodies.validation.view.ValidationResultViewFactory;
 import com.luxsoft.cfdi.CFDIMandarFacturarForm;
+import com.luxsoft.cfdi.CFDIReportDialog;
+import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 import com.luxsoft.siipap.pos.ui.utils.UIUtils;
 import com.luxsoft.siipap.swing.actions.DispatchingAction;
 import com.luxsoft.siipap.swing.binding.Binder;
@@ -73,7 +90,9 @@ import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.Renderers;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
+import com.luxsoft.sw3.cfd.ImporteALetra;
 import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
+import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.selectores.SelectorDeDescuento;
 import com.luxsoft.sw3.ventas.InstruccionDeEntrega;
 import com.luxsoft.sw3.ventas.Pedido;
@@ -455,10 +474,10 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				insertButton
 				,new JButton(getDeleteAction())
 				,new JButton(getEditAction())
-				//,new JButton(getImprimirAction())
 				,new JButton(getDescuentoEspecialAction())
 				,new JButton(getPrecioEspecialAction())
 				,consolidarButton
+				,new JButton(getImprimirAction())
 		};
 		return ButtonBarFactory.buildLeftAlignedBar(buttons,true);
 	}
@@ -501,7 +520,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	public Action getImprimirAction(){
 		if(imprimirAction==null){
 			imprimirAction=CommandUtils.createPrintAction(this, "imprimir");
-			imprimirAction.putValue(Action.NAME, "Imprimir [F12]");
+			imprimirAction.putValue(Action.NAME, "Imprimir [F9]");
 		}
 		return imprimirAction;
 	}
@@ -795,16 +814,94 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 						claveField.requestFocusInWindow();
 						return true;
 					}
+				}else if(KeyStroke.getKeyStroke("F9").getKeyCode()==e.getKeyCode()){
+					if(isFocused()){
+						e.consume();
+						try {
+							imprimir();
+						} catch (JRException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						return true;
+					}
 				}
+				
 				
 			}								
 			return false;
 		}
 	}
 	
+	public static String getJasperReport(String reportName){
+		String reps=System.getProperty("sw3.reports.path");
+		if(StringUtils.isEmpty(reps))
+			throw new RuntimeException("No se ha definido la ruta de los reportes en: sw3.reports.path");
+		return reps+reportName;
+	}
 
 	
-
+	public void imprimir() throws JRException{
+		/*JasperPrint jasperPrint=imprimirCotizacion();
+		JasperPrintManager.printReport(jasperPrint, false);*/
+		JasperPrint jasperPrint=imprimirCotizacion();
+		JRViewer jasperViewer = new JRViewer(jasperPrint);
+		jasperViewer.setPreferredSize(new Dimension(900, 1000));
+		CFDIReportDialog dialog=new CFDIReportDialog(jasperViewer,"Cotizacion Vista Previe",false);
+		ScreenUtils.locateOnScreenCenter(dialog);
+		dialog.open();
+	}
+	
+	
+	public JasperPrint imprimirCotizacion(){
+		 
+		// MessageUtils.showMessage("Ahora se va a imprimir", "imprimir cotizacion");
+		 
+		 Map<String, Object> parametros = new HashMap<String, Object>();
+		 
+		 Pedido cotizacion=getController().getPedido();
+		 final EventList<PedidoDet> conceptos=GlazedLists.eventList(cotizacion.getPartidas());
+		 
+		 parametros.put("COMPANY",Services.getInstance().getEmpresa().getNombre());
+		 parametros.put("CLAVCTE", cotizacion.getCliente().getClave());
+		 parametros.put("NOMBRE", cotizacion.getCliente().getNombre());
+		 parametros.put("FECHA", cotizacion.getFecha());
+		 parametros.put("RFC", cotizacion.getCliente().getRfc());
+		 parametros.put("CONTACTO", cotizacion.getCliente().getContactoPrincipal());
+		 parametros.put("TELEFONOS", cotizacion.getCliente().getTelefonosRow());
+		 parametros.put("IMP_BRUTO", cotizacion.getImporteBruto());
+		 parametros.put("IMP_DESCUENTO", cotizacion.getImporteDescuento());
+		 parametros.put("SUBTOTAL", cotizacion.getSubTotal());
+		 parametros.put("IMPUESTO", cotizacion.getImpuesto());
+		 parametros.put("TOTAL", cotizacion.getTotal());
+		 parametros.put("TIPO", cotizacion.getOrigen().equals(OrigenDeOperacion.CRE)?"CREDITO":"CONTADO");
+		 parametros.put("COMENTARIO", cotizacion.getComentario());
+		 parametros.put("CREADO_USR", cotizacion.getLog().getCreateUser());
+		 parametros.put("KILOS", cotizacion.getKilos());
+		 if(cotizacion.getSocio()!= null)
+		 parametros.put("SOCIO", cotizacion.getSocio().getNombre());
+		 parametros.put("IMP_CON_LETRA",ImporteALetra.aLetra(cotizacion.getTotalMN()));
+		 parametros.put("SUCURSAL", cotizacion.getSucursal().getNombre());
+		 JasperPrint jasperPrint = null;
+		 DefaultResourceLoader loader = new DefaultResourceLoader();
+		 String jasper="ventas/Cotizacion.jasper";
+		// ReportUtils2.runReport(path, params)
+		 Resource res = loader.getResource(getJasperReport(jasper));
+		 try {
+				java.io.InputStream io = res.getInputStream();
+				String[] columnas= {"cotizable","cantidad","descripcion","producto.gramos","precio","importeBruto","cortes","precioCorte","instruccionesDecorte"};
+				String[] etiquetas={"Cot","Cant","Producto","(g)","Precio","ImpBruto","Corte(#)","Cortes()","Corte"};
+				final TableFormat tf=GlazedLists.tableFormat(columnas, etiquetas);
+				final EventTableModel tableModel=new EventTableModel(conceptos,tf);
+				final JRTableModelDataSource tmDataSource=new JRTableModelDataSource(tableModel);
+				jasperPrint = JasperFillManager.fillReport(io, parametros,tmDataSource);
+				return jasperPrint;
+			} catch (Exception ioe) {
+				ioe.printStackTrace();
+				throw new RuntimeException(ExceptionUtils.getRootCauseMessage(ioe));
+			}
+	 }
+	
 	/**
 	 * Prueba local en el EDT
 	 * 

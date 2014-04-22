@@ -194,8 +194,9 @@ public class Proc_CxPCompras {
 		PagoCXP pag=pagos.get(0);
 		
 		boolean transito=false;
-		
-		if(!DateUtil.isSameMonth(pag.getFecha(),pag.getFechaCobro())){
+		if(pag.getFechaCobro()==null){
+			 
+		}else if(!DateUtil.isSameMonth(pag.getFecha(),pag.getFechaCobro())){
 			 transito = true;
 			 asiento="TRANSITO";
 		}		
@@ -370,8 +371,9 @@ public class Proc_CxPCompras {
 	private void generarDiferenciaCambiaria(final Poliza poliza, List<PagoCXP> pagos){
 		String asiento="PAGO";
 		Boolean transito=false;
-		
-		if(!DateUtil.isSameMonth(pagos.get(0).getFecha(),pagos.get(0).getFechaCobro())){
+		if (pagos.get(0).getFechaCobro()==null){
+			
+		}else if(!DateUtil.isSameMonth(pagos.get(0).getFecha(),pagos.get(0).getFechaCobro())){
 			transito = true;
 			asiento="TRANSITO";
 		}
@@ -566,8 +568,9 @@ public class Proc_CxPCompras {
 		
 		String asiento="PAGO";
 		Boolean transito=false;
-		
-	if(!DateUtil.isSameMonth(pagos.get(0).getFecha(),pagos.get(0).getFechaCobro())){
+	if(pagos.get(0).getFechaCobro()==null){
+		 
+	}else if(!DateUtil.isSameMonth(pagos.get(0).getFecha(),pagos.get(0).getFechaCobro())){
 		 transito = true;
 	}
 	

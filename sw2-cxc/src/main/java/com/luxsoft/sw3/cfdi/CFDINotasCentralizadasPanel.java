@@ -10,8 +10,11 @@ import com.luxsoft.cfdi.CFDIPrintUI;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
+import com.luxsoft.siipap.reports.NotasCanceladasReportForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
+import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 
 
@@ -80,6 +83,9 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 		List<Action> res=super.createProccessActions();
 		res.add(addAction(null, "timbrar", "Timbrar"));
 		res.add(addAction(null, "mandarPorCorreoElectronico", "Mandar por Correo"));
+		res.add(addAction(null, "cancelacionDeNotasSAT", "Cancelar Notas SAT"));
+		res.add(addAction(null, "reporteNotasCanceladas", "Notas Canceladas"));
+		
 		return res;
 	}
 	
@@ -95,6 +101,21 @@ public class CFDINotasCentralizadasPanel extends FilteredBrowserPanel<CFDI>{
 			}
 		}
 	}
+	
+	public void cancelacionDeNotasSAT(){
+		if(MessageUtils.showConfirmationMessage("¿Cancelar CFDI's de hoy en el SAT ?",	"Cancelación CFDI SAT")){
+			CancelacionesDeNotasDeCreditoSAT task=new CancelacionesDeNotasDeCreditoSAT("certificadopapel");
+			task.cancelacion(new Date());
+		}else{
+			System.out.println("No cancelar");
+		}
+		
+	}
+	public void reporteNotasCanceladas(){
+		NotasCanceladasReportForm report=new NotasCanceladasReportForm();
+		report.run();
+	}
+	
 
 	@Override
 	protected void doSelect(Object bean) {

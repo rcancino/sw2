@@ -3,8 +3,11 @@ package com.luxsoft.sw3.pedidos.forms;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyEventPostProcessor;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
@@ -16,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.NumberFormatter;
@@ -58,11 +62,14 @@ import com.luxsoft.sw3.ventas.PedidoDet;
 public class PedidoDetForm2 extends AbstractForm{
 	
 	
-	
+	private final KeyEventPostProcessor keyHandler;
 	private List<ProductoRow> productos;
 	
 	public PedidoDetForm2(PedidoDetFormModel2 model) {
-		super(model);		
+		
+		super(model);
+		
+		keyHandler=new KeyHandler();
 		String tipo=model.isCredito()?"Crédito":"Contado";
 		setTitle("Detalle de pedido tipo :"+tipo);
 		model.getModel("producto").addValueChangeListener(new PropertyChangeListener(){
@@ -236,7 +243,7 @@ private Action buscarPendientes;
 	 
 	public void buscarPedidosPendientes() {
 		if(getDetModel().getPedidoDet().getClave()!=null){
-			System.err.println("Accion buscar Pendientes");
+			
 			final PedidoDet det=getDetModel().getPedidoDet();
 			PedidoDetFormModel2 model=new PedidoDetFormModel2(det);
 			model.setSucursal(Services.getInstance().getConfiguracion().getSucursal());
@@ -256,6 +263,7 @@ private Action buscarPendientes;
 	
 	@Override
 	protected void onWindowOpened() {
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(keyHandler);
 		getDetModel().updateHeader();
 	}
 
@@ -356,6 +364,48 @@ private Action buscarPendientes;
 		});
 	}
 	
-	
+	/**
+	 * Garantiza la ejecucion de ciertas tareas mediante teclas de acceso 
+	 * 
+	 * @author Ruben Cancino Ramos
+	 *
+	 */
+	private class KeyHandler implements KeyEventPostProcessor{
+		
+		
+		/**
+		 * Implementacion de {@link KeyEventPostProcessor} para los accesos de teclado rpido
+		 * 
+		 */
+		
+		@Override
+		public boolean postProcessKeyEvent(final  KeyEvent e) {
+			
+			if(KeyStroke.getKeyStroke("F12").getKeyCode()==e.getKeyCode()){
+			
+				if(isFocused()){
+					e.consume();
+					buscarPedidosPendientes();
+					return true;
+				}
+				
+			}else if(KeyStroke.getKeyStroke("F2").getKeyCode()==e.getKeyCode()){
+				 if(isFocused()){
+					e.consume();
+					buscarProducto();
+					return true;
+				}
+			}
+			
+		
+				
+								
+			return false;
+		}
+
+		
+		
+		
+	}
 
 }

@@ -115,7 +115,7 @@ public class ListaDePreciosPorClienteFormModel extends DefaultFormModel {
 		if(getLista().getCliente()==null){
 			return;
 		}
-		List<Producto> list=ProductoFinderCxc.findWithDialog();
+		List<Producto> list=ProductoFinderCxc.findWithDialog(getLista().getCliente());
 		for(Producto p:list){
 			ListaDePreciosClienteDet det=new ListaDePreciosClienteDet();
 			det.setProducto(p);

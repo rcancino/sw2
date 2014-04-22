@@ -1,10 +1,13 @@
 package com.luxsoft.siipap.pos.ui.forms;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
 import javax.swing.text.DateFormatter;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
@@ -34,15 +37,26 @@ public class EntregaActualizacionForm extends AbstractForm{
 		setTitle("Actualización de entrega");
 	}
 
+	//private JSpinner recepcion;
+	
 	@Override
 	protected JComponent buildFormPanel() {
+		
+		/*recepcion=new JSpinner();
+		SpinnerDateModel model=new SpinnerDateModel(new Date(),null,null,Calendar.MINUTE);
+		recepcion.setModel(model);
+		recepcion.setEnabled(true);
+		//afterCreated(recepcion);
+*/		
 		FormLayout layout=new FormLayout("p,2dlu,70dlu,3dlu" +
 				",p,2dlu,70dlu, 3dlu" +
 				",p,2dlu,100dlu:g","");
 		final DefaultFormBuilder builder=new DefaultFormBuilder(layout);
 		
-		//builder.append("Llegada con cliente",getControl("arribo"));
+		
+		
 		builder.append("Recepción del cliente",getControl("recepcion"),true);
+		//builder.append("Recepción del cliente",recepcion,true);
 		builder.append("Recibió",getControl("recibio"),7);
 		builder.nextLine();
 		builder.append("Comentario",getControl("comentario"),9);
@@ -50,13 +64,16 @@ public class EntregaActualizacionForm extends AbstractForm{
 		return builder.getPanel();
 	}
 	
+/*	protected void afterCreated(JSpinner salidaField){
 	
+	}*/
 	
 	@Override
 	protected JComponent createCustomComponent(String property) {
-		if("recepcion".equals(property) || "arribo".equals(property)){
+		if("recepcion".equals(property) ){
 			JSpinner s=com.luxsoft.siipap.swing.binding.Bindings
 					.createDateSpinnerBinding(model.getModel(property));
+			//SpinnerDateModel s=new SpinnerDateModel(new Date(),null,null,Calendar.MINUTE);
 			
 			s.setEnabled(!model.isReadOnly());
 			return s;
@@ -70,6 +87,7 @@ public class EntregaActualizacionForm extends AbstractForm{
 		
 		DefaultFormModel model=new DefaultFormModel(target);
 		EntregaActualizacionForm form=new EntregaActualizacionForm(model);
+		
 		form.open();
 		if(!form.hasBeenCanceled()){
 			return target;

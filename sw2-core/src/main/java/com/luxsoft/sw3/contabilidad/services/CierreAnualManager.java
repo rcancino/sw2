@@ -33,7 +33,9 @@ public class CierreAnualManager {
 		logger.info("Actualizando cierre anual : "+year);
 		List<CuentaContable> cuentas=getHibernateTemplate().find("from CuentaContable c ");
 		for(CuentaContable c:cuentas){
+			
 			try {
+			
 				recalcularSaldo(c, year);
 			} catch (Exception e) {
 				logger.error("No se puede recalcular cuenta: "+c,e);
@@ -44,11 +46,12 @@ public class CierreAnualManager {
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public SaldoDeCuenta recalcularSaldo(CuentaContable cuenta, final int year) {
+		System.out.println("Si entre al Recalculo para la cuenta:  "+cuenta.getClave() );
 		int mes=13;
 		cuenta=(CuentaContable)getHibernateTemplate().load(CuentaContable.class, cuenta.getId());
 		
 		logger.debug("Actualizando saldos para cuenta: "+cuenta+ " Year: "+year+ " Mes: "+mes);
-		
+		System.out.println("Actualizando saldos para cuenta: "+cuenta+ " Year: "+year+ " Mes: "+mes);
 		SaldoDeCuenta saldo=getSaldo(cuenta, year, mes);
 		
 		
@@ -59,11 +62,14 @@ public class CierreAnualManager {
 			BigDecimal saldosaldoInicial=BigDecimal.ZERO;
 			
 			int mesAnterior=12;
+			
 			String hql="from SaldoDeCuentaPorConcepto s where s.concepto.id=? and s.year=? and s.mes=?";
 			List<SaldoDeCuentaPorConcepto> res=getHibernateTemplate()
 					.find(hql, new Object[]{concepto.getId(),year,mesAnterior});
 			if(!res.isEmpty())
 				saldosaldoInicial=res.get(0).getSaldoFinal();
+			
+		
 			
 			BigDecimal cargos=(BigDecimal)getHibernateTemplate().find("select sum(p.debe) from PolizaDet p " +
 					" where p.concepto.id=? " +
@@ -72,6 +78,8 @@ public class CierreAnualManager {
 					"  and p.poliza.clase=? ",params)
 					.iterator().next();
 			if(cargos==null)cargos=BigDecimal.ZERO;
+			
+		
 			
 			BigDecimal abonos=(BigDecimal)getHibernateTemplate().find("select sum(p.haber) from PolizaDet p " +
 					" where p.concepto.id=? " +

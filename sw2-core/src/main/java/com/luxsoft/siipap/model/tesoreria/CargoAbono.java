@@ -74,9 +74,9 @@ public class CargoAbono extends BaseBean{
 	@Type(type="date")
 	private Date fecha;
 	
-	@Column(name="FECHA_COBRO" , nullable=false)
+	@Column(name="FECHA_COBRO" )
 	@Type(type="date")
-	private Date fechaCobro=new Date();
+	private Date fechaCobro=null;
 	
 	@Column(name="FECHA_DEPOSITO" )
 	@Type(type="date")

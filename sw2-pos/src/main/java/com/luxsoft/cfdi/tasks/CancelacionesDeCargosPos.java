@@ -1,7 +1,8 @@
-package com.luxsoft.sw3.cfdi.parches;
+package com.luxsoft.cfdi.tasks;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.Provider.Service;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,9 +19,10 @@ import com.edicom.ediwinws.cfdi.client.CfdiClient;
 import com.edicom.ediwinws.service.cfdi.CancelaResponse;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.Periodo;
-import com.luxsoft.siipap.service.ServiceLocator2;
+//import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.util.DBUtils;
 import com.luxsoft.sw3.cfdi.model.CFDI;
+import com.luxsoft.sw3.services.Services;
 
 /**
  * Parche para generar las cancelaciones pendientes de CFDIs en el SAT
@@ -28,22 +30,22 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
  * @author Ruben Cancino
  *
  */
-public class CancelacionesDeCargos {
+public class CancelacionesDeCargosPos {
 	
 	CfdiClient client;
 	Empresa empresa;
 	final String pfxPassword;
 	
 	
-	 public CancelacionesDeCargos(String password) {
+	 public CancelacionesDeCargosPos(String password) {
 		this.pfxPassword=password;
 	}
 	
 	public void cancelacion(Periodo periodo){
 		
 		DBUtils.whereWeAre();
-		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
-		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
+		empresa=Services.getInstance().getConfiguracion().getSucursal().getEmpresa();
+		empresa=Services.getInstance().getConfiguracion().getSucursal().getEmpresa();
 		
 		String sql="SELECT x.CFD_ID FROM sx_cxc_cargos_cancelados c join sx_cfdi x on(x.origen_id=c.cargo_id) " +
 				" where date(x.creado) between ? and ?" +
@@ -53,13 +55,13 @@ public class CancelacionesDeCargos {
 				new SqlParameterValue(Types.DATE, periodo.getFechaInicial()),
 				new SqlParameterValue(Types.DATE, periodo.getFechaFinal())
 		};
-		List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(
+		List<String> rows=Services.getInstance().getJdbcTemplate().queryForList(
 				sql
 				, args
 				, String.class);
 		List<String> porCancelar=new ArrayList<String>();
 		for(String id:rows){
-			CFDI cfdi=ServiceLocator2.getCFDIManager().getCFDI(id);
+			CFDI cfdi=Services.getCFDIManager().getCFDI(id);
 			if(cfdi.getTimbreFiscal().getUUID()!=null){
 				porCancelar.add(cfdi.getTimbreFiscal().getUUID());
 			}
@@ -78,9 +80,10 @@ public class CancelacionesDeCargos {
 		try {
 			cancelar(array,periodo);
 			for(String id:rows){
-				CFDI cfdi=ServiceLocator2.getCFDIManager().getCFDI(id);
+				System.err.println("Estoy cancelando");
+				CFDI cfdi=Services.getCFDIManager().getCFDI(id);
 				cfdi.setCancelacion(new Date());
-				cfdi=(CFDI)ServiceLocator2.getHibernateTemplate().merge(cfdi);
+				cfdi=(CFDI)Services.getInstance().getHibernateTemplate().merge(cfdi);
 				System.out.println("Cancelacion: "+cfdi);
 			}
 		} catch (Exception e) {
@@ -93,12 +96,13 @@ public class CancelacionesDeCargos {
 	
 	public void cancelar(String[] uuidList,Periodo periodo) throws Exception{
 		String dirPath="Z:\\CFDI\\cancelaciones";
+		//String dirPath="\\mnt\\siipapwin\\CFDI\\cancelaciones";
 		File dir=new File(dirPath);
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
+		Resource pfx=Services.getInstance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		//Resource pfx=Services.getInstance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
 		byte[] pfxData=new byte[(int)pfx.getFile().length()];
@@ -119,18 +123,18 @@ public class CancelacionesDeCargos {
 		//String aka=new String(Base64.encode("Prueba de cancelacion".getBytes()));
 		try {
 			
-			//String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
-			String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
+			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
+			//String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			
 			FileOutputStream out1=new FileOutputStream(msgFile);
-			//out1.write(Base64.decode(msg));
+			out1.write(Base64.decode(msg));
 			out1.close();
 			
 			
 			File akaFile=new File(dir,xmlFile+"_AKA.xml");
 			FileOutputStream out2=new FileOutputStream(akaFile);
-			//out2.write(Base64.decode(aka.getBytes()));
+			out2.write(Base64.decode(aka.getBytes()));
 			out2.close();
 			
 		} catch (Exception e) {
@@ -140,14 +144,14 @@ public class CancelacionesDeCargos {
 	}
 	
 	public static void main(String[] args) {
-	//	System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
-	//	System.setProperty("sucursalOrigen", "OFICINAS");
+		System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
+		System.setProperty("sucursalOrigen", "OFICINAS");
 		
-		System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.1/produccion");
-		System.setProperty("sucursalOrigen", "QRQUERETARO");
-		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
-	//	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
-		Periodo per=new Periodo("01/03/2014","31/03/2014");
+	//	System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.1/produccion");
+	//	System.setProperty("sucursalOrigen", "QRQUERETARO");
+	//	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
+		CancelacionesDeCargosPos task=new CancelacionesDeCargosPos("certificadopapel");
+		Periodo per=new Periodo("28/02/2014","28/02/2014");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			task.cancelacion(new Periodo(dia,dia));

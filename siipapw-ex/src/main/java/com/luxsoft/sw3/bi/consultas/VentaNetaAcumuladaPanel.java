@@ -82,6 +82,7 @@ public class VentaNetaAcumuladaPanel extends FilteredBrowserPanel<VentaNetaAcumu
 
 	public VentaNetaAcumuladaPanel() {
 		super(VentaNetaAcumuladalRow.class);
+		
 	}
 	
 	protected void init(){
@@ -116,15 +117,18 @@ public class VentaNetaAcumuladaPanel extends FilteredBrowserPanel<VentaNetaAcumu
 
 	public void buscar(){
 		if(periodo==null)
+			
 			periodo=Periodo.getPeriodoDelMesActual();
-		cambiarPeriodo();
+
 	}
 	
 	
 	protected void manejarPeriodo(){
 		//periodo=Periodo.getPeriodoEnUnMes(-1);
-		periodo=Periodo.periodoDeloquevaDelMes();
-			
+		//periodo=Periodo.periodoDeloquevaDelMes();
+		
+		periodo=Periodo.getPeriodoDelMesActual();
+		
 	}
 	
 	
@@ -133,12 +137,15 @@ public void cambiarPeriodo(){
 		ValueHolder yearModel=new ValueHolder(Periodo.obtenerYear(periodo.getFechaInicial()));
 		ValueHolder mesModel=new ValueHolder(Periodo.obtenerMes(periodo.getFechaFinal()));
 		
+	
+		
 		AbstractDialog dialog=Binder.createSelectorMesYear(yearModel, mesModel);
 		dialog.open();
 		if(!dialog.hasBeenCanceled()){
 			int year=(Integer)yearModel.getValue();
 			int mes=(Integer)mesModel.getValue();
 			periodo=Periodo.getPeriodoEnUnMes(mes-1, year);
+			//periodo=Periodo.getPeriodoEnUnMes(mes, year);
 			
 			DateFormat df=new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 			DateFormat df2=new SimpleDateFormat("yyyy-MM-dd 23:00:00");
@@ -183,6 +190,12 @@ protected void installFilters(final DefaultFormBuilder builder){
 
 
 	public String ventaNetaAcumulada(){
+		
+		if(yearStr==0 || mesStr==0){
+			mesStr=Periodo.obtenerMes(periodo.getFechaFinal())+1;
+			yearStr=Periodo.obtenerYear(periodo.getFechaFinal());
+
+		}
 
 		String sql=SQLUtils.loadSQLQueryFromResource("sql/bi/VentaNetaAcumulada.sql");
 		//-------------*************----------

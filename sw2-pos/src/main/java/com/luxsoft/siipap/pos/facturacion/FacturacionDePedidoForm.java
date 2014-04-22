@@ -72,6 +72,14 @@ public class FacturacionDePedidoForm extends AbstractForm {
 				}
 			}
 		});
+		model.getModel("cobrado").addValueChangeListener(new PropertyChangeListener(){
+			public void propertyChange(PropertyChangeEvent evt) {
+			if(!getFacturacionModel().getCobrado().equals(BigDecimal.ZERO)){
+				createCustomComponent("cobrado").requestFocusInWindow();
+				calcularCambio();
+				}
+			}
+		});
 	}
 
 	PedidoHeader header;
@@ -106,6 +114,13 @@ public class FacturacionDePedidoForm extends AbstractForm {
 		updateTitleLabel(builder.append("Pagos", addReadOnly("totalPagos")));
 		builder.nextLine();
 		updateTitleLabel(builder.append("Por cobrar", addReadOnly("porPagar")));
+		
+		updateTitleLabel(builder.append("Cobrado", createCustomComponent("cobrado")));
+	
+		updateTitleLabel(builder.append("Cambio", addReadOnly("cambio"),5));
+		
+	
+		
 		if(getFacturacionModel().getPedido().isContraEntrega()){
 			builder.nextLine();
 			updateTitleLabel(builder.append("PAGO CONTRA ENTREGA"));
@@ -120,10 +135,13 @@ public class FacturacionDePedidoForm extends AbstractForm {
 
 	@Override
 	protected JComponent createCustomComponent(String property) {
-		if (property.startsWith("total") || "porPagar".equals(property)) {
+		if (property.startsWith("total") || "porPagar".equals(property) || "cobrado".equals(property)  || "cambio".equals(property) ) {
 			return Binder.createBigDecimalForMonyBinding(model
 					.getModel(property));
 		}
+		
+		
+		
 		return super.createCustomComponent(property);
 	}
 
@@ -333,6 +351,14 @@ public class FacturacionDePedidoForm extends AbstractForm {
 			}
 			return false;
 		}
+	}
+	
+	
+	private void calcularCambio() {
+		BigDecimal camb= BigDecimal.ZERO;
+		camb=getFacturacionModel().getCobrado().subtract(getFacturacionModel().getTotalPagos());
+		model.setValue("cambio", camb);
+
 	}
 
 	/**

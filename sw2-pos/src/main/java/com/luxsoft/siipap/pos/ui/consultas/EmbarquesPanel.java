@@ -35,6 +35,7 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.luxsoft.siipap.model.Configuracion;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.pos.POSActions;
 import com.luxsoft.siipap.pos.POSRoles;
 
@@ -52,6 +53,7 @@ import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.sw3.embarque.Embarque;
 import com.luxsoft.sw3.embarque.Entrega;
 import com.luxsoft.sw3.services.Services;
+import com.luxsoft.sw3.ui.command.BuscadorDeVentasEnvio;
 
 /**
  * Consulta para el control y mantenimiento de embarques
@@ -224,7 +226,7 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 		modificarEntrega=addContextAction(new SinCerrarPredicate(), POSRoles.EMBARQUES.name(), "modificarEntrega", "Modificar");		
 		modificarEntrega.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/table_edit.png"));
 		
-		actualizarEntrega=addContextAction(new SinCerrarPredicate(), POSRoles.EMBARQUES.name(), "actualizarEntrega", "Actualizar");		
+		actualizarEntrega=addContextAction(new SinCerrarPredicate(), POSRoles.EMBARQUES.name(), "actualizarEntrega", "Recibido");		
 		actualizarEntrega.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/book_edit.png"));
 		
 		registrarLlegadaCliente=addContextAction(new SinCerrarPredicate(), POSRoles.EMBARQUES.name(), "registrarLlegadaCliente", "Llegada cliente");
@@ -292,6 +294,8 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 		List<Action> procesos=super.createProccessActions();
 		procesos.add(addAction("", "reporteEntregasPorChofer", "Entregas por chofer"));
 		procesos.add(addAction("", "reporteEntregasPorCobrar", "Embarques por cobrar (COD)"));
+		procesos.add(addAction("", "reporteFacturaDeEnvio", "Factura De Envio"));
+		
 		return procesos;
 	}
 	
@@ -303,14 +307,14 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 				,new JButton(agregarEntrega)
 				,new JButton(eliminarEntrega)
 				,new JButton(modificarEntrega)
+				,new JButton(salidaAction)
 				//,new JButton(cerrarAction)
 				//,new JButton(cancelarCierreAction)
 				,new JButton(registrarLlegadaCliente)
 				,new JButton(actualizarEntrega)
-				
-				,new JButton(salidaAction)
-				,new JButton(registrarRetorno)
 				,new JButton(registrarIncidente)
+				,new JButton(registrarRetorno)
+				
 		};
 		return ButtonBarFactory.buildRightAlignedBar(buttons);
 	}
@@ -407,19 +411,48 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 	
 	public void registrarSalida(){
 		executeSigleSelection(new SingleSelectionHandler<Embarque>(){
-			public Embarque execute(Embarque selected) {				
-				return controller.registrarSalida(selected);
+			public Embarque execute(Embarque selected) {
+				Embarque control=controller.registrarSalida(selected);
+					load();
+				return control;
 			}
 		});
 	}
 	
 	public void registrarRetorno(){
+		
 		executeSigleSelection(new SingleSelectionHandler<Embarque>(){
-			public Embarque execute(Embarque selected) {				
-				return controller.registrarRetorno(selected);
+			public Embarque execute(Embarque selected) {	
+				Embarque res=controller.registrarRetorno(selected);
+				if (res.getRegreso()!=null){
+					if(MessageUtils.showConfirmationMessage("¿Generar Embarque automaticamente.?",	"Registro de Embarque Automatico")){
+						generarEmbarqueAutomaticamente();
+					}else{
+						System.err.println("No generar ");
+					}
+				}
+						return res;
 			}
 		});
 		
+	}
+	
+	public void generarEmbarqueAutomaticamente(){
+		executeSigleSelection(new SingleSelectionHandler<Embarque>(){
+			public Embarque execute(Embarque selected) {				
+				//Embarque automatico= new Embarque();
+				
+				Embarque embarque=new Embarque();
+				embarque.setFecha(Services.getInstance().obtenerFechaDelSistema());
+				embarque.setSucursal(Services.getInstance().getConfiguracion().getSucursal().getNombre());
+				embarque.setChofer(selected.getChofer());
+				embarque.setTransporte(selected.getTransporte());
+				Sucursal s=Services.getInstance().getConfiguracion().getSucursal();
+				Embarque res=Services.getInstance().getEmbarquesManager().salvarEmbarque(embarque, s);
+				load();
+				return res;
+			}
+		});
 	}
 	
 	public void registrarIncidente(){
@@ -432,8 +465,9 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 	
 	public void agregarEntrega(){
 		executeSigleSelection(new SingleSelectionHandler<Embarque>(){
-			public Embarque execute(Embarque selected) {				
+			public Embarque execute(Embarque selected) {	
 				return controller.agregarEntrega(selected);
+				
 			}
 		});
 	}
@@ -510,6 +544,12 @@ public class EmbarquesPanel extends AbstractMasterDatailFilteredBrowserPanel<Emb
 		}
 		
 		
+	}
+	
+	
+	public void reporteFacturaDeEnvio(){
+		BuscadorDeVentasEnvio search=new BuscadorDeVentasEnvio();
+		search.actionPerformed(null);
 	}
 	
 	private class SinCerrarPredicate implements Predicate{

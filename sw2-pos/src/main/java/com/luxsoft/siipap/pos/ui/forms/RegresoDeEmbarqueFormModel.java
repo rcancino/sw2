@@ -55,6 +55,13 @@ public class RegresoDeEmbarqueFormModel extends DefaultFormModel {
 			support.getResult().addError("Registre usuario que atiende");
 			return;
 		}
+		
+		for(Entrega ent:getPartidasSource()){
+			if(ent.getRecepcion()==null){
+				support.getResult().addError("No se ha registrado la Recepcion del cliente para una entrega");
+				return;
+			}
+		}
 	}
 	
 	public EventList<Entrega> getPartidasSource() {

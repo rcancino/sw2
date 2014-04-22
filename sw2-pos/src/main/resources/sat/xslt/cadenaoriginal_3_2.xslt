@@ -6,25 +6,25 @@
 	<!--
 		En esta sección se define la inclusión de las plantillas de utilerías para colapsar espacios
 	-->
-	<xsl:include href="file:/z:/cfdi/sat/xslt/utilerias.xslt"/>
+	<xsl:include href="sat/xslt/utilerias.xslt"/>
 	<!-- 
 		En esta sección se define la inclusión de las demás plantillas de transformación para 
 		la generación de las cadenas originales de los complementos fiscales 
 	-->
-	<xsl:include href="file:/z:/cfdi/sat/xslt/ecc.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/psgecfd.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/donat11.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/divisas.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/ecb.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/detallista.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/implocal.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/terceros11.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/iedu.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/ventavehiculos.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/pfic.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/TuristaPasajeroExtranjero.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/leyendasFisc.xslt"/>
-	<xsl:include href="file:/z:/cfdi/sat/xslt/spei.xslt"/>
+	<xsl:include href="sat/xslt/ecc.xslt"/>
+	<xsl:include href="sat/xslt/psgecfd.xslt"/>
+	<xsl:include href="sat/xslt/donat11.xslt"/>
+	<xsl:include href="sat/xslt/divisas.xslt"/>
+	<xsl:include href="sat/xslt/ecb.xslt"/>
+	<xsl:include href="sat/xslt/detallista.xslt"/>
+	<xsl:include href="sat/xslt/implocal.xslt"/>
+	<xsl:include href="sat/xslt/terceros11.xslt"/>
+	<xsl:include href="sat/xslt/iedu.xslt"/>
+	<xsl:include href="sat/xslt/ventavehiculos.xslt"/>
+	<xsl:include href="sat/xslt/pfic.xslt"/>
+	<xsl:include href="sat/xslt/TuristaPasajeroExtranjero.xslt"/>
+	<xsl:include href="sat/xslt/leyendasFisc.xslt"/>
+	<xsl:include href="sat/xslt/spei.xslt"/>
 	<!-- Aquí iniciamos el procesamiento de la cadena original con su | inicial y el terminador || -->
 	<xsl:template match="/">|<xsl:apply-templates select="/cfdi:Comprobante"/>||</xsl:template>
 	<!--  Aquí iniciamos el procesamiento de los datos incluidos en el comprobante -->

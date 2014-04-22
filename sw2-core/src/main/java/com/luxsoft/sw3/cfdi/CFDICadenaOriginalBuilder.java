@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamSource;
 import mx.gob.sat.cfd.x3.ComprobanteDocument;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,8 +27,14 @@ public class CFDICadenaOriginalBuilder {
 
 	public String generarCadena(ComprobanteDocument document){
 		try {
-			Resource xslt=new ClassPathResource("sat/cadenaoriginal_3_2.xslt");
-			Assert.isTrue(xslt.exists(),"No existe el xslt");
+			
+			String xslPath=System.getProperty("cfd.xslt.path");
+			FileSystemResource xslt=new FileSystemResource(xslPath);
+			System.out.println("Ruta de XSLT: "+xslt.getPath());
+			
+			
+			/*Resource xslt=new ClassPathResource("sat/cadenaoriginal_3_2.xslt");
+			Assert.isTrue(xslt.exists(),"No existe el xslt");*/
 			
 			TransformerFactory factory=TransformerFactory.newInstance();
 			StreamSource source=new StreamSource(xslt.getInputStream());

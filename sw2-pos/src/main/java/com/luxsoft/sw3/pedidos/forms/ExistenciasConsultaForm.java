@@ -3,8 +3,11 @@ package com.luxsoft.sw3.pedidos.forms;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyEventPostProcessor;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -14,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.JTableHeader;
 
@@ -49,17 +53,19 @@ import com.luxsoft.siipap.swing.form2.AbstractForm;
 import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.sw3.pedidos.SelectorDeProductosRow;
+
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ventas.PedidoDet;
 
 public class ExistenciasConsultaForm extends AbstractForm{
 	
 	
-	
+	private final KeyEventPostProcessor keyHandler;
 	private List<ProductoRow> productos;
 	
 	public ExistenciasConsultaForm(PedidoDetFormModel2 model) {
-		super(model);		
+		super(model);	
+		keyHandler=new KeyHandler();
 		setTitle("Consulta de Existencias ");
 		
 	}
@@ -176,6 +182,7 @@ public class ExistenciasConsultaForm extends AbstractForm{
 	
 	@Override
 	protected void onWindowOpened() {
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventPostProcessor(keyHandler);
 	//	getDetModel().updateHeader();
 	}
 
@@ -253,6 +260,36 @@ public class ExistenciasConsultaForm extends AbstractForm{
 	}
 	
 	
+private class KeyHandler implements KeyEventPostProcessor{
+		
+		
+		/**
+		 * Implementacion de {@link KeyEventPostProcessor} para los accesos de teclado rpido
+		 * 
+		 */
+		
+		@Override
+		public boolean postProcessKeyEvent(final  KeyEvent e) {
+			
+		 if(KeyStroke.getKeyStroke("F2").getKeyCode()==e.getKeyCode()){
+				 if(isFocused()){
+					e.consume();
+					buscarProducto();
+					return true;
+				}
+			}
+			
+		
+				
+								
+			return false;
+		}
+
+		
+		
+		
+	}
+	
 
 	
 	public static void main(String[] args) {
@@ -275,4 +312,8 @@ public class ExistenciasConsultaForm extends AbstractForm{
 		});
 	}	
 
+	
+	
+	
+	
 }

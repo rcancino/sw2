@@ -31,6 +31,7 @@ import ca.odell.glazedlists.swing.TextComponentMatcherEditor;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.actions.DispatchingAction;
@@ -43,6 +44,8 @@ public class ProductoFinderCxc extends AbstractControl{
 	
 	protected EventList<Producto> source;
 	protected SortedList<Producto> sortedSource;
+	
+	private static Cliente cliente;
 
 	@Override
 	protected JComponent buildContent() {
@@ -153,9 +156,14 @@ public class ProductoFinderCxc extends AbstractControl{
 		worker=new SwingWorker<List<Producto>, String>(){
 			@Override
 			protected List<Producto> doInBackground() throws Exception {
-				String hql="from Producto p where p.activo=true and p.inventariable=true and p.deLinea=true and p.modoDeVenta=?";
-				return ServiceLocator2.getHibernateTemplate().find(hql, new Object[]{"B"});
-				
+				if(cliente.getClave().equals("P010389")){
+					String hql="from Producto p where p.activo=true and p.inventariable=true and p.deLinea=true";
+					return ServiceLocator2.getHibernateTemplate().find(hql);
+				}else{
+					String hql="from Producto p where p.activo=true and p.inventariable=true and p.deLinea=true and p.modoDeVenta=?";
+					return ServiceLocator2.getHibernateTemplate().find(hql, new Object[]{"B"});	
+				}
+					
 			}
 			@Override
 			protected void done() {
@@ -184,6 +192,13 @@ public class ProductoFinderCxc extends AbstractControl{
 		return dialog.getProductos();
 	}
 	
+	
+	public static List<Producto> findWithDialog(Cliente c){
+		cliente=c;
+		final ProductoFinderDialog dialog=new ProductoFinderDialog();
+		dialog.open();
+		return dialog.getProductos();
+	}
 	
 	
 	static class  ProductoFinderDialog extends SXAbstractDialog{

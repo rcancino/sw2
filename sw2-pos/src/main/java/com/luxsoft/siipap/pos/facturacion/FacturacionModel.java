@@ -47,6 +47,11 @@ public class FacturacionModel implements ListEventListener{
 	private int numeroDeFacturas;
 	private int numeroDePagos;
 	
+
+	private BigDecimal cobrado=BigDecimal.ZERO;
+	private BigDecimal cambio=BigDecimal.ZERO;
+	
+	
 	
 	public FacturacionModel(){
 		facturas=GlazedLists.eventList(new BasicEventList<Venta>());
@@ -268,6 +273,26 @@ public class FacturacionModel implements ListEventListener{
 		FacturacionModel model=(FacturacionModel)Bean.proxy(FacturacionModel.class);
 		model.setPedido(pedido);		
 		return model;
+	}
+
+
+	public BigDecimal getCobrado() {
+		return cobrado;
+	}
+
+
+	public void setCobrado(BigDecimal cobrado) {
+		this.cobrado = cobrado;
+	}
+
+
+	public BigDecimal getCambio() {
+		return cambio;
+	}
+
+
+	public void setCambio(BigDecimal cambio) {
+		this.cambio = cambio;
 	}
 
 }

@@ -25,6 +25,7 @@ public class SaldoDeCuentasManagerImpl implements SaldoDeCuentasManager{
 	
 	@Transactional(propagation=Propagation.SUPPORTS)
 	public SaldoDeCuenta getSaldo(CuentaContable cuenta, int year, int mes) {
+		System.out.println("Estoy en el getSaldo");
 		List<SaldoDeCuenta> saldos=getHibernateTemplate()
 				.find("from SaldoDeCuenta s left join fetch s.conceptos c " +
 						" where s.cuenta.id=? and s.year=? and s.mes=?"
@@ -39,6 +40,9 @@ public class SaldoDeCuentasManagerImpl implements SaldoDeCuentasManager{
 			saldo=saldos.get(0);
 		//Verificar la existencia de saldos por concepto
 		for(ConceptoContable concepto:cuenta.getConceptos()){
+			if(cuenta.getClave().equals("110")){
+				System.out.println("Procesando Concepto"+concepto.getClave() +" ---- "+ concepto.getDescripcion());
+			}
 			SaldoDeCuentaPorConcepto saldoPorConcepto=saldo.getSaldoPorConcepto(concepto);
 			if(saldoPorConcepto==null){
 				saldoPorConcepto=new SaldoDeCuentaPorConcepto();
@@ -60,7 +64,9 @@ public class SaldoDeCuentasManagerImpl implements SaldoDeCuentasManager{
 		
 		
 		
-		for(ConceptoContable concepto:saldo.getCuenta().getConceptos()){			
+		for(ConceptoContable concepto:saldo.getCuenta().getConceptos()){		
+			
+			System.out.println("Procesando concepto para :"+concepto.getDescripcion() + "fuera de getsaldo");
 			
 			Object params[]={concepto.getId(),year,mes};
 			

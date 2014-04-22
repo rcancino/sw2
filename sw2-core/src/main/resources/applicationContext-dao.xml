@@ -49,6 +49,7 @@
 		<value>CheckPlusDocumento</value>
 		<value>CFDIClienteMails</value>
 		<value>TipoDeCambio</value>
+		<value>User</value>
 	</util:set>
       
 	<util:set id="entidades">

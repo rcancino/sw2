@@ -43,6 +43,7 @@ public class ClienteCreditoRow {
 			
 		}
 		setUsuario(c.getLog().getUpdateUser());
+		if(c.isDeCredito())
 		setVencimientoFechaFactura(c.getCredito().isVencimientoFactura());
 	}
 	

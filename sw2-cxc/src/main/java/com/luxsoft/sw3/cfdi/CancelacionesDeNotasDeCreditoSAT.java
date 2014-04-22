@@ -1,8 +1,7 @@
-package com.luxsoft.sw3.cfdi.parches;
+package com.luxsoft.sw3.cfdi;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,15 +28,14 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
  * @author Ruben Cancino
  *
  */
-public class CancelacionesEspecialDeNotasDeCredito {
+public class CancelacionesDeNotasDeCreditoSAT {
 	
 	CfdiClient client;
 	Empresa empresa;
 	final String pfxPassword;
-	List<CFDI> cfdis ;
 	
 	
-	 public CancelacionesEspecialDeNotasDeCredito(String password) {
+	 public CancelacionesDeNotasDeCreditoSAT(String password) {
 		this.pfxPassword=password;
 	}
 	
@@ -45,32 +43,26 @@ public class CancelacionesEspecialDeNotasDeCredito {
 		
 		DBUtils.whereWeAre();
 		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
-		//empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
+		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
 		//Localizando todas los CFDI de notas de credito
 		/*List<CFDI> cfdis=ServiceLocator2.getHibernateTemplate()
 				.find("from CFDI c where c.tipo=? and c.tipoCfd=?"
 						,new Object[]{"NOTA_CREDITO","I"});*/
-		/*String sql="SELECT X.CFD_ID FROM sx_cxc_abonos_cancelados C JOIN sx_cxc_abonos A ON(A.ABONO_ID=C.ABONO_ID)"+
+		String sql="SELECT X.CFD_ID FROM sx_cxc_abonos_cancelados C JOIN sx_cxc_abonos A ON(A.ABONO_ID=C.ABONO_ID)"+
 						" LEFT JOIN SX_CFDI X ON(X.ORIGEN_ID=A.ABONO_ID)"+
 						" where DATE(C.CREADO)= ?  AND A.TIPO_ID LIKE 'NOTA%'"+
-						 "AND X.CANCELACION IS  NULL";*/
-		
-		
-		String sql="SELECT X.CFD_ID FROM sx_cxc_abonos_cancelados C JOIN sx_cxc_abonos A ON(A.ABONO_ID=C.ABONO_ID)"+
-				"  JOIN SX_CFDI X ON(X.ORIGEN_ID=A.ABONO_ID)"+
-				" where  A.TIPO_ID LIKE 'NOTA%'"+
-				 "AND X.CANCELACION IS  NULL";
+						 "AND X.CANCELACION IS  NULL";
 		Object[] args={dia};
-		//List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(sql, args,String.class);
-		List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(sql,String.class);
+		List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(sql, args,String.class);
 		List<String> porCancelar=new ArrayList<String>();
+		List<CFDI> cfdis=new ArrayList<CFDI>() ;
 		for(String id:rows){
 			CFDI cfdi=ServiceLocator2.getCFDIManager().getCFDI(id);
 			if(cfdi.getTimbreFiscal().getUUID()!=null){
 				porCancelar.add(cfdi.getTimbreFiscal().getUUID());
+				cfdis.add(cfdi);
 				
 			}
-			
 		}
 		for(String uuid:porCancelar){
 			System.out.println("Cancelacion para cfdi: "+uuid);
@@ -79,13 +71,15 @@ public class CancelacionesEspecialDeNotasDeCredito {
 		String[] array=porCancelar.toArray(new String[0]);
 		System.out.println("Notas por cancelar: : "+array.length);
 		try {
-			cancelar(array);
-			for(String id:rows){
-				CFDI cfdi=ServiceLocator2.getCFDIManager().getCFDI(id);
-				cfdi.setCancelacion(new Date());
-				cfdi=(CFDI)ServiceLocator2.getHibernateTemplate().merge(cfdi);
-				System.out.println("Cancelacion: "+cfdi);
+			if(cfdis!=null){
+//				cancelar(array);
+				for(CFDI cfd:cfdis){
+					cfd.setCancelacion(new Date());
+					cfd=(CFDI)ServiceLocator2.getHibernateTemplate().merge(cfd);
+					System.out.println("Cancelacion: "+cfd);
+				}	
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,7 +114,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 				
 		try {
 			
-			String xmlFile="cancelacionNotas";
+			String xmlFile="cancelacionEspecialNotas";
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			FileOutputStream out1=new FileOutputStream(msgFile);
 			out1.write(Base64.decode(msg));
@@ -139,7 +133,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 	}
 	
 	public static void main(String[] args) {
-		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
+		CancelacionesDeNotasDeCreditoSAT task=new CancelacionesDeNotasDeCreditoSAT("certificadopapel");
 		task.cancelacion(DateUtil.toDate("13/03/2014"));
 	}
 

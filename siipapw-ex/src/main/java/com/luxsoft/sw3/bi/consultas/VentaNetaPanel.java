@@ -360,8 +360,16 @@ public class VentaNetaPanel extends FilteredBrowserPanel<VentaNetaMensualRow>{
 	}
 	
 	public String  ventaNeta(){
+		
+		if(yearStr==0 || mesStr==0){
+			mesStr=Periodo.obtenerMes(periodo.getFechaFinal())+1;
+			yearStr=Periodo.obtenerYear(periodo.getFechaFinal());
+			
+		}
+		
 		String sql=SQLUtils.loadSQLQueryFromResource("sql/bi/VentaNetaMensual.sql");
 				
+		
 	
 		DateFormat df=new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 		DateFormat df2=new SimpleDateFormat("yyyy-MM-dd 23:00:00");

@@ -133,7 +133,7 @@ public class SolicitudDeDepositoForm extends AbstractForm implements ActionListe
 		builder.append("Referencia", getControl("referenciaBancaria"));
 		builder.nextLine();
 		
-		builder.append("Anticipo", getControl("anticipo"),true);
+		//builder.append("Anticipo", getControl("anticipo"),true);
 		builder.append("Solicita", getControl("solicita"));
 		
 		builder.nextLine();

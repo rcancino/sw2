@@ -3,9 +3,11 @@ package com.luxsoft.siipap.pos.ui.consultas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,7 +28,7 @@ import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.Renderers;
 import com.luxsoft.siipap.util.SQLUtils;
-import com.luxsoft.siipap.ventas.model2.VentaContraEntrega;
+
 import com.luxsoft.sw3.services.Services;
 
 /**
@@ -35,52 +37,61 @@ import com.luxsoft.sw3.services.Services;
  * @author Ruben Cancino
  *
  */
-public class EntregasPendientesDeAsignarPanel extends FilteredBrowserPanel<VentaContraEntrega>{
+public class EntregasPendientesDeAsignarPanel extends FilteredBrowserPanel<PendienteDeAsignarRow>{
 
 	public EntregasPendientesDeAsignarPanel() {
-		super(VentaContraEntrega.class);		
+		super(PendienteDeAsignarRow.class);		
 	}
 	
 	protected void init(){
 		addProperty(
-				"origen"
-				,"nombre"
-				,"total"
-				,"documento"
-				,"pedido"
-				,"fecha_ped"
-				
-				
-				//,"contraEntrega"
-				//,"fpago"
-				,"facturado"
-				,"retrasoEnAsignacion"
-				,"retrasoEnAsignacionHoras"
-				//,"entregado"
-				//,"instruccion"
-				//,"facturista"
+				"sucursal",
+				"nombre",
+				"origen",
+				"contraEntrega",
+				"formaPago",
+				"fecha",
+				"pedidoCreado",
+				"pedidoFolio",
+				"documento",
+				"facturaCreado",
+				"fechaEntrega",
+				"total",
+				"saldo",
+				"importe",
+				"entregado",
+				"pendiente",
+				"ultimoPago",
+				"instruccionDeEntrega",
+				"cargoId",
+				"devolucionAplicada"
 				);
 		addLabels(
-				"Origen"
-				,"Cliente"
-				,"Total"
-				,"Factura"
-				,"Pedido"
-				,"Fecha (Pedido)"
-				
-				//,"CE"
-				//,"F.pago"
-				,"Facturado"
-				,"Retraso "
-				,"Ret (hr)"
-				//,"Entregado"
-				//,"Instruccion"
-				//,"Facturista"
+				"sucursal",
+				"nombre",
+				"origen",
+				"contraEntrega",
+				"formaPago",
+				"fecha",
+				"pedidoCreado",
+				"pedidoFolio",
+				"documento",
+				"facturaCreado",
+				"fechaEntrega",
+				"total",
+				"saldo",
+				"importe",
+				"entregado",
+				"pendiente",
+				"ultimoPago",
+				"instruccionDeEntrega",
+				"cargoId",
+				"devolucionAplicada"
 				);
 		installTextComponentMatcherEditor("Factura", "documento");
 		installTextComponentMatcherEditor("Cliente", "nombre");
-		Comparator  c1=GlazedLists.beanPropertyComparator(VentaContraEntrega.class, "retrasoEnAsignacionHoras");
-		setDefaultComparator(GlazedLists.reverseComparator(c1));
+//		Comparator  c1=GlazedLists.beanPropertyComparator(VentaContraEntrega.class, "retrasoEnAsignacionHoras");
+	//	setDefaultComparator(GlazedLists.reverseComparator(c1));
 	}
 	
 	@Override
@@ -94,24 +105,40 @@ public class EntregasPendientesDeAsignarPanel extends FilteredBrowserPanel<Venta
 	}
 
 	@Override
-	protected List<VentaContraEntrega> findData() {
-		String sql=SQLUtils.loadSQLQueryFromResource("sql/embarques/facturasDeEnvioPorAsignar.sql");
+	protected List<PendienteDeAsignarRow> findData() {
+		String sql="SELECT (SELECT S.NOMBRE FROM SW_SUCURSALES S WHERE S.SUCURSAL_ID=V.SUCURSAL_ID) AS sucursal,V.nombre,V.origen,V.CE as contraEntrega,V.fpago"+
+		" ,v.fecha ,V.PEDIDO_CREADO AS fecha_ped,V.PEDIDO_FOLIO AS pedido,V.DOCTO AS documento,V.CREADO AS facturado,STR_TO_DATE(e.fecha_entrega, '%Y-%m-%d %H:%i:%s') as fechaEntrega"+
+		" ,V.total,V.TOTAL-IFNULL((SELECT SUM(A.IMPORTE) FROM sx_cxc_aplicaciones A WHERE A.CARGO_ID=V.CARGO_ID),0) AS saldo"+
+		" ,v.importe,ifnull( (select sum(e.valor) from sx_entregas e where e.venta_id=V.cargo_id),0) as entregado "+
+		" ,V.IMPORTE-ifnull( (select sum(e.valor) from sx_entregas e where e.venta_id=V.cargo_id),0) AS pendiente"+
+		" ,(SELECT MAX(A.CREADO) FROM sx_cxc_aplicaciones A WHERE A.CARGO_ID=V.CARGO_ID) AS ultimoPago"+
+		" ,V.INSTRUCCION_ENTREGA AS instruccion,V.CARGO_ID as id"+
+		" ,IFNULL((SELECT SUM(A.IMPORTE) FROM sx_cxc_aplicaciones A "+
+		" WHERE A.CARGO_ID=V.CARGO_ID and a.ABN_DESCRIPCION like '%DEV%'),0) AS devolucionAplicada"+
+		" FROM sx_ventas v "+
+		" JOIN sx_clientes C ON(C.CLIENTE_ID=V.CLIENTE_ID)"+ 
+		" JOIN sx_pedidos P ON(P.PEDIDO_ID=V.PEDIDO_ID)"+
+		" JOIN sx_pedidos_entregas E ON(E.INSTRUCCION_ID=P.INSTRUCCION_ID)"+
+		" where V.FECHA>='2014/01/01' AND NOW()>STR_TO_DATE(e.fecha_entrega, '%Y-%m-%d %H:%i:%s')"+
+		" AND IFNULL(V.COMENTARIO2,'') NOT LIKE '%CANCELAD%'"+
+		" AND ifnull( (select sum(e.valor) from sx_entregas e where e.venta_id=V.cargo_id),0)=0"+
+		" and v.total-IFNULL((SELECT SUM(A.IMPORTE) FROM sx_cxc_aplicaciones A WHERE A.CARGO_ID=V.CARGO_ID and a.ABN_DESCRIPCION like '%DEV%'),0)>1";
 		return Services.getInstance().getJdbcTemplate().query(sql
-				, new BeanPropertyRowMapper(VentaContraEntrega.class));
+				, new BeanPropertyRowMapper(PendienteDeAsignarRow.class));
 				
 	}
 	
 	@Override
 	protected void adjustMainGrid(JXTable grid) {
-		grid.setRowHeight(25);
-		grid.setFont(new Font("Serif", Font.PLAIN, 18));
+		/*grid.setRowHeight(25);
+		grid.setFont(new Font("Serif", Font.PLAIN, 18));*/
 		//grid.getColumnExt("Facturado").setCellRenderer(new DefaultTableRenderer(new Renderers.ToHourConverter()));		
 		//grid.getColumnExt("Fecha (Pedido)").setCellRenderer(new DefaultTableRenderer(new Renderers.ToHourConverter()));
-		grid.getColumnExt("Facturado").setCellRenderer(new DefaultTableRenderer(new MyDateConverter()));
+		/*grid.getColumnExt("Facturado").setCellRenderer(new DefaultTableRenderer(new MyDateConverter()));
 		grid.getColumnExt("Fecha (Pedido)").setCellRenderer(new DefaultTableRenderer(new MyDateConverter()));
-		grid.getColumnExt("Cliente").setMaxWidth(300);
+		grid.getColumnExt("Cliente").setMaxWidth(300);*/
 		
-		HighlightPredicate red=new HighlightPredicate() {
+	/*	HighlightPredicate red=new HighlightPredicate() {
 			public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
 				VentaContraEntrega vv=(VentaContraEntrega)getFilteredSource().get(adapter.row);
 				return vv.getRetrasoEnAsignacionHoras()>3;
@@ -136,14 +163,14 @@ public class EntregasPendientesDeAsignarPanel extends FilteredBrowserPanel<Venta
 				new ColorHighlighter(Color.RED,Color.WHITE,red),
 				new ColorHighlighter(Color.YELLOW,Color.BLACK,yellow),
 				new ColorHighlighter(Color.GREEN,Color.BLACK,green)
-		);
+		);*/
 	}
 	
 	@Override
 	protected void doSelect(Object bean) {
-		VentaContraEntrega vc=(VentaContraEntrega)bean;
+/*		VentaContraEntrega vc=(VentaContraEntrega)bean;
 		//FacturaForm.show(vc.getId());
-		ReportUtils2.imprimirFacturaCopia(vc.getId());
+		ReportUtils2.imprimirFacturaCopia(vc.getId());*/
 	}
 	
 	private Timer timer;
@@ -158,7 +185,7 @@ public class EntregasPendientesDeAsignarPanel extends FilteredBrowserPanel<Venta
 	
 	@Override
 	public void open() {
-		//load();
+		load();
 		timer=new Timer();
 		timer.schedule(task, 5000, 1000*30);
 		

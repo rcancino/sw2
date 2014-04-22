@@ -197,10 +197,7 @@ public class AuditLogListener implements PostInsertEventListener
 		}else if(bean instanceof CompraUnitaria){
 			
 			CompraUnitaria com=(CompraUnitaria)bean;
-			//System.out.println("Resolviendo destino para compra unitaria: "+com);
-			System.out.println("generando Destino para compradet  "+com.getId());
-			System.out.println("-------"+com.getCompra()+"------------");
-			//System.out.println("-------"+com.getCompra().isImportacion()+"------------");
+		
 			if( (com.getCompra()!=null) && com.getCompra().isImportacion()){
 				System.out.println("la compra es de importacion" +com.getId());
 				return getDestinos().toArray(new String[0]);

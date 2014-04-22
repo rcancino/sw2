@@ -51,14 +51,16 @@ public class Proc_DeCobroDeChequeEnTransito {
 	public List<Poliza> generaPoliza(final Date fecha) {
 		String sql="SELECT B.CARGOABONO_ID " +
 				"  FROM sw_bcargoabono B WHERE " +
-				"  B.FECHA_COBRO =?" +
-				"  AND B.ORIGEN in (\'GASTOS\','COMPRAS')" +
-				"  AND B.FECHA<>B.FECHA_COBRO";
+				"  B.FECHA >='2014/01/01'  AND" +
+				"  B.ORIGEN in (\'GASTOS\','COMPRAS')" +
+				" AND COMENTARIO NOT LIKE '%CANCELA%'" +
+				//"  AND B.FECHA<>B.FECHA_COBRO ";
+				"  AND ( B.FECHA_COBRO IS NULL OR MONTH(B.FECHA)<>MONTH(B.FECHA_COBRO) )";
 		Object[] args=new Object[]{
 			new SqlParameterValue(Types.DATE, fecha)	
 		};
 		List<Long> pagos=ServiceLocator2
-				.getJdbcTemplate().queryForList(sql, args,Long.class);
+				.getJdbcTemplate().queryForList(sql,Long.class);
 		//System.out.println("Pagos a procesar: "+pagos.size() +"Este es el procesador para cheques en transito");
 		
 		final List<Poliza> polizas=new ArrayList<Poliza>();
@@ -120,8 +122,8 @@ public class Proc_DeCobroDeChequeEnTransito {
 		
 		final Date fechaPago=pago.getFecha();
 		Date fechaCobro=pago.getFechaCobro();
-		if(fechaCobro==null)
-			fechaCobro=fechaPago;
+		//if(fechaCobro==null)
+			//fechaCobro=fechaPago;
 		
 		String asiento="PAGO";
 		

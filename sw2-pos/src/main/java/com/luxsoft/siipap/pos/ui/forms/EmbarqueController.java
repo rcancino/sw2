@@ -1,5 +1,6 @@
 package com.luxsoft.siipap.pos.ui.forms;
 
+import java.awt.Dialog;
 import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.Date;
@@ -12,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.aspectj.bridge.MessageUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +24,7 @@ import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.UserLog;
 import com.luxsoft.siipap.pos.POSRoles;
+
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeFacturasParaAsignacionDeEmbarques;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeFacturasParaEntrega;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
@@ -76,6 +79,7 @@ public class EmbarqueController {
 	}
 	
 	public Embarque registrarSalida( Embarque embarque){
+	
 		if(embarque.getSalida()!=null){
 			String pattern="El embarque ya salio el  {0,date,short} a las {0,time}" +
 			" por lo que no es modificable";
@@ -86,6 +90,10 @@ public class EmbarqueController {
 		if(salida!=null){
 			embarque=find(embarque.getId());
 			embarque.setSalida(salida);
+			if(embarque.getChofer().equals("\"DIRECTO\"")){
+				embarque.setRegreso(salida);
+			}
+			
 			System.out.println("Registrando salida con entregas: "+embarque.getPartidas().size());
 			//Embarque target=persist(embarque,null);
 			Embarque target=persistir(embarque);
@@ -99,6 +107,8 @@ public class EmbarqueController {
 	}
 	
 	public Embarque registrarRetorno(final Embarque embarque){
+		
+		
 		if(embarque.getRegreso()!=null){
 			String pattern="El embarque ya registro su regreso el  {0,date,short} a las {0,time}" +
 			" por lo que no es modificable";
@@ -109,6 +119,25 @@ public class EmbarqueController {
 			MessageUtils.showMessage("El embarque no ha registrado su salida", "Embarques");
 			return embarque;
 		}
+
+	/*	for(Entrega ent: embarque.getPartidas()){
+			if(ent.getArribo()==null){
+					String pattern="No se ha registrado la llegada con el cliente para la  Entrega de la Fac: "+ent.getDocumento()+"";
+					MessageUtils.showMessage(pattern,"Embarques");
+					
+						
+					
+			}
+			if(ent.getRecepcion()==null){
+				String pattern="No se ha registrado la recepcion del cliente para una Entrega de la Fac: "+ent.getDocumento();
+				MessageUtils.showMessage(pattern, "Embarques");
+				if(MessageUtils.showConfirmationMessage("Eliminar la entrega del Documento  "+ ent.getDocumento(), "Eliminación de entregas")){
+					elminarEntregaEnRetorno(embarque, ent);
+				}else
+				return embarque;
+			}
+			
+		}*/
 		//final Date regreso=RegistroDeSalida.seleccionar();
 		Embarque target=Services.getInstance().getEmbarquesManager().getEmbarquer(embarque.getId());
 		
@@ -194,6 +223,11 @@ public class EmbarqueController {
 			}else
 				return e;
 		}*/
+		if(target.getChofer().equals("\"DIRECTO\"")){
+		  entrega.setArribo(new Date());
+		  entrega.setRecepcion(new Date());
+		}
+		
 		entrega.setFactura(v);
 		entrega.setInstruccionDeEntrega(ie);
 		
@@ -223,6 +257,21 @@ public class EmbarqueController {
 			
 		}
 		return target;
+	}
+	
+public Embarque elminarEntregaEnRetorno(final Embarque embarque,Entrega...entregas){
+		
+		Embarque target=find(embarque.getId());
+		String userName=null;
+		if( embarque.getRegreso()==null){
+			for(Entrega e:entregas){
+				target.getPartidas().remove(e);
+				e.setEmbarque(null);
+			}
+		}
+		
+		
+		return persistir(target);
 	}
 	
 	public Embarque elminarEntrega(final Embarque embarque,Entrega...entregas){
@@ -359,11 +408,24 @@ public class EmbarqueController {
 	}
 	
 	public Embarque actualizarEntrega(final Embarque embarque,Entrega source){
+		
+		if(embarque.getSalida()==null){
+			String pattern="El embarque no ha  salido por lo que no se puede registrar la llegada al cliente";
+			MessageUtils.showMessage(pattern, "Embarques");
+			return embarque;
+		}
+		if(source.getArribo()==null){
+			String pattern="No se ha registrado la llegada con el cliente";
+			MessageUtils.showMessage(pattern, "Embarques");
+			return embarque;
+		}
 		Entrega target=new Entrega();
 		BeanUtils.copyProperties(source, target,new String[]{"id","version","partidas"});
 		target=EntregaActualizacionForm.editar(target);
 		if(target!=null){
-			//source.setArribo(target.getArribo());
+			if(target.getRecepcion()==null){
+				target.setRecepcion(new Date());
+			}
 			source.setRecepcion(target.getRecepcion());
 			source.setRecibio(target.getRecibio());
 			source.setComentario(target.getComentario());

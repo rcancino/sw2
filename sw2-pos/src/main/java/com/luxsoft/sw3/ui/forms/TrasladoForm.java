@@ -155,11 +155,22 @@ public class TrasladoForm extends AbstractForm {
 	}
 	
 	private JComponent buildOperadoresControl(final ValueModel vm){
-		List data=Services.getInstance().getJdbcTemplate()
-				.queryForList("select concat(first_name,' ',last_name) from sx_usuarios where departamento=? ",new Object[]{"INVENTARIOS"},String.class);
-		SelectionInList sl=new SelectionInList(data,vm);
-		JComboBox box=BasicComponentFactory.createComboBox(sl);
+		List<String> data=Services.getInstance().getJdbcTemplate()
+				.queryForList("select concat(first_name,' ',last_name) as nombre from sx_usuarios where departamento=? ",new Object[]{"INVENTARIOS"},String.class);
+	
+	
+		final JComboBox box = new JComboBox();
+		final EventList source = GlazedLists.eventList(data);
+		AutoCompleteSupport support = AutoCompleteSupport.install(box,source);
+		support.setFilterMode(TextMatcherEditor.STARTS_WITH);
+		support.setSelectsTextOnFocusGain(true);
+		support.setStrict(false);
+		
+		final EventComboBoxModel model = (EventComboBoxModel) box.getModel();
+		model.addListDataListener(new Bindings.WeakListDataListener(vm));
+		box.setSelectedItem(vm.getValue());
 		return box;
+		
 	}
 	
 	private JComponent buildChoferControl(final ValueModel vm) {
@@ -199,6 +210,17 @@ public class TrasladoForm extends AbstractForm {
 		gridComponent.setPreferredSize(new Dimension(750,300));
 		return gridComponent;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
