@@ -48,6 +48,10 @@ public interface IngresosManager {
 	
 	public CargoAbono correccionDeFechaCobro(final CargoAbono cheque,final Date fecha);
 	
+	public CargoAbono cambioDeCobro( CargoAbono cheque,Boolean cobrado);
+	
 	public void correccionDeFechaDeposito(CargoAbono ca, Date fechaDeposito);
+	
+	public CargoAbono correccionDeFechaCobrado(final CargoAbono cheque,final Date fecha);
 
 }

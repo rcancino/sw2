@@ -47,7 +47,7 @@ import freemarker.template.utility.StringUtil;
 /**
  * Movimiento de las cuentas bancarias
  * 
- * Desde el punto de vista del sistema un Cargo es una disminición del saldo de la cuenta
+ * Desde el punto de vista del sistema un Cargo es una disminicin del saldo de la cuenta
  * y se expresa mediante el signo negativo en el importe.
  * Por otro lado el abono es con signo positivo
  * 
@@ -76,7 +76,7 @@ public class CargoAbono extends BaseBean{
 	
 	@Column(name="FECHA_COBRO" )
 	@Type(type="date")
-	private Date fechaCobro=null;
+	private Date fechaCobro=new Date();
 	
 	@Column(name="FECHA_DEPOSITO" )
 	@Type(type="date")
@@ -154,6 +154,8 @@ public class CargoAbono extends BaseBean{
 	@Column(name="revisado",nullable=false)
 	private boolean revisado=false;
 	
+
+	
 	//@Column(name="PAGO_ID")
 	//public String pago;
 	
@@ -174,6 +176,13 @@ public class CargoAbono extends BaseBean{
 
 	@Column(name="CLASIFICACION",length=50)
 	private String clasificacion;
+	
+	@Column(name="cobrado",nullable=false)
+	private boolean cobrado=false;
+	
+	@Column(name="FECHACOBRADO" )
+	@Type(type="date")
+	private Date fechaCobrado=null;
 	
 	public CargoAbono(){}
 	
@@ -309,10 +318,20 @@ public class CargoAbono extends BaseBean{
 		this.conciliado = conciliado;
 		firePropertyChange("conciliado", old, conciliado);
 	}
+	
+	
+	public Boolean getCobrado() {
+		return cobrado;
+	}
+	public void setCobrado(Boolean cobrado) {
+		Object old=this.cobrado;
+		this.cobrado = cobrado;
+		firePropertyChange("cobrado", old, cobrado);
+	}
 
 	/**
 	 * Normalmente es el numero de cheque o el numero de autorizacion/transferencia 
-	 * En la implementación actual y en el caso de los cargos este campo se considera
+	 * En la implementacin actual y en el caso de los cargos este campo se considera
 	 * al liberar el pago
 	 * 
 	 * @return
@@ -704,7 +723,14 @@ public class CargoAbono extends BaseBean{
 	public void setFechaDeposito(Date fechaDeposito) {
 		this.fechaDeposito = fechaDeposito;
 	}
+	
+	public Date getFechaCobrado() {
+		return fechaCobrado;
+	}
 
+	public void setFechaCobrado(Date fechaCobrado) {
+		this.fechaCobrado = fechaCobrado;
+	}
 	
 
 }

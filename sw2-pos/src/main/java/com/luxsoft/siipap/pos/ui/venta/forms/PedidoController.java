@@ -8,7 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+
+import net.sf.jasperreports.engine.JasperManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
@@ -28,6 +33,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.validation.util.PropertyValidationSupport;
 import com.luxsoft.siipap.cxc.model.FormaDePago;
+import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.model.core.Producto;
@@ -36,9 +42,13 @@ import com.luxsoft.siipap.pos.ui.forms.InstruccionDeEntregaForm;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeAsociados;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeCheckplus;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeClientes;
+import com.luxsoft.siipap.pos.ui.selectores.SelectorDePedidosPendientes;
+import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.service.KernellSecurity;
+import com.luxsoft.siipap.swing.browser.JRBrowserReportForm;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.ventas.model.Asociado;
 import com.luxsoft.sw3.pedidos.PedidoUtils;
 import com.luxsoft.sw3.pedidos.forms.PedidoDetForm2;
@@ -67,7 +77,7 @@ import javax.swing.JOptionPane;
  * 
  * @author Ruben Cancino Ramos
  * TODO Esta clase tiene demasiadas responsabilidades es necesario refactorizar usando los
- *      mejores patrones de diseño disponibles
+ *      mejores patrones de diseo disponibles
  *
  */
 public class PedidoController extends DefaultFormModel implements ListEventListener{
@@ -253,6 +263,7 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 				if(clientes.size()==1){
 					getPedido().setCliente(clientes.get(0));
 				}*/
+				
 				getPedido().setCliente(cliente);
 			}
 			
@@ -292,8 +303,34 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 			getPedido().setSocio(null);
 		}
 		actualizarImportes();
+		if(!getPedido().getCliente().getClave().equals("1") && !getPedido().getCliente().getClave().equals("U050008") ){
+			buscarPedidosPendientesCte();
+		}
+		
 	}
 	
+	public void buscarPedidosPendientesCte(){
+		
+		if (getPedido().getCliente().getId()!=null){
+			Long clienteId= getPedido().getCliente().getId();
+			String sql ="SELECT P.FOLIO,P.FECHA FROM SX_PEDIDOS P LEFT JOIN SX_VENTAS V ON (P.PEDIDO_ID=V.PEDIDO_ID) "+
+		     " WHERE P.FECHA BETWEEN  DATE_ADD(NOW(),INTERVAL -15 DAY) AND NOW() AND V.CARGO_ID IS NULL AND P.CLIENTE_ID=?";
+			Object[] args={clienteId}; 
+			List<Map> rows=Services.getInstance().getJdbcTemplate().queryForList(sql, args);	
+			if (!rows.isEmpty()){
+				Pedido ped=SelectorDePedidosPendientes.seleccionar(getPedido().getCliente());
+				if(ped!=null){
+					PedidoFormView.showPedido(ped.getId());
+				}
+
+			}
+			
+		}
+	
+	}
+	
+	
+
 	public void modificarSocio(){
 		if(getPedido().getCliente().getClave().equals("U050008")){
 			if(!getPedido().isFacturado()){
@@ -460,8 +497,8 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 			target=getManager().save(target);
 			
 			if(target.getPendiente()!=null){
-				MessageUtils.showMessage("El pedido requiere de autorización, estará en espera de la misma para poder" +
-						" facturar", "Autorización pendiente");
+				MessageUtils.showMessage("El pedido requiere de autorizacin, estar en espera de la misma para poder" +
+						" facturar", "Autorizacin pendiente");
 			}
 			logger.info("Pedido  persistido: "+target);
 			return target;
@@ -784,8 +821,8 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 		Iterator it=c.getComentarios().entrySet().iterator();
 		while(it.hasNext()){
 			if(c.getComentarios().get("AVISO")!=null)
-				MessageUtils.showMessage("Atención: "+c.getComentarios().get("AVISO"), "Atencion");
-			//JOptionPane.showMessageDialog(null,"Atención: "+c.getComentarios().get("SUSP_AUT") ); 
+				MessageUtils.showMessage("Atencin: "+c.getComentarios().get("AVISO"), "Atencion");
+			//JOptionPane.showMessageDialog(null,"Atencin: "+c.getComentarios().get("SUSP_AUT") ); 
 			return;
 		}
 	}

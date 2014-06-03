@@ -49,8 +49,8 @@ public class RecepcionDeMaquilaCentralizadaPanel extends AbstractMasterDatailFil
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"sucursal.nombre","documento","clave","descripcion","cantidad","comentario"};
-		String[] names={"Sucursal","Docto","Producto","Descripción","Cantidad","Comentario"};
+		String[] props={"sucursal.nombre","documento","clave","descripcion","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados","comentario"};
+		String[] names={"Sucursal","Docto","Producto","Descripción","Cantidad","Costop","Costo","Kilos","Comentario"};
 		return GlazedLists.tableFormat(EntradaDeMaquila.class, props,names);
 	}
 	

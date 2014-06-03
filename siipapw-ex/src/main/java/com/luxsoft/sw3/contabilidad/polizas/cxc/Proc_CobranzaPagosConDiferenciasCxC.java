@@ -24,6 +24,8 @@ public class Proc_CobranzaPagosConDiferenciasCxC implements IProcesador{
 				String ref2=pago.getSucursal().getNombre();
 				String asiento="COBRANZA DIFERENCIAS OG";
 				BigDecimal totalAplicado=pago.getAplicado(poliza.getFecha());
+				BigDecimal tc = new BigDecimal(pago.getTc());
+				totalAplicado=totalAplicado.multiply(tc);
 				
 				//Cargo a Otros gastos
 				PolizaDetFactory.generarPolizaDet(poliza, "704", "OGST01", true, totalAplicado, "Ajuste automatico <$1", ref1, ref2, asiento);

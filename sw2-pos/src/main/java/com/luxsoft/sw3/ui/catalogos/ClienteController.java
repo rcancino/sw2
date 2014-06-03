@@ -59,8 +59,16 @@ public class ClienteController {
 		form.open();
 		if(!form.hasBeenCanceled()){
 			Cliente res= (Cliente)model.getBaseBean();
-			res=Services.getInstance().getClientesManager().save(res);
+			try {
+				res=Services.getInstance().getClientesManager().save(res);
+			} catch (Exception e) {
+				// TODO: handle exception
+				MessageUtils.showMessage("El RFC del Cliente ya esta grabado en la base de datos  ","Error en alta");
+				res=null;
+			}
+			if (res!=null)
 			MessageUtils.showMessage("Cliente registrado con clave: "+res.getClave(), "Registro de clientes");
+			
 			return res;
 		}
 		return null;

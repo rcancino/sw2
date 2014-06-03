@@ -113,7 +113,8 @@ public class ControladorDeProvisionDeGastos extends ControladorDinamico{
 								ConceptoDeGasto rubro=gasto.getRubro();
 								String concepto="";
 								String cuenta="";
-								if(rubro!=null){	
+								if(rubro!=null){
+									System.out.println("--------------" +rubro.getId());
 									rubro=rubro.getRubroSegundoNivel(rubro);
 									cuenta=StringUtils.substring(rubro.getCuentaContable(),0,3);
 									concepto= rubro.getId().toString();
@@ -129,6 +130,9 @@ public class ControladorDeProvisionDeGastos extends ControladorDinamico{
 									totalGasto=totalGasto.add(g.getTotalMN().amount());									
 									iva=iva.add(g.getImpuestoMN().amount());
 									iva=iva.subtract(g.getRetencion1MN().amount());
+									
+									
+									
 								}
 								
 								//Cargo al gasto

@@ -497,7 +497,8 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	@Override
 	public void open() {		
 		timer=new Timer();
-		timer.schedule(task, 1000, 60000);
+		timer.schedule(task, 1000, 30000);
+	
 		
 	}
 	@Override

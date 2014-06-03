@@ -59,8 +59,8 @@ public class TrasladosCentralizadosPanel extends AbstractMasterDatailFilteredBro
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"traslado.documento","producto.clave","producto.descripcion","tipo","solicitado","cantidad","comentario"};
-		String[] labels={"Traslado","Producto","Descripción","Tipo","Solicitado","Cantidad","Comentario"};
+		String[] props={"traslado.documento","producto.clave","producto.descripcion","tipo","solicitado","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados","comentario"};
+		String[] labels={"Traslado","Producto","Descripción","Tipo","Solicitado","Cantidad","Costop","Costo","Kilos","Comentario"};
 		return GlazedLists.tableFormat(TrasladoDet.class, props,labels);
 	}
 

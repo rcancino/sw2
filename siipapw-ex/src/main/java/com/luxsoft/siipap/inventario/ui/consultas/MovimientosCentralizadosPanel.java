@@ -1,14 +1,24 @@
 package com.luxsoft.siipap.inventario.ui.consultas;
 
 
+import java.awt.BorderLayout;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.jfree.data.time.MovingAverage;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.CollectionList;
@@ -17,6 +27,8 @@ import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.TextFilterator;
 import ca.odell.glazedlists.CollectionList.Model;
+import ca.odell.glazedlists.event.ListEvent;
+import ca.odell.glazedlists.event.ListEventListener;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.matchers.CompositeMatcherEditor;
 import ca.odell.glazedlists.matchers.Matcher;
@@ -24,15 +36,20 @@ import ca.odell.glazedlists.matchers.MatcherEditor;
 import ca.odell.glazedlists.swing.TextComponentMatcherEditor;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
+import com.jgoodies.forms.layout.FormLayout;
 import com.luxsoft.siipap.inventario.ui.reports.KardexReportForm;
 import com.luxsoft.siipap.inventarios.model.Movimiento;
 import com.luxsoft.siipap.inventarios.model.MovimientoDet;
 import com.luxsoft.siipap.inventarios.model.MovimientoDet.TipoCIS;
+import com.luxsoft.siipap.reportes.ReporteDeAlcancesForm;
+import com.luxsoft.siipap.reportes.ReporteDeAlcancesPorCapasForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
+import com.luxsoft.siipap.swing.controls.AbstractControl;
 import com.luxsoft.siipap.swing.matchers.CheckBoxMatcher;
 import com.luxsoft.siipap.swing.reports.ReportUtils;
 import com.luxsoft.siipap.swing.utils.CommandUtils;
+
 
 /**
  * Panel para el mantenimiento de traslados
@@ -113,13 +130,22 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 		String[] props={"sucursal.nombre","fecha","clave"
 				,"descripcion"
 				,"cantidad"
+				,"costoPromedio"
+				,"costoPromedioMovimiento"
+				,"kilosCalculados"
 				,"comentario"
-				,"tipoCis"
+				,"tipoCis"				
 				};
+		
 		String[] labels={"Sucursal","Fecha","Clave"
 				,"Descripcion"
-				,"cantidad"
-				,"comentario","Tipo (CIS)"};
+				,"Cantidad"
+				,"Costop"
+				,"Costo"
+				,"Kilos"
+				,"Comentario"
+				,"Tipo (CIS)"				
+			   	};
 		return GlazedLists.tableFormat(MovimientoDet.class, props,labels);
 	}
 
@@ -156,12 +182,20 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 		actions.add(addAction("", "reporteMaterialEnRecorte", "Recorte"));
 		actions.add(addAction("", "reporteResumenDeMovimientos", "Resumen de Movs."));
 		actions.add(addAction("", "asignarTipoCis", "Asignación Tipo CIS"));
+		actions.add(addAction("", "reporteDeAlcancesPorCapas", "Alcance Por Capas"));
 		return actions;
 	}
 	
 	public void kardex(){
 		KardexReportForm.run();
 	}
+	
+	
+	public void reporteDeAlcancesPorCapas(){
+		ReporteDeAlcancesPorCapasForm.run();
+	}
+	
+	
 	
 	public void reporteAnaliticoPorMovimiento(){
 		//AnaliticoXMovimientoReportForm.runReport();
@@ -236,6 +270,89 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 				}
 			}
 		}
+	}
+	
+	
+private TotalesPanel totalPanel=new TotalesPanel();
+	
+	public JPanel getTotalesPanel(){
+		return (JPanel)totalPanel.getControl();
+	}
+	
+	
+	
+	private class TotalesPanel extends AbstractControl implements ListEventListener{
+		
+		private JLabel importe=new JLabel();
+		private JLabel kilos=new JLabel();
+		
+		
+
+		@Override
+		protected JComponent buildContent() {
+			
+			JPanel panel=new JPanel(new BorderLayout());
+			final FormLayout layout=new FormLayout("p,1dlu,f:max(80dlu;p)","");
+			DefaultFormBuilder builder=new DefaultFormBuilder(layout);
+			importe.setHorizontalAlignment(SwingConstants.RIGHT);
+			kilos.setHorizontalAlignment(SwingConstants.RIGHT);
+			
+			
+			
+			builder.appendSeparator("Totales");
+			builder.nextColumn();
+			builder.append("Importe",importe);
+			builder.append("Kilos", kilos);
+					
+			builder.getPanel().setOpaque(false);
+			getFilteredSource().addListEventListener(this);
+			
+			updateTotales();
+			
+			return panel;
+			//return builder.getPanel();
+		}
+		
+		public void listChanged(ListEvent listChanges) {
+			if(listChanges.next()){
+				
+			}
+			updateTotales();
+		}
+		
+		public void updateTotales(){
+			BigDecimal importe=BigDecimal.ZERO;
+			BigDecimal kilos=BigDecimal.ZERO;
+			
+			
+			
+			int indice=1;
+			/*for(Object  r:getFilteredSource()){
+				MovimientoDet an=(MovimientoDet)r;
+				an.setIndice(indice++);
+			}*/
+					
+			for(Object  r:getFilteredSource()){
+				MovimientoDet an=(MovimientoDet)r;
+				
+			    
+				importe=importe.add(an.getCosto());
+				kilos=kilos.add(new BigDecimal(an.getKilos()));	
+				
+			}
+	
+		
+			
+			String pattern="{0}";
+			
+			this.importe.setText(MessageFormat.format(pattern, importe));
+			
+			this.kilos.setText(MessageFormat.format(pattern, kilos));
+			
+		}
+		
+		
+		
 	}
 	
 

@@ -1,6 +1,7 @@
 package com.luxsoft.siipap.inventario.ui.consultas;
 
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,9 @@ import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JTextField;
+
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.PredicateUtils;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.CollectionList;
@@ -28,6 +32,8 @@ import com.luxsoft.siipap.inventarios.model.Transformacion;
 import com.luxsoft.siipap.inventarios.model.TransformacionDet;
 
 
+import com.luxsoft.siipap.reportes.ResumenTransformacionesForm;
+import com.luxsoft.siipap.reportes.ResumenTransformacionesGlobalForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.matchers.CheckBoxMatcher;
@@ -87,8 +93,8 @@ public class TransformacionesCentralizadasPanel extends AbstractMasterDatailFilt
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"sucursal.nombre","documento","fecha","transformacion.clase","renglon","clave","descripcion","producto.linea.nombre","unidad.nombre","kilos","cantidad","comentario"};
-		String[] names={"sucursal.nombre","documento","Fecha","Tipo","Rngl","Clave","Desc","Línea","U","Kg","Cant","Comentario"};		
+		String[] props={"sucursal.nombre","documento","fecha","transformacion.clase","renglon","clave","descripcion","producto.linea.nombre","unidad.nombre","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados","comentario"};
+		String[] names={"sucursal.nombre","documento","Fecha","Tipo","Rngl","Clave","Desc","Lnea","U","Cant","Costop","Costo","Kilos","Comentario"};		
 		return GlazedLists.tableFormat(TransformacionDet.class, props,names);
 	}
 
@@ -101,6 +107,17 @@ public class TransformacionesCentralizadasPanel extends AbstractMasterDatailFilt
 			}
 			
 		};
+	}
+	
+	protected List<Action> createProccessActions() {
+		//List<Action> procesos=super.createProccessActions();
+		List<Action> actions=ListUtils.predicatedList(new ArrayList<Action>(), PredicateUtils.notNullPredicate());
+			actions.add(addAction(null, "resumenTransformacionesReport", "Transformaciones Detalle"));
+			actions.add(addAction(null, "globalTransformacionesReport", "Transformaciones Global"));
+		/*	actions.add(addAction("", "reporteFacturasPendientesCamioneta", "Facturas pendientes (CAM)"));
+			*/
+		return actions;
+		
 	}
 	
 	private JTextField productoFilter=new JTextField(5);
@@ -143,6 +160,17 @@ public class TransformacionesCentralizadasPanel extends AbstractMasterDatailFilt
 	protected List<Transformacion> findData() {
 		String hql="from Transformacion t where t.fecha between ? and ?";
 		return ServiceLocator2.getHibernateTemplate().find(hql,new Object[]{periodo.getFechaInicial(),periodo.getFechaFinal()});
+	}
+	
+	public void resumenTransformacionesReport() {
+		ResumenTransformacionesForm rep=new ResumenTransformacionesForm();
+		rep.run();
+	}
+	
+	public void globalTransformacionesReport() {
+	//	ResumenTransformacionesGlobalForm rep=new ResumenTransformacionesGlobalForm();
+//		rep.run();
+		ResumenTransformacionesGlobalForm.run();
 	}
 
 	

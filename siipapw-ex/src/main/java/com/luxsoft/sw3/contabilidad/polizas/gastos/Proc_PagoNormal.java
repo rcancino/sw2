@@ -102,6 +102,7 @@ public class Proc_PagoNormal implements IProcesador{
 	public static void registrarIetuAcumuladoPorConcepto(Poliza poliza,CargoAbono pago,String asiento){
 		EventList<GCompraDet> partidasDeCompras=new BasicEventList<GCompraDet>(0);
 		Requisicion req=pago.getRequisicion();
+		
 		for(RequisicionDe det:req.getPartidas()){
 			GFacturaPorCompra factura=det.getFacturaDeGasto();
 			partidasDeCompras.addAll(factura.getCompra().getPartidas());

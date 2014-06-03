@@ -119,8 +119,8 @@ public class CancelacionesDeCargos {
 		//String aka=new String(Base64.encode("Prueba de cancelacion".getBytes()));
 		try {
 			
-			//String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
-			String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
+			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
+			//String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			
 			FileOutputStream out1=new FileOutputStream(msgFile);
@@ -147,7 +147,7 @@ public class CancelacionesDeCargos {
 		System.setProperty("sucursalOrigen", "QRQUERETARO");
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
 	//	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
-		Periodo per=new Periodo("01/03/2014","31/03/2014");
+		Periodo per=new Periodo("01/04/2014","01/04/2014");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			task.cancelacion(new Periodo(dia,dia));

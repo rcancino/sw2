@@ -50,8 +50,8 @@ public class DevolucionesCentralizadasDeVentasPanel extends AbstractMasterDatail
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"sucursal.nombre","documento","fecha","clave","descripcion","ventaDet.cantidad","cantidad"};
-		String[] labels={"Sucursal","Docto","Fecha","Prod","Desc","Vendido","Devuelto"};
+		String[] props={"sucursal.nombre","documento","fecha","clave","descripcion","ventaDet.cantidad","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados"};
+		String[] labels={"Sucursal","Docto","Fecha","Prod","Desc","Vendido","Devuelto","Costop","Costo","Kilos"};
 		return GlazedLists.tableFormat(DevolucionDeVenta.class, props,labels);
 	}
 	

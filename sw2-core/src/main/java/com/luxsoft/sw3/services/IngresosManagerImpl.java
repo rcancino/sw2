@@ -204,8 +204,8 @@ public class IngresosManagerImpl implements IngresosManager{
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public CorreccionDeFicha registrarCorreccionDeFicha(CorreccionDeFicha co) {
-		Assert.notNull(co.getFicha(),"Corrección debe tener ficha");
-		Assert.notNull(co.getFicha().getIngreso(),"Corrección debe tener ficha");
+		Assert.notNull(co.getFicha(),"Correccin debe tener ficha");
+		Assert.notNull(co.getFicha().getIngreso(),"Correccin debe tener ficha");
 		
 		Ficha ficha=co.getFicha();		
 		CargoAbono cargoAbono=ficha.getIngreso();
@@ -372,7 +372,7 @@ public class IngresosManagerImpl implements IngresosManager{
 		
 		if(comisionCredito.amount().doubleValue()<0){
 			//Comision credito
-			String comentario="Comisión por Tarjeta CREDITO ";
+			String comentario="Comisin por Tarjeta CREDITO ";
 			CargoAbonoPorCorte ca=aplicarCargoAbonoPorCorte(corte, comisionCredito.amount()
 					, origen, comentario, TipoDeAplicacion.COMISION_CREDITO);
 			ca.setOrden(2);
@@ -385,7 +385,7 @@ public class IngresosManagerImpl implements IngresosManager{
 			corte.agregarAplicacion(ca1);
 		}if(comisionDebito.amount().doubleValue()<0){
 			//Comision debito
-			String comentario="Comisión por Tarjeta DEBITO ";
+			String comentario="Comisin por Tarjeta DEBITO ";
 			CargoAbonoPorCorte ca=aplicarCargoAbonoPorCorte(corte, comisionDebito.amount()
 					, origen, comentario, TipoDeAplicacion.COMISION_DEBITO);
 			ca.setOrden(4);
@@ -397,7 +397,7 @@ public class IngresosManagerImpl implements IngresosManager{
 			ca1.setOrden(5);
 			corte.agregarAplicacion(ca1);
 		}if(comisionAmex.amount().doubleValue()<0){
-			String comentario="Comisión por Tarjeta AMEX ";
+			String comentario="Comisin por Tarjeta AMEX ";
 			CargoAbonoPorCorte ca=aplicarCargoAbonoPorCorte(corte, comisionAmex.amount()
 					, origen, comentario, TipoDeAplicacion.COMISION_AMEX);
 			ca.setOrden(6);
@@ -679,6 +679,22 @@ public class IngresosManagerImpl implements IngresosManager{
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
+	public CargoAbono cambioDeCobro( CargoAbono cheque,Boolean cobrado){
+		cheque=(CargoAbono)getHibernateTemplate().get(CargoAbono.class, cheque.getId());
+		cheque.setCobrado(cobrado);		
+		registrarBitacora(cheque);
+		return (CargoAbono)getHibernateTemplate().merge(cheque);
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public CargoAbono correccionDeFechaCobrado( CargoAbono cheque,final Date fecha){
+		cheque=(CargoAbono)getHibernateTemplate().get(CargoAbono.class, cheque.getId());
+		cheque.setFechaCobrado(fecha);		
+		registrarBitacora(cheque);
+		return (CargoAbono)getHibernateTemplate().merge(cheque);
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public CargoAbono correccionDeFechaCobro( CargoAbono cheque,final Date fecha){
 		cheque=(CargoAbono)getHibernateTemplate().get(CargoAbono.class, cheque.getId());
 		cheque.setFechaCobro(fecha);		
@@ -700,9 +716,9 @@ public class IngresosManagerImpl implements IngresosManager{
 				String UPDATE_2="UPDATE SW_BCARGOABONO SET IMPORTE=? , COMENTARIO=REPLACE(COMENTARIO,'AMEX','AMEX MODIF')WHERE CARGOABONO_ID=?";
 				getJdbcTemplate().update(UPDATE_2, new Object[]{importe,cargoabono_id});
 			}else
-				throw new RuntimeException("El movimiento no está relacionado con una comisión de AMEX");
+				throw new RuntimeException("El movimiento no est relacionado con una comisin de AMEX");
 		}else
-			throw new RuntimeException("El movimiento no es una comisión de AMEX");
+			throw new RuntimeException("El movimiento no es una comisin de AMEX");
 		return (CargoAbono)getHibernateTemplate().get(CargoAbono.class, cargoabono_id);
 		
 	}

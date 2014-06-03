@@ -33,14 +33,14 @@ public class PedidoFormValidator {
 				support.getResult().addError("Cliente suspendido PARA TODO TIPO DE VENTA");
 			}
 			if(c.isJuridico()){
-				support.getResult().addError( "Cliente en trámite jurídico por lo que no se le puede facturar.\n Pedir autorización al departamento de crédito");
+				support.getResult().addError( "Cliente en trmite jurdico por lo que no se le puede facturar.\n Pedir autorizacin al departamento de crdito");
 			}
 			if(c.getChequesDevueltos().doubleValue()>0){
 				support.getResult().addError( "El cliente tiene cheque(s) devueltos por un monto de: "+c.getChequesDevueltos()+" NO SE LE PUEDE FACTURAR.");
 			}
 		}
 		if(pedido.getTotal().doubleValue()<0){
-			//support.getResult().addError("El monto mínimo para generar un pedido es de 10.00 pesos");
+			//support.getResult().addError("El monto mnimo para generar un pedido es de 10.00 pesos");
 			support.getResult().addError("El montopara generar un pedido debe ser mayor a 0.00 pesos");
 		}
 		
@@ -77,7 +77,7 @@ public class PedidoFormValidator {
 		validarFormaDePago(support);
 		validarFormaDeEnvio(support);
 		if(getPedido().getPartidas().isEmpty())
-			support.getResult().addError("El pedido sin partidas no es válido");
+			support.getResult().addError("El pedido sin partidas no es vlido");
 		if(StringUtils.isBlank(getPedido().getComprador())){
 			support.getResult().addError("Registre el nombre de la persona que levanta el pedido ");
 		}
@@ -162,11 +162,11 @@ public class PedidoFormValidator {
 	private void validarFormaDeEnvio(PropertyValidationSupport support){
 		if(getPedido().getEntrega().name().startsWith("ENVIO")){
 			if(getPedido().getInstruccionDeEntrega()==null){
-				support.getResult().addError("Debe definir la dirección de envio");
+				support.getResult().addError("Debe definir la direccin de envio");
 			}
 		}else if(FormaDeEntrega.ENVIO_CARGO.equals(getPedido().getEntrega())){
 			if(getPedido().getFlete().doubleValue()<=0)
-				support.getResult().addError("El tipo de envio con cargo no aplica para la población/estado definidos");
+				support.getResult().addError("El tipo de envio con cargo no aplica para la poblacin/estado definidos");
 		}
 	}
 	
@@ -178,19 +178,19 @@ public class PedidoFormValidator {
 		
 		//Validar q el cliente tenga credito
 		if(!c.isDeCredito()){
-			support.getResult().addError("El cliente no tiene línea de crédito");
+			support.getResult().addError("El cliente no tiene lnea de crdito");
 			return;
 		} 
 		
 		//Valida credito no suspendido
 		if(c.getCredito().isSuspendido())
-			//support.getResult().addError( "Crédito suspendido temporalmente ");	
-			support.getResult().addError( "ENLAZAR LA LLAMADA DEL CLIENTE A CREDITO");	
+			//support.getResult().addError( "Crdito suspendido temporalmente ");	
+			support.getResult().addError( "ENLAZAR LA LLAMADA DEL CLIENTE A CREDITO (Venta a Credito Suspendida)");	
 		
 		//Valida la linea de credito
 		if(c.getCredito().getCreditoDisponible().doubleValue()<getPedido().getTotal().doubleValue()){
-			//support.getResult().addError( "Línea de crédito SATURADA");
-			support.getResult().addError( "ENLAZAR LA LLAMADA DEL CLIENTE A CREDITO");
+			//support.getResult().addError( "Lnea de crdito SATURADA");
+			support.getResult().addError( "ENLAZAR LA LLAMADA DEL CLIENTE A CREDITO (Linea de Credito Saturada)");
 			
 		}
 		
@@ -225,7 +225,7 @@ public class PedidoFormValidator {
 		/*
 		 * // Modificacion por ordenes de Direccion General (Lic. Jose Sanchez) 14/08/2013
 		if(c.getCredito().getAtrasoMaximo()>15){
-			support.getResult().addError( "El cliente tiene un atraso superior a 15 dias (Llamar a Crédito)");
+			support.getResult().addError( "El cliente tiene un atraso superior a 15 dias (Llamar a Crdito)");
 		}*/
 		
 	}
@@ -267,7 +267,7 @@ public class PedidoFormValidator {
 					support.getResult().addError( "Direccion incorrecta");
 				}
 			}else{
-				support.getResult().addError( "La dirección del cliente no puede ser nula");
+				support.getResult().addError( "La direccin del cliente no puede ser nula");
 			}
 		}
 	}

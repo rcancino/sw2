@@ -169,7 +169,7 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 		CFDIUtils.validarDocumento(document);
 		comprobanteFiscal=salvar(document,comprobanteFiscal);
 		nota.setFolio(new Integer(comprobanteFiscal.getFolio()));
-		getHibernateTemplate().update(nota);
+		//getHibernateTemplate().update(nota);
 		return comprobanteFiscal;
 	}
 	

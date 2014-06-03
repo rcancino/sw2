@@ -11,11 +11,19 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.matchers.TextMatcherEditor;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import ca.odell.glazedlists.swing.EventComboBoxModel;
+
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.swing.actions.SWXAction;
+import com.luxsoft.siipap.swing.binding.Bindings;
 import com.luxsoft.siipap.swing.controls.Header;
 import com.luxsoft.siipap.swing.controls.SXAbstractDialog;
 import com.luxsoft.sw3.embarque.Chofer;
@@ -59,14 +67,14 @@ public class EntregasPorChofer extends SWXAction{
 		
 
 		public ReportForm() {
-			super("Facturas cobradas");
+			super("Entregas Por Chofer");
 		}
 		
 		private void initComponents(){
 			fechaInicial=new JXDatePicker();
 			fechaInicial.setFormats("dd/MM/yyyy");
-			List<Chofer> data=Services.getInstance().getUniversalDao().getAll(Chofer.class);
-			choferes=new JComboBox(data.toArray());
+			choferes= buildChoferesBox();
+			  
 		}
 		
 		private JComponent buildForm(){
@@ -81,7 +89,7 @@ public class EntregasPorChofer extends SWXAction{
 		}
 		
 		protected JComponent buildHeader(){
-			return new Header("Relación de facturas cobradas","").getHeader();
+			return new Header("Entregas Por Chofer","").getHeader();
 		}
 
 		@Override
@@ -100,6 +108,7 @@ public class EntregasPorChofer extends SWXAction{
 			Chofer ch=(Chofer)choferes.getSelectedItem();
 			if(ch!=null)
 				parametros.put("CHOFER", ch.getId());
+			
 			parametros.put("SUCURSAL", suc.getNombre());
 			System.out.println(parametros);
 			logger.info("Parametros de reporte:"+parametros);
@@ -110,6 +119,21 @@ public class EntregasPorChofer extends SWXAction{
 			return parametros;
 		}
 	}
+	
+	
+	private JComboBox buildChoferesBox(){
+		EventList<Chofer> data=GlazedLists.eventList(Services.getInstance().getUniversalDao().getAll(Chofer.class));
+		final JComboBox box = new JComboBox();		
+		AutoCompleteSupport support = AutoCompleteSupport.install(box,data, null);
+		support.setFilterMode(TextMatcherEditor.CONTAINS);
+		support.setStrict(false);
+		return box;
+	}
+	
+	
+	
+	
+	
 	
 	public static void run(){
 		EntregasPorChofer action=new EntregasPorChofer();

@@ -56,8 +56,8 @@ public class VentasCentralizadasDeVentasPanel extends AbstractMasterDatailFilter
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"sucursal.nombre","documento","fecha","clave","descripcion","cantidad"};
-		String[] labels={"Sucursal","Docto","Fecha","Prod","Desc","Cantidad"};
+		String[] props={"sucursal.nombre","documento","fecha","clave","descripcion","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados"};
+		String[] labels={"Sucursal","Docto","Fecha","Prod","Desc","Cantidad","Costop","Costo","Kilos"};
 		return GlazedLists.tableFormat(VentaDet.class, props,labels);
 	}
 	

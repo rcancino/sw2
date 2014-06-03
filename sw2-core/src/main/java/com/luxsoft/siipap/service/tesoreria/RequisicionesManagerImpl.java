@@ -73,9 +73,9 @@ public class RequisicionesManagerImpl extends GenericManagerImpl<Requisicion, Lo
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Requisicion registrarPago(Requisicion req) {
-		/*if(req.getPago()!=null){
+		if(req.getPago()!=null){
 			req.getPago().setFechaCobro(req.getPago().getFecha());
-		}*/
+		}
 		req.setEstado(Estado.PAGADA);
 		return save(req);
 	}

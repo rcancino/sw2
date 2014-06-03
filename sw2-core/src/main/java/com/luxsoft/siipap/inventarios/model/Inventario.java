@@ -462,7 +462,9 @@ public abstract class Inventario extends BaseBean {
 		return getCosto().multiply(BigDecimal.valueOf(getCantidadEnUnidad()));
 	}
 	
-	
+	public BigDecimal getCostoPromedioMovimiento(){
+		return getCostoPromedio().multiply(BigDecimal.valueOf(getCantidadEnUnidad()));
+	}	
 
 	public double getExistencia() {
 		return existencia;

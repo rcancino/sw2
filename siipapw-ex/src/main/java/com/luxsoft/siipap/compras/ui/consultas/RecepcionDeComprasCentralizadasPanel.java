@@ -69,8 +69,8 @@ public class RecepcionDeComprasCentralizadasPanel extends AbstractMasterDatailFi
 	protected TableFormat createDetailTableFormat() {
 		return GlazedLists.tableFormat(
 				EntradaPorCompra.class
-				,new String[]{"sucursal.nombre","documento","fecha","clave","descripcion","compraDet.solicitado","cantidad"}
-				,new String[]{"Sucursal","Docto","Fecha","Prod","Desc","Solicitado","Recibido"}
+				,new String[]{"sucursal.nombre","documento","fecha","clave","descripcion","compraDet.solicitado","cantidad","costoPromedio","costoPromedioMovimiento","kilosCalculados"}
+				,new String[]{"Sucursal","Docto","Fecha","Prod","Desc","Solicitado","Recibido","Costop","Costo","Kilos"}
 				);
 		
 	}
