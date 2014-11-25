@@ -47,6 +47,8 @@
 		<value>PedidoDet</value>
 		<value>Folio</value>
 		<value>FolioFiscal</value>
+		<value>Sector</value>
+		<value>SectorDet</value>
 		<!--<value>CFDI</value>
  	     <value>ExistenciaConteo</value>
 		<value>Conteo</value>

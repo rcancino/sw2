@@ -1,6 +1,9 @@
 package com.luxsoft.siipap.pos.ui.selectores;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;
@@ -23,8 +26,13 @@ public class SelectorDeSolicitudesPendietes extends AbstractSelector<SolicitudDe
 
 	@Override
 	protected List<SolicitudDeTraslado> getData() {
-		String hql="from SolicitudDeTraslado sol where sol.origen.id=? and sol.atendido is null";
-		return Services.getInstance().getHibernateTemplate().find(hql,getSucursal().getId());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar  fechaActual=Calendar.getInstance();
+         fechaActual.add(Calendar.DATE, -7);
+	     Date fechaCorte=fechaActual.getTime();
+	    Object[] params={getSucursal().getId(),fechaCorte};
+		String hql="from SolicitudDeTraslado sol where sol.origen.id=? and sol.atendido is null and fecha>=?";
+		return Services.getInstance().getHibernateTemplate().find(hql,params);
 	}
 
 	@Override

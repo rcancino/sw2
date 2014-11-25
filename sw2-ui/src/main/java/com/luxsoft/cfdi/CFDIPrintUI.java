@@ -72,10 +72,10 @@ public class CFDIPrintUI {
 			}else{
 				JasperPrintManager.printReport(jasperPrint, false);
 			}
-			if(venta.getImpreso()==null && (cfdi!=null)){
+			/*if(venta.getImpreso()==null && (cfdi!=null)){
 				venta.setImpreso(time);
 				hibernateTemplate.merge(venta);
-			}
+			}*/
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 			MessageUtils.showError("Error imprimiendo CFDI", ioe);

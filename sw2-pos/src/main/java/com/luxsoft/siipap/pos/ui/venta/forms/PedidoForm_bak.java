@@ -874,10 +874,24 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		 parametros.put("SUBTOTAL", cotizacion.getSubTotal());
 		 parametros.put("IMPUESTO", cotizacion.getImpuesto());
 		 parametros.put("TOTAL", cotizacion.getTotal());
-		 parametros.put("TIPO", cotizacion.getOrigen().equals(OrigenDeOperacion.CRE)?"CREDITO":"CONTADO");
+		 parametros.put("TIPO", cotizacion.getOrigen());
 		 parametros.put("COMENTARIO", cotizacion.getComentario());
 		 parametros.put("CREADO_USR", cotizacion.getLog().getCreateUser());
 		 parametros.put("KILOS", cotizacion.getKilos());
+		 if(cotizacion.isDeCredito()){
+			 parametros.put("DESCUENTO", cotizacion.getCliente().getCredito().getDescuentoEstimado());
+		 }else{
+			 parametros.put("DESCUENTO", cotizacion.getDescuento());	 
+		 }
+		 
+		 
+		 System.out.println("-----------desc"+cotizacion.getDescuento()+ "----- desc ori"+cotizacion.getDescuentoOrigen());
+		 
+		 parametros.put("FPAGO", cotizacion.getFormaDePago().name());
+		
+		 
+		
+		 
 		 if(cotizacion.getSocio()!= null)
 		 parametros.put("SOCIO", cotizacion.getSocio().getNombre());
 		 parametros.put("IMP_CON_LETRA",ImporteALetra.aLetra(cotizacion.getTotalMN()));
@@ -889,8 +903,8 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		 Resource res = loader.getResource(getJasperReport(jasper));
 		 try {
 				java.io.InputStream io = res.getInputStream();
-				String[] columnas= {"cotizable","cantidad","descripcion","producto.gramos","precio","importeBruto","cortes","precioCorte","instruccionesDecorte"};
-				String[] etiquetas={"Cot","Cant","Producto","(g)","Precio","ImpBruto","Corte(#)","Cortes()","Corte"};
+				String[] columnas= {"cotizable","cantidad","descripcion","producto.gramos","precio","importeBruto","cortes","precioCorte","instruccionesDecorte","producto.modoDeVenta"};
+				String[] etiquetas={"Cot","Cant","Producto","(g)","Precio","ImpBruto","Corte(#)","Cortes()","Corte","ModVta"};
 				final TableFormat tf=GlazedLists.tableFormat(columnas, etiquetas);
 				final EventTableModel tableModel=new EventTableModel(conceptos,tf);
 				final JRTableModelDataSource tmDataSource=new JRTableModelDataSource(tableModel);

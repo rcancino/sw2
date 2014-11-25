@@ -565,6 +565,11 @@
     	<property name="hibernateTemplate" ref="hibernateTemplate"/>
     	<property name="mailSender" ref="mailSender"/>
     </bean>
+    
+     <bean id="cfdi_EnvioServices" class="com.luxsoft.sw3.cfdi.CFDI_EnvioServices">
+    	<property name="hibernateTemplate" ref="hibernateTemplate"/>
+    	<property name="mailSender" ref="mailSender"/>
+    </bean>
  
 </beans>
 

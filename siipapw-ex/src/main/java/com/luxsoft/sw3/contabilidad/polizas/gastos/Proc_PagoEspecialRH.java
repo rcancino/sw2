@@ -66,6 +66,7 @@ public class Proc_PagoEspecialRH implements IProcesador{
 						System.out.println("Rubro de gasto: +"+gasto.getRubro()+ " sin concepto contable GcompraDet.id: "+gasto.getId());
 					}
 					String pattern="DOC: {0}  ({1,date,short}), {2}";
+					System.out.println("-------"+gasto.getId()+"----------"+gasto.getComentario());
 					String descripcion2=MessageFormat.format(pattern
 							, gasto.getFactura()
 							,factura.getFecha()							

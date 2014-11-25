@@ -312,6 +312,7 @@ public class Devolucion extends BaseBean implements Replicable{
 	
 	public BigDecimal getImporteBruto(){
 		CantidadMonetaria importe=CantidadMonetaria.pesos(0);
+		//CantidadMonetaria importe=CantidadMonetaria.dolares(0);
 		for(DevolucionDeVenta devoDet:getPartidas()){
 			Currency moneda=getVenta().getMoneda();
 			importe=importe.add(new CantidadMonetaria(devoDet.getImporteBruto(),moneda));
@@ -324,6 +325,7 @@ public class Devolucion extends BaseBean implements Replicable{
 	public BigDecimal getImporteDescuento(){
 		
 		CantidadMonetaria importe=CantidadMonetaria.pesos(0);
+		//CantidadMonetaria importe=CantidadMonetaria.dolares(0);
 		for(DevolucionDeVenta devoDet:getPartidas()){
 			Currency moneda=getVenta().getMoneda();
 			importe=importe.add(new CantidadMonetaria(devoDet.getImporteDescuento(),moneda));

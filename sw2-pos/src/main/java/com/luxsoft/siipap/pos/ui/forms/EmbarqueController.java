@@ -90,7 +90,7 @@ public class EmbarqueController {
 		if(salida!=null){
 			embarque=find(embarque.getId());
 			embarque.setSalida(salida);
-			if(embarque.getChofer().equals("\"DIRECTO\"")){
+			if(embarque.getChofer().equals("\"DIRECTO\"") || embarque.getChofer().equals("\"PATN,TRICICLO,DIABLO,CAMINANDO\"" )){
 				embarque.setRegreso(salida);
 			}
 			
@@ -223,7 +223,7 @@ public class EmbarqueController {
 			}else
 				return e;
 		}*/
-		if(target.getChofer().equals("\"DIRECTO\"")){
+		if(target.getChofer().equals("\"DIRECTO\"") || target.getChofer().equals("\"PATN,TRICICLO,DIABLO,CAMINANDO\"")){
 		  entrega.setArribo(new Date());
 		  entrega.setRecepcion(new Date());
 		}

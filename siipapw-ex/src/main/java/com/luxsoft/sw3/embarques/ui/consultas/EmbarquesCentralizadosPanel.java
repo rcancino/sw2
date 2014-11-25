@@ -26,6 +26,7 @@ import ca.odell.glazedlists.swing.TextComponentMatcherEditor;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reportes.BuscadorDeVentasEnvio;
 import com.luxsoft.siipap.reportes.EntregasPorChofer;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
@@ -203,6 +204,8 @@ public class EmbarquesCentralizadosPanel extends AbstractMasterDatailFilteredBro
 		List<Action> procesos=super.createProccessActions();
 		procesos.add(addAction("", "reporteDeAsignacion", "Asignación de choferes"));
 		procesos.add(addAction("", "reporteDeEntregas", "Entregas por chofer"));
+		procesos.add(addAction("", "reporteVentasDeEnvio", "Facturas de Envio"));
+	
 		return procesos;
 	}
 	@Override
@@ -310,6 +313,15 @@ public class EmbarquesCentralizadosPanel extends AbstractMasterDatailFilteredBro
 			ReportUtils.viewReport(ReportUtils.toReportesPath("embarques/AsignacionDeEnvio.jasper"), map);
 		}
 	}
+	
+	
+
+	public void reporteVentasDeEnvio() {
+		new BuscadorDeVentasEnvio().actionPerformed(null);
+		
+	}
+	
+	
 	
 	public void reporteDeEntregas(){
 		EntregasPorChofer.run();

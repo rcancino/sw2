@@ -57,6 +57,7 @@ public class CFDIPrintServices {
 		JasperPrint jasperPrint = null;
 		DefaultResourceLoader loader = new DefaultResourceLoader();
 		String jasper=cfdi.getTimbreFiscal().getUUID()!=null?"ventas/FacturaCFDI.jasper":"ventas/RemisionVentaCFDI.jasper";
+	
 		//String jasper=cfdi.getTimbreFiscal().getUUID()!=null?"ventas/FacturaCFDIBajio.jasper":"ventas/RemisionVentaCFDI.jasper";
 		Resource res = loader.getResource(getJasperReport(jasper));
 		//System.out.println("Generando impresion de CFDI con parametros: "+parametros+ " \nruta: "+res);
@@ -149,6 +150,7 @@ public class CFDIPrintServices {
 		parametros.put("PINT_IVA",		MonedasUtils.IVA.multiply(BigDecimal.valueOf(100)));
 		parametros.put("TIPOX", 		venta.getOrigen().equals(OrigenDeOperacion.CRE)?"CREDITO":"CONTADO");
 		//parametros.put("DESTINATARIO", "CLIENTE");
+		parametros.put("IMPRESO", 	venta.getImpreso());
 		
 		if(venta.getClave().equals("1")){			
 			CantidadMonetaria factor=CantidadMonetaria.pesos(1).add(CantidadMonetaria.pesos(MonedasUtils.IVA));
@@ -163,6 +165,7 @@ public class CFDIPrintServices {
 			parametros.put("IMPORTE", 			comprobante.getTotal()); 
 			
 			//parametros.put("ANTICIPO", MonedasUtils.calcularImporteSinIva(venta.getAnticipoAplicado()));
+			
 		
 		}
 		

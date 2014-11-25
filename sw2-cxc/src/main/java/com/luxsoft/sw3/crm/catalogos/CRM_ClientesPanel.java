@@ -26,6 +26,8 @@ import ca.odell.glazedlists.UniqueList;
 
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
+import com.luxsoft.siipap.cxc.CXCActions;
+import com.luxsoft.siipap.cxc.ui.clientes.CFDIMailsClienteForm;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.reports.ClientesNuevosBI;
 import com.luxsoft.siipap.service.KernellSecurity;
@@ -118,13 +120,18 @@ public class CRM_ClientesPanel extends FilteredBrowserPanel<Cliente> implements 
 			printClientesNuevos.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/table_go.png"));
 			printClientesNuevos.putValue(Action.SHORT_DESCRIPTION, "Reporte Clientes Nuevos");
 			
+			Action actualizaCorreo=addAction(CXCActions.MantenimientoClientes.getId(), "actualizarCorreo", "Actualizar Correo");
+			actualizaCorreo.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/vcard_edit.png"));
+			actualizaCorreo.putValue(Action.SHORT_DESCRIPTION, "Actualizar correo");
+			
 			actions=new Action[]{
 				getLoadAction()
-				,getEditAction()
+				//,getEditAction()
 				,getViewAction()
-				,printInfoReport
+				//,printInfoReport
 				,printClientesNuevos
 				,addAction("", "validarParaCFD", "validarCFD")
+				,actualizaCorreo
 				};
 		return actions;
 	}
@@ -179,6 +186,17 @@ public class CRM_ClientesPanel extends FilteredBrowserPanel<Cliente> implements 
 	public void printClientesNew(){
 		ClientesNuevosBI.run();
 	}
+	
+	public void actualizarCorreo() {
+		
+		if(!selectionModel.getSelected().isEmpty()){
+			Object selected=selectionModel.getSelected().get(0);
+			Cliente c=(Cliente)selected;
+			String clave=c.getClave();
+			CFDIMailsClienteForm.showForm(clave);
+		}
+	}
+	
 	
 
 	private ClienteManager getManager(){

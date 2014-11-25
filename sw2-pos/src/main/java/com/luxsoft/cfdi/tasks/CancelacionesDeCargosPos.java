@@ -95,8 +95,8 @@ public class CancelacionesDeCargosPos {
 	
 	
 	public void cancelar(String[] uuidList,Periodo periodo) throws Exception{
-		String dirPath="Z:\\CFDI\\cancelaciones";
-		//String dirPath="\\mnt\\siipapwin\\CFDI\\cancelaciones";
+		//String dirPath="Z:\\CFDI\\cancelaciones";
+		String dirPath="\\mnt\\siipapwin\\CFDI\\cancelaciones";
 		File dir=new File(dirPath);
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);

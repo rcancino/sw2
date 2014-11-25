@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 
 import com.jgoodies.uif.builder.ToolBarBuilder;
 import com.jgoodies.uifextras.panel.HeaderPanel;
+import com.luxsoft.siipap.cxc.ui.clientes.CFDIMailsClienteForm;
+import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.model.gastos.GProductoServicio;
 import com.luxsoft.siipap.swing.actions.SWXAction;
 import com.luxsoft.siipap.swing.controls.SXAbstractDialog;
@@ -61,6 +63,9 @@ public class CRM_ClienteBrowser extends SXAbstractDialog{
 		
 		return content;
 	}
+	
+	
+
 	
 	
 	

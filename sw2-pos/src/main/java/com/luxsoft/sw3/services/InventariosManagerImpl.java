@@ -34,6 +34,8 @@ import com.luxsoft.siipap.inventarios.model.ExistenciaConteo;
 import com.luxsoft.siipap.inventarios.model.Inventario;
 import com.luxsoft.siipap.inventarios.model.Movimiento;
 import com.luxsoft.siipap.inventarios.model.MovimientoDet;
+import com.luxsoft.siipap.inventarios.model.Sector;
+import com.luxsoft.siipap.inventarios.model.SectorDet;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTrasladoDet;
 import com.luxsoft.siipap.inventarios.model.Traslado;
@@ -520,6 +522,14 @@ public class InventariosManagerImpl implements InventariosManager{
 		return salvarConteoDeInventario(conteo, time,user);
 	}
 	
+	
+	@Transactional(propagation=Propagation.SUPPORTS,readOnly=false)
+	public Sector registrarSector(final Sector sector){
+		Date time=obtenerFechaDelSistema();
+		String user=KernellSecurity.instance().getCurrentUserName();
+		return salvarSector(sector, time,user);
+	}
+	
 	@Transactional(propagation=Propagation.REQUIRED)
 	private Conteo salvarConteoDeInventario(Conteo conteo,final Date time,String user){
 		
@@ -549,6 +559,39 @@ public class InventariosManagerImpl implements InventariosManager{
 		
 		Conteo res=(Conteo)this.hibernateTemplate.merge(conteo);
 		return res;
+		
+	}
+	
+private Sector salvarSector(Sector sector,final Date time,String user){
+		
+		//Bitacoras
+		if(sector.getId()==null){
+			sector.getLog().setCreado(time);
+			sector.getLog().setCreateUser(user);
+			sector.getAddresLog().setCreatedIp(KernellSecurity.getIPAdress());
+			sector.getAddresLog().setCreatedMac(KernellSecurity.getMacAdress());
+		}
+		
+		sector.getLog().setModificado(time);
+		sector.getLog().setUpdateUser(user);
+		sector.getAddresLog().setUpdatedIp(KernellSecurity.getIPAdress());
+		sector.getAddresLog().setUpdatedMac(KernellSecurity.getMacAdress());
+		
+		
+		if(sector.getId()==null){
+			/*Folio folio=folioDao.buscarNextFolio(conteo.getSucursal(), "CONTEO_INV");
+			conteo.setDocumento(folio.getFolio());			
+			folioDao.save(folio);*/
+		}
+		
+		for(SectorDet det:sector.getPartidas()){
+		//	det.setDocumento(sector.getDocumento());
+		}
+		
+		Sector res=(Sector)this.hibernateTemplate.merge(sector);
+		return res;
+		
+		
 		
 	}
 	

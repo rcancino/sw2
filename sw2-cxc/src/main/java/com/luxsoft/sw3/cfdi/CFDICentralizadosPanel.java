@@ -23,15 +23,18 @@ import com.luxsoft.siipap.cxc.ui.CXCUIServiceFacade;
 import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeClientes;
 import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.core.Cliente;
+import com.luxsoft.siipap.reports.CfdisNoEnviadosReport;
 import com.luxsoft.siipap.service.ServiceLocator2;
 //import com.luxsoft.siipap.pos.ui.forms.FacturaForm;
 //import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.Header;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.siipap.swing.utils.SWExtUIManager;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 //import com.luxsoft.sw3.services.Services;
+
 
 
 
@@ -157,8 +160,25 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 	protected List<Action> createProccessActions(){
 		List<Action> res=super.createProccessActions();
 		res.add(addAction(null, "mandarPorCorreoElectronico", "Mandar por Correo"));
+		res.add(addAction("", "mantenimientoCorreo", "Mantenimiento de Correo"));
+		res.add(addAction("", "xmlNoEnviados", "Xml no Enviados"));
+		
 		return res;
 	}
+	
+	public void mantenimientoCorreo(){
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+				com.luxsoft.siipap.swing.utils.SWExtUIManager.setup();
+			com.luxsoft.sw3.crm.catalogos.CRM_ClienteBrowser browser = new com.luxsoft.sw3.crm.catalogos.CRM_ClienteBrowser();
+			browser.open();
+				
+			}
+
+		});
+	}
+	
 	
 	public Cliente getCliente() {
 		return cliente;
@@ -197,6 +217,11 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 			}
 		}
 		
+	}
+	
+	
+	public void xmlNoEnviados(){
+		CfdisNoEnviadosReport.run();
 	}
 	
 	public void timbrar(){

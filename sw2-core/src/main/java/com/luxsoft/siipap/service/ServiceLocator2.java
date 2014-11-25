@@ -26,6 +26,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 
 
+
 import com.luxsoft.siipap.compras.dao.ListaDePreciosDao;
 import com.luxsoft.siipap.cxc.service.CXCManager;
 import com.luxsoft.siipap.cxc.service.ClienteServices;
@@ -67,6 +68,7 @@ import com.luxsoft.sw3.cfd.services.CFDMailServices;
 import com.luxsoft.sw3.cfd.services.ComprobantesDigitalesManager;
 import com.luxsoft.sw3.cfdi.CFDIFactura;
 import com.luxsoft.sw3.cfdi.CFDIManager;
+import com.luxsoft.sw3.cfdi.CFDI_EnvioServices;
 import com.luxsoft.sw3.cfdi.CFDI_MailServices;
 import com.luxsoft.sw3.cfdi.IFactura;
 import com.luxsoft.sw3.cfdi.INotaDeCredito;
@@ -442,6 +444,11 @@ public  class ServiceLocator2 {
 	
 	public static CFDI_MailServices getCFDIMailServices(){
 		return (CFDI_MailServices)instance().getContext().getBean("cfdi_MailServices");
+	}
+	
+	
+	public static CFDI_EnvioServices getCFDIEnvioServices(){
+		return (CFDI_EnvioServices)instance().getContext().getBean("cfdi_EnvioServices");
 	}
 	
 	public static CheckplusManager getCheckplusManager(){

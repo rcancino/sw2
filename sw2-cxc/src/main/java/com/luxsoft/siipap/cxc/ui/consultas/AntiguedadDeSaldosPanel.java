@@ -61,6 +61,8 @@ import com.luxsoft.siipap.reports.FacturasPendientesCamionetaTab;
 import com.luxsoft.siipap.reports.ProgramacionDeCobroSemanalReport;
 import com.luxsoft.siipap.reports.ProyeccionDeCobranzaReport;
 import com.luxsoft.siipap.reports.ResultadoDeCobranzaCxCReport;
+import com.luxsoft.siipap.reports.SaldosPendienteXAbogadoConUltimoReport;
+import com.luxsoft.siipap.reports.SaldosPendienteXAbogadoReportForm;
 import com.luxsoft.siipap.reports.VentasDiariasBI;
 import com.luxsoft.siipap.reports.VentasGlobalesBI;
 import com.luxsoft.siipap.reports.VentasPorFacturistaBI;
@@ -232,6 +234,8 @@ public class AntiguedadDeSaldosPanel extends AbstractMasterDatailFilteredBrowser
 				,addAction("", "reporteClientesConAtrasoAviso", "Aviso de Clientes Con Atraso")			
 				,addAction("", "reporteClientesConAtraso", "Clientes Suspendidos por Atraso")
 				,addAction("", "reporteVentasPorVendedor", "Ventas Por Vendedor")
+				,addAction("", "saldosPendientes", "Saldos Pendientes Por Abogado")
+				
 				};
 		
 		return actions;
@@ -321,6 +325,10 @@ public class AntiguedadDeSaldosPanel extends AbstractMasterDatailFilteredBrowser
 	
 	public void reporteClientesSinVenta(){
 		
+	}
+	
+	public void saldosPendientes(){
+		SaldosPendienteXAbogadoConUltimoReport.run();;
 	}
 	
 	

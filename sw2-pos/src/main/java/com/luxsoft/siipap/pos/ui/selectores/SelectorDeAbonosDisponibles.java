@@ -56,7 +56,7 @@ public class SelectorDeAbonosDisponibles extends AbstractSelector<Abono>{
 			String hql="from Abono p  where p.sucursal.id=? and p.total-p.aplicado>0";
 			return Services.getInstance().getHibernateTemplate().find(hql,sucursal.getId());
 		}else{
-			String hql="from Abono p  where p.sucursal.id=? and p.total-p.aplicado>0 and p.cliente.clave=?";
+			String hql="from Abono p  where p.sucursal.id=? and p.total-p.aplicado>0 and p.cliente.clave=? and p.tipo not like 'NOTA%'";
 			return Services.getInstance().getHibernateTemplate().find(hql
 					,new Object[]{sucursal.getId(),getCliente().getClave()});
 		}

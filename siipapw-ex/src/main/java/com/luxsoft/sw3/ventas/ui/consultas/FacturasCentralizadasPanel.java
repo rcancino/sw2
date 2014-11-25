@@ -39,6 +39,7 @@ import com.luxsoft.siipap.swing.matchers.CheckBoxMatcher;
 import com.luxsoft.siipap.swing.reports.ReportUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
+import com.luxsoft.sw3.bi.crm.CRM_ClienteBrowser;
 import com.luxsoft.sw3.cfd.CFDPrintServicesCxC;
 import com.luxsoft.sw3.cfd.model.ComprobanteFiscal;
 
@@ -132,10 +133,24 @@ public class FacturasCentralizadasPanel extends FilteredBrowserPanel<Venta>{
 		procesos.add(addAction("","reporteDeFacturasCanceladas", "Facturas Canceladas"));
 		procesos.add(addAction("","reporteClientesNuevos", "Clientes Nuevos"));
 		procesos.add(addAction("", "relacionTPS", "Relacion De TPS"));
+		procesos.add(addAction("", "mantenimientoCorreo", "Mantenimiento de Correo"));
 		procesos.add(ba);
 		return procesos;
 	}
 	
+	
+	public void mantenimientoCorreo(){
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+				com.luxsoft.siipap.swing.utils.SWExtUIManager.setup();
+				CRM_ClienteBrowser browser=new CRM_ClienteBrowser();
+				browser.open();
+				
+			}
+
+		});
+	}
 	
 	
 	public void reporteDeVentasDiarias(){

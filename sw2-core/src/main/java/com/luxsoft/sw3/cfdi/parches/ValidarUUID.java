@@ -89,8 +89,7 @@ public class ValidarUUID {
 	
 	public static void main(String[] args) {
 		ValidarUUID task=new ValidarUUID();
-		task.validacion(new Periodo("0" +
-				"05/02/2014","27/02/2014"));
+		task.validacion(new Periodo("21/10/2014","23/10/2014"));
 	}
 
 }

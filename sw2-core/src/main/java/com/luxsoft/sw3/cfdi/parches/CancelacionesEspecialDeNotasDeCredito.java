@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.poi.hssf.record.formula.functions.Time;
 import org.bouncycastle.util.encoders.Base64;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
@@ -120,7 +121,8 @@ public class CancelacionesEspecialDeNotasDeCredito {
 				
 		try {
 			
-			String xmlFile="cancelacionNotas";
+			String xmlFile=empresa.getClave()+"_NOTAS_"+new Date() +"_"+new Time();
+			//String xmlFile="cancelacionNotas";
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			FileOutputStream out1=new FileOutputStream(msgFile);
 			out1.write(Base64.decode(msg));
@@ -140,7 +142,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 	
 	public static void main(String[] args) {
 		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
-		task.cancelacion(DateUtil.toDate("13/03/2014"));
+		task.cancelacion(DateUtil.toDate("19/06/2014"));
 	}
 
 }

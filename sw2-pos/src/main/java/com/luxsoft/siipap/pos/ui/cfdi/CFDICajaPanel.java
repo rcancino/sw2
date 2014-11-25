@@ -361,6 +361,11 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 					, false)
 					;
 		}
+		if(venta.getImpreso()==null && (cfdiVenta.getCfdi()!=null)){
+			venta.setImpreso(time);
+			Services.getInstance().getHibernateTemplate().merge(venta);
+		}
+		
 	}
 	
 	public void consultarDisponibles(){

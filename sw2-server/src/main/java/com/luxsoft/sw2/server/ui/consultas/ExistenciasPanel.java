@@ -166,6 +166,5 @@ public class ExistenciasPanel extends DefaultCentralReplicaPanel<Existencia>{
 		return Periodo.obtenerYear(periodo.getFechaFinal());
 	}
 	
-	
+}	
 
-}

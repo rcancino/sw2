@@ -62,6 +62,7 @@
      	<property name="panels">
      		<list>
      			<ref bean="facturasCentralizadasPanel"/>
+     			<ref bean="CfdiPanel"/>
      			<ref bean="comprobantesFiscalesDigitalesPanel"/>
      		</list>
      	</property>
@@ -76,6 +77,13 @@
     	class="com.luxsoft.sw3.ventas.ui.consultas.CFDPanel"
     	p:title="Comprobantes Fiscales Digitales">
     </bean>
+    
+     <bean id="CfdiPanel" 
+    	class="com.luxsoft.sw3.cfdi.CFDICentralizadosPanel"
+    	p:title="CFDI's">
+    </bean>
+    
+   
     
      
      

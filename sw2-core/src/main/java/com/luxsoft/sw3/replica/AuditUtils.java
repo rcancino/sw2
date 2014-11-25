@@ -223,6 +223,8 @@ public class AuditUtils {
 		classTableMap.put("CFDI", "SX_CFDI");
 		classTableMap.put("CFDIClienteMails", "SX_CLIENTES_CFDI_MAILS");
 		classTableMap.put("Gasto", "SX_GASTOS");
+		classTableMap.put("Sector", "SX_SECTOR");
+		classTableMap.put("SectorDet", "SX_SECTORDET");
 		
 		
 		

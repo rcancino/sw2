@@ -39,7 +39,8 @@ public class CFDITimbrador implements InitializingBean{
 		
 		//byte[] res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);
 		byte[] res=null;
-		String modo=System.getProperty("cfdi.timbrado", "test");
+		String modo =System.getProperty("cfdi.timbrado", "test");
+		
 		if(modo.equals("test")){
 			System.out.println("Timbrando en modo de prueba...");
 			res=cfdiClient.getCfdiTest("PAP830101CR3", "yqjvqfofb", zipFile);

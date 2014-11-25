@@ -41,8 +41,13 @@ import com.luxsoft.siipap.inventario.ui.reports.KardexReportForm;
 import com.luxsoft.siipap.inventarios.model.Movimiento;
 import com.luxsoft.siipap.inventarios.model.MovimientoDet;
 import com.luxsoft.siipap.inventarios.model.MovimientoDet.TipoCIS;
+import com.luxsoft.siipap.reportes.BuscadorDeVentasEnvio;
+import com.luxsoft.siipap.reportes.DetalleDeDevolucionesReport;
+import com.luxsoft.siipap.reportes.MovInventDetalle;
+import com.luxsoft.siipap.reportes.MovInventResumen;
 import com.luxsoft.siipap.reportes.ReporteDeAlcancesForm;
 import com.luxsoft.siipap.reportes.ReporteDeAlcancesPorCapasForm;
+import com.luxsoft.siipap.reportes.VentasMAsMenosBI;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.AbstractControl;
@@ -176,13 +181,18 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 	protected List<Action> createProccessActions(){
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction("", "kardex", "Kardex"));
-		actions.add(addAction("", "reporteAnaliticoPorMovimiento", "Analítico por Mov."));
+		/*actions.add(addAction("", "reporteAnaliticoPorMovimiento", "Analítico por Mov."));
 		actions.add(addAction("", "reporteDiscrepanciasDeInventario", "Discrepancias"));
 		actions.add(addAction("", "reporteExistenciaInv", "Reporte de Existencias"));
 		actions.add(addAction("", "reporteMaterialEnRecorte", "Recorte"));
 		actions.add(addAction("", "reporteResumenDeMovimientos", "Resumen de Movs."));
 		actions.add(addAction("", "asignarTipoCis", "Asignación Tipo CIS"));
-		actions.add(addAction("", "reporteDeAlcancesPorCapas", "Alcance Por Capas"));
+		actions.add(addAction("", "reporteDeAlcancesPorCapas", "Alcance Por Capas"));*/
+		actions.add(addAction("", "reporteVentasDeEnvio", "Facturas de Envio"));
+		actions.add(addAction("", "reporteMovInventDetalle", "Movs. Invent. Detalle"));
+		actions.add(addAction("", "reporteMovInventResumen", "Movs. Invent. Resumen"));
+		actions.add(addAction("", "reporteDetalleDeDevoluciones", "Detalle de Devoluciones"));
+		actions.add(addAction("", "reportedeVentasMasMenos", "Ventas de Mas/Menos"));
 		return actions;
 	}
 	
@@ -190,7 +200,7 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 		KardexReportForm.run();
 	}
 	
-	
+	/*
 	public void reporteDeAlcancesPorCapas(){
 		ReporteDeAlcancesPorCapasForm.run();
 	}
@@ -217,6 +227,28 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 	public void reporteResumenDeMovimientos() {
 		//ResumenDeMovReportForm.run();
 		
+	}*/
+	
+
+	public void reporteVentasDeEnvio() {
+		new BuscadorDeVentasEnvio().actionPerformed(null);
+		
+	}
+	
+	public void reporteMovInventDetalle(){
+		new MovInventDetalle().run();
+	}
+	
+	public void reporteMovInventResumen(){
+		new MovInventResumen().run();
+	}
+
+	public void reporteDetalleDeDevoluciones(){
+		new DetalleDeDevolucionesReport().run();
+	}
+	
+	public void reportedeVentasMasMenos(){
+		new VentasMAsMenosBI().run();
 	}
 	
 
@@ -332,15 +364,15 @@ private TotalesPanel totalPanel=new TotalesPanel();
 				an.setIndice(indice++);
 			}*/
 					
-			for(Object  r:getFilteredSource()){
+		/*	for(Object  r:getFilteredSource()){
 				MovimientoDet an=(MovimientoDet)r;
 				
 			    
 				importe=importe.add(an.getCosto());
 				kilos=kilos.add(new BigDecimal(an.getKilos()));	
 				
-			}
-	
+			} 
+	*/
 		
 			
 			String pattern="{0}";

@@ -225,6 +225,9 @@
         <mapping class="com.luxsoft.sw3.ventas.EstadoDeVenta"/>
         <mapping class="com.luxsoft.sw3.cfdi.model.CFDI"/>
         <mapping class="com.luxsoft.sw3.cfdi.model.CFDIClienteMails"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.Sector"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.SectorDet"/>
+        
     
     </session-factory>
 </hibernate-configuration>

@@ -21,10 +21,15 @@
 		</license>
 	</licenses>
 	<repositories>
-		<repository>
+		<!-- <repository>
 			<id>luxsoft-repository</id>
 			<name>Luxsoft Repository</name>
 			<url>http://luxsoftnet.com/m2/repository</url>
+		</repository> -->
+		<repository>
+			<id>luxsoft-repository</id>
+			<name>Luxsoft Repository</name>
+			<url>file:///c:/m2/repository</url>
 		</repository>
 		<repository>
       		<id>QRGen</id>

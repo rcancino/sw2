@@ -294,7 +294,15 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 			//Se evalua el atraso para recalcular el importe de la comision
 			double comision=.5;//c.getComisionVendedor();
 			
-			if(c.getAtraso()>=30 && c.getAtraso()<45)
+			if(c.getAtraso()>7 && c.getAtraso()<=30)
+				comision=.4;
+			else if(c.getAtraso()>30 && c.getAtraso()<=45){
+				comision=.3;
+			}else if(c.getAtraso()>45){
+				comision=.0;
+			}
+			
+			/*if(c.getAtraso()>=30 && c.getAtraso()<45)
 				comision=.4;
 			else if(c.getAtraso()>=45 && c.getAtraso()<60){
 				comision=.3;
@@ -304,7 +312,8 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 				comision=.1;
 			}else if(c.getAtraso()>=90){
 				comision=.0;
-			}
+			}*/
+			
 			c.setComisionVendedor(comision);
 			c.actualizarComisiones();
 			

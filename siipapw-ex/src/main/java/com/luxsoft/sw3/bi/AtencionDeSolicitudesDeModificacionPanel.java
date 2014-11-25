@@ -10,16 +10,24 @@ import java.util.TimerTask;
 import javax.swing.Action;
 
 import org.apache.activemq.thread.Task;
+import org.apache.commons.lang.time.DateUtils;
 import org.jdesktop.swingx.JXTable;
 import org.jfree.ui.DateCellRenderer;
 
 import com.luxsoft.siipap.cxc.CXCRoles;
+import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reports.CfdisNoEnviadosReport;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.Renderers;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.siipap.swing.utils.Renderers.ToHourConverter;
+import com.luxsoft.siipap.util.DateUtil;
+import com.luxsoft.sw3.cfdi.CFDI_EnvioServices;
+import com.luxsoft.sw3.cfdi.parches.CancelacionesDeCargos;
+import com.luxsoft.sw3.cfdi.parches.CancelacionesEspecialDeNotasDeCredito;
+import com.luxsoft.sw3.cfdi.parches.ValidarUUID;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacion;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacionForm;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacionFormModel;
@@ -70,18 +78,37 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	private Action prenderActualizacion;
 	private Action apagarActualizacion;
 	
+	private Action prenderEnvio;
+	private Action apagarEnvio;
+	
+	
 	@Override
 	protected List<Action> createProccessActions(){
 		
-		prenderActualizacion=addAction("", "prenderActualizacionAutomatica", "Encender Actualizacion automática");
+		prenderActualizacion=addAction("", "prenderActualizacionAutomatica", "Encender Actualizacion automatica");
 		
-		apagarActualizacion=addAction("", "apagarActualizacionAutomatica", "Apagar Actualizacion automática");
+		apagarActualizacion=addAction("", "apagarActualizacionAutomatica", "Apagar Actualizacion automatica");
 		apagarActualizacion.setEnabled(false);
+		
+		prenderEnvio=addAction("", "prenderEnvioAutomatico", "Encender Envio Cfdi");
+
+		apagarEnvio=addAction("", "apagarEnvioAutomatico", "Apagar Envio Cfdi");
+		apagarEnvio.setEnabled(false);
 		
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction(null, "actualizarExistencias", "Actualizar Exist."));
 		actions.add(prenderActualizacion);
 		actions.add(apagarActualizacion);
+		
+		actions.add(prenderEnvio);
+		actions.add(apagarEnvio);
+		actions.add(addAction("", "envioDeCfdiDiaAnterior", "Enviar Cfdi dia ant."));
+		actions.add(addAction("", "xmlNoEnviados", "Reporte De No Enviados"));
+	
+		actions.add(addAction("", "cancelacionDeCargos", "Cancelación De Cargos"));
+		actions.add(addAction("", "cancelacionDeNotas", "Cancelación De Notas"));
+		actions.add(addAction("", "validarUUID", "Revision UUID's"));
+		
 		return actions;
 	}
 
@@ -141,7 +168,46 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
          timerActualizar.purge();
 
      }
+     
+     
+     
+     private Timer timerEnvioCfdi;
+     
+     TimerTask enviar=new TimerTask() {
+			public void run() {
+				envioDeCfdi();
+		}
+	};
 	
+	
+	
+	 public void startEnvio() {
+		 System.out.println("Arrancando Actualizacion de Existencias automatico");
+		 timerEnvioCfdi=new Timer();
+         timerEnvioCfdi.schedule(enviar,1000, 3600000 );
+     
+     }
+
+     public void cancelEnvio() {
+
+    	 System.out.println("Deteniendo Actualizacion de Existencias automatico");
+    	 enviar.cancel();
+         timerEnvioCfdi.purge();
+
+     }
+	
+	public void envioDeCfdi(){
+		CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
+		service.madarPorCorreo();
+	}
+	
+	
+	public void envioDeCfdiDiaAnterior(){
+		CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
+		 Date dia=DateUtils.addDays(new Date(),-1);
+		service.madarPorCorreo(dia);
+		MessageUtils.showMessage("Los CFDI's pendientes de ayer han sido enviados", "Envio de CFDI's");
+	}
 
 	@Override
 	protected void adjustMainGrid(JXTable grid) {
@@ -151,7 +217,7 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		grid.getColumnExt("Atendido").setCellRenderer(new DateCellRenderer(new SimpleDateFormat("dd/MM/yyyy :hh:mm")));
 		
 		
-		//grid.getColumnExt("Recibió").setVisible(false);
+		//grid.getColumnExt("Recibi").setVisible(false);
 		//grid.getColumnExt("Surtidor").setVisible(false);
 		
 	}
@@ -185,19 +251,59 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	}
 	
 	
-	public void apagarActualizacionAutomatica(){
-		cancel();
-		prenderActualizacion.setEnabled(true);
-		apagarActualizacion.setEnabled(false);
-	}
 	public void prenderActualizacionAutomatica(){		
 		start();
 		prenderActualizacion.setEnabled(false);
 		apagarActualizacion.setEnabled(true);
 	}
+	
+	
+	public void apagarActualizacionAutomatica(){
+		cancel();
+		prenderActualizacion.setEnabled(true);
+		apagarActualizacion.setEnabled(false);
+	}
+	
+	public void prenderEnvioAutomatico(){		
+		startEnvio();
+		prenderEnvio.setEnabled(false);
+		apagarEnvio.setEnabled(true);
+	}
+	
+	
+	public void apagarEnvioAutomatico(){
+		cancelEnvio();
+		prenderEnvio.setEnabled(true);
+		apagarEnvio.setEnabled(false);
+	}
+	
 		
 	public void reporte(){
 		//BitacoraClientesCredito.show();
+	}
+	
+	public void xmlNoEnviados(){
+		CfdisNoEnviadosReport.run();
+	}
+	
+	public void cancelacionDeCargos(){
+	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
+			Date dia=DateUtils.addDays(new Date(),-1);
+			task.cancelacion(new Periodo(dia,dia));
+			MessageUtils.showMessage("Cargos Cancelados", "Cancelación De Cargos");
+	}
+	
+	public void cancelacionDeNotas(){
+		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
+		task.cancelacion(new Date());
+		MessageUtils.showMessage("Notas Canceladas", "Cancelación De Notas");
+	}
+	
+	public void validarUUID(){
+		ValidarUUID task=new ValidarUUID();
+		Date dia=DateUtils.addDays(new Date(),-1);
+		task.validacion(new Periodo(dia,dia));
+		MessageUtils.showMessage("UUID's Corregidos", "Correccion de UUID's");
 	}
 	
 	@Override

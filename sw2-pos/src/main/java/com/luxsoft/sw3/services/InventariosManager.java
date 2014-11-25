@@ -11,6 +11,7 @@ import com.luxsoft.siipap.inventarios.model.Existencia;
 import com.luxsoft.siipap.inventarios.model.ExistenciaConteo;
 import com.luxsoft.siipap.inventarios.model.Inventario;
 import com.luxsoft.siipap.inventarios.model.Movimiento;
+import com.luxsoft.siipap.inventarios.model.Sector;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.maquila.model.RecepcionDeMaquila;
@@ -107,6 +108,8 @@ public interface InventariosManager {
 	public void generarAjusteDeInventario(Sucursal sucursal,Date fecha);
 	
 	public PreDevolucion salvarPreDevolucion(final PreDevolucion preDevo);
+	
+	public Sector registrarSector(final Sector sector);
 	
 	
 	/** Maquila **/

@@ -52,6 +52,7 @@ import com.luxsoft.siipap.inventario.ui.reports.MovimientosCosteadosReportForm;
 import com.luxsoft.siipap.inventario.ui.reports.ReportePorDocumentoForm;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reportes.VentasSinCosto;
 import com.luxsoft.siipap.reports.VentasXSucReportForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.binding.Binder;
@@ -317,7 +318,8 @@ public class MovimientosCosteadosPanel extends AbstractMasterDatailFilteredBrows
 				,addAction(InventariosActions.ConsultaDeCostosDeInventario.getId(), "facturasAnalizadas", "Facturas Analizadas")
 				,addAction(InventariosActions.ConsultaDeCostosDeInventario.getId(), "reporteDeMovimiento", "Imprimir Dcto")
 				,addAction(InventariosActions.ConsultaDeCostosDeInventario.getId(), "reporteComSinAnalizar", "Coms Sin Analizar")
-		        ,addAction("", "reporteVentasMensuales", "Ventas Mensuales")
+				,addAction("", "reporteVentasMensuales", "Ventas Mensuales")
+				,addAction("", "reporteDeVentasSinCosto", "Ventas Sin Costo Promedio")
 				
 				};
 		return actions;
@@ -368,6 +370,10 @@ public class MovimientosCosteadosPanel extends AbstractMasterDatailFilteredBrows
 	
 	public void reporteDeInventarioMaquila(){
 		Maquila_InventariosCosteadosForm.run();		
+	}
+	
+	public void reporteDeVentasSinCosto(){
+		VentasSinCosto.run();
 	}
 	
 	public void reporteDeMovimientosMaquila(){

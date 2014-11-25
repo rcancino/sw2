@@ -67,6 +67,7 @@ public class RevisionDeCargosForm extends AbstractForm{
 		
 		builder.appendSeparator("");
 		builder.append("Fecha Revisión",addReadOnly("fechaRevision"));
+		//builder.append("Fecha Revisión",getControl("fechaRevision"));
 		builder.append("Cobrador",getControl("cobrador"));
 		
 		builder.append("Com Rec CxC",getControl("comentarioRecepcion"),5);
