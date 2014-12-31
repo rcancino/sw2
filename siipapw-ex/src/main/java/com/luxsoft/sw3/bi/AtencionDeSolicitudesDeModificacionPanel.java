@@ -81,6 +81,9 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	private Action prenderEnvio;
 	private Action apagarEnvio;
 	
+	private Action prenderActMaq;
+	private Action apagarActMaq;
+	
 	
 	@Override
 	protected List<Action> createProccessActions(){
@@ -95,6 +98,12 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		apagarEnvio=addAction("", "apagarEnvioAutomatico", "Apagar Envio Cfdi");
 		apagarEnvio.setEnabled(false);
 		
+		
+		prenderActMaq=addAction("", "prenderActualizacionMaq", "Encender Act. Maq.");
+
+		apagarActMaq=addAction("", "apagarActualizacionMaq", "Apagar Act. Maq.");
+		apagarActMaq.setEnabled(false);
+		
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction(null, "actualizarExistencias", "Actualizar Exist."));
 		actions.add(prenderActualizacion);
@@ -102,11 +111,16 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		
 		actions.add(prenderEnvio);
 		actions.add(apagarEnvio);
+		
+		actions.add(prenderActMaq);
+		actions.add(apagarActMaq);
+		
+		
 		actions.add(addAction("", "envioDeCfdiDiaAnterior", "Enviar Cfdi dia ant."));
 		actions.add(addAction("", "xmlNoEnviados", "Reporte De No Enviados"));
 	
-		actions.add(addAction("", "cancelacionDeCargos", "Cancelación De Cargos"));
-		actions.add(addAction("", "cancelacionDeNotas", "Cancelación De Notas"));
+		actions.add(addAction("", "cancelacionDeCargos", "Cancelacin De Cargos"));
+		actions.add(addAction("", "cancelacionDeNotas", "Cancelacin De Notas"));
 		actions.add(addAction("", "validarUUID", "Revision UUID's"));
 		
 		return actions;
@@ -201,6 +215,36 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		service.madarPorCorreo();
 	}
 	
+	   private Timer timerActMaq;
+	     
+	     TimerTask actualizarMaq=new TimerTask() {
+				public void run() {
+					actualizaExistMaq();
+			}
+		};
+		
+		
+		 public void startExistMaq() {
+			 System.out.println("Arrancando Actualizacion de Existencias automatico");
+			 timerActMaq=new Timer();
+	         timerActMaq.schedule(actualizarMaq,1000, 3600000 );
+	     
+	     }
+
+	     public void cancelExistMaq() {
+
+	    	 System.out.println("Deteniendo Actualizacion de Existencias automatico");
+	    	 actualizarMaq.cancel();
+	         timerActMaq.purge();
+
+	     }
+		
+		
+	
+	public void actualizaExistMaq(){
+		ServiceLocator2.getExistenciaMaqDao().actualizarExistencias();
+	}
+	
 	
 	public void envioDeCfdiDiaAnterior(){
 		CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
@@ -277,6 +321,20 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		apagarEnvio.setEnabled(false);
 	}
 	
+	
+	public void prenderActualizacionMaq(){		
+		startExistMaq();
+		prenderActMaq.setEnabled(false);
+		apagarActMaq.setEnabled(true);
+	}
+	
+	
+	public void apagarActualizacionMaq(){
+		cancelExistMaq();
+		prenderActMaq.setEnabled(true);
+		apagarActMaq.setEnabled(false);
+	}
+	
 		
 	public void reporte(){
 		//BitacoraClientesCredito.show();
@@ -290,13 +348,13 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
 			Date dia=DateUtils.addDays(new Date(),-1);
 			task.cancelacion(new Periodo(dia,dia));
-			MessageUtils.showMessage("Cargos Cancelados", "Cancelación De Cargos");
+			MessageUtils.showMessage("Cargos Cancelados", "Cancelacin De Cargos");
 	}
 	
 	public void cancelacionDeNotas(){
 		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
 		task.cancelacion(new Date());
-		MessageUtils.showMessage("Notas Canceladas", "Cancelación De Notas");
+		MessageUtils.showMessage("Notas Canceladas", "Cancelacin De Notas");
 	}
 	
 	public void validarUUID(){

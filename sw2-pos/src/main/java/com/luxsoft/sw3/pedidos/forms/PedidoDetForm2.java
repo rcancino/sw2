@@ -70,7 +70,7 @@ public class PedidoDetForm2 extends AbstractForm{
 		super(model);
 		
 		keyHandler=new KeyHandler();
-		String tipo=model.isCredito()?"Crédito":"Contado";
+		String tipo=model.isCredito()?"Crdito":"Contado";
 		setTitle("Detalle de pedido tipo :"+tipo);
 		model.getModel("producto").addValueChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent evt) {				
@@ -125,7 +125,7 @@ public class PedidoDetForm2 extends AbstractForm{
 		builder.append("Pedidos Pend.",pendientesButton);
 		builder.nextLine();
 		
-		builder.appendSeparator("Instrucción de corte");
+		builder.appendSeparator("Instruccin de corte");
 		builder.append("Comentario",getControl("instruccionesDecorte"),5);
 		builder.nextLine();
 		builder.append("Cantidad ",getControl("cortes"));
@@ -270,7 +270,7 @@ private Action buscarPendientes;
 	private JComponent buildDisponibilidadPanel(){		
 		final TableFormat tf=GlazedLists.tableFormat(Existencia.class
 				, new String[]{"sucursal.nombre","cantidad","recorte","pedidosPendientes","disponible","recorteComentario"} //,"modificado","clave","year","mes"}
-				,new String[] {"Sucursal","Existencia","Recorte","Pedidos Pend.","Disponible","Recorte Comentario"} //,"Actualización","Clave","Año","Mes"}
+				,new String[] {"Sucursal","Existencia","Recorte","Pedidos Pend.","Disponible","Recorte Comentario"} //,"Actualizacin","Clave","Ao","Mes"}
 		);
 		EventTableModel tm=new EventTableModel(getDetModel().getExistencias(),tf);		
 		 JXTable grid=buildTable();

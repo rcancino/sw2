@@ -48,7 +48,7 @@
      			</bean>
      			<bean id="trasladosParaEmbarques" class="com.luxsoft.sw3.embarques.ui.consultas.TrasladosPanel"/>
      			<bean class="com.luxsoft.sw3.embarques.ui.consultas.EntregasPanel"/>
-     			
+     			<bean class="com.luxsoft.sw3.embarques.ui.consultas.EntregasCentralizadasPendientesDeAsignarPanel"/>
      			
      			
      		</list>

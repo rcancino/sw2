@@ -11,15 +11,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.util.Assert;
+
 
 
 
 import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.dao.UniversalDao;
 import com.luxsoft.siipap.inventarios.dao.ExistenciaDao;
+import com.luxsoft.siipap.inventarios.dao.ExistenciaMaqDao;
 import com.luxsoft.siipap.model.Configuracion;
 import com.luxsoft.siipap.model.Empresa;
 import com.luxsoft.siipap.model.Sucursal;
@@ -135,6 +136,10 @@ public final class Services {
 	
 	public ExistenciaDao getExistenciasDao(){
 		return (ExistenciaDao)getContext().getBean("existenciaDao");
+	}
+	
+	public ExistenciaMaqDao getExistenciasMaqDao(){
+		return (ExistenciaMaqDao)getContext().getBean("existenciaMaqDao");
 	}
 	
 	private Configuracion configuracion;

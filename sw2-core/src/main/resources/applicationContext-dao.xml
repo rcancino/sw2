@@ -50,6 +50,7 @@
 		<value>CFDIClienteMails</value>
 		<value>TipoDeCambio</value>
 		<value>User</value>
+		<value>ExistenciaMaq</value>
 	</util:set>
       
 	<util:set id="entidades">

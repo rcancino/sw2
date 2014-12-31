@@ -27,6 +27,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 
 
+
 import com.luxsoft.siipap.compras.dao.ListaDePreciosDao;
 import com.luxsoft.siipap.cxc.service.CXCManager;
 import com.luxsoft.siipap.cxc.service.ClienteServices;
@@ -42,6 +43,7 @@ import com.luxsoft.siipap.dao.gastos.GCompraDao;
 import com.luxsoft.siipap.dao.hibernate.UniversalDaoHibernate;
 import com.luxsoft.siipap.dao.tesoreria.CargoAbonoDao;
 import com.luxsoft.siipap.inventarios.dao.ExistenciaDao;
+import com.luxsoft.siipap.inventarios.dao.ExistenciaMaqDao;
 import com.luxsoft.siipap.inventarios.dao.InventarioAnualDao;
 import com.luxsoft.siipap.inventarios.service.CostoPromedioManager;
 import com.luxsoft.siipap.inventarios.service.CostosServices;
@@ -343,6 +345,11 @@ public  class ServiceLocator2 {
 	public static synchronized ExistenciaDao getExistenciaDao(){
 		return (ExistenciaDao)instance().getContext().getBean("existenciaDao");
 	}
+	
+	public static synchronized ExistenciaMaqDao getExistenciaMaqDao(){
+		return (ExistenciaMaqDao)instance().getContext().getBean("existenciaMaqDao");
+	}
+	
 	
 	public static synchronized TransformacionesManager getTransformacionesManager(){
 		return (TransformacionesManager)instance().getContext().getBean("transformacionesManager");

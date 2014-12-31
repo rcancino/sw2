@@ -45,6 +45,7 @@ import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.pos.POSRoles;
+import com.luxsoft.siipap.pos.ui.reports.AnalisisDeDifConteo;
 import com.luxsoft.siipap.pos.ui.reports.ConteoFisicoAnalisisDiferenciasForm;
 import com.luxsoft.siipap.pos.ui.reports.ConteoFisicoDiferenciaForm;
 import com.luxsoft.siipap.pos.ui.reports.ConteoFisicoValidacionForm;
@@ -97,7 +98,7 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 	@Override
 	protected TableFormat createDetailTableFormat() {
 		String[] props={"documento","clave","unidad","descripcion","cantidad"};
-		String[] labels={"Folio","Producto","U","Descripción","cantidad"};
+		String[] labels={"Folio","Producto","U","Descripcin","cantidad"};
 		return GlazedLists.tableFormat(ConteoDet.class, props,labels);
 	}
 
@@ -131,15 +132,18 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 	protected List<Action> createProccessActions() {
 		List<Action> procesos=new ArrayList<Action>();
 		procesos.add(addAction("", "cargarSectores", "Cargar Sectores"));
-		procesos.add(addAction("", "generarExistenciasParaConteoFisico", "Generar Existencias para conteo físico"));
+		procesos.add(addAction("", "generarExistenciasParaConteoFisico", "Generar Existencias para conteo fsico"));
 		//procesos.add(addAction("", "reporteDeConteoSelectovo", "Rep Conteo selectivo"));
 		procesos.add(addAction("", "reporteNoCapturados", "Rep No Capturados"));
-		procesos.add(addAction("", "reporteConteoValidacion", "Rep Validación"));
+		procesos.add(addAction("", "reporteConteoValidacion", "Rep Validacin"));
+		procesos.add(addAction("", "reporteDeDiferencias", "Rep. de Diferencias"));
+		
 		//procesos.add(addAction("", "generarExistenciasParaConteo", "Generar existencias"));
 		procesos.add(addAction("", "aplicarConteo", "Fijar conteo"));		
-		//procesos.add(addAction("", "reporteConteoFisicoAnalisisDiferencias", "Rep Análisis Diferencias"));
+		//procesos.add(addAction("", "reporteConteoFisicoAnalisisDiferencias", "Rep Anlisis Diferencias"));
 		procesos.add(addAction("", "limpiarExistencias", "Limpiar existencias p/conteo"));
 		procesos.add(addAction("", "reporteMedidasEspeciales", "Rep. Medidas especiales"));
+		
 		
 		 
 		return procesos;
@@ -236,7 +240,7 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 						return "OK";
 					}
 					protected void done() {
-						MessageUtils.showMessage("Proceso terminado", "Generación de existencias para conteo");
+						MessageUtils.showMessage("Proceso terminado", "Generacin de existencias para conteo");
 					}
 				};
 				TaskUtils.executeSwingWorker(worker);
@@ -262,13 +266,13 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 						return "OK";
 					}
 					protected void done() {
-						MessageUtils.showMessage("Proceso terminado", "Generación de existencias para conteo");
+						MessageUtils.showMessage("Proceso terminado", "Generacin de existencias para conteo");
 					}
 				};
 				TaskUtils.executeSwingWorker(worker);
 			}
 		}else{
-			MessageUtils.showMessage("Ya han sido generadas las existencias para inventario físico", "");
+			MessageUtils.showMessage("Ya han sido generadas las existencias para inventario fsico", "");
 		}
 		*/
 	}
@@ -288,12 +292,12 @@ public void generarExistenciasParaConteoFisico(){
 					return "OK";
 				}
 				protected void done() {
-					MessageUtils.showMessage("Proceso terminado", "Generación de existencias para conteo");
+					MessageUtils.showMessage("Proceso terminado", "Generacin de existencias para conteo");
 				}
 			};
 			TaskUtils.executeSwingWorker(worker);
 		} else{
-			MessageUtils.showMessage("Ya han sido generadas las existencias para inventario físico", "");
+			MessageUtils.showMessage("Ya han sido generadas las existencias para inventario fsico", "");
 		}
 		
 	}else{
@@ -319,7 +323,7 @@ public void generarExistenciasParaConteoFisico(){
 					Date fecha=new Date();
 					Services.getInstance().getInventariosManager().generarAjusteDeInventario(Services.getInstance().getConfiguracion().getSucursal(), fecha);
 					
-					boolean recalcular=MessageUtils.showConfirmationMessage("Los Inventario ha sido fijado y el ajuste se ha generado ¿ Recalcular Productos ?", "Conteo de Inventario");
+					boolean recalcular=MessageUtils.showConfirmationMessage("Los Inventario ha sido fijado y el ajuste se ha generado  Recalcular Productos ?", "Conteo de Inventario");
 					if(recalcular){
 						calcularExistencias();
 					}else{
@@ -341,7 +345,7 @@ public void generarExistenciasParaConteoFisico(){
 		final Date fecha=new Date();
 		final int mes=Periodo.obtenerMes(fecha)+1;
 		final int year=Periodo.obtenerYear(fecha);
-		System.out.println("Recalculando existencia para Año:"+year+ " Mes: "+mes+" Fecha:"+fecha);
+		System.out.println("Recalculando existencia para Ao:"+year+ " Mes: "+mes+" Fecha:"+fecha);
 		SwingWorker worker=new SwingWorker(){			
 			protected Object doInBackground() throws Exception {
 				Services.getInstance().getExistenciasDao()
@@ -381,6 +385,10 @@ public void generarExistenciasParaConteoFisico(){
 						conteo.setSector(sector.getSector());
 						conteo.setReplicado(null);
 						conteo.setImportado(null);
+						conteo.setComentario(sector.getComentario());
+						conteo.setContador1(sector.getResponsable1());
+						conteo.setContador2(sector.getResponsable2());
+						
 						
 					List<SectorDet> sectoresDet=sector.getPartidas();
 					for(SectorDet sectordet:sectoresDet){
@@ -412,7 +420,7 @@ public void generarExistenciasParaConteoFisico(){
 	 }
 	
  
-	 
+
 	 
 	 
 	public void doAplicarConteo(){
@@ -554,11 +562,16 @@ public void generarExistenciasParaConteoFisico(){
 			ReportUtils2.runReport("invent/NoCapturados.jasper",map);
 			
 		}else{MessageUtils.showMessage("No tiene los derechos apropiados", "Inventarios");}
-		
-		
-		
-		
+			
 	}
+	
+	 public void  reporteDeDiferencias(){
+		 final User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+		 if((user!=null) && user.hasRole(POSRoles.CONTROLADOR_DE_INVENTARIOS.name())){
+			 AnalisisDeDifConteo.run(); 
+		 }else{MessageUtils.showMessage("No tiene los derechos apropiados", "Inventarios");}
+		 
+	 }
 	
 	public void reporteMedidasEspeciales(){
 		
@@ -606,7 +619,7 @@ public void generarExistenciasParaConteoFisico(){
 				.find("from ExistenciaConteo e where e.sucursal.id=? and date(e.fecha)=?"
 						,new Object[]{Configuracion.getSucursalLocalId(),new Date()});
 		if(!res.isEmpty() && res.get(0).getFijado()!=null){
-			JOptionPane.showMessageDialog(null,"Atención:  Inventario ya fijado" ); 
+			JOptionPane.showMessageDialog(null,"Atencin:  Inventario ya fijado" ); 
 			
 			return false;
 		}
@@ -620,7 +633,7 @@ public void generarExistenciasParaConteoFisico(){
 				.find("from ExistenciaConteo e where e.sucursal.id=? and date(e.fecha)=?"
 						,new Object[]{Configuracion.getSucursalLocalId(),fechaValid});
 		if(!res.isEmpty() && res.get(0).getFijado()!=null){
-			JOptionPane.showMessageDialog(null,"Atención:  Inventario ya fijado" ); 
+			JOptionPane.showMessageDialog(null,"Atencin:  Inventario ya fijado" ); 
 			
 			return false;
 		}

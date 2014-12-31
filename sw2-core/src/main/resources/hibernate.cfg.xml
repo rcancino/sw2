@@ -44,6 +44,7 @@
         
         <mapping class="com.luxsoft.siipap.model.core.ConfiguracionKit"/>
         <mapping class="com.luxsoft.siipap.inventarios.model.Existencia"/>
+         <mapping class="com.luxsoft.siipap.inventarios.model.ExistenciaMaq"/>
         <mapping class="com.luxsoft.siipap.inventarios.model.InventarioAnual"/>
         <mapping class="com.luxsoft.siipap.inventarios.model.Movimiento"/>                
         <mapping class="com.luxsoft.siipap.inventarios.model.MovimientoDet"/>

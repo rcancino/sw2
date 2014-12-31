@@ -62,6 +62,7 @@ import com.luxsoft.siipap.cxc.ui.form.NotaDevolucionFormModel;
 import com.luxsoft.siipap.cxc.ui.form.NotaDevoucionForm;
 import com.luxsoft.siipap.cxc.ui.model.AplicacionDePagoModel;
 import com.luxsoft.siipap.cxc.ui.model.DescuentoEspecialFormModel;
+import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeClientes;
 import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeRMD2;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.core.Cliente;
@@ -104,16 +105,18 @@ public class CXCUIServiceFacade {
 	 * @return
 	 */
 	public static EventList<Cliente> getClientes(){
-		if(clientes.isEmpty()){
+		//if(clientes.isEmpty()){
 			relodClientes();
-		}
+		//}
 		return clientes;
 	}
 	
 	public static void relodClientes(){
 		logger.info("Cargando clientes cache...");
 		clientes.clear();
-		clientes.addAll(ServiceLocator2.getClienteManager().getAll());
+		//clientes.addAll(ServiceLocator2.getClienteManager().getAll());
+		Cliente c=SelectorDeClientes.seleccionar();
+		clientes.add(c);
 	}
 	
 	private static List<String> bancos=new ArrayList<String>();

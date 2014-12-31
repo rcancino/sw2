@@ -225,6 +225,7 @@ public class AuditUtils {
 		classTableMap.put("Gasto", "SX_GASTOS");
 		classTableMap.put("Sector", "SX_SECTOR");
 		classTableMap.put("SectorDet", "SX_SECTORDET");
+		classTableMap.put("ExistenciaMaq", "SX_EXISTENCIAS_MAQ");
 		
 		
 		

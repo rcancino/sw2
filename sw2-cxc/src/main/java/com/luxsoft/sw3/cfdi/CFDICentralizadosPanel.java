@@ -1,8 +1,10 @@
 package com.luxsoft.sw3.cfdi;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -133,24 +135,34 @@ public class CFDICentralizadosPanel extends FilteredBrowserPanel<CFDI>{
 
 	@Override
 	protected List<CFDI> findData() {
-		/*
-		String hql="from CFDI c where date(c.log.creado) " +
-				"between ? and ? " +
-				" and c.origen not in(select cc.cargo.id from CancelacionDeCargo cc)";
-		return ServiceLocator2.getHibernateTemplate().find(hql
-				, new Object[]{periodo.getFechaInicial()
-				,periodo.getFechaFinal()}
-				);
-		*/
+	
+		List<CFDI> comp = new ArrayList<CFDI>();
+		
 		if(getCliente()==null)
 			return ListUtils.EMPTY_LIST;
-		String hql="from CFDI c where date(c.log.creado) " +
-				"between ? and ? and c.rfc=? " +
-				" and c.origen not in(select cc.cargo.id from CancelacionDeCargo cc)";
-		return ServiceLocator2.getHibernateTemplate().find(hql
-				, new Object[]{periodo.getFechaInicial()
-				,periodo.getFechaFinal(),getCliente().getRfc()}
-				);
+		
+		
+		String sql="SELECT CARGO_ID FROM sx_ventas where fecha between ? and ? and CLIENTE_ID=? " +
+				" and COMENTARIO2 is null"+
+				" union "+
+				" select abono_id from sx_cxc_abonos where fecha between ? and ? and CLIENTE_ID=? "+
+				" AND tipo_id like 'NOTA%' AND TOTAL<>0"
+				;
+		List<Map> ids=ServiceLocator2.getJdbcTemplate().queryForList(sql, new Object[]{periodo.getFechaInicial()
+				,periodo.getFechaFinal(),getCliente().getId(),periodo.getFechaInicial()
+				,periodo.getFechaFinal(),getCliente().getId()});
+		
+		for(Map id:ids){
+			String origen_id=(String) id.get("CARGO_ID");
+			
+			CFDI cfdi=ServiceLocator2.getCFDIManager().buscarPorOrigen(origen_id);
+			
+			if(cfdi !=null){
+				comp.add(cfdi);
+			}
+		}
+		return comp;
+		
 	}
 	
 	

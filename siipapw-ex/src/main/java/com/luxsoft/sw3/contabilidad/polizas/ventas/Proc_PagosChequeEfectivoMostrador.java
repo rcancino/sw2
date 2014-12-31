@@ -71,6 +71,7 @@ public class Proc_PagosChequeEfectivoMostrador implements IProcesador{
 				}
 				
 				if((p instanceof PagoConCheque) || (p instanceof PagoConEfectivo)){
+					System.out.println("----------  "+p.getId());
 					if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
 						totalAplicado=totalAplicado.add(p.getAplicado(poliza.getFecha()));
 						PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);

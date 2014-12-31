@@ -44,6 +44,7 @@
 		   		<value>com.luxsoft.siipap.model.core.Cliente</value> 
 		   		<value>com.luxsoft.siipap.cxc.model.Ficha</value> 
 		   		<value>com.luxsoft.siipap.maquila.model.RecepcionDeMaquila</value>
+		   		<value>com.luxsoft.siipap.inventarios.model.ExistenciaMaq</value>
    	    	</set>
    	    </property> 
    	</bean>
@@ -117,6 +118,13 @@
 		p:sessionFactory-ref="sessionFactory"
 		p:productoDao-ref="productoDao"
 		p:jdbcTemplate-ref="jdbcTemplate"/>
+	
+	
+	<bean id="existenciaMaqDao" class="com.luxsoft.siipap.inventarios.dao.ExistenciaMaqDaoImpl"
+		p:sessionFactory-ref="sessionFactory"
+		p:productoDao-ref="productoDao"
+		p:jdbcTemplate-ref="jdbcTemplate"/>
+	
 	
 	<bean id="movimientoDao" class="com.luxsoft.siipap.inventarios.dao.MovimientoDaoImpl"
 		p:sessionFactory-ref="sessionFactory"/>

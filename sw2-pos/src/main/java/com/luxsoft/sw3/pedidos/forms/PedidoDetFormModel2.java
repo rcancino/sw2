@@ -15,6 +15,7 @@ import javax.swing.SwingWorker;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.dao.DataAccessException;
 
 import ca.odell.glazedlists.BasicEventList;
@@ -27,10 +28,12 @@ import ca.odell.glazedlists.matchers.Matchers;
 
 import com.jgoodies.validation.util.PropertyValidationSupport;
 import com.luxsoft.siipap.inventarios.model.Existencia;
+import com.luxsoft.siipap.inventarios.model.ExistenciaMaq;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.swing.controls.Header;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.siipap.util.SQLUtils;
 import com.luxsoft.sw3.services.Services;
@@ -47,6 +50,8 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 	private Header header;	
 	
 	private double existenciaTotal;
+	
+	private double existenciaMaquila;
 	
 	public PedidoDetFormModel2(PedidoDet bean) {
 		super(bean);
@@ -108,6 +113,9 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 		}*/
 	}
 
+	
+	
+	
 	public void dispose(){
 		removeBeanPropertyChangeListener(this);
 	}
@@ -223,6 +231,22 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 		return existencias;
 	}
 	
+	public Double getExistenciaMaquila(){
+		
+		int mes =DateUtil.toMes(getFecha());
+		int year =DateUtil.toYear(getFecha());
+		
+		String clave=getProductio().getClave();	
+	
+		String sql="select sum(e.cantidad) as EXIST from sx_existencias_maq e where  e.clave=? and e.mes=? and e.year=?  ";
+		Object []args={clave,mes,year};
+		 Map<Object,Double> existencia= Services.getInstance().getJdbcTemplate().queryForMap(sql, args);
+		 if(existencia.get("EXIST")!= null)
+		   return existencia.get("EXIST");
+		 else
+		   return 0.0;
+	}
+	
 	public double getExistencia(){
 		Existencia res= (Existencia)CollectionUtils.find(getExistencias(), new Predicate(){
 			public boolean evaluate(Object object) {
@@ -261,8 +285,9 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 				header.setTitulo(MessageFormat.format("{0} ({1})",p.getDescripcion(),p.getClave()));
 				String pattern="Uni:{0}\t Ancho:{1}\tLargo:{2}\t Calibre:{3}" +
 						"\nAcabado:{4}\t Caras:{5}\tPrecio:{6}" +
-						"\nCrédito: {7,number,currency}\tContado: {8,number,currency} " +
-						"\n\nExistencias     Sucursal:{9,number,#,###,###}   Total: {10,number,#,###,###}"
+						"\nCrdito: {7,number,currency}\tContado: {8,number,currency} " +
+						"\n\nExistencias     Sucursal:{9,number,#,###,###}   Total: {10,number,#,###,###}"+
+						"   Maquila: {11,number,#,###,###.###}"
 						;
 				String desc=MessageFormat.format(pattern
 						,p.getUnidad().getNombre()						
@@ -276,6 +301,7 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 						,p.getPrecioContado()
 						,getExistencia()
 						,this.existenciaTotal
+						,getExistenciaMaquila()
 						);
 				if(p.getPaquete()>1)
 					desc+=" Paquete: "+p.getPaquete();

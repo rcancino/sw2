@@ -67,6 +67,12 @@
     	<property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
     
+    <bean id="existenciaMaqDao" class="com.luxsoft.siipap.inventarios.dao.ExistenciaMaqDaoImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    	<property name="productoDao" ref="productoDao"/>
+    	<property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+    
     <bean id="kitDao" class="com.luxsoft.siipap.inventarios.dao.KitDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory"/>
     </bean>
