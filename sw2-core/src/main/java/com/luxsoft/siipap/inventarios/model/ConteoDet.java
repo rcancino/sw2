@@ -83,6 +83,15 @@ public class ConteoDet implements Serializable
 	
     @Column(name="CANTIDAD")
 	private double cantidad;
+    
+    @Column(name="RNGL" , updatable = false
+        	,insertable=false)
+	private int renglon;
+    
+    public int getRenglon() {
+		return renglon;
+	}
+    
 
 	public int getVersion() {
 		return version;

@@ -167,7 +167,7 @@ public class ProductoForm extends GenericAbstractForm<Producto>{
 		builder.append("Inventario",getControl("activoInventario"));
 		builder.append("Comentario",getControl("activoInventarioObs"));
 		
-		
+		builder.append("Ajuste",getControl("ajuste"));
 		
 		return builder.getPanel();
 	}

@@ -358,7 +358,8 @@ public class ExistenciaConteo implements Serializable{
 			setDiferencia(getConteo()-getExistencia());
 			if(getProducto().getUnidad().getUnidad().equals("MIL")){
 				double aju=Math.abs(getDiferencia());
-				if(-30.00d<aju && aju<30.00d){
+				//if(-30.00d<aju && aju<30.00d){
+				if(-(getProducto().getAjuste())<aju && aju<getProducto().getAjuste()){
 					setAjuste(getDiferencia());
 				}else
 					setAjuste(0.0d);

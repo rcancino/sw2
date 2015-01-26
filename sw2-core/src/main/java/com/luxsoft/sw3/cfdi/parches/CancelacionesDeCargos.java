@@ -148,7 +148,7 @@ public class CancelacionesDeCargos {
 		//System.setProperty("sucursalOrigen", "QRQUERETARO");
 		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
 	
-		Periodo per=new Periodo("22/12/2014","29/12/2014");
+		Periodo per=new Periodo("07/01/2015","22/01/2015");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			task.cancelacion(new Periodo(dia,dia));

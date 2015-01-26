@@ -254,6 +254,9 @@ public class Producto extends BaseBean implements Replicable{
     @Column(name="M2MILLAR")
 	private double metros2PorMillar;
     
+    @Column(name="AJUSTE")
+	private double ajuste;
+    
     /** fin de propiedades especificas de papel **/
     
     @Embedded
@@ -340,6 +343,16 @@ public class Producto extends BaseBean implements Replicable{
 		return unidad;
 	}
 
+    public double getAjuste() {
+        return ajuste;
+    }
+    public void setAjuste(double ajuste) {
+    	Object old=this.ajuste;
+        this.ajuste = ajuste;
+        firePropertyChange("ajuste", old, ajuste);
+    }
+    
+    
 	public void setUnidad(Unidad unidad) {
 		Object old=this.unidad;
 		this.unidad = unidad;

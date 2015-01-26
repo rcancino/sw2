@@ -85,6 +85,7 @@ public class ProductosPanel extends FilteredBrowserPanel<Producto>{
 				,"precioContado"
 				,"precioCredito"
 				,"activoVentasObs"
+				,"ajuste"
 				);
 		addLabels(
 				"Id"
@@ -107,6 +108,7 @@ public class ProductosPanel extends FilteredBrowserPanel<Producto>{
 				,"$Contado"
 				,"$Credito"
 				,"Obs.Venta"
+				,"Ajuste"
 				);
 		boolean[] edits={false,false,false,true,false,true,true,true,false,false,false,false,false,false,true,true,true,true,false,false,false};
 		return GlazedLists.tableFormat(beanClazz,getProperties(), getLabels(),edits);
