@@ -135,12 +135,17 @@ public class RevisionDeCargosRules {
 		if(cuenta.getFechaRevisionCxc()==null){
 			final Date vto=DateUtils.addDays(cuenta.getFechaRevision(), plazo+tolerancia);
 			cuenta.setVencimiento(vto);
-			if(cuenta.getCliente().getCredito().isVencimientoFactura()){
+			if(cuenta.getCliente().getCredito().isVencimientoFactura() && !cuenta.getCliente().getCredito().isRevision()){
 				cuenta.setRevisada(true);
 				cuenta.setFechaRevisionCxc(cuenta.getFecha());
+			}else{
+				cuenta.setRevisada(false);
+				cuenta.setFechaRevisionCxc(cuenta.getFecha());
 			}
+			
 		}else{
 			//Si el cliente es de credito
+			
 			if(cuenta.getCliente().getCredito().isVencimientoFactura()){
 				final Date vto=DateUtils.addDays(cuenta.getFecha(), plazo);
 				cuenta.setVencimiento(vto);
