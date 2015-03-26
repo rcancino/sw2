@@ -196,7 +196,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	        return bar;
 	}
 	 
-	 final ActionLabel entregaLabel=new ActionLabel("Dirección");
+	 final ActionLabel entregaLabel=new ActionLabel("Direccin");
 	
 	@Override
 	protected JComponent buildFormPanel() {
@@ -219,7 +219,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		builder.append("Tipo",getControl("tipo"));
 		builder.append(getTitleLabel("Pago"),getControl("formaDePago"));
 		//addReadOnly("descripcionFormaDePago").setBorder(null);
-		builder.append("Opción",getControl("checkplusOpcion"));
+		builder.append("Opcin",getControl("checkplusOpcion"));
 		builder.append("Socio",getControl("socio"));
 		builder.nextLine();
 		//CellConstraints cc=new CellConstraints();
@@ -227,8 +227,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		
 		builder.append("Comentario",getControl("comentario"));
 		builder.append("Puesto",getControl("puesto"));
-		builder.append("Entre" +
-				"ga",getControl("entrega"));
+		builder.append("Entrega",getControl("entrega"));
 		
 		
 		entregaLabel.setFont(TITLE_LABEL_FONT);
@@ -239,6 +238,9 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		builder.append("Comprador",getControl("mismoComprador"));
 		builder.append("Facturista",getControl("facturista"));
 		builder.append("",addReadOnly("operador"));
+		builder.nextLine();
+		builder.append("Modo",getControl("modo"));
+		builder.append("",getControl("entregaParcial"));
 		
 		ComponentUtils.decorateSpecialFocusTraversal(builder.getPanel());
 		if(getController().getPedido().getId()==null)
@@ -280,7 +282,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		return builder.getPanel();
 	}
 	/**
-	 * Segunda sección del panel de totales
+	 * Segunda seccin del panel de totales
 	 * @return
 	 */
 	private JComponent buildTotalesPane_2(){
@@ -297,7 +299,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		return builder.getPanel();
 	}
 	/**
-	 * Tercera  sección del panel de totales
+	 * Tercera  seccin del panel de totales
 	 * @return
 	 */
 	private JComponent buildTotalesPane_3(){
@@ -318,7 +320,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		JComponent c=ValidationResultViewFactory.createReportList(model.getValidationModel(),color);
 		c.setBorder(null);
 		JScrollPane sp=(JScrollPane)c;
-		sp.setBorder(BorderFactory.createTitledBorder(Borders.EMPTY_BORDER,"Validación"));		
+		sp.setBorder(BorderFactory.createTitledBorder(Borders.EMPTY_BORDER,"Validacin"));		
 		JList list=(JList)sp.getViewport().getView();
 		list.setFont(new java.awt.Font("SansSerif", 1, 13));
 		return c;
@@ -374,7 +376,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			//tf.setFocusable(false);
 			return tf;
 		}else if("instruccionDeEntrega".equals(property)){
-			JTextArea ta=UIFactory.createMultilineLabel("<h3>Dirección</h3>");
+			JTextArea ta=UIFactory.createMultilineLabel("<h3>Direccin</h3>");
 			ta.setBorder(BorderFactory.createEtchedBorder());
 			ValueModel vm=ConverterFactory.createStringConverter(model.getModel(property),new  InstruccionDeEntrega.StringFormat());
 			//BasicComponentFactory.createLabel(valueModel, format)
@@ -416,8 +418,17 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			ValueModel vm=ConverterFactory.createStringConverter(model.getModel(property), UIUtils.buildToStringFormat());
 			Bindings.bind(label, vm);
 			return label;
+		}else if("entregaParcial".equals(property)){
+			JComponent c=BasicComponentFactory.createCheckBox(model.getModel(property), "Entrega Parcial");
+			c.setEnabled(!model.isReadOnly());
+			return c;
+		}else if("modo".equals(property)){
+			final SelectionInList sl=new SelectionInList(Pedido.Modo.values(),model.getModel(property));
+			JComboBox box=BasicComponentFactory.createComboBox(sl);
+			return box;
 		}
 		return super.createCustomComponent(property);
+		
 	}
 	
 	private JComponent buildClienteControl(){
@@ -757,7 +768,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	 */
 	private class KeyHandler implements KeyEventPostProcessor{
 		/**
-		 * Implementacion de {@link KeyEventPostProcessor} para los accesos de teclado rápido
+		 * Implementacion de {@link KeyEventPostProcessor} para los accesos de teclado rpido
 		 * 
 		 */
 		public boolean postProcessKeyEvent(final  KeyEvent e) {

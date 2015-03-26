@@ -139,9 +139,9 @@ public class SectorForm extends AbstractForm implements ListSelectionListener{
 	private EventSelectionModel<SectorDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"clave","descripcion","unidad","kilos","comentario"};
-		String[] columnLabels={"Producto","Descripción","U","kilos","Comentario"};
-		boolean[] edits={false,false,false,false,true};
+		String[] propertyNames={"renglon","clave","descripcion","unidad","kilos","comentario"};
+		String[] columnLabels={"Rngl","Producto","Descripción","U","kilos","Comentario"};
+		boolean[] edits={false,false,false,false,false,true};
 		final TableFormat tf=GlazedLists.tableFormat(SectorDet.class,propertyNames, columnLabels,edits);
 		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
 		grid=ComponentUtils.getStandardTable();

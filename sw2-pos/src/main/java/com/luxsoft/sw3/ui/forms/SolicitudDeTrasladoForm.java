@@ -201,9 +201,10 @@ public class SolicitudDeTrasladoForm extends AbstractForm implements ListSelecti
 	private EventSelectionModel<SolicitudDeTrasladoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"producto.clave","producto.descripcion","solicitado","comentario"};
-		String[] columnLabels={"Producto","Descripción","Solicitado","Comentario"};
-		boolean[] edits={false,false,true,true};
+		String[] propertyNames={"producto.clave","producto.descripcion","solicitado","comentario","cortes","instruccionesDecorte"};
+		String[] columnLabels={"Producto","Descripcin","Solicitado","Comentario","Cortes","Inst. Corte"};
+
+		boolean[] edits={false,false,true,true,true,true};
 		final TableFormat tf=GlazedLists.tableFormat(SolicitudDeTrasladoDet.class,propertyNames, columnLabels,edits);
 		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
 		grid=new JTable(tm);

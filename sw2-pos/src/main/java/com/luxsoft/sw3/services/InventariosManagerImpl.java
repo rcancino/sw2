@@ -380,6 +380,8 @@ public class InventariosManagerImpl implements InventariosManager{
 			tps.setCantidad(cantidad*-1);
 			tps.setComentario(det.getComentarioTps());
 			tps.setSolicitado(det.getSolicitado());
+			tps.setCortes(det.getCortes());
+			tps.setInstruccionesDecorte(det.getInstruccionesDecorte());
 			salida.agregarPartida(tps);
 			actualizarExistencia(tps);
 		}
@@ -408,6 +410,8 @@ public class InventariosManagerImpl implements InventariosManager{
 			tpe.setComentario(tps.getComentario());
 			tpe.setProducto(tps.getProducto());
 			tpe.setSolicitado(tps.getSolicitado());
+			tpe.setCortes(tps.getCortes());
+			tpe.setInstruccionesDecorte(tps.getInstruccionesDecorte());
 			entrada.agregarPartida(tpe);
 		}
 		folioDao.save(folio);

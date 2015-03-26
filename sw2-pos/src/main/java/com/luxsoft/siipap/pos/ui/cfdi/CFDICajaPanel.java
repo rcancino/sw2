@@ -311,6 +311,14 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 			logger.info("Timbrando CFDI: "+cfdiVenta.getCfdi());
 			Services.getCFDIManager().timbrar(cfdiVenta.getCfdi());
 			facturasBrowser.load();
+			
+			CFDI comprobanteFiscal=Services.getCFDIManager().getCFDI(cfdiVenta.getCfdi().getId());
+			if(comprobanteFiscal.getTimbreFiscal() !=null){
+				comprobanteFiscal.setUUID(comprobanteFiscal.getTimbreFiscal().getUUID());
+				comprobanteFiscal.setTimbrado(comprobanteFiscal.getTimbreFiscal().getFechaTimbrado());
+				comprobanteFiscal=(CFDI) Services.getInstance().getHibernateTemplate().merge(comprobanteFiscal);
+			}
+			
 			//Mandar imprimir
 			imprimirJuegos(cfdiVenta);
 		} catch (Exception e) {

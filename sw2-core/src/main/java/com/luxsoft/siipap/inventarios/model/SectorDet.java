@@ -89,6 +89,14 @@ public class SectorDet implements Serializable
 	@Length(max=255)
 	private String comentario;
 	
+    
+    @Column(name="RNGL" , updatable = false
+        	,insertable=false)
+	private int renglon;
+    
+    public int getRenglon() {
+		return renglon;
+	}
 	
 
 	public int getVersion() {

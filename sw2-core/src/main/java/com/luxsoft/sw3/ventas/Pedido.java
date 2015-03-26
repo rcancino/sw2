@@ -30,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Generated;
@@ -179,11 +180,11 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	private FormaDePago formaDePago=FormaDePago.EFECTIVO;
 	
     @Column(name="COMENTARIO")
-	@Length(max=255, message="El tamaño maximo del comentario es de 255 caracteres")	
+	@Length(max=255, message="El tamao maximo del comentario es de 255 caracteres")	
 	private String comentario;
     
     @Column(name="COMENTARIO2",length=70)
-    @Length(max=255, message="El tamaño maximo del comentario es de 255 caracteres")
+    @Length(max=255, message="El tamao maximo del comentario es de 255 caracteres")
     private String comentario2;
     
     @Column(name="COMISION_DESC")
@@ -256,6 +257,18 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	
 	@Column(name="SURTIDOR",length=100)
     private String surtidor;
+	
+	@Column(name="PARCIAL",nullable=false)
+	private boolean entregaParcial=false;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "MODO", nullable = false, length = 15)
+	private Modo modo=Modo.MOSTRADOR;
+	
+	@Column(name="TPUESTO",nullable=true)
+	private Date tpuesto;
+	
+
 	
 	@Embedded
 	@AttributeOverrides({
@@ -715,16 +728,30 @@ public class Pedido extends BaseBean implements AddressLoggable{
 		this.mismaDireccion = mismaDireccion;
 		firePropertyChange("mismaDireccion", old, mismaDireccion);
 	}
-
-	public boolean isPuesto() {
-		return puesto;
+	
+	
+	public boolean isEntregaParcial() {
+		return entregaParcial;
 	}
 
-	public void setPuesto(boolean puesto) {
-		boolean old=this.puesto;
-		this.puesto = puesto;
-		firePropertyChange("puesto", old, puesto);
+	public void setEntregaParcial(boolean entregaParcial) {
+		boolean old=this.entregaParcial;
+		this.entregaParcial = entregaParcial;
+		firePropertyChange("entregaParcial", old, entregaParcial);
 	}
+	
+	
+	public Modo getModo() {
+		return modo;
+	}	
+
+	public void setModo(Modo modo) {
+		Object old=this.modo;
+		this.modo = modo;
+		firePropertyChange("modo", old, modo);
+	}
+
+	
 
 	public AutorizacionDePedido getAutorizacion() {
 		return autorizacion;
@@ -1036,6 +1063,12 @@ public class Pedido extends BaseBean implements AddressLoggable{
 		LOCAL,ENVIO,ENVIO_FORANEO,ENVIO_CARGO
 	}
 
+	
+	public static enum Modo{
+		MOSTRADOR,TELEFONICA
+	}
+	
+	
 	public void setTotalFacturado(BigDecimal totalFacturado) {
 		this.totalFacturado = totalFacturado;
 	}
@@ -1102,6 +1135,35 @@ public class Pedido extends BaseBean implements AddressLoggable{
 		this.checkplusOpcion = checkplusOpcion;
 		firePropertyChange("checkplusOpcion", old,checkplusOpcion);
 	}
+	
+	
+	public Date getTpuesto() {
+		return tpuesto;
+	}
+	public void setTpuesto(Date tpuesto) {
+		Object old=this.tpuesto;
+		this.tpuesto = tpuesto;
+		firePropertyChange("tpuesto", old,tpuesto);
+	}
+	
+	
+	public boolean isPuesto() {
+		return puesto;
+	}
+
+	public void setPuesto(boolean puesto) {
+		boolean old=this.puesto;
+		this.puesto = puesto;
+		if(puesto){
+			setTpuesto(new Date());
+		}else{
+			setTpuesto(null);
+		}
+		firePropertyChange("puesto", old, puesto);
+	}
+
+	
+	
 	
 	
 }

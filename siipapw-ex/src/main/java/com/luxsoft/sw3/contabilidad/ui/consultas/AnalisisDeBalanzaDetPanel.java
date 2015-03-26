@@ -327,7 +327,7 @@ public class AnalisisDeBalanzaDetPanel extends FilteredBrowserPanel<PolizaDet> {
 		final AnalisisDeBalanzaDetPanel browser=new AnalisisDeBalanzaDetPanel(year,mes,conceptoId,concepto,cuenta);
 		
 		final FilterBrowserDialog dialog=new FilterBrowserDialog(browser);
-		dialog.setTitle("Cuenta: "+cuenta+" Concepto:"+concepto);
+		dialog.setTitle("Cuenta: "+cuenta);
 		dialog.setModal(false);
 		dialog.open();
 	}

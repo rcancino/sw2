@@ -117,7 +117,7 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 	public void insertarBulk(JComponent parent){
 		List<Existencia> selected=SelectorDeExistencias.find(getSolicitud().getOrigen(), getSolicitud().getFecha());
 		if(!selected.isEmpty()){
-			for(Existencia e:selected){
+			/*for(Existencia e:selected){
 				double cantidad=0d;
 				String pattern="Producto ({0})  {1} \n Disponible en {2} : {3}";
 				String msg=MessageFormat.format(pattern
@@ -136,6 +136,24 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 					partidasSource.add(det);
 					//getSolicitud().agregarPartida(p, cantidad);
 				}
+			}*/
+			
+			for(Existencia e:selected){
+				double cantidad=0d;
+				SolicitudDeTrasladoDet det=new SolicitudDeTrasladoDet(e.getProducto(),cantidad);
+				final DefaultFormModel model=new DefaultFormModel(det);
+				SolicitudDeTrasladoDetForm form=new SolicitudDeTrasladoDetForm(model);
+				form.open();
+				if(!form.hasBeenCanceled()){
+					
+					 System.out.println("det:"+ det.getSolicitado()+"   "+det.getCortes()+"   "+det.getInstruccionesDecorte());
+					    det.setSucursal(getSolicitud().getSucursal().getId());
+						det.setOrigen(getSolicitud().getOrigen().getId());
+						det.setRenglon(partidasSource.size()+1);
+					partidasSource.add(det);
+					
+				}
+				
 			}
 		}
 	}

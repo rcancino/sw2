@@ -126,6 +126,8 @@ public class PedidoDetForm2 extends AbstractForm{
 		builder.nextLine();
 		
 		builder.appendSeparator("Instruccin de corte");
+		builder.append("Cortado",getControl("cortado"));
+		builder.nextLine();
 		builder.append("Comentario",getControl("instruccionesDecorte"),5);
 		builder.nextLine();
 		builder.append("Cantidad ",getControl("cortes"));

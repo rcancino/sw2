@@ -249,6 +249,7 @@
         <mapping class="com.luxsoft.sw3.contabilidad.model.SaldoDeCuentaPorConcepto"/>
         <mapping class="com.luxsoft.sw3.contabilidad.model.Poliza"/>
         <mapping class="com.luxsoft.sw3.contabilidad.model.PolizaDet"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.CuentaContableSat"/>
         
         
         

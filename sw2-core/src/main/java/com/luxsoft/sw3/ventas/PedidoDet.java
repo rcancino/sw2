@@ -173,6 +173,22 @@ public class PedidoDet extends BaseBean{
 	@Transient
 	private boolean cotizable=false;
 	
+	
+	@Column(name="CORTADO")
+	private boolean cortado=false;
+	
+	
+	public boolean isCortado() {
+		return cortado;
+	}
+
+	public void setCortado(boolean cortado) {
+		boolean old=this.cortado;
+        this.cortado = cortado;
+        firePropertyChange("cortado", old, cortado);
+	}
+	
+	
 	public boolean isCotizable() {
 		return cotizable;
 	}

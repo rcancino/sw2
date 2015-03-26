@@ -52,6 +52,8 @@ public class SolicitudDeTrasladoDet implements Serializable{
 	@Column(name="COMENTARIO")
 	@Length(max=255)
 	private String comentario;
+		
+	
 	
 	@Transient
 	@Length(max=255)
@@ -62,6 +64,40 @@ public class SolicitudDeTrasladoDet implements Serializable{
 	
 	@Column(name="RENGLON")
 	private int renglon=1;
+	
+	
+	
+	@Column(name = "CORTES", nullable = false)
+	private int cortes = 0;
+	
+	@Column(name="CORTES_INSTRUCCION")
+	@Length(max=17)
+	private String instruccionesDecorte;	
+	
+	
+	
+	public int getCortes() {
+		return cortes;
+	}
+
+	public void setCortes(int cortes) {
+		int old=this.cortes;
+		this.cortes = cortes;
+		firePropertyChange("cortes", old, cortes);
+	}
+
+	public String getInstruccionesDecorte() {
+		return instruccionesDecorte;
+		//return getDescripcionCorte();
+	}
+
+	public void setInstruccionesDecorte(String instruccionesDecorte) {
+		Object old=this.instruccionesDecorte;
+		this.instruccionesDecorte = instruccionesDecorte;
+		firePropertyChange("instruccionesDecorte", old, instruccionesDecorte);
+	}
+	
+	
 	
 	public SolicitudDeTrasladoDet() {}
 

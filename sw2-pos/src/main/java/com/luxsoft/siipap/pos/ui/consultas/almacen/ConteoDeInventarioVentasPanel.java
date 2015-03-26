@@ -93,8 +93,8 @@ public class ConteoDeInventarioVentasPanel extends AbstractMasterDatailFilteredB
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"documento","clave","unidad","descripcion","cantidad"};
-		String[] labels={"Folio","Producto","U","Descripción","cantidad"};
+		String[] props={"renglon","documento","clave","unidad","descripcion","cantidad"};
+		String[] labels={"Rngl","Folio","Producto","U","Descripción","cantidad"};
 		return GlazedLists.tableFormat(ConteoDet.class, props,labels);
 	}
 

@@ -191,9 +191,9 @@ public class TrasladoForm extends AbstractForm {
 	private EventSelectionModel<SolicitudDeTrasladoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"producto.clave","producto.descripcion","solicitado","existencia","recibido","nuevaExistencia","comentarioTps"};
-		String[] columnLabels={"Producto","Descripción","Solicitado","Disponible","Por Enviar","Saldo","Comentario"};
-		boolean[] edits={false,false,false,false,true,false,true};
+		String[] propertyNames={"producto.clave","producto.descripcion","solicitado","existencia","recibido","nuevaExistencia","comentarioTps","cortes","instruccionesDecorte"};
+		String[] columnLabels={"Producto","Descripcin","Solicitado","Disponible","Por Enviar","Saldo","Comentario","Cortes","Inst de Corte"};
+		boolean[] edits={false,false,false,false,true,false,true,true,true};
 		final TableFormat tf=GlazedLists.tableFormat(SolicitudDeTrasladoDet.class,propertyNames, columnLabels,edits);
 		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
 		grid=ComponentUtils.getStandardTable();

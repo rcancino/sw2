@@ -41,6 +41,36 @@ public class ConceptoContable {
 	@NotEmpty(message="La descripcion es mandatoria")
 	private String descripcion;
 	
+
+	@Column(name="SUBCUENTA",length=255)
+	@NotNull
+	private String subcuenta;
+	
+	
+	@ManyToOne(optional=false)
+	@JoinColumn (name="CUENTA_SAT_ID")
+	private CuentaContableSat cuentaSat;
+	
+	
+	
+
+	public String getSubcuenta() {
+		return subcuenta;
+	}
+
+	public void setSubcuenta(String subcuenta) {
+		this.subcuenta = subcuenta;
+	}
+
+	public CuentaContableSat getCuentaSat() {
+		return cuentaSat;
+	}
+
+	public void setCuentaSat(CuentaContableSat cuentaSat) {
+		this.cuentaSat = cuentaSat;
+	}
+	
+	
 	
 	
 	@Embedded
@@ -135,7 +165,7 @@ public class ConceptoContable {
 	}
 	
 	public String toString(){
-		return getDescripcion()+" ("+getClave()+")";
+		return getDescripcion();
 	}
 
 	

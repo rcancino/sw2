@@ -27,6 +27,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.hibernate.validator.Length;
 
 import com.luxsoft.siipap.maquila.model.MovimientoConFlete;
 import com.luxsoft.siipap.model.CantidadMonetaria;
@@ -76,6 +77,39 @@ public class TrasladoDet extends Inventario implements MovimientoConFlete{
 	 */
 	@Column(name="TPS_ORIGEN")
     private String origen;	
+	
+	@Column(name = "CORTES", nullable = false)
+	private int cortes = 0;
+	
+	@Column(name="CORTES_INSTRUCCION")
+	@Length(max=17)
+	private String instruccionesDecorte;	
+	
+	
+	
+	public int getCortes() {
+		return cortes;
+	}
+
+	public void setCortes(int cortes) {
+		int old=this.cortes;
+		this.cortes = cortes;
+		firePropertyChange("cortes", old, cortes);
+	}
+
+	public String getInstruccionesDecorte() {
+		return instruccionesDecorte;
+		//return getDescripcionCorte();
+	}
+
+	public void setInstruccionesDecorte(String instruccionesDecorte) {
+		Object old=this.instruccionesDecorte;
+		this.instruccionesDecorte = instruccionesDecorte;
+		firePropertyChange("instruccionesDecorte", old, instruccionesDecorte);
+	}
+	
+	
+	
 	
 	public TrasladoDet(){}	
 

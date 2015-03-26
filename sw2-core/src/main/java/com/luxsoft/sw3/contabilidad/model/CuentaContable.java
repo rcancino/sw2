@@ -111,6 +111,21 @@ public class CuentaContable {
 	@NotNull
 	private boolean presentacionPresupuestal=false;
 	
+	@ManyToOne(optional=false)
+	@JoinColumn (name="CUENTA_SAT_ID")
+	private CuentaContableSat cuentaSat;
+	
+	
+	
+	public CuentaContableSat getCuentaSat() {
+		return cuentaSat;
+	}
+
+	public void setCuentaSat(CuentaContableSat cuentaSat) {
+		this.cuentaSat = cuentaSat;
+	}
+	
+	
 	@Embedded
 	@AttributeOverrides({
 	       @AttributeOverride(name="createUser",	column=@Column(name="CREADO_USR"	,nullable=true,insertable=true,updatable=false)),

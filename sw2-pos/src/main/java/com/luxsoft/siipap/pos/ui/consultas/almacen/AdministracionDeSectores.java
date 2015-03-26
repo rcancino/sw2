@@ -92,8 +92,8 @@ public class AdministracionDeSectores extends AbstractMasterDatailFilteredBrowse
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"clave","descripcion","producto.unidad","producto.kilos","comentario","producto.linea.nombre","producto.clase.nombre","producto.marca.nombre"};
-		String[] labels={"Producto","Descripción","Unidad","Kilos","Comentario","Linea","Clase","Marca"};
+		String[] props={"renglon","clave","descripcion","producto.unidad","producto.kilos","comentario","producto.linea.nombre","producto.clase.nombre","producto.marca.nombre"};
+		String[] labels={"Rngl","Producto","Descripción","Unidad","Kilos","Comentario","Linea","Clase","Marca"};
 		return GlazedLists.tableFormat(SectorDet.class, props,labels);
 		//final TableFormat tf=GlazedLists.tableFormat(SectorDet.class,propertyNames, columnLabels,edits);
 	}

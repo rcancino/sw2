@@ -103,8 +103,8 @@ public class CierreAnualPanel extends AbstractMasterDatailFilteredBrowserPanel<S
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"concepto.cuenta.clave","concepto.clave","concepto.descripcion","saldoInicial","debe","haber","saldoFinal","year","mes"};
-		String[] names={"Cuenta","Concepto","Descripcion","Inicial","Debe","Haber","Final","year","mes"};
+		String[] props={"concepto.subcuenta","concepto.descripcion","saldoInicial","debe","haber","saldoFinal","year","mes"};
+		String[] names={"Cuenta","Concepto","Inicial","Debe","Haber","Final","year","mes"};
 		return GlazedLists.tableFormat(SaldoDeCuentaPorConcepto.class, props,names);
 	}
 	

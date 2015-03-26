@@ -42,6 +42,7 @@ import com.luxsoft.siipap.pos.ui.forms.InstruccionDeEntregaForm;
 import com.luxsoft.siipap.pos.ui.reports.ClientesNuevos;
 import com.luxsoft.siipap.pos.ui.reports.EntregasPorChofer;
 import com.luxsoft.siipap.pos.ui.reports.FacturasCanceladas;
+import com.luxsoft.siipap.pos.ui.reports.ReporteDePedidosNoFacturados;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeClientes;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeFacturasParaCOD;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
@@ -235,6 +236,7 @@ public class PedidosPanel2 extends FilteredBrowserPanel<PedidoRow> implements Pr
 				,addAction("", "reporteFacturasCanceladas", "Facturas canceladas")
 				,addAction("", "reporteEntregasPorChofer", "Entregas por chofer")
 				,addAction("", "refacturar", "Refacturación autorizada")
+				,addAction("", "reportePedidosNofacturados", "Pedidos No Facturados")
 				
 				};
 		return actions;
@@ -378,6 +380,9 @@ public class PedidosPanel2 extends FilteredBrowserPanel<PedidoRow> implements Pr
 		
 	}
 	
+	public void reportePedidosNofacturados(){
+		ReporteDePedidosNoFacturados.run();
+	}
 	
 	public void mandarFacturar(){
 		PedidoRow row=(PedidoRow)getSelectedObject();

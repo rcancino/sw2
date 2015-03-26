@@ -38,6 +38,8 @@ public class CuentasContablesPanel extends FilteredBrowserPanel<CuentaContable>{
 				,"presentacionFinanciera"
 				,"presentacionPresupuestal"
 				,"descripcion2"
+				,"cuentaSat.id"
+				,"cuentaSat.nombre"
 				);
 		addLabels(
 				"Id"
@@ -53,6 +55,8 @@ public class CuentasContablesPanel extends FilteredBrowserPanel<CuentaContable>{
 				,"P. Financiera"
 				,"P. Presupuestal"
 				,"Descripcion 2"
+				,"Cuenta Sat"
+				,"Descripcion Sat"
 				);
 	}
 

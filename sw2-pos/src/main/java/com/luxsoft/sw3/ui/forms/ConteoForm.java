@@ -143,9 +143,9 @@ public class ConteoForm extends AbstractForm implements ListSelectionListener{
 	private EventSelectionModel<ConteoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"clave","descripcion","unidad","kilos","cantidad"};
-		String[] columnLabels={"Producto","Descripción","U","kilos","Cantidad"};
-		boolean[] edits={false,false,false,false,true};
+		String[] propertyNames={"renglon","clave","descripcion","unidad","kilos","cantidad"};
+		String[] columnLabels={"Rngl","Producto","Descripción","U","kilos","Cantidad"};
+		boolean[] edits={false,false,false,false,false,true};
 		final TableFormat tf=GlazedLists.tableFormat(ConteoDet.class,propertyNames, columnLabels,edits);
 		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
 		grid=ComponentUtils.getStandardTable();
