@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -15,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -39,6 +41,7 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.util.TableUtilities;
+import com.luxsoft.siipap.inventarios.model.MovimientoDet;
 import com.luxsoft.siipap.model.core.Proveedor;
 import com.luxsoft.siipap.swing.binding.Bindings;
 import com.luxsoft.siipap.swing.controls.Header;
@@ -48,6 +51,7 @@ import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
 import com.luxsoft.sw3.maquila.model.Almacen;
 import com.luxsoft.sw3.maquila.model.EntradaDeMaterialDet;
+import com.luxsoft.sw3.maquila.ui.selectores.SelectorDeSMQ;
 
 
 /**
@@ -119,6 +123,7 @@ public class RecepcionDeMaterialForm extends AbstractForm implements ListSelecti
 		builder.nextLine();
 		builder.append("Comentario",getControl("observaciones"),9);
 		
+		panel.add(buildTolbar());
 		panel.add(builder.getPanel());		
 		panel.add(buildGridPanel());
 		panel.add(buildToolbarPanel());
@@ -263,12 +268,28 @@ public class RecepcionDeMaterialForm extends AbstractForm implements ListSelecti
 		
 	}
 	
+	protected JComponent buildTolbar(){
+		JToolBar bar=new JToolBar();
+		bar.add(CommandUtils.createInsertAction(this, "insertar"));
+		
+		return bar;
+	}
+	
 	public void insertPartida(){
 		getController().insertar();
 		TableUtilities.resizeColumnsToPreferredWidth(grid);
 		grid.requestFocusInWindow();
 		grid.packAll();
 	}
+	
+	public void insertar(){
+		List<MovimientoDet> salidas=SelectorDeSMQ.seleccionar() ;
+		for(MovimientoDet smq:salidas ){
+			getController().insertarSMQ(smq);
+		}
+		
+	}
+	
 	
 	public void deletePartida(){
 		if(!selectionModel.isSelectionEmpty()){

@@ -2,7 +2,9 @@ package com.luxsoft.sw3.maquila.ui.forms;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -13,11 +15,14 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 
 import com.jgoodies.validation.util.PropertyValidationSupport;
+import com.luxsoft.siipap.inventarios.model.CostoPromedio;
+import com.luxsoft.siipap.inventarios.model.MovimientoDet;
 import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.model.core.Proveedor;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.sw3.maquila.model.EntradaDeMaterial;
 import com.luxsoft.sw3.maquila.model.EntradaDeMaterialDet;
 
@@ -134,6 +139,53 @@ public class RecepcionDeMaterialFormModel extends DefaultFormModel {
 		}
 		form.setProductos(null);
 	}
+	
+	public void insertarSMQ(MovimientoDet smq){
+		System.out.println("Agregando partida");
+		EntradaDeMaterialDet target=new EntradaDeMaterialDet();
+		target.setMovimientoDet(smq);
+		target.setRecepcion(getRecepcion());
+		target.setAlmacen(getRecepcion().getAlmacen());
+		target.setProducto(smq.getProducto());
+		target.setKilos(new BigDecimal(smq.getCantidad()).abs());
+		
+		Date fechaActual=new Date();
+		int mes= DateUtil.toMes(fechaActual);
+		 if(mes==1)
+			 mes=12;
+		else
+			mes=mes-1;
+		 
+		int year= DateUtil.toYear(fechaActual);
+		
+		if (mes==1)
+			year=year-1;
+		
+		
+		
+		CostoPromedio costo=ServiceLocator2.getCostoPromedioManager().buscarCostoPromedio(year, mes, smq.getProducto().getClave());
+		
+		target.setImporte(costo.getCostop().multiply(new BigDecimal(smq.getCantidadEnUnidad()).abs()));
+		
+		DefaultFormModel model=new DefaultFormModel(target);
+		RecepcionDeMaterialDetForm form=new RecepcionDeMaterialDetForm(model);
+		form.open();
+		if(!form.hasBeenCanceled()){
+			EntradaDeMaterialDet det=(EntradaDeMaterialDet)model.getBaseBean();
+			boolean ok=getRecepcion().agregarEntrada(det);
+			if(ok){
+				afterInserPartida(det);
+				partidasSource.add(det);
+			}else{
+				MessageUtils.showMessage("Ya esta registrado el producto: "+det.getProducto(), "Recepcin de bobinas");
+			}
+		}
+		form.setProductos(null);
+		
+		
+		
+	}
+	
 	
 	public void afterInserPartida(EntradaDeMaterialDet det){
 		

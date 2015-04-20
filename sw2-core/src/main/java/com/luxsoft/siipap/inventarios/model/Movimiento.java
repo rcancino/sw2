@@ -249,6 +249,7 @@ public class Movimiento extends BaseBean implements Replicable{
 		,RMC("Reposición de material",-1)
 		,OIM("Otros Ingresos De Mercancia",1)
 		,VIR("Ingreso De Viruta",1)
+		,SMQ("Salida De Maquila",-1)
 		;
 		
 		

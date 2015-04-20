@@ -28,6 +28,7 @@ import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
 import org.springframework.util.Assert;
 
+import com.luxsoft.siipap.inventarios.model.MovimientoDet;
 import com.luxsoft.siipap.model.BaseBean;
 import com.luxsoft.siipap.model.core.Producto;
 
@@ -454,5 +455,21 @@ public class EntradaDeMaterialDet extends BaseBean{
 		.append(this.metros2)
 		.toString();
 	}
+	
+	 @ManyToOne(optional = false,fetch=FetchType.LAZY)
+		@JoinColumn(name = "INVENTARIO_ID",nullable=true)
+	 private MovimientoDet movimientoDet;
+	 
+	 
+	 
+
+	public MovimientoDet getMovimientoDet() {
+		return movimientoDet;
+	}
+
+	public void setMovimientoDet(MovimientoDet movimientoDet) {
+		this.movimientoDet = movimientoDet;
+	}
+	
 
 }
