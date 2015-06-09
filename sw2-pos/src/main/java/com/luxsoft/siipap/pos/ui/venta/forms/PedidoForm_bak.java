@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.security.Provider.Service;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
@@ -96,6 +97,7 @@ import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.selectores.SelectorDeDescuento;
 import com.luxsoft.sw3.ventas.InstruccionDeEntrega;
 import com.luxsoft.sw3.ventas.Pedido;
+import com.luxsoft.sw3.ventas.Pedido.ClasificacionVale;
 import com.luxsoft.sw3.ventas.PedidoDet;
 
 /**
@@ -113,9 +115,14 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	final BeanHandler beanHandler;
 	
 	private final KeyEventPostProcessor keyHandler;
-
+	
+	
 	public PedidoForm_bak(final PedidoController controller) {
 		super(controller);
+		
+	
+		
+		
 		setTitle("Pedido    ["+model.getValue("sucursal")+"]");
 		beanHandler=new BeanHandler();		
 		model.addBeanPropertyChangeListener(beanHandler);
@@ -140,6 +147,18 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				
 					//getControl("entrega").setEnabled(false);
 					entregaLabel.setEnabled(!getController().getPedido().isMismaDireccion());
+			}
+		});
+		
+       model.getModel("clasificacionVale").addValueChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				
+					suursalesBox.setEnabled(!getController().getPedido().getClasificacionVale().equals(ClasificacionVale.SIN_VALE));
+					
+					if(getController().getPedido().getClasificacionVale().equals(ClasificacionVale.SIN_VALE))
+						getController().getPedido().setSucursalVale(null);
 			}
 		});
 		keyHandler=new KeyHandler();
@@ -219,7 +238,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		builder.append("Tipo",getControl("tipo"));
 		builder.append(getTitleLabel("Pago"),getControl("formaDePago"));
 		//addReadOnly("descripcionFormaDePago").setBorder(null);
-		builder.append("Opcin",getControl("checkplusOpcion"));
+		builder.append("Opcion",getControl("checkplusOpcion"));
 		builder.append("Socio",getControl("socio"));
 		builder.nextLine();
 		//CellConstraints cc=new CellConstraints();
@@ -242,6 +261,9 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		builder.append("Modo",getControl("modo"));
 		builder.append("",getControl("entregaParcial"));
 		
+		builder.append("Vale",getControl("clasificacionVale"));
+		builder.append("Sucursal",getControl("sucursalVale"));
+			
 		ComponentUtils.decorateSpecialFocusTraversal(builder.getPanel());
 		if(getController().getPedido().getId()==null)
 			ComponentUtils.decorateTabFocusTraversal(claveField);
@@ -426,10 +448,35 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			final SelectionInList sl=new SelectionInList(Pedido.Modo.values(),model.getModel(property));
 			JComboBox box=BasicComponentFactory.createComboBox(sl);
 			return box;
+		}else if("clasificacionVale".equals(property)){
+			if(model.getValue("id")==null){
+			final SelectionInList sl=new SelectionInList(Pedido.ClasificacionVale.values(),model.getModel(property));
+			JComboBox box=BasicComponentFactory.createComboBox(sl);
+			return box;
+			}else{
+				return BasicComponentFactory.createLabel(model.getModel(property), UIUtils.buildToStringFormat());
+			}
+		}else if("sucursalVale".equals(property)){
+			if(model.getValue("id")==null){
+			   
+				List sucursales=Services.getInstance().getSucursalesOperativas();
+				sucursales.remove(getModel().getValue("sucursalVale"));
+				SelectionInList sl=new SelectionInList(sucursales,model.getModel(property));
+				suursalesBox=BasicComponentFactory.createComboBox(sl);
+				if(model.getModel("clasificacionVale").toString().equals("SIN_VALE")){
+					 suursalesBox.setEnabled(false);
+				}
+				return suursalesBox;
+			}else{
+				return BasicComponentFactory.createLabel(model.getModel(property), UIUtils.buildToStringFormat());
+			}
 		}
 		return super.createCustomComponent(property);
 		
 	}
+	
+	private JComboBox suursalesBox;
+	
 	
 	private JComponent buildClienteControl(){
 		//FormLayout layout=new FormLayout("10dlu:g,2dlu,p,2dlu,p","");
@@ -593,6 +640,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				,"cortes"
 				,"importeCorte"
 				,"log.creado"
+				,"conVale"
 				};
 		
 		String[] columnLabels={"Cot","Clave","Producto","(g)","cal","Cant"
@@ -606,7 +654,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				,"Cortes (#)"
 				,"Cortes ($)"
 				,"Creado"
-				
+				,"Vale"
 				};
 		final TableFormat tf=GlazedLists.tableFormat(PedidoDet.class,propertyNames, columnLabels);
 		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);

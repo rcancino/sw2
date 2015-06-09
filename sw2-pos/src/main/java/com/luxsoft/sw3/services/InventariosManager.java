@@ -103,6 +103,8 @@ public interface InventariosManager {
 	
 	public void generarExistenciasParaConteo(final Long sucursalId,Date fecha,String user);
 	
+	public void generarExistenciasParaConteoFisico(final Sucursal sucursal,Date fecha,String user);
+	
 	public void generarExistenciasParaConteo(List<Existencia> exis,boolean parcial,Date fecha,String user);
 	
 	public void generarAjusteDeInventario(Sucursal sucursal,Date fecha);

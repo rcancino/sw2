@@ -84,6 +84,11 @@ public class SolicitudDeTraslado extends BaseBean implements Replicable{
 	@Length(max=255)
 	private String comentario;
 	
+	@Column(name="CLASIFICACION",length=255)
+	@Length(max=255)
+	private String clasificacion;
+	
+	
 	@Column(name="REFERENCIA",length=30)
 	@Length(max=30)
 	private String referencia;
@@ -101,6 +106,23 @@ public class SolicitudDeTraslado extends BaseBean implements Replicable{
 			org.hibernate.annotations.CascadeType.SAVE_UPDATE})
 	@Fetch(value=FetchMode.SUBSELECT)
 	private List<SolicitudDeTrasladoDet> partidas=new ArrayList<SolicitudDeTrasladoDet>();
+	
+	@Column(name="PEDIDO_ID",length=255)
+	@Length(max=255)
+	private String pedido;
+	
+	
+	public String getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(String pedido) {
+		Object old=this.comentario;
+		this.pedido = pedido;
+		firePropertyChange("pedido", old, pedido);
+	}
+	
+	
 	
 	
 	/**
@@ -183,6 +205,16 @@ public class SolicitudDeTraslado extends BaseBean implements Replicable{
 		firePropertyChange("comentario", old, comentario);
 	}
 	
+	
+	public String getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(String clasificacion) {
+		Object old=this.clasificacion;
+		this.clasificacion = clasificacion;
+		firePropertyChange("clasificacion", old, clasificacion);
+	}
 	
 
 	public String getReferencia() {

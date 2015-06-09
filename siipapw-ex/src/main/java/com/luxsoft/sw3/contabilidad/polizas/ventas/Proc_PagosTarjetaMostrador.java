@@ -142,6 +142,7 @@ public class Proc_PagosTarjetaMostrador implements IProcesador{
 				
 				if( (p instanceof PagoConTarjeta) ){
 					//System.out.println("Acumulado pago tar: "+p+ "  Orig: "+p.getOrigenAplicacion());
+					System.out.println("Error ---------"+p.getId());
 					if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
 						if(!"MOS".equals(origen)){
 							//System.out.println("Acumulado pago tar: "+p);

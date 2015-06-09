@@ -117,6 +117,22 @@ public class Traslado extends BaseBean implements Replicable{
 	private Boolean porInventario;
 	
 	
+	@Column(name="CLASIFICACION",length=255)
+	@Length(max=255)
+	private String clasificacion;
+	
+	public String getClasificacion() {
+		return clasificacion;
+	}
+
+	public void setClasificacion(String clasificacion) {
+		Object old=this.clasificacion;
+		this.clasificacion = clasificacion;
+		firePropertyChange("clasificacion", old, clasificacion);
+	}
+	
+	
+	
 	@OneToMany(cascade={
 			 CascadeType.PERSIST
 			,CascadeType.MERGE

@@ -177,6 +177,19 @@ public class PedidoDet extends BaseBean{
 	@Column(name="CORTADO")
 	private boolean cortado=false;
 	
+	@Column(name="CONVALE")
+	private boolean conVale=false;
+	
+	public boolean isConVale() {
+		return conVale;
+	}
+
+	public void setConVale(boolean conVale) {
+		boolean old=this.conVale;
+        this.conVale = conVale;
+        firePropertyChange("conVale", old, conVale);
+	}
+	
 	
 	public boolean isCortado() {
 		return cortado;

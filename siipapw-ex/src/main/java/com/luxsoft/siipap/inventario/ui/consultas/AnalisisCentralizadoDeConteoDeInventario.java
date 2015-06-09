@@ -25,6 +25,7 @@ import com.luxsoft.siipap.inventario.ui.reports.InventarioCosteadoReportForm;
 import com.luxsoft.siipap.inventarios.model.Conteo;
 import com.luxsoft.siipap.inventarios.model.ExistenciaConteo;
 import com.luxsoft.siipap.reportes.AnalisisDeDiferenciasForm;
+import com.luxsoft.siipap.reportes.CapturaDeConteoDeInventario;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.matchers.CheckBoxMatcher;
@@ -204,7 +205,9 @@ public class AnalisisCentralizadoDeConteoDeInventario extends FilteredBrowserPan
 	@Override
 	protected List<Action> createProccessActions() {
 		List<Action> procesos=super.createProccessActions();
-		procesos.add(addAction("", "reporteAnalisisDeDiferencias","Analisis de diferencias"));		
+		procesos.add(addAction("", "reporteAnalisisDeDiferencias","Analisis de diferencias"));
+		procesos.add(addAction("", "reporteDeConteoPorPersona","Reporte de Captura x Persona"));
+		
 		return procesos;
 	}
 	
@@ -212,6 +215,9 @@ public class AnalisisCentralizadoDeConteoDeInventario extends FilteredBrowserPan
 		AnalisisDeDiferenciasForm.run();
 	}
 	
+	public void reporteDeConteoPorPersona(){
+		CapturaDeConteoDeInventario.run();
+	}
 	
 
 }

@@ -39,6 +39,7 @@ import com.luxsoft.siipap.cxc.ui.form.NotaDeCargoFormModel;
 import com.luxsoft.siipap.cxc.ui.model.AplicacionDePagoModel;
 import com.luxsoft.siipap.cxc.ui.selectores.SelectorDeDisponibles;
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.reports.EstadoDeCuentaJurReport;
 import com.luxsoft.siipap.reports.Juridico_ReciboEntregaAbogadoForm;
 import com.luxsoft.siipap.reports.Juridico_RelacionDeTraspasosForm;
 import com.luxsoft.siipap.reports.SaldosPendienteXAbogadoReportForm;
@@ -151,8 +152,9 @@ public class CarteraDeJuridicoPanel extends FilteredBrowserPanel<Cargo>{
 				
 				,addAction(CXCActions.ReportesDeCarteraDeJuridico.getId(), "reporteDeTraspasos", "Reporte de Traspasos")
 				,addAction(CXCActions.ReportesDeCarteraDeJuridico.getId(), "reporteDeEntrega", "Reporte de Entrega")				
-				
 				,addAction("","saldosPendientes", "Saldos pendientes ")
+				,addAction("","reporteDeEstadoDeCuentaJur", "Estado de cuenta")
+				
 				};
 		return actions;
 	}
@@ -337,6 +339,11 @@ public class CarteraDeJuridicoPanel extends FilteredBrowserPanel<Cargo>{
 	
 	public void reporteDeEntrega(){
 		Juridico_ReciboEntregaAbogadoForm.run();
+	}
+	
+	
+	public void reporteDeEstadoDeCuentaJur(){
+		EstadoDeCuentaJurReport.run();
 	}
 	
 	public CXCManager getManager(){

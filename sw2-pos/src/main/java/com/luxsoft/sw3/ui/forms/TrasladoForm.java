@@ -58,7 +58,7 @@ public class TrasladoForm extends AbstractForm {
 
 	public TrasladoForm(final TrasladoController model) {
 		super(model);
-		setTitle("Generación de Traslados         ("+model.getValue("sucursal")+" )");
+		setTitle("Generacin de Traslados         ("+model.getValue("sucursal")+" )");
 		getController().getUserModel().addValueChangeListener(new PropertyChangeListener(){
 			public void propertyChange(PropertyChangeEvent evt) {
 				String user=getController().getUser();
@@ -93,10 +93,11 @@ public class TrasladoForm extends AbstractForm {
 		builder.append("Chofer",getControl("chofer"));
 		builder.nextLine();
 		builder.append("Comentario SOL",addReadOnly("comentario"),9);
-		builder.append("Referencia ",addReadOnly("referencia"),9);
+		builder.append("Referencia ",addReadOnly("referencia"));
+		builder.append("Clasificacion ",addReadOnly("clasificacion"));
 		builder.nextLine();
 		usuarioNombre=new JLabel("");
-		builder.append("Atendió",getControl("usuario"));
+		builder.append("Atendi",getControl("usuario"));
 		builder.append(usuarioNombre,5);
 		builder.nextLine();
 		builder.append("Por inventario",getControl("porInventario"));

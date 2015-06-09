@@ -115,6 +115,9 @@ public class ClienteCredito extends BaseBean {
 	@Column(name="ATRASO_MAX",nullable=false)
 	private int atrasoMaximo;
 	
+	@Column(name="NO_ATRASO",nullable=false)
+	private boolean noAtraso=false;
+	
 	@Embedded
 	@AttributeOverrides({
 	       @AttributeOverride(name="createUser",	column=@Column(name="CREADO_USR"	,nullable=true,insertable=true,updatable=false)),
@@ -234,6 +237,16 @@ public class ClienteCredito extends BaseBean {
 		this.suspendido = suspendido;
 		firePropertyChange("suspendido", old, suspendido);
 	}
+	
+	public boolean isNoAtraso() {
+		return noAtraso;
+	}
+
+	
+	public void setNoAtraso(boolean noAtraso) {
+		this.noAtraso = noAtraso;
+	}
+	
 	
 	/**
      * Calcula el vencimiento para una opracion de venta

@@ -5,6 +5,8 @@ import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -21,6 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventSelectionModel;
@@ -30,7 +33,6 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.util.TableUtilities;
-
 import com.luxsoft.siipap.inventarios.model.Conteo;
 import com.luxsoft.siipap.inventarios.model.ConteoDet;
 import com.luxsoft.siipap.swing.form2.AbstractForm;
@@ -143,11 +145,16 @@ public class ConteoForm2 extends AbstractForm implements ListSelectionListener{
 	private EventSelectionModel<ConteoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"renglon","clave","descripcion","unidad","kilos","cantidad"};
-		String[] columnLabels={"Rngl","Producto","Descripción","U","kilos","Cantidad"};
+		String[] propertyNames={"ind","clave","descripcion","unidad","kilos","cantidad"};
+		String[] columnLabels={"Rngl","Producto","Descripcin","U","kilos","Cantidad"};
 		boolean[] edits={false,false,false,false,false,true};
 		final TableFormat tf=GlazedLists.tableFormat(ConteoDet.class,propertyNames, columnLabels,edits);
-		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
+		Comparator<ConteoDet> c=GlazedLists.beanPropertyComparator(ConteoDet.class, "ind");
+		EventList<ConteoDet> partidasConteo=getController().getPartidasSource();
+		Collections.sort(partidasConteo, c);
+		final EventTableModel tm=new EventTableModel(partidasConteo,tf);
+		
+		
 		grid=ComponentUtils.getStandardTable();
 		grid.setModel(tm);
 		selectionModel=new EventSelectionModel<ConteoDet>(getController().getPartidasSource());

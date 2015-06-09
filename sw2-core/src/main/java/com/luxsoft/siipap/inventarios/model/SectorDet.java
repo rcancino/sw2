@@ -94,6 +94,21 @@ public class SectorDet implements Serializable
         	,insertable=false)
 	private int renglon;
     
+    
+    @Column(name="IND")
+   	private int ind;
+       
+       
+       public int getInd() {
+   		return ind;
+   	}
+
+   	public void setInd(int ind) {
+   		int old=this.ind;
+   		this.ind = ind;
+   		firePropertyChange("ind", old, ind);
+   	}
+    
     public int getRenglon() {
 		return renglon;
 	}

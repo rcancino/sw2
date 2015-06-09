@@ -5,13 +5,14 @@ import java.awt.KeyEventPostProcessor;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -21,6 +22,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.VerticalLayout;
 
+import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.swing.EventSelectionModel;
@@ -30,13 +32,11 @@ import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.util.TableUtilities;
-
 import com.luxsoft.siipap.inventarios.model.Conteo;
 import com.luxsoft.siipap.inventarios.model.ConteoDet;
 import com.luxsoft.siipap.swing.form2.AbstractForm;
 import com.luxsoft.siipap.swing.utils.ComponentUtils;
 import com.luxsoft.siipap.swing.utils.ResourcesUtils;
-import com.luxsoft.sw3.services.Services;
 
 
 /**
@@ -51,7 +51,7 @@ public class ConteoForm extends AbstractForm implements ListSelectionListener{
 
 	public ConteoForm(final ConteoController model) {
 		super(model);
-		setTitle("Captura de conteo de inventario    ("+model.getValue("sucursal")+" )");
+		setTitle("Captura de conteo de inventario  ("+model.getValue("sucursal")+" )");
 	}
 	
 	public ConteoController getController(){
@@ -143,11 +143,14 @@ public class ConteoForm extends AbstractForm implements ListSelectionListener{
 	private EventSelectionModel<ConteoDet> selectionModel;
 	
 	protected JComponent buildGridPanel(){
-		String[] propertyNames={"renglon","clave","descripcion","unidad","kilos","cantidad"};
-		String[] columnLabels={"Rngl","Producto","Descripción","U","kilos","Cantidad"};
-		boolean[] edits={false,false,false,false,false,true};
+		String[] propertyNames={"ind","clave","descripcion","unidad","kilos","cantidad"};
+		String[] columnLabels={"Rngl","Producto","Descripcin","U","kilos","Cantidad"};
+		boolean[] edits={true,false,false,false,false,true};
 		final TableFormat tf=GlazedLists.tableFormat(ConteoDet.class,propertyNames, columnLabels,edits);
-		final EventTableModel tm=new EventTableModel(getController().getPartidasSource(),tf);
+		Comparator<ConteoDet> c=GlazedLists.beanPropertyComparator(ConteoDet.class, "ind");
+		EventList<ConteoDet> partidasConteo=getController().getPartidasSource();
+		Collections.sort(partidasConteo, c);
+		final EventTableModel tm=new EventTableModel(partidasConteo,tf);
 		grid=ComponentUtils.getStandardTable();
 		grid.setModel(tm);
 		selectionModel=new EventSelectionModel<ConteoDet>(getController().getPartidasSource());
@@ -218,12 +221,6 @@ public class ConteoForm extends AbstractForm implements ListSelectionListener{
 					if(isFocused()){
 						e.consume();
 						insertPartida();
-						return true;
-					}
-				}else if(KeyStroke.getKeyStroke("DELETE").getKeyCode()==e.getKeyCode()){
-					if(isFocused()){
-						e.consume();
-						deletePartida();
 						return true;
 					}
 				}else if(KeyStroke.getKeyStroke("F11").getKeyCode()==e.getKeyCode()){

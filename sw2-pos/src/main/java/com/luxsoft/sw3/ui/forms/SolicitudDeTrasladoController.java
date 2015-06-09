@@ -57,6 +57,12 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 		super(solicitud);
 	}
 	
+	public SolicitudDeTrasladoController(SolicitudDeTraslado solicitud,EventList<SolicitudDeTrasladoDet> partidas) {
+		super(solicitud);
+		this.partidasSource=partidas;
+		GlazedLists.syncEventListToList(partidasSource, getSolicitud().getPartidas());
+	}
+	
 	protected void init(){
 		if(getValue("id")==null){
 			//partidasSource=GlazedLists.eventList(new ArrayList<SolicitudDeTrasladoDet>());
@@ -117,26 +123,7 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 	public void insertarBulk(JComponent parent){
 		List<Existencia> selected=SelectorDeExistencias.find(getSolicitud().getOrigen(), getSolicitud().getFecha());
 		if(!selected.isEmpty()){
-			/*for(Existencia e:selected){
-				double cantidad=0d;
-				String pattern="Producto ({0})  {1} \n Disponible en {2} : {3}";
-				String msg=MessageFormat.format(pattern
-						,e.getProducto().getClave()
-						,e.getDescripcion()
-						,e.getSucursal().getNombre()
-						,e.getCantidad()
-						);
-				String res=JOptionPane.showInputDialog(parent, msg,"Cantidad");
-				cantidad=NumberUtils.toDouble(res);
-				if(cantidad>0){
-					SolicitudDeTrasladoDet det=new SolicitudDeTrasladoDet(e.getProducto(),cantidad);
-					det.setSucursal(getSolicitud().getSucursal().getId());
-					det.setOrigen(getSolicitud().getOrigen().getId());
-					det.setRenglon(partidasSource.size()+1);
-					partidasSource.add(det);
-					//getSolicitud().agregarPartida(p, cantidad);
-				}
-			}*/
+	
 			
 			for(Existencia e:selected){
 				double cantidad=0d;

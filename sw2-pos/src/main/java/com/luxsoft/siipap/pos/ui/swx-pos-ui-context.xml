@@ -28,6 +28,7 @@
      	<property name="panels">
      		<list>
      			<ref bean="pedidosPanel"/>
+     			<!-- <ref bean="pedidosPanel2"/> -->
      			<ref bean="pedidosEspecialesPanel"/> 
      			<ref bean="facturacionCreditoCFDIPanel"/>
      			<bean class="com.luxsoft.siipap.pos.ui.cfdi.CFDIPanel"
@@ -59,10 +60,15 @@
      	p:title="Pedidos"
      	p:defaultPanel="true"/> -->
      	
-     <bean id="pedidosPanel" 
+      <!-- <bean id="pedidosPanel" 
      	class="com.luxsoft.sw3.pedidos.PedidosPanel2"
      	p:title="Pedidos"
-     	p:defaultPanel="true"/>
+     	p:defaultPanel="true"/> -->
+     	
+     	<bean id="pedidosPanel" 
+     	class="com.luxsoft.sw3.pedidos.PedidosPanel3"
+     	p:title="Pedidos"
+     	p:defaultPanel="true"/> 
      	
      <bean id="pedidosEspecialesPanel"
      	class="com.luxsoft.siipap.pos.ui.consultas.PedidosEspecialesPanel"
@@ -143,12 +149,12 @@
      			
      			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TablerosPanel"
      				p:title="Tableros de Control"/>
-     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.ConteoDeInventarioPanel"
-     				p:title="Conteo de Inventario"/>
+     			<!-- <bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.ConteoDeInventarioPanel"
+     				p:title="Conteo de Inventario"/> -->
      			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.AnalisisDeConteoDeInventario"
      				p:title="Anlisis de Conteo"/>
      				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.ConteoDeInventarioPanel2"
-     				p:title="Conteo de Inventario2"/>
+     				p:title="Conteo de Inventario"/>
      				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.AdministracionDeSectores"
      				p:title="Administracion De Sectores"/>
      		</list>

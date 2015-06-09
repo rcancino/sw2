@@ -359,6 +359,7 @@ public class InventariosManagerImpl implements InventariosManager{
 		salida.setChofer(chofer);
 		salida.setSucursal(sol.getOrigen());
 		salida.setComentario(sol.getComentarioTps());
+		salida.setClasificacion(sol.getClasificacion());
 		//Folio
 		Folio folio=folioDao.buscarNextFolio(salida.getSucursal(), "TRASLADOS");
 		salida.setDocumento(folio.getFolio());
@@ -366,6 +367,7 @@ public class InventariosManagerImpl implements InventariosManager{
 		salida.setSurtidor(surtidor);
 		salida.setCortador(cortador);
 		salida.setSuperviso(supervisor);
+		
 		for(SolicitudDeTrasladoDet det:sol.getPartidas()){
 			if(det.getRecibido()<=0)
 				continue;
@@ -391,6 +393,7 @@ public class InventariosManagerImpl implements InventariosManager{
 		entrada.setDocumento(sol.getDocumento());
 		entrada.setComentario(sol.getComentarioTps());
 		entrada.setPorInventario(sol.getPorInventario());
+		entrada.setClasificacion(sol.getClasificacion());
 		entrada.setChofer(chofer);
 		//Comentario para el documento TPS que se atiende y se utiliza en el reporte de traslado TPE
 		entrada.setComentarioComision(salida.getDocumento().toString());
@@ -599,6 +602,31 @@ private Sector salvarSector(Sector sector,final Date time,String user){
 		
 	}
 	
+
+
+@Transactional(propagation=Propagation.SUPPORTS)
+public void generarExistenciasParaConteoFisico(final Sucursal sucursal,final Date fecha,final String user){
+	List<Existencia> exis=buscarExistencias(sucursal);
+	for(Existencia e:exis){
+		ExistenciaConteo ec=new ExistenciaConteo();
+		ec.setFecha(fecha);
+		ec.setId(e.getId());
+		ec.setSucursal(e.getSucursal());
+		ec.setProducto(e.getProducto());
+		ec.setExistencia(e.getCantidad());
+		
+		ec.getLog().setCreado(fecha);
+		ec.getLog().setModificado(fecha);
+		ec.getLog().setCreateUser(user);
+		ec.getLog().setUpdateUser(user);
+		
+		ec=(ExistenciaConteo)hibernateTemplate.merge(ec);
+		//System.out.println(ec);
+	}
+}
+
+
+
 	@Transactional(propagation=Propagation.SUPPORTS)
 	public void generarExistenciasParaConteo(final Long sucursalId,final Date fecha,final String user){
 		List<Existencia> exis=existenciaDao.buscarExistencias(sucursalId, fecha);

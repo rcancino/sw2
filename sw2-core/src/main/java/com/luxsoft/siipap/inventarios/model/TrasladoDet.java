@@ -82,7 +82,7 @@ public class TrasladoDet extends Inventario implements MovimientoConFlete{
 	private int cortes = 0;
 	
 	@Column(name="CORTES_INSTRUCCION")
-	@Length(max=17)
+	@Length(max=35)
 	private String instruccionesDecorte;	
 	
 	

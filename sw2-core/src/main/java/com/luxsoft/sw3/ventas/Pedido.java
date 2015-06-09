@@ -265,10 +265,35 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	@Column(name = "MODO", nullable = false, length = 15)
 	private Modo modo=Modo.MOSTRADOR;
 	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "CLASIFICACION_VALE", nullable = false, length = 30)
+	private ClasificacionVale clasificacionVale=ClasificacionVale.SIN_VALE;
+	
+	
+	@ManyToOne 
+    @JoinColumn (name="SUCURSAL_VALE")
+    private Sucursal sucursalVale;
+	
+	@Column(name="VALE",nullable=false)
+	private boolean vale=false;
+	
 	@Column(name="TPUESTO",nullable=true)
 	private Date tpuesto;
 	
 
+	
+	public boolean isVale() {
+		return vale;
+	}
+
+	public void setVale(boolean vale) {
+		boolean old=this.vale;
+		this.vale = vale;
+		firePropertyChange("vale", old, vale);
+	}
+	
+	
+	
 	
 	@Embedded
 	@AttributeOverrides({
@@ -312,7 +337,18 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	public Pedido(){}
 	
 	
+	public Sucursal getSucursalVale() {
+		return sucursalVale;
+	}
 
+	public void setSucursalVale(Sucursal sucursalVale) {
+		Object old=this.sucursalVale;
+		this.sucursalVale =sucursalVale;
+		firePropertyChange("sucursalVale", old, sucursalVale);
+	}
+	
+	
+	
 	public Pedido(boolean especial) {
 		super();
 		this.especial = especial;
@@ -750,6 +786,18 @@ public class Pedido extends BaseBean implements AddressLoggable{
 		this.modo = modo;
 		firePropertyChange("modo", old, modo);
 	}
+	
+
+	public ClasificacionVale getClasificacionVale() {
+		return clasificacionVale;
+	}	
+
+	public void setClasificacionVale(ClasificacionVale clasificacionVale) {
+		Object old=this.clasificacionVale;
+		this.clasificacionVale = clasificacionVale;
+		firePropertyChange("clasificacionVale", old, clasificacionVale);
+	}
+
 
 	
 
@@ -1067,6 +1115,12 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	public static enum Modo{
 		MOSTRADOR,TELEFONICA
 	}
+	
+	
+	public static enum ClasificacionVale{
+		SIN_VALE,RECOGE_CAMIONETA,RECOGE_CLIENTE,EXISTENCIA_VENTA
+	}
+	
 	
 	
 	public void setTotalFacturado(BigDecimal totalFacturado) {

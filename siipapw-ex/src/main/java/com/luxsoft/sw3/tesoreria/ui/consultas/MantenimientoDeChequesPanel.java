@@ -13,6 +13,7 @@ import org.apache.commons.collections.PredicateUtils;
 
 import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.tesoreria.CargoAbono;
+import com.luxsoft.siipap.reportes.VentasEnDolares;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.swing.dialog.SelectorDeFecha;
@@ -119,6 +120,7 @@ public class MantenimientoDeChequesPanel extends FilteredBrowserPanel<CargoAbono
 			actions.add(addAction(TESORERIA_ROLES.CONTROL_DE_INGRESOS.getId(),"registrarCobro", "Registrar Cobro"));
 			actions.add(addAction(TESORERIA_ROLES.CONTROL_DE_INGRESOS.getId(),"cancelarCobro", "Cancelar Cobro"));
 			actions.add(addAction(null,"pendientesDeCobro", "Cheques Pendientes"));
+			actions.add(addAction(null,"reporteDeVentasEnDolares", "Ventas en Dolares"));
 		/*	actions.add(addAction("", "reporteFacturasPendientesCamioneta", "Facturas pendientes (CAM)"));
 			*/
 		return actions;
@@ -162,6 +164,10 @@ public class MantenimientoDeChequesPanel extends FilteredBrowserPanel<CargoAbono
 	
 	public void pendientesDeCobro(){
 		ReportUtils.viewReport(ReportUtils.toReportesPath("TESORERIA/ChequesPendientesDeCobro.jasper"),null);
+	}
+	
+	public void reporteDeVentasEnDolares(){
+		VentasEnDolares.run();
 	}
 	
 	public void cancelarFechaDeCobroDeCheque(){

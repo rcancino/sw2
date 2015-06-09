@@ -97,7 +97,7 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"renglon","documento","clave","unidad","descripcion","cantidad"};
+		String[] props={"ind","documento","clave","unidad","descripcion","cantidad"};
 		String[] labels={"Rngl","Folio","Producto","U","Descripcin","cantidad"};
 		return GlazedLists.tableFormat(ConteoDet.class, props,labels);
 	}
@@ -116,7 +116,7 @@ public class ConteoDeInventarioPanel2 extends AbstractMasterDatailFilteredBrowse
 		if(actions==null)
 			actions=new Action[]{
 				getLoadAction()
-		//		,getInsertAction()
+				,getInsertAction()
 				,getEditAction()
 				,getViewAction()
 		//		,CommandUtils.createDeleteAction(this, "cancelar")
@@ -288,11 +288,12 @@ public void generarExistenciasParaConteoFisico(){
 			SwingWorker worker=new SwingWorker(){
 				protected Object doInBackground() throws Exception {
 					Date fecha=Services.getInstance().obtenerFechaDelSistema();
-					Services.getInstance().getInventariosManager().generarExistenciasParaConteo(Configuracion.getSucursalLocalId(), fecha,"");
+					//Services.getInstance().getInventariosManager().generarExistenciasParaConteo(Configuracion.getSucursalLocalId(), fecha,"");
+					Services.getInstance().getInventariosManager().generarExistenciasParaConteoFisico(Services.getInstance().getConfiguracion().getSucursal(), fecha,"");
 					return "OK";
 				}
 				protected void done() {
-					MessageUtils.showMessage("Proceso terminado", "Generacin de existencias para conteo");
+					MessageUtils.showMessage("Proceso terminado", "Generacion de existencias para conteo");
 				}
 			};
 			TaskUtils.executeSwingWorker(worker);
@@ -327,7 +328,7 @@ public void generarExistenciasParaConteoFisico(){
 					if(recalcular){
 						calcularExistencias();
 					}else{
-					MessageUtils.showMessage("No se recalcularon las Existencias Recalcular manualmente", "Conteo de Inventario" );	
+					MessageUtils.showMessage("No se recalcularon las Existencias, Recalcular manualmente", "Conteo de Inventario" );	
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -345,7 +346,7 @@ public void generarExistenciasParaConteoFisico(){
 		final Date fecha=new Date();
 		final int mes=Periodo.obtenerMes(fecha)+1;
 		final int year=Periodo.obtenerYear(fecha);
-		System.out.println("Recalculando existencia para Ao:"+year+ " Mes: "+mes+" Fecha:"+fecha);
+		System.out.println("Recalculando existencia para Año:"+year+ " Mes: "+mes+" Fecha:"+fecha);
 		SwingWorker worker=new SwingWorker(){			
 			protected Object doInBackground() throws Exception {
 				Services.getInstance().getExistenciasDao()
@@ -394,8 +395,8 @@ public void generarExistenciasParaConteoFisico(){
 					for(SectorDet sectordet:sectoresDet){
 						System.out.println("      ----Partida :"+sectordet);
 						ConteoDet conteoDet=new ConteoDet();
-										conteoDet.setConteo(conteo);
-										
+						conteoDet.setConteo(conteo);
+						conteoDet.setInd(sectordet.getInd());			
 						conteoDet.setProducto(sectordet.getProducto());
 						conteo.agregarPartida(conteoDet);
 						

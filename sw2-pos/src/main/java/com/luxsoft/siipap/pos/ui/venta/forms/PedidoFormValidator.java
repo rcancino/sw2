@@ -216,11 +216,14 @@ public class PedidoFormValidator {
 		default:
 			break;
 		}
-		if(c.getCredito().getAtrasoMaximo()>atrasoMax){
-			String pattern="El cliente tiene un atraso superior a {0} dias --";
-			String pattern2=pattern+"\nENLAZAR LA LLAMADA DEL CLIENTE A CREDITO";
-			support.getResult().addError(MessageFormat.format(pattern2, atrasoMax));
-		}
+		 if (!c.getCredito().isNoAtraso())
+		 {
+			 if(c.getCredito().getAtrasoMaximo()>atrasoMax){
+					String pattern="El cliente tiene un atraso superior a {0} dias --";
+					String pattern2=pattern+"\nENLAZAR LA LLAMADA DEL CLIENTE A CREDITO";
+					support.getResult().addError(MessageFormat.format(pattern2, atrasoMax));
+				}
+		 }
 		
 		/*
 		 * // Modificacion por ordenes de Direccion General (Lic. Jose Sanchez) 14/08/2013
