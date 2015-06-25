@@ -91,6 +91,7 @@ public class SolicitudDeTrasladoForm extends AbstractForm implements ListSelecti
 			builder.append("Documento",addReadOnly("documento"));
 		}
 		builder.append("Fecha",addReadOnly("fecha"));
+		builder.append("Clasificacion",addReadOnly("clasificacion"));
 		builder.nextLine();
 		usuarioNombre=new JLabel("");
 		builder.append("Usuario",getControl("usuario"));

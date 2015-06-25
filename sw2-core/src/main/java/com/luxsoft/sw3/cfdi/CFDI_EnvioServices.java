@@ -317,7 +317,7 @@ public class CFDI_EnvioServices {
 	
 	public static void main(String[] args) throws Exception{
 		final CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
-		 Date dia = DateUtil.toDate("06/06/2015");
+		 Date dia = DateUtil.toDate("20/06/2015");
 		service.madarPorCorreo(dia);
 		//service.mandarPorCorreo("8a8a82fa-432f6a82-0143-30f0da04-002d");
 	}

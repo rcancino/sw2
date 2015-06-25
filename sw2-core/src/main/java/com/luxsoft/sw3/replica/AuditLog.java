@@ -229,7 +229,7 @@ public class AuditLog implements Serializable{
 	    .append(this.id, otro.getId())
 	    .append(this.entityId, otro.getEntityId())
 	    .append(this.entityName, otro.getEntityName())
-	    .append(this.dateCreated, otro.dateCreated)
+	    .append(this.sucursalDestino, otro.sucursalDestino)
 	    .isEquals();
 	}
 	

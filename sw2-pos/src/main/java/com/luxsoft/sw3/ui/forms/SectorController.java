@@ -98,21 +98,23 @@ public class SectorController extends DefaultFormModel {
 		form.open();
 		if(!form.hasBeenCanceled()){
 			
-			boolean ok=true;
+			
+			/*boolean ok=true;
 			for(SectorDet sd : getSector().getPartidas()){
 				
 				 if(sd.getClave().equals(det.getClave())){
 					 ok=false;
 				 }
-			 }
-		   if(ok){
+			 }*/
+		//   if(ok){
 			   partidasSource.add(det);   
-		   }
-		   else{
+		//   }
+		/*   else{
 			   MessageUtils.showMessage("Ya esta registrado el producto: "+det.getClave(), "");   
-		   }
+		   }*/
 			
 		   
+			
 			
 		}
 	}

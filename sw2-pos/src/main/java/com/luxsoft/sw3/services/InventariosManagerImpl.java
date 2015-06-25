@@ -48,6 +48,7 @@ import com.luxsoft.siipap.model.Periodo;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.core.Folio;
 import com.luxsoft.siipap.model.core.Producto;
+import com.luxsoft.siipap.model.tesoreria.Cuenta.Clasificacion;
 import com.luxsoft.siipap.service.KernellSecurity;
 import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.util.MonedasUtils;
@@ -56,6 +57,7 @@ import com.luxsoft.siipap.ventas.model.DevolucionDeVenta;
 import com.luxsoft.siipap.ventas.model.PreDevolucion;
 import com.luxsoft.siipap.ventas.model.PreDevolucionDet;
 import com.luxsoft.sw3.maquila.dao.RecepcionDeMaquilaDao;
+import com.luxsoft.sw3.ventas.Pedido.ClasificacionVale;
 
 
 /**
@@ -385,7 +387,12 @@ public class InventariosManagerImpl implements InventariosManager{
 			tps.setCortes(det.getCortes());
 			tps.setInstruccionesDecorte(det.getInstruccionesDecorte());
 			salida.agregarPartida(tps);
-			actualizarExistencia(tps);
+			if(!salida.getSolicitud().getClasificacion().equals("RECOGE_CAMIONETA") && !salida.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
+				System.out.println("Actualizando Existencia Para TPS Clasificacion Vale: "+salida.getSolicitud().getClasificacion());
+				actualizarExistencia(tps);
+			}
+				
+			
 		}
 		
 		Traslado entrada=preparar("TPE", time, sol,user);
@@ -416,6 +423,11 @@ public class InventariosManagerImpl implements InventariosManager{
 			tpe.setCortes(tps.getCortes());
 			tpe.setInstruccionesDecorte(tps.getInstruccionesDecorte());
 			entrada.agregarPartida(tpe);
+			if(entrada.getSolicitud().getClasificacion().equals("RECOGE_CAMIONETA") || entrada.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
+				System.out.println("Actualizando Existencia Para TPE  Clasificacion Vale: "+ entrada.getSolicitud().getClasificacion());
+				actualizarExistencia(tpe);
+			}
+			   
 		}
 		folioDao.save(folio);
 		sol.setAtendido(salida.getDocumento());

@@ -320,6 +320,11 @@ public class AlcancesPanel_Pos extends FilteredBrowserPanel<Alcance>{
 						form.open();
 						if(!form.hasBeenCanceled()){
 							compra=controller.getCompra();
+							
+							for(CompraUnitaria det:compra.getPartidas()){
+								det.actualizar();
+							}
+							
 							compra=Services.getInstance().getComprasManager().save(compra);
 							MessageUtils.showMessage("Compra generada: "+compra.getFolio(), "Compras");							
 							ReportUtils2.imprimirCompra(compra);

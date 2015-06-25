@@ -71,6 +71,10 @@ public class ComprasCentralizadasController {
 		form.open();
 		if(!form.hasBeenCanceled()){
 			target=controller.getCompra();
+			for(CompraUnitaria det : target.getPartidas()){
+				det.actualizar();
+			}
+			
 			return getManager().saveCentralizada(target);
 		}
 		return source;

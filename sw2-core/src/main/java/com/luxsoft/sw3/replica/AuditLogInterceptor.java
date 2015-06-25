@@ -57,6 +57,22 @@ public class AuditLogInterceptor extends EmptyInterceptor implements Initializin
 	public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 		if(id!=null && replicar(entity.getClass())){
 			for(String destino:resolverDestinos(entity)){
+				if(entity instanceof Traslado){
+					Traslado t =(Traslado) entity;
+					AuditLog audit1=new AuditLog(entity,id,"INSERT",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"INSERT",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else if(entity instanceof TrasladoDet){
+					
+					TrasladoDet t =(TrasladoDet) entity;
+					AuditLog audit1=new AuditLog(entity,id,"INSERT",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"INSERT",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else
 				inserts.add(new AuditLog(entity,id,"INSERT",getIPAdress(),getSucursalOrigen(),destino));
 			}
 		}
@@ -68,6 +84,22 @@ public class AuditLogInterceptor extends EmptyInterceptor implements Initializin
 		
 		if(id!=null && replicar(entity.getClass())){
 			for(String destino:resolverDestinos(entity)){
+				if(entity instanceof Traslado){
+					Traslado t =(Traslado) entity;
+					AuditLog audit1=new AuditLog(entity,id,"UPDATE",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"UPDATE",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else if(entity instanceof TrasladoDet){
+					
+					TrasladoDet t =(TrasladoDet) entity;
+					AuditLog audit1=new AuditLog(entity,id,"UPDATE",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"UPDATE",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else
 				updates.add(new AuditLog(entity,id,"UPDATE",getIPAdress(),getSucursalOrigen(),destino));
 			}
 		}
@@ -78,6 +110,22 @@ public class AuditLogInterceptor extends EmptyInterceptor implements Initializin
 	public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 		if(id!=null && replicar(entity.getClass())){
 			for(String destino:resolverDestinos(entity)){
+				if(entity instanceof Traslado){
+					Traslado t =(Traslado) entity;
+					AuditLog audit1=new AuditLog(entity,id,"DELETE",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"DELETE",getIPAdress(),getSucursalOrigen(),t.getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else if(entity instanceof TrasladoDet){
+					
+					TrasladoDet t =(TrasladoDet) entity;
+					AuditLog audit1=new AuditLog(entity,id,"DELETE",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getSucursal().getNombre());
+					inserts.add(audit1);
+					AuditLog audit2=new AuditLog(entity,id,"DELETE",getIPAdress(),getSucursalOrigen(),t.getTraslado().getSolicitud().getOrigen().getNombre());
+					inserts.add(audit2);
+					
+				}else
 				deletes.add(new AuditLog(entity,id,"DELETE",getIPAdress(),getSucursalOrigen(),destino));
 			}
 		}	
@@ -87,10 +135,12 @@ public class AuditLogInterceptor extends EmptyInterceptor implements Initializin
 		if(entity instanceof SolicitudDeTraslado){
 			SolicitudDeTraslado sol=(SolicitudDeTraslado)entity;
 			return new String[]{sol.getOrigen().getNombre()};
-		}else if(entity instanceof Traslado){
+		}/*else if(entity instanceof Traslado){
 			Traslado t=(Traslado)entity;
 			if(t.getTipo().equals("TPE")){
+				ServiceLocator2.getConfiguracion().getSucursal();
 				return new String[]{t.getSolicitud().getSucursal().getNombre()};
+				
 			}else{
 				return new String[]{"OFICINAS"};
 			}
@@ -101,7 +151,7 @@ public class AuditLogInterceptor extends EmptyInterceptor implements Initializin
 			}else{
 				return new String[]{"OFICINAS"};
 			}
-		}else{
+		}*/else{
 			return new String[]{"OFICINAS"};
 		}
 	}

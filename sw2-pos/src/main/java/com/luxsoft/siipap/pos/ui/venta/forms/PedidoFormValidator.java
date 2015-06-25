@@ -11,6 +11,7 @@ import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.sw3.ventas.Pedido;
+import com.luxsoft.sw3.ventas.Pedido.ClasificacionVale;
 import com.luxsoft.sw3.ventas.PedidoDet;
 import com.luxsoft.sw3.ventas.Pedido.FormaDeEntrega;
 
@@ -112,7 +113,8 @@ public class PedidoFormValidator {
 				support.getResult().addError("No existe en el sistema el tipo de cambio para el dia ");
 			}
 		}
-		
+		validarIsConVale(support);
+		validarSucursalVale(support);
 		validarIsCotizacion(support);
 		/*
 		for(PedidoDet det:getPedido().getPartidas()){
@@ -253,6 +255,24 @@ public class PedidoFormValidator {
 	}
 	
 	
+	private void validarIsConVale(PropertyValidationSupport support){
+		boolean conVale=false;
+		for(PedidoDet det : getPedido().getPartidas()){
+			System.out.println("Validando si el pedido tiene vale");
+			if(det.isConVale() && getPedido().getClasificacionVale().equals(ClasificacionVale.SIN_VALE)){
+				System.out.println("El pedido si tiene vale");
+				conVale=true;
+				break;
+			}
+		}
+		if(conVale){
+			support.getResult().addError("El pedido requiere Vale favor de seleccionar una clasificacion para Vale");
+		}
+	
+			
+	}
+	
+	
 	private void validarDireccion(PropertyValidationSupport support){
 		if(getPedido().getEntrega().equals(FormaDeEntrega.LOCAL))
 			return;
@@ -274,6 +294,13 @@ public class PedidoFormValidator {
 			}
 		}
 	}
+	
+	private void validarSucursalVale(PropertyValidationSupport support){
+		if(!getPedido().getClasificacionVale().equals(ClasificacionVale.SIN_VALE) && getPedido().getSucursalVale()==null){
+			support.getResult().addError( "Debe seleccionar la sucursal a la que solicita el vale");
+		}
+	}
+	
 	
 	
 	public Pedido getPedido() {

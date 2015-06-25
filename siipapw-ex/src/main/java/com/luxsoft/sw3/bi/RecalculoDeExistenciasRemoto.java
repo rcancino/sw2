@@ -91,17 +91,7 @@ public class RecalculoDeExistenciasRemoto {
  
  
  public void ActualizarExistencias(JdbcTemplate template ,List<Map<String,Object>> claves,Long sucursalId,Periodo per,int mes, int year, String sucName){
-	 
-	/* String sql=SQLUtils.loadSQLQueryFromResource("sql/calculoDeExistenciaPorClave.sql");
-	 
-		sql=sql.replaceAll("@SUCURSAL", sucursalId+"");		
-		sql=sql.replaceAll("@FECHA_INI", "2009/01/01");
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd");
-	    String fecha1=  formato.format(per.getFechaFinal());
-	   	sql=sql.replaceAll("@CORTE_FIN",fecha1 );
-	   	sql=sql.replaceAll("@CORTE","2009/01/01" );	*/
-	 
-	 
+ 
 	for(Map<String, Object> clave:claves){
 		 String sql=SQLUtils.loadSQLQueryFromResource("sql/calculoDeExistenciaPorClave.sql");
 		 

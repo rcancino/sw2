@@ -265,7 +265,7 @@ public class SincronizadorDeExistencias {
 		.addSucursal(2L,3L,5L,6L,9L,11L)
 		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
 		//.actualizarExistenciasOficinas(new Date());
-		.actualizarExistenciasOficinas(new Date("2015/06/08"));
+		.actualizarExistenciasOficinas(new Date("2015/06/09"));
 		
 		
 		

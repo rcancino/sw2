@@ -221,7 +221,7 @@ public class PagosPorTipo {
 						return "DEPOSITO_POR_IDENTIFICAR";
 				}
 			}
-			
+			 
 				if(!DateUtils.isSameDay(fecha, pago.getPrimeraAplicacion())){
 					return "SALDO_A_FAVOR";
 				}

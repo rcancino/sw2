@@ -69,6 +69,11 @@ public class CompraController2 {
 		form.open();
 		if(!form.hasBeenCanceled()){			
 			target= controller.getCompra();
+			
+			for(CompraUnitaria det : target.getPartidas()){
+				det.actualizar();
+			}
+			
 			return persistir(target);
 		}
 		return compra;

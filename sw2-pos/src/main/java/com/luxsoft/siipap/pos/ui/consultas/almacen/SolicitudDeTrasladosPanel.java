@@ -15,10 +15,14 @@ import ca.odell.glazedlists.gui.TableFormat;
 
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTrasladoDet;
+import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.model.Sucursal;
+import com.luxsoft.siipap.model.User;
+import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.reports.KardexReportForm;
 import com.luxsoft.siipap.pos.ui.reports.SolicitudesPendientesReportForm;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
+import com.luxsoft.siipap.security.SeleccionDeUsuario;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
@@ -54,7 +58,7 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 	@Override
 	protected TableFormat createDetailTableFormat() {
 		String[] props={"solicitud.documento","producto.clave","producto.descripcion","solicitado","recibido","comentario"};
-		String[] labels={"Sol","Producto","Descripción","Solicitado","Recibido","Comentario"};
+		String[] labels={"Sol","Producto","Descripcin","Solicitado","Recibido","Comentario"};
 		return GlazedLists.tableFormat(SolicitudDeTrasladoDet.class, props,labels);
 	}
 
@@ -109,6 +113,7 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 	protected List<Action> createProccessActions(){
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction("", "reporteDeSolicitudesPendientes", "Solicitudes Pendientes"));
+		actions.add(addAction("", "marcarNoAtender", "Marcar No Atender"));
 		return actions;
 	}
 	
@@ -120,7 +125,7 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 	protected List<SolicitudDeTraslado> findData() {
 		String hql="from SolicitudDeTraslado s where " +
 				" s.sucursal.id=? " +
-				" and s.fecha between ? and ? ";
+				" and s.fecha between ? and ?  and s.noAtender is false and ifnull(s.comentario,'')<>'CANCELACION AUTOMATICA'";
 		Sucursal suc=Services.getInstance().getConfiguracion().getSucursal();
 		return Services.getInstance().getHibernateTemplate().find(hql
 				,new Object[]{suc.getId()
@@ -143,6 +148,31 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 		params.put("SOL_ID", sol.getId());
 		ReportUtils2.runReport("invent/SolicitudDeTraslado.jasper", params);
 	}
+	
+	public void marcarNoAtender(){
+		if(getSelectedObject()!=null ){
+			SolicitudDeTraslado m=(SolicitudDeTraslado)getSelectedObject();
+			List<Traslado> t=Services.getInstance().getHibernateTemplate().find("from Traslado t where t.solicitud.id=? ",new Object[]{m.getId()});
+			if(t.isEmpty()){
+				User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+				if((user!=null) && user.hasRole(POSRoles.VENDEDOR.name())){
+					
+					m.setnoAtender(true);
+					m.setUsrCancelacion(user.getUsername());
+					//m.getLog().setUpdateUser(user.getFirstName());
+					m=(SolicitudDeTraslado)Services.getInstance().getHibernateTemplate().merge(m);
+					MessageUtils.showMessage("Se cancelo la Solicitud"+m.getDocumento(),"Cancelacin de Vale");		
+				}else{
+					MessageUtils.showMessage("No tiene los derechos apropiados", "Ventas");
+				}
+			}else {
+				MessageUtils.showMessage("El traslado ya ha sido atendido", "Ventas");
+			}
+			
+		}
+	}
+	
+	
 	
 
 }

@@ -86,12 +86,45 @@ public class SolicitudDeTraslado extends BaseBean implements Replicable{
 	
 	@Column(name="CLASIFICACION",length=255)
 	@Length(max=255)
-	private String clasificacion;
+	private String clasificacion="EXISTENCIA";
 	
 	
 	@Column(name="REFERENCIA",length=30)
 	@Length(max=30)
 	private String referencia;
+	
+	
+
+	@Column(name="NO_ATENDER",nullable=false)
+	private boolean noAtender=false;
+	
+	
+	@Column(name="CANCELACION_USR",length=255)
+	@Length(max=255)
+	private String usrCancelacion;
+	
+	public String getUsrCancelacion() {
+		return usrCancelacion;
+	}
+
+	public void setUsrCancelacion(String usrCancelacion) {
+		Object old=this.usrCancelacion;
+		this.usrCancelacion = usrCancelacion;
+		firePropertyChange("usrCancelacion", old, usrCancelacion);
+	}
+	
+	
+	public boolean isnoAtender() {
+		return noAtender;
+	}
+
+	public void setnoAtender(boolean noAtender) {
+		boolean old=this.noAtender;
+		this.noAtender = noAtender;
+		firePropertyChange("noAtender", old, noAtender);
+	}
+	
+	
 	
 	@Transient
 	@Length(max=255)

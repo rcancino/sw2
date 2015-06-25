@@ -1,29 +1,17 @@
 package com.luxsoft.sw3.pedidos;
 
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.Action;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -33,21 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.CollectionList;
+import ca.odell.glazedlists.CollectionList.Model;
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
-import ca.odell.glazedlists.TextFilterator;
-import ca.odell.glazedlists.CollectionList.Model;
 import ca.odell.glazedlists.event.ListEvent;
 import ca.odell.glazedlists.event.ListEventListener;
 import ca.odell.glazedlists.gui.TableFormat;
 import ca.odell.glazedlists.matchers.MatcherEditor;
 import ca.odell.glazedlists.matchers.Matchers;
-import ca.odell.glazedlists.matchers.TextMatcherEditor;
-import ca.odell.glazedlists.swing.AutoCompleteSupport;
-import ca.odell.glazedlists.swing.EventComboBoxModel;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.DefaultFormBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.uifextras.panel.HeaderPanel;
@@ -55,10 +37,8 @@ import com.luxsoft.cfdi.CFDIMandarFacturarForm;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTrasladoDet;
 import com.luxsoft.siipap.model.Periodo;
-import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.model.core.Cliente;
-import com.luxsoft.siipap.model.core.Producto;
 import com.luxsoft.siipap.pos.POSActions;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.consultas.RefacturadorController;
@@ -74,22 +54,16 @@ import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.pos.ui.venta.forms.PedidoController;
 import com.luxsoft.siipap.pos.ui.venta.forms.PedidoFormView;
 import com.luxsoft.siipap.pos.ui.venta.forms.PedidoForm_bak;
-
 import com.luxsoft.siipap.security.SeleccionDeUsuario;
 import com.luxsoft.siipap.service.KernellSecurity;
-import com.luxsoft.siipap.swing.binding.Binder;
-import com.luxsoft.siipap.swing.binding.Bindings;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
-import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel.SelectionPredicate;
 import com.luxsoft.siipap.swing.controls.AbstractControl;
-import com.luxsoft.siipap.swing.controls.SXAbstractDialog;
-import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.cfdi.model.CFDIClienteMails;
-
+import com.luxsoft.sw3.services.InventariosManager;
 import com.luxsoft.sw3.services.PedidosManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.services.SolicitudDeTrasladosManager;
@@ -97,10 +71,7 @@ import com.luxsoft.sw3.ui.forms.PedidoDolaresController;
 import com.luxsoft.sw3.ui.forms.PedidoDolaresForm;
 import com.luxsoft.sw3.ui.forms.SolicitudDeTrasladoController;
 import com.luxsoft.sw3.ui.forms.SolicitudDeTrasladoForm;
-
 import com.luxsoft.sw3.ui.services.AutorizacionesFactory;
-import com.luxsoft.sw3.ui.services.KernellUtils;
-
 import com.luxsoft.sw3.ventas.AutorizacionDePedido;
 import com.luxsoft.sw3.ventas.InstruccionDeEntrega;
 import com.luxsoft.sw3.ventas.Pedido;
@@ -168,6 +139,8 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				,"moneda"
 				,"total"
 				,"puesto"
+				,"creado"
+				,"modificado"
 				,"formaDePago"
 				,"contraEntrega"				
 				,"comentario"
@@ -184,6 +157,8 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				,"Mon"
 				,"Total"
 				,"Puesto"
+				,"Creado"
+				,"Modificado"
 				,"F.P."	
 				,"PCE"
 				,"Comentario"
@@ -475,7 +450,9 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				source.set(index, new PedidoRow(p));
 				
 				if(!p.getClasificacionVale().equals(ClasificacionVale.SIN_VALE) && !p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
-					generarValePedido(p);
+					 SolicitudDeTraslado sol=generarValePedido(p);
+					 generarTraslado(sol);
+					 
 					p.setVale(true);
 					p=(Pedido)Services.getInstance().getUniversalDao().save(p);
 				}
@@ -506,19 +483,32 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		}
 		
 		if(!p.getClasificacionVale().equals(ClasificacionVale.SIN_VALE) && !p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
-			generarValePedido(p);
-			p.setVale(true);
-			p=(Pedido)Services.getInstance().getUniversalDao().save(p);
-		}
-		if(p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
-			boolean actPedido=generarValeExisVta(p);
-			p.setVale(actPedido);
-			p=(Pedido)Services.getInstance().getUniversalDao().save(p);
-		}
+			   SolicitudDeTraslado sol=generarValePedido(p);
+			   generarTraslado(sol);
+				p.setVale(true);
+			
+				p=(Pedido)Services.getInstance().getUniversalDao().save(p);
+			}
+			if(p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
+				boolean actPedido=generarValeExisVta(p);
+				p.setVale(actPedido);
+				p=(Pedido)Services.getInstance().getUniversalDao().save(p);
+				
+			}
 			
 	}
 	
-	public void generarValePedido(Pedido pedido){
+public void generarTraslado(SolicitudDeTraslado sol){
+		
+		getInventarioManager().generarSalidaPorTraslado(sol, new Date(), null, null, null, null, null);
+	
+	}
+	
+	
+	
+	 
+	 
+	public SolicitudDeTraslado generarValePedido(Pedido pedido){
 		SolicitudDeTraslado sol= new SolicitudDeTraslado();
 		 EventList<SolicitudDeTrasladoDet> partidasSource = new BasicEventList<SolicitudDeTrasladoDet>();
 		
@@ -528,7 +518,7 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		sol.setPorInventario(false);
 		sol.setSucursal(pedido.getSucursal());
 		sol.setClasificacion(pedido.getClasificacionVale().toString());
-		sol.setReferencia("Ped: "+pedido.getFolio()+" - "+pedido.getTipo());
+		sol.setReferencia("Ped: "+pedido.getFolio()+" - "+pedido.getTipo().toString().substring(0,2));
 		sol.setPedido(pedido.getId());
 		
 		for(PedidoDet det : pedido.getPartidas() ){
@@ -543,6 +533,7 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				soldet.setOrigen(pedido.getSucursalVale().getId());
 				soldet.setSucursal(det.getSucursal().getId());
 				soldet.setSolicitado(det.getCantidad());
+				soldet.setRecibido(det.getCantidad());
 				soldet.setRenglon(partidasSource.size()+1);
 				partidasSource.add(soldet);
 			}
@@ -554,17 +545,22 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		String user=pedido.getLog().getUpdateUser();
 			
 		sol.getLog().setCreado(time);
-		sol.getLog().setCreateUser(user);
+		sol.getLog().setCreateUser(pedido.getLog().getUpdateUser());
 		sol.getAddresLog().setCreatedIp(sol.getAddresLog().getUpdatedIp());
 		sol.getAddresLog().setCreatedMac(KernellSecurity.getMacAdress());
 		sol.getLog().setModificado(time);	
-		sol.getLog().setUpdateUser(user);
+		sol.getLog().setUpdateUser(pedido.getLog().getUpdateUser());
 		sol.getAddresLog().setUpdatedIp(KernellSecurity.getIPAdress());
 		sol.getAddresLog().setUpdatedMac(KernellSecurity.getMacAdress());
 	
 		
-		trdManager.save(sol);
+		sol=trdManager.save(sol);
+		
+		//
+		
 		MessageUtils.showMessage("Solicitud generada: "+sol.getDocumento(), "Solicitud de traslado");
+		
+		return sol;
 	}
 	
 	
@@ -611,6 +607,7 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		}
 		
 	}
+	
 	
 	
 	@Deprecated
@@ -777,6 +774,10 @@ private TotalesPanel totalPanel;
 		
 	private PedidosManager getManager(){
 		return Services.getInstance().getPedidosManager();
+	}
+	
+	private InventariosManager getInventarioManager(){
+		return Services.getInstance().getInventariosManager();
 	}
 
 	private class TotalesPanel extends AbstractControl implements ListEventListener{

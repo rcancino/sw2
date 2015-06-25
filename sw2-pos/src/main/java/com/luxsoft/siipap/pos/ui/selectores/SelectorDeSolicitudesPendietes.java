@@ -31,14 +31,14 @@ public class SelectorDeSolicitudesPendietes extends AbstractSelector<SolicitudDe
          fechaActual.add(Calendar.DATE, -7);
 	     Date fechaCorte=fechaActual.getTime();
 	    Object[] params={getSucursal().getId(),fechaCorte};
-		String hql="from SolicitudDeTraslado sol where sol.origen.id=? and sol.atendido is null and fecha>=?";
+	    String hql="from SolicitudDeTraslado sol where sol.origen.id=? and sol.atendido is null and fecha>=? and sol.noAtender is false and ifnull(sol.comentario,'')<>'CANCELACION AUTOMATICA'";
 		return Services.getInstance().getHibernateTemplate().find(hql,params);
 	}
 
 	@Override
 	protected TableFormat<SolicitudDeTraslado> getTableFormat() {
-		String[] props={"sucursal.nombre","documento","fecha","comentario"};
-		String[] names={"Sucursal","Docto","Fecha","Comentario"};
+		String[] props={"sucursal.nombre","documento","fecha","comentario","clasificacion"};
+		String[] names={"Sucursal","Docto","Fecha","Comentario","Clasificacion"};
 		return GlazedLists.tableFormat(SolicitudDeTraslado.class, props,names);
 	}
 

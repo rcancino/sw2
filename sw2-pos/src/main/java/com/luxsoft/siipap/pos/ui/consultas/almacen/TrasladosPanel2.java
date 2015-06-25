@@ -16,9 +16,11 @@ import ca.odell.glazedlists.CollectionList.Model;
 import ca.odell.glazedlists.gui.TableFormat;
 
 import com.luxsoft.cfdi.CFDIPrintUI;
+import com.luxsoft.siipap.inventarios.model.Movimiento;
 import com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado;
 import com.luxsoft.siipap.inventarios.model.Traslado;
 import com.luxsoft.siipap.inventarios.model.TrasladoDet;
+import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.reports.RelacionDeTPSReportForm;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeSolicitudesPendietes;
@@ -29,11 +31,17 @@ import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.sw3.cfdi.model.CFDI;
 import com.luxsoft.sw3.services.Services;
+import com.luxsoft.sw3.ui.forms.MovimientoController;
+import com.luxsoft.sw3.ui.forms.MovimientoDeInventarioForm;
+import com.luxsoft.sw3.ui.forms.TrasladoAutomaticoController;
+import com.luxsoft.sw3.ui.forms.TrasladoAutomaticoForm;
 import com.luxsoft.sw3.ui.forms.TrasladoController;
 import com.luxsoft.sw3.ui.forms.TrasladoForm;
+import com.luxsoft.sw3.ui.services.KernellUtils;
+import com.luxsoft.sw3.ventas.Pedido.ClasificacionVale;
 
 /**
- * Panel para la atención y mantenimiento de traslados
+ * Panel para la atencin y mantenimiento de traslados
  * 
  * @author Ruben Cancino
  *
@@ -47,8 +55,8 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 	
 	protected void init(){		
 		super.init();
-		addProperty("Sucursal","tipo","documento","fecha","solicitud.documento","solicitud.sucursal","chofer","porInventario","comentario","solicitud.referencia","cfdi");
-		addLabels("sucursal.nombre","Tipo","Docto","Fecha","Sol","Sucursal (SOL)","Chofer","Por Inv","Comentario","Ref (Sol)","CFDI");
+		addProperty("Sucursal","tipo","documento","fecha","solicitud.documento","solicitud.sucursal","chofer","porInventario","comentario","solicitud.referencia","cfdi","clasificacion");
+		addLabels("sucursal.nombre","Tipo","Docto","Fecha","Sol","Sucursal (SOL)","Chofer","Por Inv","Comentario","Ref (Sol)","CFDI","Clasificacion");
 		installTextComponentMatcherEditor("Solicitante", new String[]{"sucursal.nombre"});
 		installTextComponentMatcherEditor("Tipo", new String[]{"tipo"});
 		installTextComponentMatcherEditor("Documento", new String[]{"documento"});
@@ -61,7 +69,7 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 	@Override
 	protected TableFormat createDetailTableFormat() {
 		String[] props={"traslado.documento","producto.clave","producto.descripcion","tipo","solicitado","cantidad","comentario"};
-		String[] labels={"Traslado","Producto","Descripción","Tipo","Solicitado","Cantidad","Comentario"};
+		String[] labels={"Traslado","Producto","Descripcin","Tipo","Solicitado","Cantidad","Comentario"};
 		return GlazedLists.tableFormat(TrasladoDet.class, props,labels);
 	}
 
@@ -88,9 +96,10 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 				//,getViewAction()
 				,CommandUtils.createPrintAction(this, "print")
 			//	,addAction(null, "imprimirRelacionTPS", "Imprimir Relacion TPS")
-				,addAction(null, "imprimirRelacionTPS","Imprimir Relación TPS")
+				,addAction(null, "imprimirRelacionTPS","Imprimir Relacin TPS")
 				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
 				,addAction(null, "printCfdi", "Imprimir CFDI")
+				//,getEditAction()
 				};
 		return actions;
 	}	
@@ -109,14 +118,34 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 	@Override
 	protected List<Traslado> findData() {
 		String hql="from Traslado s where " +
-				" s.fecha between ? and ? ";
-		//Sucursal suc=Services.getInstance().getConfiguracion().getSucursal();
+				" s.fecha between ? and ? and s.sucursal.id = ? and  s.tipo='TPS' ";
+		Long suc=Services.getInstance().getConfiguracion().getSucursalLocalId();
 		return Services.getInstance().getHibernateTemplate().find(hql
 				,new Object[]{
 				periodo.getFechaInicial()
-				,periodo.getFechaFinal()
+				,periodo.getFechaFinal(),suc
 				});
 	}
+	
+	@Override
+	protected Traslado doEdit(Traslado bean) {
+		
+		if(getSelectedObject()!=null){
+			Traslado target=(Traslado)getSelectedObject();
+			//target=(Traslado)Services.getInstance().getHibernateTemplate().get(Traslado.class, target.getId());
+			TrasladoAutomaticoController controller=new TrasladoAutomaticoController(target);
+			TrasladoAutomaticoForm form=new TrasladoAutomaticoForm(controller);
+			form.open();
+			if(!form.hasBeenCanceled()){
+				return controller.persistir();
+			}
+			return bean;
+		}
+			return bean;
+		
+	}
+	
+	
 	
 	public void atender(){
 		List<SolicitudDeTraslado> sols=SelectorDeSolicitudesPendietes.seleccionar();
@@ -156,9 +185,22 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 		if(getSelectedObject()!=null){
 			Traslado m=(Traslado)getSelectedObject();
 			if(m.getTipo().equals("TPS") && (m.getCfdi()==null)){
+				
+					
+				if(m.getClasificacion().equals(ClasificacionVale.RECOGE_CAMIONETA.toString()) || m.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString())){
+					
+					
+					TrasladoAutomaticoController controller=new TrasladoAutomaticoController(m);
+					TrasladoAutomaticoForm form=new TrasladoAutomaticoForm(controller);
+					form.open();
+					if(!form.hasBeenCanceled()){
+						 m=controller.persistir();
+					}
+					
+				}
 				int index=source.indexOf(m);
 				CFDI cfdi=Services.getCFDITraslado().generar(m);
-				timbrar(m);
+				//timbrar(m);
 				if(index!=-1){
 					m=(Traslado)Services.getInstance().getHibernateTemplate().get(Traslado.class, m.getId());
 					source.set(index, m);

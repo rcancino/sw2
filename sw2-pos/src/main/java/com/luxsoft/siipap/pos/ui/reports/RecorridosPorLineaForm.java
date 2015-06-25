@@ -123,7 +123,8 @@ public class RecorridosPorLineaForm extends SWXAction{
 					new ParamLabelValue("TODOS"," "),
 					new ParamLabelValue("POSITIVOS"," AND E.CANTIDAD >0"),
 					new ParamLabelValue("NEGATIVOS"," AND E.CANTIDAD<0"),
-					new ParamLabelValue("SIN EXISTENCIA"," AND E.CANTIDAD=0")
+					new ParamLabelValue("SIN EXISTENCIA"," AND E.CANTIDAD=0"),
+					new ParamLabelValue("POSITIVOS/NEGATIVOS","AND (I.CANTIDAD/I.FACTORU)<>0")
 					});
 		
 						

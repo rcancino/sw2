@@ -28,7 +28,7 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
  * @author Ruben Cancino
  *
  */
-public class CancelacionesDeCargos {
+public class CancelacionesDeCargos{
 	
 	CfdiClient client;
 	Empresa empresa;
@@ -148,7 +148,7 @@ public class CancelacionesDeCargos {
 		//System.setProperty("sucursalOrigen", "QRQUERETARO");
 		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
 	
-		Periodo per=new Periodo("01/05/2015","06/06/2015");
+		Periodo per=new Periodo("01/05/2015","19/06/2015");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			task.cancelacion(new Periodo(dia,dia));
