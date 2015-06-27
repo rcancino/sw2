@@ -44,6 +44,8 @@
 					p:title="Autorizacin de Depositos"/>
 				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TrasladosPanel2"
      			    p:title="Traslados (Atendidos)"/>
+     			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.TrasladosPanel3"
+     			    p:title="Traslados (Recibidos)"/>
      			<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.SolicitudDeTrasladosPanel"
      			    p:title="Traslados (Solicitados)"/>
      			<bean class="com.luxsoft.siipap.pos.ui.consultas.EstadoDeVentasPanel"

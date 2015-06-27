@@ -57,7 +57,7 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 		super.init();
 		addProperty("Sucursal","tipo","documento","fecha","solicitud.documento","solicitud.sucursal","chofer","porInventario","comentario","solicitud.referencia","cfdi","clasificacion");
 		addLabels("sucursal.nombre","Tipo","Docto","Fecha","Sol","Sucursal (SOL)","Chofer","Por Inv","Comentario","Ref (Sol)","CFDI","Clasificacion");
-		installTextComponentMatcherEditor("Solicitante", new String[]{"sucursal.nombre"});
+		installTextComponentMatcherEditor("Solicitante", new String[]{"solicitud.sucursal.nombre"});
 		installTextComponentMatcherEditor("Tipo", new String[]{"tipo"});
 		installTextComponentMatcherEditor("Documento", new String[]{"documento"});
 		installTextComponentMatcherEditor("Solicitud", new String[]{"solicitud.documento"});
@@ -95,6 +95,7 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 				
 				//,getViewAction()
 				,CommandUtils.createPrintAction(this, "print")
+				,addAction(null, "imprimirTPE","Imprimir TPE")
 			//	,addAction(null, "imprimirRelacionTPS", "Imprimir Relacion TPS")
 				,addAction(null, "imprimirRelacionTPS","Imprimir Relacin TPS")
 				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
@@ -223,6 +224,19 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 			ReportUtils2.runReport("invent/SalidaDeTraslado.jasper", params);
 		}
 	}
+	
+
+	public void imprimirTPE(){
+		if(getSelectedObject()!=null){
+			Traslado m=(Traslado)getSelectedObject();
+			Map params=new HashMap();
+			params.put("SOL_ID", m.getSolicitud().getId());
+			ReportUtils2.runReport("invent/EntradaTraslado.jasper", params);
+		}
+	}
+	
+	
+	
 	
 	public void printCfdi(){
 		if(getSelectedObject()!=null){

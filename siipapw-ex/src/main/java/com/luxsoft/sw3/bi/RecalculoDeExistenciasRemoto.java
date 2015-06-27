@@ -142,6 +142,7 @@ public class RecalculoDeExistenciasRemoto {
 	public static void main(String[] args) {
 		new RecalculoDeExistenciasRemoto()
 		.addSucursal(6L,5L,2L,3L,9L,11L)
+		//.addSucursal(9L)
 		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
 		.recalcularExistencias();
 		

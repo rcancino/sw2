@@ -125,7 +125,7 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 	protected List<SolicitudDeTraslado> findData() {
 		String hql="from SolicitudDeTraslado s where " +
 				" s.sucursal.id=? " +
-				" and s.fecha between ? and ?  and s.noAtender is false and ifnull(s.comentario,'')<>'CANCELACION AUTOMATICA'";
+				" and s.fecha between ? and ?   ";
 		Sucursal suc=Services.getInstance().getConfiguracion().getSucursal();
 		return Services.getInstance().getHibernateTemplate().find(hql
 				,new Object[]{suc.getId()
@@ -154,17 +154,24 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 			SolicitudDeTraslado m=(SolicitudDeTraslado)getSelectedObject();
 			List<Traslado> t=Services.getInstance().getHibernateTemplate().find("from Traslado t where t.solicitud.id=? ",new Object[]{m.getId()});
 			if(t.isEmpty()){
-				User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
-				if((user!=null) && user.hasRole(POSRoles.VENDEDOR.name())){
-					
-					m.setnoAtender(true);
-					m.setUsrCancelacion(user.getUsername());
-					//m.getLog().setUpdateUser(user.getFirstName());
-					m=(SolicitudDeTraslado)Services.getInstance().getHibernateTemplate().merge(m);
-					MessageUtils.showMessage("Se cancelo la Solicitud"+m.getDocumento(),"Cancelacin de Vale");		
+				if(!m.isnoAtender()){
+					User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+					if((user!=null) && user.hasRole(POSRoles.VENDEDOR.name())){
+						
+							m.setnoAtender(true);
+							m.setUsrCancelacion(user.getUsername());
+							//m.getLog().setUpdateUser(user.getFirstName());
+							m=(SolicitudDeTraslado)Services.getInstance().getHibernateTemplate().merge(m);
+							MessageUtils.showMessage("Se cancelo la Solicitud"+m.getDocumento(),"Cancelacin de Vale");
+						
+								
+					}else{
+						MessageUtils.showMessage("No tiene los derechos apropiados", "Ventas");
+					}
 				}else{
-					MessageUtils.showMessage("No tiene los derechos apropiados", "Ventas");
+					MessageUtils.showMessage("La solicitud ya ha sido cancelada", "Ventas");
 				}
+				
 			}else {
 				MessageUtils.showMessage("El traslado ya ha sido atendido", "Ventas");
 			}
