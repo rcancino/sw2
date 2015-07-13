@@ -47,11 +47,7 @@ public class ConceptoContable {
 	private String subcuenta;
 	
 	
-	@ManyToOne(optional=false)
-	@JoinColumn (name="CUENTA_SAT_ID")
-	private CuentaContableSat cuentaSat;
-	
-	
+
 	
 
 	public String getSubcuenta() {
@@ -62,13 +58,6 @@ public class ConceptoContable {
 		this.subcuenta = subcuenta;
 	}
 
-	public CuentaContableSat getCuentaSat() {
-		return cuentaSat;
-	}
-
-	public void setCuentaSat(CuentaContableSat cuentaSat) {
-		this.cuentaSat = cuentaSat;
-	}
 	
 	
 	

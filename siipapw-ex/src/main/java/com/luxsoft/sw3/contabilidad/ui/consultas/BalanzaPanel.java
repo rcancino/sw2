@@ -87,7 +87,7 @@ public class BalanzaPanel extends AbstractMasterDatailFilteredBrowserPanel<Saldo
 	@Override
 	protected void agregarMasterProperties() {
 		addProperty(
-				"cuenta.cuentaSat.codigo"
+				"id"
 				,"cuenta.clave"
 				,"cuenta.descripcion"
 				,"saldoInicial"
@@ -98,7 +98,7 @@ public class BalanzaPanel extends AbstractMasterDatailFilteredBrowserPanel<Saldo
 				,"mes"
 				);
 		addLabels(
-				"Codigo Sat"
+				"Id"
 				,"Cuenta"
 				,"Descripcion"
 				,"S. Inicial"
@@ -120,8 +120,8 @@ public class BalanzaPanel extends AbstractMasterDatailFilteredBrowserPanel<Saldo
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"concepto.cuentaSat.codigo","concepto.subcuenta","concepto.descripcion","saldoInicial","debe","haber","saldoFinal","year","mes"};
-		String[] names={"Codigo sat","Cuenta","Concepto","Inicial","Debe","Haber","Final","year","mes"};
+		String[] props={"concepto.cuenta.clave","concepto.clave","concepto.descripcion","saldoInicial","debe","haber","saldoFinal","year","mes"};
+		String[] names={"Cuenta","Concepto","Descripcion","Inicial","Debe","Haber","Final","year","mes"};
 		return GlazedLists.tableFormat(SaldoDeCuentaPorConcepto.class, props,names);
 	}
 	

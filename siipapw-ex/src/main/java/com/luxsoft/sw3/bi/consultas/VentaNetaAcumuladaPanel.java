@@ -506,7 +506,8 @@ private TotalesPanel totalPanel=new TotalesPanel();
 				kilos=kilos.add(an.getKilos());
 				//inventarioKilos=inventarioKilos.add(an.getKilosInv());
 				
-				if(!kilos.equals(BigDecimal.ZERO)){
+				//if(!kilos.equals(BigDecimal.ZERO)){
+				if(kilos.doubleValue()!=0){
 
 					precioKgVta=ventaNeta.divide(kilos,2,RoundingMode.HALF_EVEN);
 					precioKgCosto=costo.divide(kilos,2,RoundingMode.HALF_EVEN);	
