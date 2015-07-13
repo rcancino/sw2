@@ -42,7 +42,9 @@ public class RecalculoDeExistenciasRemoto {
  public void recalcularExistencias(){
 	    final Date fecha=new Date();
 		final int mes=Periodo.obtenerMes(fecha)+1;
+	   // final int mes=Periodo.obtenerMes(fecha);
 		final int year=Periodo.obtenerYear(fecha);
+		//final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
 		final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
 		
 		try {
@@ -108,8 +110,8 @@ public class RecalculoDeExistenciasRemoto {
 	    Map<String, Object> existencia= template.queryForMap(sqlExist,new Object[]{clave.get("CLAVE"),mes,year,sucursalId});
 		 if(!row.get("CANTIDAD").equals(existencia.get("CANTIDAD"))){
 			    System.err.println("Se debe recalcular: "+ row.get("CLAVE")+" "+row.get("CANTIDAD")+" "+existencia.get("CANTIDAD"));
-			    String updateSql="UPDATE SX_EXISTENCIAS SET CANTIDAD=? WHERE  INVENTARIO_ID=?";
-			      template.update(updateSql,new Object[]{row.get("CANTIDAD"),existencia.get("INVENTARIO_ID")});
+			    String updateSql="UPDATE SX_EXISTENCIAS SET CANTIDAD=?, MODIFICADO=? WHERE  INVENTARIO_ID=?";
+			      template.update(updateSql,new Object[]{row.get("CANTIDAD"),formato.format(new Date()),existencia.get("INVENTARIO_ID")});
 			    String insertAudit="INSERT INTO audit_log (entityId,entityName,action,tableName,ip,SUCURSAL_ORIGEN,SUCURSAL_DESTINO,dateCreated,lastUpdated,replicado,message,version)"+
 			    					"VALUES "+
 			    					"(?,'Existencia','UPDATE','SX_EXISTENCIAS','10.10.X.X',?,'OFICINAS',NOW(),NOW(),null,null,0); ";
@@ -142,7 +144,7 @@ public class RecalculoDeExistenciasRemoto {
 	public static void main(String[] args) {
 		new RecalculoDeExistenciasRemoto()
 		.addSucursal(6L,5L,2L,3L,9L,11L)
-		//.addSucursal(9L)
+		//.addSucursal(11L)
 		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
 		.recalcularExistencias();
 		

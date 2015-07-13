@@ -363,7 +363,15 @@ public class InventariosManagerImpl implements InventariosManager{
 		salida.setComentario(sol.getComentarioTps());
 		salida.setClasificacion(sol.getClasificacion());
 		//Folio
-		Folio folio=folioDao.buscarNextFolio(salida.getSucursal(), "TRASLADOS");
+		Folio folio=null;
+		if (sol.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString()) || sol.getClasificacion().equals(ClasificacionVale.ENVIA_SUCURSAL.toString()) ){
+			salida.setComentario("AUT-SOL: "+sol.getDocumento()+"-"+sol.getSucursal().getNombre());
+			 folio=folioDao.buscarNextFolio(sol.getSucursal(), "TRASLADOS_SOL");
+			
+		}else{
+			folio=folioDao.buscarNextFolio(salida.getSucursal(), "TRASLADOS");	
+		}
+		
 		salida.setDocumento(folio.getFolio());
 		salida.setPorInventario(sol.getPorInventario());
 		salida.setSurtidor(surtidor);
@@ -382,12 +390,12 @@ public class InventariosManagerImpl implements InventariosManager{
 			tps.setFecha(salida.getFecha());
 			tps.setDocumento(salida.getDocumento());
 			tps.setCantidad(cantidad*-1);
-			tps.setComentario(det.getComentarioTps());
+			tps.setComentario(salida.getComentario());
 			tps.setSolicitado(det.getSolicitado());
 			tps.setCortes(det.getCortes());
 			tps.setInstruccionesDecorte(det.getInstruccionesDecorte());
 			salida.agregarPartida(tps);
-			if(!salida.getSolicitud().getClasificacion().equals("RECOGE_CAMIONETA") && !salida.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
+			if(!salida.getSolicitud().getClasificacion().equals("ENVIA_SUCURSAL") && !salida.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
 				System.out.println("Actualizando Existencia Para TPS Clasificacion Vale: "+salida.getSolicitud().getClasificacion());
 				actualizarExistencia(tps);
 			}
@@ -399,6 +407,11 @@ public class InventariosManagerImpl implements InventariosManager{
 		entrada.setSucursal(sol.getSucursal());
 		entrada.setDocumento(sol.getDocumento());
 		entrada.setComentario(sol.getComentarioTps());
+		
+	if (sol.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString()) || sol.getClasificacion().equals(ClasificacionVale.ENVIA_SUCURSAL.toString()) ){
+		entrada.setComentario("AUT-SOL: "+sol.getDocumento()+"-"+sol.getSucursal().getNombre());
+		}
+		
 		entrada.setPorInventario(sol.getPorInventario());
 		entrada.setClasificacion(sol.getClasificacion());
 		entrada.setChofer(chofer);
@@ -417,13 +430,13 @@ public class InventariosManagerImpl implements InventariosManager{
 			tpe.setSucursal(entrada.getSucursal());
 			tpe.setFecha(entrada.getFecha());
 			tpe.setDocumento(entrada.getDocumento());
-			tpe.setComentario(tps.getComentario());
+			tpe.setComentario(entrada.getComentario());
 			tpe.setProducto(tps.getProducto());
 			tpe.setSolicitado(tps.getSolicitado());
 			tpe.setCortes(tps.getCortes());
 			tpe.setInstruccionesDecorte(tps.getInstruccionesDecorte());
 			entrada.agregarPartida(tpe);
-			if(entrada.getSolicitud().getClasificacion().equals("RECOGE_CAMIONETA") || entrada.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
+			if(entrada.getSolicitud().getClasificacion().equals("ENVIA_SUCURSAL") || entrada.getSolicitud().getClasificacion().equals("RECOGE_CLIENTE")){
 				System.out.println("Actualizando Existencia Para TPE  Clasificacion Vale: "+ entrada.getSolicitud().getClasificacion());
 				actualizarExistencia(tpe);
 			}

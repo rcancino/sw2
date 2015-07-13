@@ -679,7 +679,9 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	}
 
 	public void setComentario2(String comentario2) {
+		Object old=this.comentario2;
 		this.comentario2 = comentario2;
+		firePropertyChange("comentario2", old, comentario2);
 	}
 	
 	
@@ -1118,7 +1120,7 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	
 	
 	public static enum ClasificacionVale{
-		SIN_VALE,RECOGE_CAMIONETA,RECOGE_CLIENTE,EXISTENCIA_VENTA
+		SIN_VALE,ENVIA_SUCURSAL,RECOGE_CLIENTE,EXISTENCIA_VENTA
 	}
 	
 	

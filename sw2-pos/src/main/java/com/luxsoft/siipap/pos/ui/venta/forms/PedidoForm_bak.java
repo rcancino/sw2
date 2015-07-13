@@ -2,7 +2,6 @@ package com.luxsoft.siipap.pos.ui.venta.forms;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -15,7 +14,6 @@ import java.beans.EventHandler;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
-import java.security.Provider.Service;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -44,7 +41,6 @@ import javax.swing.event.ListSelectionListener;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.view.JRViewer;
 
@@ -80,8 +76,10 @@ import com.jgoodies.uifextras.util.UIFactory;
 import com.jgoodies.validation.view.ValidationResultViewFactory;
 import com.luxsoft.cfdi.CFDIMandarFacturarForm;
 import com.luxsoft.cfdi.CFDIReportDialog;
-import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
+import com.luxsoft.siipap.model.User;
+import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.utils.UIUtils;
+import com.luxsoft.siipap.security.SeleccionDeUsuario;
 import com.luxsoft.siipap.swing.actions.DispatchingAction;
 import com.luxsoft.siipap.swing.binding.Binder;
 import com.luxsoft.siipap.swing.controls.UpperCaseField;
@@ -449,7 +447,8 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			JComboBox box=BasicComponentFactory.createComboBox(sl);
 			return box;
 		}else if("clasificacionVale".equals(property)){
-			if(model.getValue("id")==null){
+			//if(model.getValue("id")==null){
+			if(model.getModel("clasificacionVale").toString().equals("SIN_VALE")){
 			final SelectionInList sl=new SelectionInList(Pedido.ClasificacionVale.values(),model.getModel(property));
 			JComboBox box=BasicComponentFactory.createComboBox(sl);
 			return box;
@@ -457,8 +456,8 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				return BasicComponentFactory.createLabel(model.getModel(property), UIUtils.buildToStringFormat());
 			}
 		}else if("sucursalVale".equals(property)){
-			if(model.getValue("id")==null){
-			   
+			//if(model.getValue("id")==null){
+			if(model.getModel("clasificacionVale").toString().equals("SIN_VALE")){  
 				List sucursales=Services.getInstance().getSucursalesOperativas();
 				sucursales.remove(getModel().getValue("sucursalVale"));
 				SelectionInList sl=new SelectionInList(sucursales,model.getModel(property));
@@ -536,6 +535,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				,new JButton(getPrecioEspecialAction())
 				,consolidarButton
 				,new JButton(getImprimirAction())
+				,new JButton(getAutorizacionSEAction())
 		};
 		return ButtonBarFactory.buildLeftAlignedBar(buttons,true);
 	}
@@ -547,6 +547,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 	private Action descuentoEspecialAction;	
 	private Action facturarAction;
 	private Action precioEspecialAction;	
+	private Action autorizarSEAction;
 	
 	public Action getLookupAction(){
 		if(lookupAction==null){
@@ -599,7 +600,35 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 			precioEspecialAction.setEnabled(!getModel().isReadOnly());
 		}	
 		return precioEspecialAction;
+	}
+	
+	public Action getAutorizacionSEAction(){
+		if(autorizarSEAction==null){
+			autorizarSEAction=new DispatchingAction(this, "autorizacionSinExistencia");
+			autorizarSEAction.putValue(Action.NAME, "Aut. Sin Existencia");
+			//precioEspecialAction.putValue(Action.SMALL_ICON, ResourcesUtils.getIconFromResource("images2/money_delete.png"));
+			autorizarSEAction.setEnabled(!getModel().isReadOnly());
+		}	
+		return autorizarSEAction;
 	}	
+	
+	public void autorizacionSinExistencia(){
+		if(getController().getPedido().isFacturado())
+			return;
+		
+		if(!getController().getPedido().getPartidas().isEmpty()){
+			User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
+			if((user!=null) && user.hasRole(POSRoles.GERENTE_DE_VENTAS.name())){
+				getController().autorizarSinExistencia("Autorizado Sin Existencia por:  "+user.getFirstName()+" "+user.getLastName());
+			}else{
+				MessageUtils.showMessage("No tiene los derechos apropiados", "Ventas");
+			}
+		}
+		
+		
+	}
+	
+	
 	public Action getFacturarAction(){
 		if(facturarAction==null){
 			facturarAction=new DispatchingAction(this, "facturar");
@@ -643,7 +672,7 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 				,"conVale"
 				};
 		
-		String[] columnLabels={"Cot","Clave","Producto","(g)","cal","Cant"
+		String[] columnLabels={"S/E","Clave","Producto","(g)","cal","Cant"
 				//,"B.O."
 				,"Precio"
 				//,"Precio Esps"

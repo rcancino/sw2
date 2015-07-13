@@ -465,6 +465,10 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 		}
 	}
 	
+	public void autorizarSinExistencia(String userName){
+		getPedido().setComentario2(userName);
+	}
+	
 	public boolean calificaParaDescuentoEspecial(){
 		return getManager().calificaParaDescuentoEspecial(getPedido());
 	}

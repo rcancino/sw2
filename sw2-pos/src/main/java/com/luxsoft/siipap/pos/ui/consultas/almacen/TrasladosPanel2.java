@@ -188,25 +188,27 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 			if(m.getTipo().equals("TPS") && (m.getCfdi()==null)){
 				
 					
-				if(m.getClasificacion().equals(ClasificacionVale.RECOGE_CAMIONETA.toString()) || m.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString())){
+				if(m.getClasificacion().equals(ClasificacionVale.ENVIA_SUCURSAL.toString()) || m.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString())){
 					
 					
 					TrasladoAutomaticoController controller=new TrasladoAutomaticoController(m);
 					TrasladoAutomaticoForm form=new TrasladoAutomaticoForm(controller);
 					form.open();
 					if(!form.hasBeenCanceled()){
-						 m=controller.persistir();
+						 m=controller. persistir();
 					}
 					
 				}
 				int index=source.indexOf(m);
-				CFDI cfdi=Services.getCFDITraslado().generar(m);
+				
+				/**Marca el error de origen id duplicado al generar el vale**/
+				//CFDI cfdi=Services.getCFDITraslado().generar(m);
 				//timbrar(m);
 				if(index!=-1){
 					m=(Traslado)Services.getInstance().getHibernateTemplate().get(Traslado.class, m.getId());
 					source.set(index, m);
 				}
-				MessageUtils.showMessage("CFDI generado: "+cfdi, "CFDI ");
+				MessageUtils.showMessage("CFDI generado","CFDI");
 				
 			}else{
 				MessageUtils.showMessage("CFDI solo se puede generar para TPS ", "CFDI ");

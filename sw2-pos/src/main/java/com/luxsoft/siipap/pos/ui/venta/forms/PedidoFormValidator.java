@@ -246,8 +246,8 @@ public class PedidoFormValidator {
 					valid=valid+1;
 				}
 			}
-			if(valid>0){
-				support.getResult().addError( "Existe un producto cotizable");
+			if(valid>0 && getPedido().getComentario2()==null){
+				support.getResult().addError( "Se Requiere autorizacion para gravar sin Existencia ");
 			}
 			
 		}

@@ -102,9 +102,9 @@ public class PedidoDetFormModel2 extends DefaultFormModel implements PropertyCha
 			}
 		}
 		
-		if(getPedidoDet().getCantidad()< getExistencia() && getPedidoDet().isConVale()){
+		/*if(getPedidoDet().getCantidad()< getExistencia() && getPedidoDet().isConVale()){
 			support.getResult().addError("Este producto no requiere vale Existencia: "+getExistencia());
-		}
+		}*/
 		/*
 		if(getPedidoDet().getCantidad()>getExistencia() ){
 			support.getResult().addError("No se puede facturar sin existencia por facturar : "+getPedidoDet().getCantidad() +" Existencia Total"+ this.existenciaTotal );
