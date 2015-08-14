@@ -43,7 +43,6 @@ public class ConceptoContable {
 	
 
 	@Column(name="SUBCUENTA",length=255)
-	@NotNull
 	private String subcuenta;
 	
 	

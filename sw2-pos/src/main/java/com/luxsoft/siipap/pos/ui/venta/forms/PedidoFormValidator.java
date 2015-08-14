@@ -34,7 +34,7 @@ public class PedidoFormValidator {
 				support.getResult().addError("Cliente suspendido PARA TODO TIPO DE VENTA");
 			}
 			if(c.isJuridico()){
-				support.getResult().addError( "Cliente en trmite jurdico por lo que no se le puede facturar.\n Pedir autorizacin al departamento de crdito");
+				support.getResult().addError( "Cliente en tramite jurdico por lo que no se le puede facturar.\n Pedir autorizacin al departamento de credito");
 			}
 			if(c.getChequesDevueltos().doubleValue()>0){
 				support.getResult().addError( "El cliente tiene cheque(s) devueltos por un monto de: "+c.getChequesDevueltos()+" NO SE LE PUEDE FACTURAR.");
@@ -42,7 +42,7 @@ public class PedidoFormValidator {
 		}
 		if(pedido.getTotal().doubleValue()<0){
 			//support.getResult().addError("El monto mnimo para generar un pedido es de 10.00 pesos");
-			support.getResult().addError("El montopara generar un pedido debe ser mayor a 0.00 pesos");
+			support.getResult().addError("El monto para generar un pedido debe ser mayor a 0.00 pesos");
 		}
 		
 		// Papel: Modificacion al validador para salvar pedidos con anticipo y totales en cero
@@ -116,6 +116,7 @@ public class PedidoFormValidator {
 		validarIsConVale(support);
 		validarSucursalVale(support);
 		validarIsCotizacion(support);
+		validarPartidasVale(support);
 		/*
 		for(PedidoDet det:getPedido().getPartidas()){
 			double existenciaTotal=0; //det
@@ -164,11 +165,11 @@ public class PedidoFormValidator {
 	private void validarFormaDeEnvio(PropertyValidationSupport support){
 		if(getPedido().getEntrega().name().startsWith("ENVIO")){
 			if(getPedido().getInstruccionDeEntrega()==null){
-				support.getResult().addError("Debe definir la direccin de envio");
+				support.getResult().addError("Debe definir la direccion de envio");
 			}
 		}else if(FormaDeEntrega.ENVIO_CARGO.equals(getPedido().getEntrega())){
 			if(getPedido().getFlete().doubleValue()<=0)
-				support.getResult().addError("El tipo de envio con cargo no aplica para la poblacin/estado definidos");
+				support.getResult().addError("El tipo de envio con cargo no aplica para la poblacion/estado definidos");
 		}
 	}
 	
@@ -180,7 +181,7 @@ public class PedidoFormValidator {
 		
 		//Validar q el cliente tenga credito
 		if(!c.isDeCredito()){
-			support.getResult().addError("El cliente no tiene lnea de crdito");
+			support.getResult().addError("El cliente no tiene lnea de credito");
 			return;
 		} 
 		
@@ -272,6 +273,19 @@ public class PedidoFormValidator {
 			
 	}
 	
+	private void validarPartidasVale(PropertyValidationSupport support){
+		int conVale=0;
+			for(PedidoDet det : getPedido().getPartidas()){
+				if(det.isConVale()){
+					conVale=conVale+1;
+				}
+			}
+			if(conVale==0 && !getPedido().getClasificacionVale().equals(ClasificacionVale.SIN_VALE) ){
+			support.getResult().addError("El pedido no tiene partidas para vale");
+		}
+		
+	}
+	
 	
 	private void validarDireccion(PropertyValidationSupport support){
 		if(getPedido().getEntrega().equals(FormaDeEntrega.LOCAL))
@@ -290,7 +304,7 @@ public class PedidoFormValidator {
 					support.getResult().addError( "Direccion incorrecta");
 				}
 			}else{
-				support.getResult().addError( "La direccin del cliente no puede ser nula");
+				support.getResult().addError( "La direccion del cliente no puede ser nula");
 			}
 		}
 	}

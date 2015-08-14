@@ -56,7 +56,11 @@ public class MenuFactory extends MenuFactoryImpl{
 		//builder.add(getActionManager().getAction("showAlmacenView"));
 		//builder.add(getActionManager().getAction("showEmbarquesView"));
 		
-		if(KernellSecurity.instance().hasRole(POSRoles.CAJERO.name())){
+		String ipConexion=KernellSecurity.getIPAdress();
+		String ipCaja1=Services.getInstance().getConfiguracion().getCaja1();
+		String ipCaja2=Services.getInstance().getConfiguracion().getCaja2();
+		
+		if(KernellSecurity.instance().hasRole(POSRoles.CAJERO.name()) && (ipConexion.equals(ipCaja1) || ipConexion.equals(ipCaja2)) ){
 			ShowViewAction sa=new ShowViewAction("Caja"){
 
 				@Override

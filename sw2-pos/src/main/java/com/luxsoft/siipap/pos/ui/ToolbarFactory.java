@@ -16,6 +16,7 @@ import com.luxsoft.siipap.model.User;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.forms.FacturaForm;
 import com.luxsoft.siipap.security.SeleccionDeUsuario;
+import com.luxsoft.siipap.service.KernellSecurity;
 import com.luxsoft.siipap.swing.AbstractView;
 import com.luxsoft.siipap.swing.Application;
 import com.luxsoft.siipap.swing.actions.ShowViewAction;
@@ -124,12 +125,16 @@ public class ToolbarFactory extends ToolbarFactoryImpl{
 		
 		
 		ShowViewAction sa=new ShowViewAction("Caja"){
+			
+			String ipConexion=KernellSecurity.getIPAdress();
+			String ipCaja1=Services.getInstance().getConfiguracion().getCaja1();
+			String ipCaja2=Services.getInstance().getConfiguracion().getCaja2();
 
 			@Override
 			protected void execute() {
 				Action delegate=getActionManager().getAction("showCajaView");
 				User user=SeleccionDeUsuario.findUser(Services.getInstance().getHibernateTemplate());
-				if((user!=null) && user.hasRole(POSRoles.CAJERO.name())){
+				if((user!=null) && user.hasRole(POSRoles.CAJERO.name()) && (ipConexion.equals(ipCaja1) || ipConexion.equals(ipCaja2)) ){
 					delegate.actionPerformed(null);
 				}else{
 					MessageUtils.showMessage("No tiene los derechos apropiados", "Caja");

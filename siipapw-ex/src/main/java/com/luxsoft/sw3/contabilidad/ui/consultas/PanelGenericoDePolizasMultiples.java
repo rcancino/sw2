@@ -82,7 +82,7 @@ public abstract class PanelGenericoDePolizasMultiples extends AbstractMasterData
 
 	@Override
 	protected TableFormat createDetailTableFormat() {
-		String[] props={"poliza.folio","concepto.clave","concepto","descripcion2","referencia","referencia2","debe","haber","asiento","tipo"};
+		String[] props={"poliza.folio","cuenta.clave","concepto","descripcion2","referencia","referencia2","debe","haber","asiento","tipo"};
 		
 		return GlazedLists.tableFormat(PolizaDet.class, props,getDetalleNames());
 	}

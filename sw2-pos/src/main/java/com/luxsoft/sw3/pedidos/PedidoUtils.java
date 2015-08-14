@@ -33,11 +33,12 @@ public class PedidoUtils {
 				",Y.AUT_ID AS contraEntregaId " +
 				",Z.ID as pendienteId " +
 				",Z.COMENTARIO  AS PENDIENTE" +
-				",S.AUT_COMMENTARIO AS comentarioAutorizacion" +
+				",S.AUT_COMMENTARIO AS comentarioAutorizacion, X.VALE, X.CLASIFICACION_VALE AS clasificacionVale, U.NOMBRE AS sucursalVale" +
 				" FROM SX_PEDIDOS X " +
 				" LEFT JOIN SX_PEDIDOS_PAGOCE Y ON(X.PEDIDO_ID=Y.PEDIDO_ID)" +
 				" LEFT JOIN SX_PEDIDOS_PENDIENTES Z ON(X.PEDIDO_ID=Z.PEDIDO_ID)" +
 				" LEFT JOIN SX_AUTORIZACIONES2 S ON(X.AUTORIZACION_ID=S.AUT_ID)" +
+				" LEFT JOIN SW_SUCURSALES U ON (U.SUCURSAL_ID=X.SUCURSAL_VALE)" +
 				" WHERE X.FECHA BETWEEN ? AND ? AND X.ESPECIAL=false";
 		//System.out.println(sql);
 		Object[] params=new Object[]{

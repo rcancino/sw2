@@ -107,7 +107,7 @@ public class MonedasUtils {
 		BigDecimal neto=importe;
 		for(Double dd:descuentos){
 			if(dd==null)continue;
-			if(dd.doubleValue()>0){
+			if(dd.doubleValue()!=0){
 				BigDecimal d=BigDecimal.valueOf(dd);
 				BigDecimal descuento=neto.multiply(d);
 				descuento=descuento.divide(BigDecimal.valueOf(100d));

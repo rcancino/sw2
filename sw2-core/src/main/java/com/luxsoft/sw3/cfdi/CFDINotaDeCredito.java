@@ -263,7 +263,7 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 			
 			for(DevolucionDeVenta det:partidas){
 				Concepto c=conceptos.addNewConcepto();
-				c.setCantidad(new BigDecimal(det.getCantidadEnUnidad()).abs().setScale(3,RoundingMode.HALF_EVEN));
+				c.setCantidad(new BigDecimal(det.getCantidadEnUnidad()).setScale(3,RoundingMode.HALF_EVEN));
 				c.setUnidad(det.getUnidad().getNombre());
 				c.setNoIdentificacion(det.getClave());
 				c.setDescripcion(det.getDescripcion());

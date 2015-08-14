@@ -62,7 +62,11 @@ public class MenuFactory extends MenuFactoryImpl{
 		MenuBuilder builder=new MenuBuilder("Catalogos",'C');
 		//Catalogos relacionados con clientes
 		
-		builder.add(getActionManager().getAction(CXCActions.ConsultaDeClientes.getId()));
+		if(KernellSecurity.instance().hasRole(CRM_Roles.CRM_USER.name())){
+			builder.add(getActionManager().getAction(CXCActions.ConsultaDeClientes.getId()));
+		}
+		
+		//builder.add(getActionManager().getAction(CXCActions.ConsultaDeClientes.getId()));
 		builder.add(SociosBrowser.getShowAction());
 		builder.addSeparator();
 		return builder.getMenu();

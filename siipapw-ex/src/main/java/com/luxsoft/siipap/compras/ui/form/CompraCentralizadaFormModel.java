@@ -235,7 +235,7 @@ public class CompraCentralizadaFormModel extends DefaultFormModel {
 	
 	protected CompraUnitaria beforeUpdate(final CompraUnitaria source){
 		CompraUnitaria target=new CompraUnitaria();
-		BeanUtils.copyProperties(source, target, new String[]{"id","version","log"});
+		BeanUtils.copyProperties(source, target, new String[]{"id","version","log","ancho","largo"});
 		return target;
 	}
 	

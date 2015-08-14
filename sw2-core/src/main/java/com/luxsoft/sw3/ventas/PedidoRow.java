@@ -4,9 +4,17 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
+import com.luxsoft.siipap.model.Sucursal;
+import com.luxsoft.sw3.ventas.Pedido.ClasificacionVale;
 
 /**
  * JavaBean / Entidad que es la abstraccion basica de lo que es un pedido de 
@@ -51,7 +59,10 @@ public class PedidoRow {
 	private String pendienteDesc;
 	private boolean deCredito;
 	private String origen;
-	
+
+	private String clasificacionVale;
+	private String sucursalVale;
+	private boolean vale;
 	
 	public PedidoRow(){}
 	
@@ -81,6 +92,12 @@ public class PedidoRow {
 		setOperador(p.getOperador());
 		setPendienteDesc(p.getPendienteDesc());
 		setOrigen(p.getOrigen());
+		setVale(p.isVale());
+		setClasificacionVale(p.getClasificacionVale().toString());
+		if(!p.getClasificacionVale().equals(ClasificacionVale.SIN_VALE)){
+			setSucursalVale(p.getSucursalVale().getNombre());
+		}
+		
 		//setContraEntrega(p.isContraEntrega());
 		
 	
@@ -359,6 +376,30 @@ public class PedidoRow {
 		this.origen = origen;
 	}
 	
+	
+	
+	public boolean isVale() {
+		return vale;
+	}
+
+	public void setVale(boolean vale) {
+		this.vale = vale;
+	}
+	public String getSucursalVale() {
+		return sucursalVale;
+	}
+
+	public void setSucursalVale(String sucursalVale) {
+		this.sucursalVale =sucursalVale;
+	}
+	public String getClasificacionVale() {
+		return clasificacionVale;
+	}	
+
+	public void setClasificacionVale(String clasificacionVale) {
+			this.clasificacionVale = clasificacionVale;
+	}
+
 	
 	
 }

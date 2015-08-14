@@ -145,7 +145,11 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				,"contraEntrega"				
 				,"comentario"
 				,"pendiente"
-				,"comentarioAutorizacion");
+				,"comentarioAutorizacion"
+				,"vale"
+				,"clasificacionVale"
+				,"sucursalVale"
+				);
 		addLabels(
 				"Folio"
 				,"Venta"
@@ -164,6 +168,9 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				,"Comentario"
 				,"Comentario(Pend)"
 				,"Comentario(Aut)"
+				,"Vale"
+				,"Clasificacion"
+				,"Sucursal"
 				);
 		installTextComponentMatcherEditor("folio", "folio");
 		installTextComponentMatcherEditor("Cliente", "clave","nombre");		
@@ -230,6 +237,7 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		procesos.add(addAction(null,"canclearPedidos", "Cancelacin de pedidos"));
 		procesos.add(addAction(null, "camcioDecliente", "Cambio de Cliente"));
 		procesos.add(addAction(null, "asignarInstruccionDeEntrega", "Registrar para COD"));
+		procesos.add(addAction("","generarValeExisPedido", "Crear vale Exist-Vta"));
 		
 		return procesos;
 	}
@@ -450,8 +458,8 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 				source.set(index, new PedidoRow(p));
 				
 				if(!p.getClasificacionVale().equals(ClasificacionVale.SIN_VALE) && !p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
-					 SolicitudDeTraslado sol=generarValePedido(p);
-					 generarTraslado(sol);
+					 SolicitudDeTraslado sol=generarValePedido(p,user.getFullName());
+					 generarTraslado(sol,user.getFullName());
 					 
 					p.setVale(true);
 					p=(Pedido)Services.getInstance().getUniversalDao().save(p);
@@ -483,8 +491,8 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		}
 		
 		if(!p.getClasificacionVale().equals(ClasificacionVale.SIN_VALE) && !p.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) && !p.isVale() ){
-			   SolicitudDeTraslado sol=generarValePedido(p);
-			   generarTraslado(sol);
+			   SolicitudDeTraslado sol=generarValePedido(p,user.getFullName());
+			   generarTraslado(sol,user.getFullName());
 				p.setVale(true);
 			
 				p=(Pedido)Services.getInstance().getUniversalDao().save(p);
@@ -498,17 +506,38 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 			
 	}
 	
-public void generarTraslado(SolicitudDeTraslado sol){
+public void generarTraslado(SolicitudDeTraslado sol,String user){
 		
-		getInventarioManager().generarSalidaPorTraslado(sol, new Date(), null, null, null, null, null);
+		getInventarioManager().generarSalidaPorTraslado(sol, new Date(), null, user, null, null, null);
 	
 	}
 	
 	
-	
+	public void generarValeExisPedido(){
+		PedidoRow row=(PedidoRow)getSelectedObject();
+		if(row!=null){
+			Pedido pedido=getSelectedPedido();
+			if( !pedido.isVale() ){
+				if(pedido.getClasificacionVale().equals(ClasificacionVale.EXISTENCIA_VENTA) ){
+					int index=source.indexOf(row);
+					boolean actPedido=generarValeExisVta(pedido);
+					pedido.setVale(actPedido);
+					pedido=(Pedido)Services.getInstance().getUniversalDao().save(pedido);
+					load();
+				}else{
+					MessageUtils.showMessage("La clasificacion del vale no es EXISTENCIA_VENTA","Vale Existencia venta");
+				}
+				
+			}else{
+				MessageUtils.showMessage("Ya existe un vale para este Pedido","Vale Existencia venta");
+			}
+			
+			
+		}
+	}
 	 
 	 
-	public SolicitudDeTraslado generarValePedido(Pedido pedido){
+	public SolicitudDeTraslado generarValePedido(Pedido pedido, String user){
 		SolicitudDeTraslado sol= new SolicitudDeTraslado();
 		 EventList<SolicitudDeTrasladoDet> partidasSource = new BasicEventList<SolicitudDeTrasladoDet>();
 		
@@ -542,14 +571,14 @@ public void generarTraslado(SolicitudDeTraslado sol){
 		ListEventListener<SolicitudDeTrasladoDet> syncEventListToList = GlazedLists.syncEventListToList(partidasSource, sol.getPartidas());
 		
 		Date time=Services.getInstance().obtenerFechaDelSistema();
-		String user=pedido.getLog().getUpdateUser();
+		
 			
 		sol.getLog().setCreado(time);
-		sol.getLog().setCreateUser(pedido.getLog().getUpdateUser());
+		sol.getLog().setCreateUser(user);
 		sol.getAddresLog().setCreatedIp(sol.getAddresLog().getUpdatedIp());
 		sol.getAddresLog().setCreatedMac(KernellSecurity.getMacAdress());
 		sol.getLog().setModificado(time);	
-		sol.getLog().setUpdateUser(pedido.getLog().getUpdateUser());
+		sol.getLog().setUpdateUser(user);
 		sol.getAddresLog().setUpdatedIp(KernellSecurity.getIPAdress());
 		sol.getAddresLog().setUpdatedMac(KernellSecurity.getMacAdress());
 	

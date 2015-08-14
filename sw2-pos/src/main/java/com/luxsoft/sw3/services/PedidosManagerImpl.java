@@ -235,7 +235,7 @@ public class PedidosManagerImpl implements PedidosManager{
 				double descuentoPorProducto=listaDePreciosClienteDao.buscarDescuentoPorProducto(pedido.getCliente(), det.getProducto(), pedido.getMoneda());
 				
 				//Ponchar el precio del catalogo (Credito)
-				if(descuentoPorProducto>0){
+				if(descuentoPorProducto!=0){
 					
 					precio=MonedasUtils.aplicarDescuentosEnCascada(precio, descuentoPorProducto);
 				}

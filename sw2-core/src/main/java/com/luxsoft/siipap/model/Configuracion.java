@@ -1,5 +1,6 @@
 package com.luxsoft.siipap.model;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -42,6 +43,30 @@ public class Configuracion extends BaseBean{
 	@ManyToOne(optional=true)
 	@JoinColumn(name="CUENTA_PREFERENTE_ID",nullable=true)
 	private Cuenta cuentaPreferencial;
+	
+	@Column(name="CAJA1",nullable=true,length=20)
+	private String caja1;
+	
+	
+	@Column(name="CAJA2",nullable=true,length=20)
+	private String caja2;
+	
+	
+	public String getCaja2(){
+		return caja2;
+	}
+	
+	public void setCaja2(String caja2){
+		this.caja2=caja2;
+	}
+	
+	public String getCaja1(){
+		return caja1;
+	}
+	
+	public void setCaja1(String caja1){
+		this.caja1=caja1;
+	}
 	
 
 	public Long getId() {

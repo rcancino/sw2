@@ -84,6 +84,8 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	private Action prenderActMaq;
 	private Action apagarActMaq;
 	
+	private Action recalculoExistencias;
+	
 	
 	@Override
 	protected List<Action> createProccessActions(){
@@ -104,6 +106,8 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		apagarActMaq=addAction("", "apagarActualizacionMaq", "Apagar Act. Maq.");
 		apagarActMaq.setEnabled(false);
 		
+		recalculoExistencias=addAction("","arrancarRecalculo","Recalcular Existencias");
+		
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction(null, "actualizarExistencias", "Actualizar Exist."));
 		actions.add(prenderActualizacion);
@@ -114,6 +118,8 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		
 		actions.add(prenderActMaq);
 		actions.add(apagarActMaq);
+		
+		actions.add(recalculoExistencias);
 		
 		
 		actions.add(addAction("", "envioDeCfdiDiaAnterior", "Enviar Cfdi dia ant."));
@@ -210,6 +216,10 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 
      }
 	
+     
+     
+     
+     
 	public void envioDeCfdi(){
 		CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
 		service.madarPorCorreo();
@@ -245,7 +255,25 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		ServiceLocator2.getExistenciaMaqDao().actualizarExistencias();
 	}
 	
+	 private Timer timerRecalculoAutomatico;
+	 
+	 TimerTask recalcularExistencias=new TimerTask(){
+		public void run(){
+			recalcularExistencias();
+		}
+	 };
 	
+	 public void startRecalculo(){
+		 System.out.println("Arrancando Recalculo automatico de existencias");
+		 timerRecalculoAutomatico=new Timer();
+         timerRecalculoAutomatico.schedule(recalcularExistencias,1000, 1800000 );
+	 }
+	 
+	 public void recalcularExistencias(){
+		 RecalculoDeExistenciasRemoto recalculo=new RecalculoDeExistenciasRemoto();
+		 recalculo.addSucursal(6L,5L,2L,3L,9L,11L).recalcularExistencias();
+	 }
+	 
 	public void envioDeCfdiDiaAnterior(){
 		CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
 		 Date dia=DateUtils.addDays(new Date(),-1);
@@ -294,6 +322,10 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		System.out.println("Existencias Actualizadas");
 	}
 	
+	
+	public void arrancarRecalculo(){
+		startRecalculo();
+	}
 	
 	public void prenderActualizacionAutomatica(){		
 		start();

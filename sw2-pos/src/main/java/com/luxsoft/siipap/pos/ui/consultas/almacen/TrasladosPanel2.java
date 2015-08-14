@@ -23,9 +23,9 @@ import com.luxsoft.siipap.inventarios.model.TrasladoDet;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.pos.POSRoles;
 import com.luxsoft.siipap.pos.ui.reports.RelacionDeTPSReportForm;
+import com.luxsoft.siipap.pos.ui.reports.RelacionTPSTimbrarReportForm;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeSolicitudesPendietes;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
-
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.utils.CommandUtils;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
@@ -98,6 +98,7 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 				,addAction(null, "imprimirTPE","Imprimir TPE")
 			//	,addAction(null, "imprimirRelacionTPS", "Imprimir Relacion TPS")
 				,addAction(null, "imprimirRelacionTPS","Imprimir Relacin TPS")
+				,addAction(null, "imprimirRelacionTPSPendientes","TPS Sin Timbrar")
 				//,addRoleBasedContextAction(null,POSRoles.CONTROLADOR_DE_INVENTARIOS.name(), this, "timbrar", "Timbrar CFDI")
 				,addAction(null, "printCfdi", "Imprimir CFDI")
 				//,getEditAction()
@@ -310,6 +311,12 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 	
 	public void imprimirRelacionTPS(){
 		RelacionDeTPSReportForm report=new RelacionDeTPSReportForm();
+		report.run();
+		
+	}
+	
+	public void imprimirRelacionTPSPendientes(){
+		 RelacionTPSTimbrarReportForm report=new RelacionTPSTimbrarReportForm();
 		report.run();
 		
 	}
