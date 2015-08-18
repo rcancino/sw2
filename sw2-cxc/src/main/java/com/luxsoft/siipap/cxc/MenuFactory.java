@@ -62,7 +62,7 @@ public class MenuFactory extends MenuFactoryImpl{
 		MenuBuilder builder=new MenuBuilder("Catalogos",'C');
 		//Catalogos relacionados con clientes
 		
-		if(KernellSecurity.instance().hasRole(CRM_Roles.CRM_USER.name())){
+		if(KernellSecurity.instance().hasRole(CRM_Roles.MANTENIMIENTO_CLIENTES.name())){
 			builder.add(getActionManager().getAction(CXCActions.ConsultaDeClientes.getId()));
 		}
 		
@@ -78,7 +78,7 @@ public class MenuFactory extends MenuFactoryImpl{
 		
 		JMenu subMenu=new JMenu("Catálogos");
 		//Catalogos clientes
-		if(KernellSecurity.instance().hasRole(CRM_Roles.MANTENIMIENTO_CLIENTES.name())){
+		if(KernellSecurity.instance().hasRole(CRM_Roles.CRM_USER.name())){
 			subMenu.add(CRM_ClienteBrowser.getShowAction());
 		}
 		builder.add(subMenu);

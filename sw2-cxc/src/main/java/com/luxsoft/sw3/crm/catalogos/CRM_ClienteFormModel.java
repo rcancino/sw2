@@ -82,14 +82,14 @@ public class CRM_ClienteFormModel extends DefaultFormModel implements PropertyCh
 			support.getResult().addWarning("CORREGIR EL RFC");
 		}if(getCliente().isPersonaFisica()){
 			if(StringUtils.isBlank(getCliente().getApellidoP()))
-				support.getResult().addError("En personas físicas el apellido paterno es mandatorio");
+				support.getResult().addError("En personas fsicas el apellido paterno es mandatorio");
 			if(StringUtils.isBlank(getCliente().getApellidoM()))
-				support.getResult().addError("En personas físicas el apellido materno es mandatorio");
+				support.getResult().addError("En personas fsicas el apellido materno es mandatorio");
 			if(StringUtils.isBlank(getCliente().getNombres()))
-				support.getResult().addError("En personas físicas el(los) nombres  es(son) mandatorio(s)");
+				support.getResult().addError("En personas fsicas el(los) nombres  es(son) mandatorio(s)");
 		}if(!getCliente().isPersonaFisica()){
 			if(StringUtils.isBlank(getCliente().getNombre())){
-				support.getResult().addError("El nombre o razón es mandatorio");
+				support.getResult().addError("El nombre o razn es mandatorio");
 			}
 		}
 		validarDireccion(getCliente().getDireccionFiscal(), support);
@@ -98,22 +98,22 @@ public class CRM_ClienteFormModel extends DefaultFormModel implements PropertyCh
 	
 	private void validarDireccion(Direccion direccion,PropertyValidationSupport support){
 		if(StringUtils.isBlank(direccion.getCalle())){
-			support.getResult().addWarning("Falta calle en dirección" );
+			support.getResult().addWarning("Falta calle en direccin" );
 			return;
 		}if(StringUtils.isBlank(direccion.getColonia())){
-			support.getResult().addWarning("Falta colonia en dirección" );
+			support.getResult().addWarning("Falta colonia en direccin" );
 			return;
 		}if(StringUtils.isBlank(direccion.getMunicipio())){
-			support.getResult().addWarning("Falta la delegación/municipio en dirección" );
+			support.getResult().addWarning("Falta la delegacin/municipio en direccin" );
 			return;
 		}if(StringUtils.isBlank(direccion.getEstado())){
-			support.getResult().addWarning("Falta el estado en la dirección" );
+			support.getResult().addWarning("Falta el estado en la direccin" );
 		}if(StringUtils.isBlank(direccion.getCp())){
-			support.getResult().addWarning("Falta el codigo postal en la dirección" );
+			support.getResult().addWarning("Falta el codigo postal en la direccin" );
 			return;
 		}if(StringUtils.isNotBlank(direccion.getNumero())){
 			if(direccion.getNumero().length()>10){
-				support.getResult().addError("Tamaño de número extorior debe ser<=10" );
+				support.getResult().addError("Tamao de nmero extorior debe ser<=10" );
 			}
 		}
 	}
@@ -152,6 +152,14 @@ public class CRM_ClienteFormModel extends DefaultFormModel implements PropertyCh
 		}
 		
 	}
+	
+	public void cancelarCredito(){
+		if(getCliente().getCredito()!=null){
+			getCliente().getCredito().setCliente(null);
+			getCliente().setCredito(null);
+		}
+	}
+	
 	
 	private class CreditoHandler implements PropertyChangeListener{
 		public void propertyChange(PropertyChangeEvent evt){			
