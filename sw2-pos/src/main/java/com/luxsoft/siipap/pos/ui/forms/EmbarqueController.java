@@ -1,8 +1,8 @@
 package com.luxsoft.siipap.pos.ui.forms;
 
-import java.awt.Dialog;
-import java.sql.SQLException;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,22 +11,17 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.aspectj.bridge.MessageUtil;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.springframework.beans.BeanUtils;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.Assert;
 
+import com.luxsoft.siipap.cxc.model.FormaDePago;
+import com.luxsoft.siipap.cxc.model.Pago;
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.User;
-import com.luxsoft.siipap.model.UserLog;
 import com.luxsoft.siipap.pos.POSRoles;
-
+import com.luxsoft.siipap.pos.ui.forms.caja.PagoFormModel;
 import com.luxsoft.siipap.pos.ui.selectores.SelectorDeFacturasParaAsignacionDeEmbarques;
-import com.luxsoft.siipap.pos.ui.selectores.SelectorDeFacturasParaEntrega;
 import com.luxsoft.siipap.pos.ui.utils.ReportUtils2;
 import com.luxsoft.siipap.service.KernellSecurity;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
@@ -35,10 +30,11 @@ import com.luxsoft.siipap.ventas.model.Venta;
 import com.luxsoft.sw3.embarque.Embarque;
 import com.luxsoft.sw3.embarque.Entrega;
 import com.luxsoft.sw3.embarque.Transporte;
-import com.luxsoft.sw3.model.AdressLog;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.services.KernellUtils;
 import com.luxsoft.sw3.ventas.InstruccionDeEntrega;
+
+
 
 /** 
  * Controlador para el manejo de embarques
@@ -120,25 +116,6 @@ public class EmbarqueController {
 			return embarque;
 		}
 
-	/*	for(Entrega ent: embarque.getPartidas()){
-			if(ent.getArribo()==null){
-					String pattern="No se ha registrado la llegada con el cliente para la  Entrega de la Fac: "+ent.getDocumento()+"";
-					MessageUtils.showMessage(pattern,"Embarques");
-					
-						
-					
-			}
-			if(ent.getRecepcion()==null){
-				String pattern="No se ha registrado la recepcion del cliente para una Entrega de la Fac: "+ent.getDocumento();
-				MessageUtils.showMessage(pattern, "Embarques");
-				if(MessageUtils.showConfirmationMessage("Eliminar la entrega del Documento  "+ ent.getDocumento(), "Eliminación de entregas")){
-					elminarEntregaEnRetorno(embarque, ent);
-				}else
-				return embarque;
-			}
-			
-		}*/
-		//final Date regreso=RegistroDeSalida.seleccionar();
 		Embarque target=Services.getInstance().getEmbarquesManager().getEmbarquer(embarque.getId());
 		
 		final RegresoDeEmbarqueFormModel model=new RegresoDeEmbarqueFormModel(target);
@@ -146,45 +123,37 @@ public class EmbarqueController {
 		form.open();
 		if(!form.hasBeenCanceled()){
 			model.comiit();
+			
 			for(Entrega entrega:target.getPartidas()){
-				if(entrega.getFactura().getPedido().isContraEntrega()){
+				Venta vent=entrega.getFactura();
+				if(vent.getPedido().isContraEntrega()){
+					System.out.println("Detectando venta contraentrega");
 					entrega.setPorCobrar(entrega.getValor());
+					if(vent.getFormaDePago().equals(FormaDePago.EFECTIVO)){
+						System.out.println("Venta contra entrega de efectivo aplicando el pago de la factura");
+						final BigDecimal porPagar=vent.getSaldoCalculado();
+						final PagoFormModel mod=new PagoFormModel();
+						
+						mod.setFormasDePago(vent.getFormaDePago());
+						mod.setSucursal(vent.getSucursal());
+						mod.getPago().setCliente(vent.getCliente());
+						mod.getPago().registrarImporte(porPagar);
+						
+						Pago pago=mod.getPago().toPago();
+						Date fecha=Services.getInstance().obtenerFechaDelSistema();
+						//Venta venta=getFactura(selected.getId());
+						Services.getInstance().getPagosManager().cobrarFactura(vent, pago,fecha);				
+						Services.getInstance().getFacturasManager().generarAbonoAutmatico(Arrays.asList(vent));
+						
+						mod.dispose();
+					}
+					
 				}
 			}
 			return persistir(target);
 		}else
 			return embarque;
-		/*
-		if(regreso!=null){
-			Embarque res= (Embarque)Services.getInstance().getHibernateTemplate().execute(new HibernateCallback(){
-				public Object doInHibernate(Session session)throws HibernateException, SQLException {
-					Embarque e=(Embarque)session.get(Embarque.class, embarque.getId());
-					for(Entrega entrega:e.getPartidas()){
-						//entrega.actualziarValor();
-						//entrega.actualizarKilosCantidad();
-						//entrega.actualizarComision();
-						if(entrega.getFactura().getPedido().isContraEntrega()){
-							entrega.setPorCobrar(entrega.getValor());
-						}
-					}
-					e.setRegreso(regreso);
-					session.flush();
-					session.clear();
-					return e;
-				}
-				
-			});
-			res=persistir(res);
-			Sucursal sucursal=Services.getInstance().getConfiguracion().getSucursal();
-			for(Entrega e:res.getPartidas()){
-				Services.getInstance().getEmbarquesManager().salvarEntrega(e, sucursal);
-			}
-			MessageUtils.showMessage("Embarque concluido: "+res.getId(), "Retorno de embarque");
-			
-			return res;
-		}else
-			return embarque;
-		*/
+		
 		
 		
 	}

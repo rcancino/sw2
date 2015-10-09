@@ -159,6 +159,8 @@
      				p:title="Conteo de Inventario"/>
      				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.AdministracionDeSectores"
      				p:title="Administracion De Sectores"/>
+     				<bean class="com.luxsoft.siipap.pos.ui.consultas.almacen.DevolucionesDeComprasPanel"
+     	         p:title="Devolucin de Compras"/> 
      		</list>
      	</property>
      </bean>

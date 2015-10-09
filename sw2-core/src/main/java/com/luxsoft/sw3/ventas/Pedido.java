@@ -1120,7 +1120,7 @@ public class Pedido extends BaseBean implements AddressLoggable{
 	
 	
 	public static enum ClasificacionVale{
-		SIN_VALE,ENVIA_SUCURSAL,RECOGE_CLIENTE,EXISTENCIA_VENTA
+		SIN_VALE,ENVIA_SUCURSAL,RECOGE_CLIENTE,EXISTENCIA_VENTA,PASA_CAMIONETA
 	}
 	
 	

@@ -74,6 +74,7 @@ public class SolicitudDeTrasladoForm extends AbstractForm implements ListSelecti
 	}
 	
 	private JLabel usuarioNombre;
+	private JComboBox box;
 
 	@Override
 	protected JComponent buildFormPanel() {
@@ -91,7 +92,8 @@ public class SolicitudDeTrasladoForm extends AbstractForm implements ListSelecti
 			builder.append("Documento",addReadOnly("documento"));
 		}
 		builder.append("Fecha",addReadOnly("fecha"));
-		builder.append("Clasificacion",addReadOnly("clasificacion"));
+		//builder.append("Clasificacion",addReadOnly("clasificacion"));
+		builder.append("Clasificacion",getControl("clasificacion"));
 		builder.nextLine();
 		usuarioNombre=new JLabel("");
 		builder.append("Usuario",getControl("usuario"));
@@ -156,6 +158,22 @@ public class SolicitudDeTrasladoForm extends AbstractForm implements ListSelecti
 			JComponent c=BasicComponentFactory.createPasswordField(getController().getUserModel(),true);
 			c.setEnabled(!model.isReadOnly());
 			return c;
+		}else if("clasificacion".equals(property)){
+			if(model.getValue("id")==null){
+				/*box=new JComboBox(new String[]{
+						"EXISTENCIA"
+						,"CONTRAVALE"
+						});
+				return box;*/
+				
+				
+				String[] clasif={"EXISTENCIA","CONTRAVALE"};
+				SelectionInList sl=new SelectionInList(clasif,model.getModel(property));
+				box=BasicComponentFactory.createComboBox(sl);
+				return box;
+			}
+			
+			
 		}
 		return null;
 	}

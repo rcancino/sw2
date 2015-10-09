@@ -520,8 +520,10 @@ public class IngresosManagerImpl implements IngresosManager{
 			cargo.setConciliado(conciliado);
 		}
 		//Tratamiento para Cargos tipo TES
-		
+		System.out.println("****************************************************--"+pago.getId());
 		for(Aplicacion a:pago.getAplicaciones()){
+			System.out.println("********************************"+a.getId()+"-----------");
+			
 			if(a.getDetalle().getCarTipo().equals("TES")){				
 				Concepto concepto=(Concepto)hibernateTemplate.get(Concepto.class, 737331L);
 				cargo.setConcepto(concepto);

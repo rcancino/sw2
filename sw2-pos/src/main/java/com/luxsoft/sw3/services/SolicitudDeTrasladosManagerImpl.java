@@ -66,6 +66,17 @@ public class SolicitudDeTrasladosManagerImpl implements SolicitudDeTrasladosMana
 			if(sd.getSolicitado()<=0)
 				iter.remove();
 		}
+		
+		if(sol.getClasificacion().equals("CONTRAVALE")){
+			
+			
+			for(SolicitudDeTrasladoDet det :sol.getPartidas()){
+		
+				det.setRecibido(det.getSolicitado());
+			
+			}
+		}
+		
 		Folio folio=folioDao.buscarNextFolio(sol.getSucursal(), "TRASLADO_SOL");
 		sol.setDocumento(folio.getFolio());
 		folioDao.save(folio);

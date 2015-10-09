@@ -189,7 +189,7 @@ public class TrasladosPanel2 extends AbstractMasterDatailFilteredBrowserPanel<Tr
 			if(m.getTipo().equals("TPS") && (m.getCfdi()==null)){
 				
 					
-				if(m.getClasificacion().equals(ClasificacionVale.ENVIA_SUCURSAL.toString()) || m.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString())){
+				if(m.getClasificacion().equals(ClasificacionVale.ENVIA_SUCURSAL.toString()) || m.getClasificacion().equals(ClasificacionVale.RECOGE_CLIENTE.toString())|| m.getClasificacion().equals(ClasificacionVale.PASA_CAMIONETA.toString()) || m.getClasificacion().equals("CONTRAVALE")){
 					
 					
 					TrasladoAutomaticoController controller=new TrasladoAutomaticoController(m);

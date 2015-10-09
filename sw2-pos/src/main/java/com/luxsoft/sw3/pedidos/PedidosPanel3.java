@@ -238,7 +238,7 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		procesos.add(addAction(null, "camcioDecliente", "Cambio de Cliente"));
 		procesos.add(addAction(null, "asignarInstruccionDeEntrega", "Registrar para COD"));
 		procesos.add(addAction("","generarValeExisPedido", "Crear vale Exist-Vta"));
-		
+		procesos.add(addAction("","noVale", "No Generar Vale Para Pedido"));
 		return procesos;
 	}
 	
@@ -529,13 +529,36 @@ public void generarTraslado(SolicitudDeTraslado sol,String user){
 				}
 				
 			}else{
-				MessageUtils.showMessage("Ya existe un vale para este Pedido","Vale Existencia venta");
+				MessageUtils.showMessage("Ya existe un vale para este Pedido o fue Cancelado","Vale Existencia venta");
 			}
 			
 			
 		}
 	}
 	 
+	
+	
+	
+	
+	public void noVale(){
+		PedidoRow row=(PedidoRow)getSelectedObject();
+		boolean noVale=false;
+		if(row!=null){
+			Pedido pedido=getSelectedPedido();
+			if (!pedido.isVale()){
+				noVale=MessageUtils.showConfirmationMessage("¿Quiere cancelar el vale para el Pedido: "+pedido.getFolio()+ " ?", "Cancelacion Vale pedido");
+					if(noVale){
+						pedido.setVale(noVale);
+						pedido=(Pedido)Services.getInstance().getUniversalDao().save(pedido);
+						MessageUtils.showMessage( "Se cancelo el vale Para El Pedido: "+pedido.getFolio(),"Cancelacion Vale Pedido");
+						}
+				} else {
+					MessageUtils.showMessage("El vale Para el pedido: "+pedido.getFolio()+" ya se genero o fue cancelado", "Cancelacion Vale Pedido");
+				}
+			}
+		
+	}
+	
 	 
 	public SolicitudDeTraslado generarValePedido(Pedido pedido, String user){
 		SolicitudDeTraslado sol= new SolicitudDeTraslado();
@@ -563,6 +586,7 @@ public void generarTraslado(SolicitudDeTraslado sol,String user){
 				soldet.setSucursal(det.getSucursal().getId());
 				soldet.setSolicitado(det.getCantidad());
 				soldet.setRecibido(det.getCantidad());
+				soldet.setOrdenp(det.getLog().getCreado());
 				soldet.setRenglon(partidasSource.size()+1);
 				partidasSource.add(soldet);
 			}
@@ -613,11 +637,12 @@ public void generarTraslado(SolicitudDeTraslado sol,String user){
 				
 				SolicitudDeTrasladoDet soldet= new SolicitudDeTrasladoDet();
 				soldet.setProducto(det.getProducto());
-				soldet.setCortes(det.getCortes());
-				soldet.setInstruccionesDecorte(det.getInstruccionesDecorte());
+				soldet.setCortes(0);
+				//soldet.setInstruccionesDecorte(det.getInstruccionesDecorte());
 				soldet.setOrigen(pedido.getSucursalVale().getId());
 				soldet.setSucursal(det.getSucursal().getId());
 				soldet.setSolicitado(det.getCantidad());
+				soldet.setOrdenp(det.getLog().getCreado());
 				soldet.setRenglon(partidasSource.size()+1);
 				partidasSource.add(soldet);
 			}

@@ -155,8 +155,8 @@ public class SolicitudesParaPagoConDepositoPanel extends FilteredBrowserPanel<So
 				getLoadAction()
 				,addRoleBasedContextAction(null, TESORERIA_ROLES.AUTORIZACION_DEPOSITOS.name(),this, "atenderSeleccion", "Atender")
 				,addRoleBasedContextAction(null, TESORERIA_ROLES.AUTORIZACION_DEPOSITOS.name(),this, "cancelar", "Cancelar")
-				,prenderAtencion
-				,apagarAtencion
+			//	,prenderAtencion
+			//	,apagarAtencion
 				};
 		}
 		return actions;

@@ -227,8 +227,8 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 							if( (v.getVendedor()!=null) && (v.getVendedor().getId()==1L))
 								continue;
 						}
-						if(v.getCliente().getCuotaMensualComision()!=null && v.getCliente().getCuotaMensualComision().doubleValue()>0)
-							continue;
+						//if(v.getCliente().getCuotaMensualComision()!=null && v.getCliente().getCuotaMensualComision().doubleValue()>0)
+						//	continue;
 						ComisionVenta c=new ComisionVenta(v);
 						c.setFechaInicial(periodo.getFechaInicial());
 						c.setFechaFinal(periodo.getFechaFinal());

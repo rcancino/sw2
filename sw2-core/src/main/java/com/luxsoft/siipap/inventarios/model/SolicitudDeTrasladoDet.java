@@ -3,6 +3,7 @@ package com.luxsoft.siipap.inventarios.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.hibernate.annotations.Parent;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
 
@@ -52,7 +54,18 @@ public class SolicitudDeTrasladoDet implements Serializable{
 	@Column(name="COMENTARIO")
 	@Length(max=255)
 	private String comentario;
+	
+	@Type (type="timestamp")
+	@Column (name="ORDENP", updatable=false)
+	private Date ordenp;
+	
+	public Date getOrdenp(){
+		return ordenp;
+	}
 		
+	public void setOrdenp (Date ordenp){
+		this.ordenp=ordenp;
+	}
 	
 	
 	@Transient

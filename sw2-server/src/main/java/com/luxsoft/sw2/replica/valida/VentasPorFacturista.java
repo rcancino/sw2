@@ -80,6 +80,15 @@ static Logger logger=LoggerHelper.getLogger();
 				 System.out.println("---"+ row); 
 			 }
 			
+			 
+		/*	 INSERT INTO SX_VENTAS_FACTURISTA  
+				(FECHA,SUCURSAL_ID,CREADO_USR,FACTURISTA,PED,MOS,CAM,CRE,CANC,FACS,IMPORTE,PART,PMOSLOC,PMOSCAM,PMOSCRE,PTELLOC,PTELCAM,PTELCRE)
+		 		VALUES('${row.FECHA}',${row.SUCURSAL_ID},'${row.CREADO_USR}'
+				 	,'${row.FACTURISTA}',${row.PED},${row.MOS},${row.CAM},${row.CRE},${row.CANC},${row.FACS},${row.IMPORTE},${row.PART},${row.PMOSLOC},${row.PMOSCAM},${row.PMOSCRE},${row.PTELLOC},${row.PTELCAM},${row.PTELCRE})
+				 	*/
+			 
+			 
+			 
 			
 			String INSERT="INSERT INTO SX_VENTAS_FACTURISTA " +
 					"(FECHA" +
@@ -93,8 +102,9 @@ static Logger logger=LoggerHelper.getLogger();
 					",CANC" +
 					",FACS" +
 					",IMPORTE" +
-					",PART)" +
-					" VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+					",PART" +
+					",PMOSLOC,PMOSCAM,PMOSCRE,PTELLOC,PTELCAM,PTELCRE)"+ 
+					" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			
 			
 			for(Map<String, Object> row:rows){
@@ -111,6 +121,12 @@ static Logger logger=LoggerHelper.getLogger();
 						,row.get("FACS")
 						,row.get("IMPORTE")
 						,row.get("PART")
+						,row.get("PMOSLOC")
+						,row.get("PMOSCAM")
+						,row.get("PMOSCRE")
+						,row.get("PTELLOC")
+						,row.get("PTELCAM")
+						,row.get("PTELCRE")
 						};
 				target.update(INSERT, params);
 				System.out.println("Registro insertado: "+row);
@@ -150,7 +166,7 @@ static Logger logger=LoggerHelper.getLogger();
 
 		final VentasPorFacturista task=new VentasPorFacturista();
 		task.addSucursal(2L,3L,6L,5L,9l);
-		task.actualizar(new Periodo("01/03/2013","31/03/2013"));
+		task.actualizar(new Periodo("01/09/2015","30/09/2015"));
 	//	task.actualizar();
 		
 		

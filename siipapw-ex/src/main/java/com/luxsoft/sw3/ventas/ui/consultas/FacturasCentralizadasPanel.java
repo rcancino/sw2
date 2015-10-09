@@ -31,6 +31,7 @@ import com.luxsoft.siipap.reportes.RelacionDeTPSReportForm;
 import com.luxsoft.siipap.reports.ClientesNuevosBI;
 import com.luxsoft.siipap.reports.FacturasCanceladasBi;
 import com.luxsoft.siipap.reports.VentasDiariasBI;
+import com.luxsoft.siipap.reports.VentasPorFacturistaModo;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.Application;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
@@ -130,6 +131,7 @@ public class FacturasCentralizadasPanel extends FilteredBrowserPanel<Venta>{
 		BuscadorDeCargos ba=new BuscadorDeCargos();
 		ba.putValue(Action.NAME, "Buscar factura");
 		procesos.add(addAction("","reporteDeVentasDiarias", "Ventas Diarias"));
+		procesos.add(addAction("","reporteDeVentasPorFacturista", "Ventas Por facurista"));
 		procesos.add(addAction("","reporteDeFacturasCanceladas", "Facturas Canceladas"));
 		procesos.add(addAction("","reporteClientesNuevos", "Clientes Nuevos"));
 		procesos.add(addAction("", "relacionTPS", "Relacion De TPS"));
@@ -155,6 +157,10 @@ public class FacturasCentralizadasPanel extends FilteredBrowserPanel<Venta>{
 	
 	public void reporteDeVentasDiarias(){
 		VentasDiariasBI.run();
+	}
+	
+	public void reporteDeVentasPorFacturista(){
+		VentasPorFacturistaModo.run();
 	}
 	
 	public void reporteDeFacturasCanceladas(){

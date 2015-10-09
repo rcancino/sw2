@@ -42,15 +42,18 @@ public class RecalculoDeExistenciasRemoto {
  public void recalcularExistencias(){
 	    final Date fecha=new Date();
 		final int mes=Periodo.obtenerMes(fecha)+1;
-	   // final int mes=Periodo.obtenerMes(fecha);
-		final int year=Periodo.obtenerYear(fecha);
+	    
+	    /**Para Arreglar discrepancias del mes anterior**/
+	  //  final int mes=Periodo.obtenerMes(fecha);
+		
+	    final int year=Periodo.obtenerYear(fecha);
 		//final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
 		final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
 		
 		try {
 			
 			for(Long sucursalId:sucursales){
-				 System.out.println("Conectando a la Sucursal:"+sucursalId);
+				 System.out.println("Conectando a la Sucursal:"+sucursalId+"  Recalculando para: "+mes+"-"+year);
 				 JdbcTemplate template=ConnectionServices.getInstance().getJdbcTemplate(sucursalId);
 				 List<Map<String, Object>> claves= buscarDiscrepancias(template, sucursalId, year, mes);
 				 
@@ -143,7 +146,8 @@ public class RecalculoDeExistenciasRemoto {
 	
 	public static void main(String[] args) {
 		new RecalculoDeExistenciasRemoto()
-		.addSucursal(6L,5L,2L,3L,9L,11L)
+		//.addSucursal(2L,3L,5L,6L,9L,14L,11L)
+		.addSucursal(14L)
 		//.addSucursal(11L)
 		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
 		.recalcularExistencias();

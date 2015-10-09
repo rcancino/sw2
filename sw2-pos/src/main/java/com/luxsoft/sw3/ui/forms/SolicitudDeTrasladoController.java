@@ -2,15 +2,12 @@ package com.luxsoft.sw3.ui.forms;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 
 import ca.odell.glazedlists.BasicEventList;
@@ -30,6 +27,7 @@ import com.luxsoft.siipap.pos.ui.selectores.SelectorDeExistencias;
 import com.luxsoft.siipap.service.KernellSecurity;
 import com.luxsoft.siipap.swing.form2.DefaultFormModel;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.sw3.services.InventariosManager;
 import com.luxsoft.sw3.services.Services;
 import com.luxsoft.sw3.ui.services.KernellUtils;
 
@@ -164,6 +162,11 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 		
 	}
 	
+	
+	private InventariosManager getInventarioManager(){
+		return Services.getInstance().getInventariosManager();
+	}
+
 	public SolicitudDeTraslado persist(){
 		SolicitudDeTraslado sol=getSolicitud();
 		registrarBitacoras(sol);
@@ -171,7 +174,21 @@ public class SolicitudDeTrasladoController extends DefaultFormModel {
 		.getSolicitudDeTrasladosManager()
 		.save(getSolicitud());
 		MessageUtils.showMessage("Solicitud generada: "+sol.getDocumento(), "Solicitud de traslado");
+		
+		if(sol.getClasificacion().equals("CONTRAVALE")){
+			System.out.println("");
+			generarTraslado(sol, sol.getLog().getCreateUser().toString());
+		}
+		
+		
 		return sol;
+	}
+	
+public void generarTraslado(SolicitudDeTraslado sol,String user){
+		
+		getInventarioManager().generarSalidaPorTraslado(sol, new Date(), null, user, null, null, null);
+		MessageUtils.showMessage("Traslado Generado", "Traslados");
+	
 	}
 	
 	private void registrarBitacoras(SolicitudDeTraslado sol){

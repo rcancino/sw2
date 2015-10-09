@@ -42,7 +42,7 @@ public class CancelacionesDeCargos{
 	public void cancelacion(Periodo periodo){
 		
 		DBUtils.whereWeAre();
-		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
+		
 		empresa=ServiceLocator2.getConfiguracion().getSucursal().getEmpresa();
 		
 		String sql="SELECT x.CFD_ID FROM sx_cxc_cargos_cancelados c join sx_cfdi x on(x.origen_id=c.cargo_id) " +
@@ -119,8 +119,8 @@ public class CancelacionesDeCargos{
 		//String aka=new String(Base64.encode("Prueba de cancelacion".getBytes()));
 		try {
 			
-			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
-			//String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
+			//String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
+			String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			
 			FileOutputStream out1=new FileOutputStream(msgFile);
@@ -140,15 +140,15 @@ public class CancelacionesDeCargos{
 	}
 	
 	public static void main(String[] args) {
-		System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
-		System.setProperty("sucursalOrigen", "OFICINAS");
-		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
+		//System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
+		//System.setProperty("sucursalOrigen", "OFICINAS");
+		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
 		
-		//System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
-	//	System.setProperty("sucursalOrigen", "QRQUERETARO");
-	//	CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
+		System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
+		System.setProperty("sucursalOrigen", "OFICINAS");
+		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
 	
-		Periodo per=new Periodo("29/07/2015","29/07/2015");
+		Periodo per=new Periodo("02/10/2015","02/10/2015");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);

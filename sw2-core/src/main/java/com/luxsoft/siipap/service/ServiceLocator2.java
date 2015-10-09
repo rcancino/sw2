@@ -219,7 +219,9 @@ public  class ServiceLocator2 {
 	public static Configuracion getConfiguracion(){
 		if(configuracion==null){
 			try {
+				System.out.println("Cargando configuracion1");
 				List<Configuracion> data=getUniversalDao().getAll(Configuracion.class);
+				System.out.println("Cargando configuracion2");
 				if(!data.isEmpty())
 					return data.get(0);
 				return null;
