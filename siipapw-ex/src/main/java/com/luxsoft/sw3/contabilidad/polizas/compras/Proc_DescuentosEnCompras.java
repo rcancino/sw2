@@ -102,6 +102,7 @@ public class Proc_DescuentosEnCompras {
 			Boolean descto_anticipo=(Boolean)primerRegistro.get("CONCEPTO_NOTA").equals("ANTICIPO_DESCUENTO");
 			Boolean descuento=(Boolean)primerRegistro.get("CONCEPTO_NOTA").equals("DESCUENTO");
 			String clave=(String)primerRegistro.get("CLAVE");
+			String claveProv=(String)primerRegistro.get("CLAVE");
 			String desc2=(String)primerRegistro.get("CONCEPTO");
 			String ref1=(String)primerRegistro.get("PROVEEDOR");
 			String ref2="TODAS";
@@ -206,19 +207,19 @@ public class Proc_DescuentosEnCompras {
 				
 				//Cargo a Descuentos sobre Compra
 				if(descto_fin){
-					PolizaDetFactory.generarPolizaDet(poliza, cta,  clave, true, totAplic2, desc2, ref1, ref2, asiento);
+					PolizaDetFactory.generarPolizaDet(poliza, cta,  claveProv, true, totAplic2, desc2, ref1, ref2, asiento);
 					
 				}else if(descto_anticipo) {
 					PolizaDetFactory.generarPolizaDet(poliza, "119", "INVA01", true, totAplic2, desc2, ref1, ref2, asiento);
 					
 				}else if(devolucion){
-					PolizaDetFactory.generarPolizaDet(poliza, cta, clave, true, totAplic2, desc2, ref1, ref2, asiento);
+					PolizaDetFactory.generarPolizaDet(poliza, cta, claveProv, true, totAplic2, desc2, ref1, ref2, asiento);
 					
 				}else if(bonificacion){
-					PolizaDetFactory.generarPolizaDet(poliza, cta, clave, true, totAplic2, desc2, ref1, ref2, asiento);
+					PolizaDetFactory.generarPolizaDet(poliza, cta, claveProv, true, totAplic2, desc2, ref1, ref2, asiento);
 						
 				}else {					
-					PolizaDetFactory.generarPolizaDet(poliza, cta, clave, true, totAplic2, desc2, ref1, ref2, asiento);
+					PolizaDetFactory.generarPolizaDet(poliza, cta, claveProv, true, totAplic2, desc2, ref1, ref2, asiento);
 					
 				}
 				

@@ -285,7 +285,7 @@ private Action buscarPendientes;
 		 grid.setFocusable(false);
 		 grid.packAll();
 		 JComponent c=ComponentUtils.createTablePanel(grid);
-		 c.setPreferredSize(new Dimension(220,135));
+		 c.setPreferredSize(new Dimension(220,200));
 		 return c;
 	}
 	

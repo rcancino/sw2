@@ -271,7 +271,7 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	 
 	 public void recalcularExistencias(){
 		 RecalculoDeExistenciasRemoto recalculo=new RecalculoDeExistenciasRemoto();
-		 recalculo.addSucursal(6L,5L,2L,3L,9L,11L).recalcularExistencias();
+		 recalculo.addSucursal(6L,5L,2L,3L,9L,11L,14L).recalcularExistencias();
 	 }
 	 
 	public void envioDeCfdiDiaAnterior(){
@@ -312,13 +312,13 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	
 	public void actualizarExistencias(){
 		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
-		sync.addSucursal(2L,3L,5L,6L,9L,11L).actualizarExistenciasOficinas(new Date());
+		sync.addSucursal(2L,3L,5L,6L,9L,11L,14L).actualizarExistenciasOficinas(new Date());
 		MessageUtils.showMessage("Existencias Actualizadas", "Actualizacion de Existencias");
 	}
 	
 	public void actualizarExistenciasAutomatico(){
 		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
-		sync.addSucursal(2L,3L,5L,6L,9L,11L).actualizarExistenciasOficinas(new Date());
+		sync.addSucursal(2L,3L,5L,6L,9L,11L,14L).actualizarExistenciasOficinas(new Date());
 		System.out.println("Existencias Actualizadas");
 	}
 	

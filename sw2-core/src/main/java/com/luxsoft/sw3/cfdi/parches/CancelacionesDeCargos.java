@@ -97,8 +97,8 @@ public class CancelacionesDeCargos{
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
+		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
 		byte[] pfxData=new byte[(int)pfx.getFile().length()];
@@ -119,8 +119,8 @@ public class CancelacionesDeCargos{
 		//String aka=new String(Base64.encode("Prueba de cancelacion".getBytes()));
 		try {
 			
-			//String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
-			String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
+			String xmlFile=empresa.getClave()+"_CANCELACIONES_"+periodo.toString2();
+		//	String xmlFile="QUERETARO"+"_CANCELACIONES_"+periodo.toString2();
 			File msgFile=new File(dir,xmlFile+"_MSG.xml");
 			
 			FileOutputStream out1=new FileOutputStream(msgFile);
@@ -140,15 +140,15 @@ public class CancelacionesDeCargos{
 	}
 	
 	public static void main(String[] args) {
-		//System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
-		//System.setProperty("sucursalOrigen", "OFICINAS");
-		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
-		
-		System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
+		System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
 		System.setProperty("sucursalOrigen", "OFICINAS");
-		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
+		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
+		
+		//System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
+		//System.setProperty("sucursalOrigen", "OFICINAS");
+		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
 	
-		Periodo per=new Periodo("02/10/2015","02/10/2015");
+		Periodo per=new Periodo("15/11/2015","28/11/2015");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);
@@ -158,6 +158,6 @@ public class CancelacionesDeCargos{
 		
 	}
 
-
+ 
 
 }

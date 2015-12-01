@@ -45,6 +45,7 @@ import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.swing.utils.TaskUtils;
 import com.luxsoft.siipap.util.SQLUtils;
 import com.luxsoft.siipap.ventas.model.Venta;
+import com.luxsoft.sw3.cfdi.parches.ReplicaNotasBon;
 import com.luxsoft.sw3.cxc.forms.CargoPorTesoreriaForm;
 
 public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPorCobrar>{
@@ -137,8 +138,20 @@ public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPor
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteCobranzaTesoreria", "Reporte de cobranza (TES)"));
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteFacturasPendientes", "Reporte Facutras pend"));
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteRmds", "Reporte de Rmd's"));
+		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"replicarNotas", "Enviar Notas"));
 		return procesos;
  		
+	}
+	
+	public void replicarNotas(){
+		ReplicaNotasBon rep=new ReplicaNotasBon();
+		boolean replicar=false;
+		replicar=MessageUtils.showConfirmationMessage("¿Replicar Notas de Bonificacion?", "Envio de notas");
+		if(replicar){
+			rep.validacion();	
+		}
+	
+		
 	}
 	
 	public void aplicarPago(){

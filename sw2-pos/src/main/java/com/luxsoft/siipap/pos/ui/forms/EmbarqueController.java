@@ -123,33 +123,33 @@ public class EmbarqueController {
 		form.open();
 		if(!form.hasBeenCanceled()){
 			model.comiit();
-			
-			for(Entrega entrega:target.getPartidas()){
+			/** Aplica el pago para facturas pago contra entrega tipo de pago efectivo en autmatico***/
+			/*for(Entrega entrega:target.getPartidas()){
 				Venta vent=entrega.getFactura();
-				if(vent.getPedido().isContraEntrega()){
-					System.out.println("Detectando venta contraentrega");
+				//if(vent.getPedido().isContraEntrega()){
+					//System.out.println("Detectando venta contraentrega");
 					entrega.setPorCobrar(entrega.getValor());
-					if(vent.getFormaDePago().equals(FormaDePago.EFECTIVO)){
-						System.out.println("Venta contra entrega de efectivo aplicando el pago de la factura");
-						final BigDecimal porPagar=vent.getSaldoCalculado();
-						final PagoFormModel mod=new PagoFormModel();
+					//if(vent.getFormaDePago().equals(FormaDePago.EFECTIVO)){
+						//System.out.println("Venta contra entrega de efectivo aplicando el pago de la factura");
+						//final BigDecimal porPagar=vent.getSaldoCalculado();
+						//final PagoFormModel mod=new PagoFormModel();
 						
-						mod.setFormasDePago(vent.getFormaDePago());
-						mod.setSucursal(vent.getSucursal());
-						mod.getPago().setCliente(vent.getCliente());
-						mod.getPago().registrarImporte(porPagar);
+						//mod.setFormasDePago(vent.getFormaDePago());
+						//mod.setSucursal(vent.getSucursal());
+						//mod.getPago().setCliente(vent.getCliente());
+						//mod.getPago().registrarImporte(porPagar);
 						
-						Pago pago=mod.getPago().toPago();
-						Date fecha=Services.getInstance().obtenerFechaDelSistema();
+						//Pago pago=mod.getPago().toPago();
+						//Date fecha=Services.getInstance().obtenerFechaDelSistema();
 						//Venta venta=getFactura(selected.getId());
-						Services.getInstance().getPagosManager().cobrarFactura(vent, pago,fecha);				
-						Services.getInstance().getFacturasManager().generarAbonoAutmatico(Arrays.asList(vent));
+						//Services.getInstance().getPagosManager().cobrarFactura(vent, pago,fecha);				
+						//Services.getInstance().getFacturasManager().generarAbonoAutmatico(Arrays.asList(vent));
 						
-						mod.dispose();
-					}
+						//mod.dispose();
+					//}
 					
-				}
-			}
+				//}
+			}*/
 			return persistir(target);
 		}else
 			return embarque;

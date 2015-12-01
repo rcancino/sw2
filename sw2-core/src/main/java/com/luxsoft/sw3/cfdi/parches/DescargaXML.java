@@ -46,7 +46,7 @@ public class DescargaXML {
 		SimpleDateFormat df=new SimpleDateFormat("ddMMyyyy");
 		String strFecha=df.format(fecha);
 				
-		String dirPath="C://xlms//xmlPapelSA//"+strFecha;
+		String dirPath="C://xlms//xmlPapelSA2015//"+strFecha;
 		File dir=new File(dirPath);
 		dir.mkdirs();
 		
@@ -107,7 +107,7 @@ public class DescargaXML {
 	public static void main(String[] args) {
 		DescargaXML task=new DescargaXML();
 		//task.validacion(new Periodo("21/10/2014","21/10/2014"));
-		task.validacion(new Date("2014/12/20"));
+		task.validacion(new Date("2015/05/04"));
 	}
 
 }
