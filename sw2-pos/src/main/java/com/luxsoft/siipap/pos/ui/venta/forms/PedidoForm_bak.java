@@ -243,7 +243,11 @@ public class PedidoForm_bak extends AbstractForm implements ActionListener,ListS
 		
 		
 		builder.append("Comentario",getControl("comentario"));
-		builder.append("Puesto",getControl("puesto"));
+		if(!getController().getPedido().isPuesto())
+			builder.append("Puesto",getControl("puesto"));
+		else
+			builder.append("Puesto",addReadOnly("puesto"));
+		
 		builder.append("Entrega",getControl("entrega"));
 		
 		

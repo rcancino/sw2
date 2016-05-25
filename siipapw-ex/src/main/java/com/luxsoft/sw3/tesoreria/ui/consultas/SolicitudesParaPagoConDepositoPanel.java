@@ -101,7 +101,7 @@ public class SolicitudesParaPagoConDepositoPanel extends FilteredBrowserPanel<So
 	}
 	
 	protected void manejarPeriodo(){
-		periodo=Periodo.getPeriodo(-15);
+		periodo=Periodo.getPeriodo(-5);
 	}
 	
 	@Override
@@ -167,7 +167,7 @@ public class SolicitudesParaPagoConDepositoPanel extends FilteredBrowserPanel<So
 		String hql="from SolicitudDeDeposito s left join fetch s.cliente c" +
 				" left join fetch s.cuentaDestino c" +
 				" left join fetch s.bancoOrigen b" +
-				" left join fetch s.pago p " +
+				//" left join fetch s.pago p " +
 				" where s.cancelacion is null and date(s.fecha) between ? and ?";
 		return ServiceLocator2.getHibernateTemplate().find(hql
 				,new Object[]{
@@ -318,7 +318,7 @@ public class SolicitudesParaPagoConDepositoPanel extends FilteredBrowserPanel<So
 		String hql="from SolicitudDeDeposito s left join fetch s.cliente c" +
 		" left join fetch s.cuentaDestino c" +
 		" left join fetch s.bancoOrigen b" +
-		" left join fetch s.pago p " +
+	//  " left join fetch s.pago p " +
 		" where s.id=?";
 		return (SolicitudDeDeposito)ServiceLocator2.getHibernateTemplate().find(hql,id).get(0);
 	}

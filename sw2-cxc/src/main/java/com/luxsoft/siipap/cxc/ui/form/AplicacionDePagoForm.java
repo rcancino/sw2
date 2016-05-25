@@ -131,7 +131,7 @@ public class AplicacionDePagoForm extends AbstractForm{
 		}else if("abono".equals(property)){
 			final EventListModel sm=new EventListModel(getAplicacionModel().getDisponibles());
 			final SelectionInList sl=new SelectionInList(sm,model.getModel(property));
-			disponiblesBox=BasicComponentFactory.createComboBox(sl);
+			disponiblesBox=BasicComponentFactory.createComboBox(sl); 
 			disponiblesBox.setEnabled(!model.isReadOnly());
 			return disponiblesBox;
 			

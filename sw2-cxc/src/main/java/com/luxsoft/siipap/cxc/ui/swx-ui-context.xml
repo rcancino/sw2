@@ -259,6 +259,9 @@
      			<bean class="com.luxsoft.sw3.cfdi.CFDINotasCentralizadasPanel">
      				<property name="title" value="CFDI's (Notas)"/>
      			</bean>
+     			<bean class="com.luxsoft.siipap.cxc.ui.consultas.AbonosPanel">
+     	    		<property name="title" value="Abonos"/>
+                </bean>
      		</list>
      	</property>
      </bean>

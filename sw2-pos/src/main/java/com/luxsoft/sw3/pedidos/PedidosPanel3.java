@@ -340,12 +340,16 @@ public class PedidosPanel3 extends AbstractMasterDatailFilteredBrowserPanel<Pedi
 		if(row==null)
 			return;
 		Pedido pedido=getSelectedPedido();
-		if(!pedido.isFacturado()){			
+		if(!pedido.isFacturado() && !pedido.isPuesto()){			
 			if(MessageUtils.showConfirmationMessage("Eliminar pedidio ?"
 					, "Eliminar pedidos")){
 				getManager().remove(pedido.getId());
 				source.remove(row);
 			}
+			
+		}
+		else{
+			MessageUtils.showMessage("El pedido no se puede eliminar por ser puesto ", "Eliminar pedido");
 		}
 	}
 	

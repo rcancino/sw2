@@ -43,7 +43,7 @@ public class Proc_FletesProveedor implements IProcesador{
 		ServiceLocator2.getHibernateTemplate().execute(new HibernateCallback() {			
 			public Object doInHibernate(Session session) throws HibernateException,SQLException {
 				
-				String hql="select distinct det.analisis.id from AnalisisDeFacturaDet det where date(det.entrada.fecha) between ? and ?";
+				String hql="select distinct det.analisis.id from AnalisisDeFacturaDet det where date(det.entrada.fecha) between ? and ? and det.analisis.factura.flete>0";
 				Set<Long> ids=new HashSet<Long>(session.createQuery(hql)
 						.setParameter(0, periodo.getFechaInicial(),Hibernate.DATE)
 						.setParameter(1, periodo.getFechaFinal(),Hibernate.DATE)

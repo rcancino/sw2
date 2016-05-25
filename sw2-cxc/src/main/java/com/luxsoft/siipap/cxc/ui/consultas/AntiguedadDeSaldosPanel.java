@@ -58,6 +58,7 @@ import com.luxsoft.siipap.reports.FacturasCanceladasNCBI;
 import com.luxsoft.siipap.reports.FacturasPendientes;
 import com.luxsoft.siipap.reports.FacturasPendientesCamioneta;
 import com.luxsoft.siipap.reports.FacturasPendientesCamionetaTab;
+import com.luxsoft.siipap.reports.NotasPorDiaReport;
 import com.luxsoft.siipap.reports.ProgramacionDeCobroSemanalReport;
 import com.luxsoft.siipap.reports.ProyeccionDeCobranzaReport;
 import com.luxsoft.siipap.reports.ResultadoDeCobranzaCxCReport;
@@ -235,12 +236,17 @@ public class AntiguedadDeSaldosPanel extends AbstractMasterDatailFilteredBrowser
 				,addAction("", "reporteClientesConAtraso", "Clientes Suspendidos por Atraso")
 				,addAction("", "reporteVentasPorVendedor", "Ventas Por Vendedor")
 				,addAction("", "saldosPendientes", "Saldos Pendientes Por Abogado")
+				,addAction("", "notasPorDia", "Notas de CreditoPorDia")
 				
 				};
 		
 		return actions;
 	}
 	
+	public void notasPorDia(){
+		NotasPorDiaReport report=new NotasPorDiaReport();
+		report.run();
+	}
 	public void ventasMensuales() {
 		VentasXSucReportForm.run();
 	}

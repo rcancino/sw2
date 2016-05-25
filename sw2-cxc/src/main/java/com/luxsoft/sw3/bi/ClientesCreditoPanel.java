@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import com.luxsoft.siipap.cxc.CXCRoles;
 import com.luxsoft.siipap.model.core.Cliente;
+import com.luxsoft.siipap.model.tesoreria.MovimientosPorCuenta;
+import com.luxsoft.siipap.reports.MovimientoDeClientesReport;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
 import com.luxsoft.siipap.util.SQLUtils;
@@ -56,6 +58,7 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 				,addRoleBasedAction(CXCRoles.DESBLOQUEO_POR_SALDO_CHEQUES_DEVUELTOS.name(),"desbloquearClientePorSaldoEnCheque", "Desbloqueo Cheque dev")
 				,addRoleBasedAction(CXCRoles.MODIFICACION_TIPO_VENCIMIENTO.name(),"modificacionDeVencimientoFactura", "Cambio Vencimiento")
 				,addRoleBasedAction(CXCRoles.MODIFICACION_LINEA_DE_CREDITO.name(),"bitacora", "Bitácora")
+				,addRoleBasedAction(CXCRoles.MODIFICACION_LINEA_DE_CREDITO.name(),"cambiosPorCliente", "Cambios por Cliente")
 				
 				
 				};
@@ -75,6 +78,11 @@ public class ClientesCreditoPanel extends FilteredBrowserPanel<ClienteCreditoRow
 	@Override
 	public void open() {
 		load();
+	}
+	
+	public void cambiosPorCliente(){
+		MovimientoDeClientesReport report= new MovimientoDeClientesReport();
+		report.run();
 	}
 
 	@Override

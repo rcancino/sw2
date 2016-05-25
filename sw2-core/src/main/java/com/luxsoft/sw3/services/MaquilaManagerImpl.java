@@ -67,12 +67,16 @@ public class MaquilaManagerImpl  implements MaquilaManager{
 
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public EntradaDeMaterial salvarEntrada(EntradaDeMaterial entrada) {
+		System.out.println("Salvando entrada");
+		
 		for(EntradaDeMaterialDet det:entrada.getPartidas()){
+				System.out.println("LA entrada es"+det.getProducto().getClave() );
 			det.setEntradaDeMaquilador(entrada.getEntradaDeMaquilador());
 			det.setFecha(entrada.getFecha());
 		}
 		EntradaDeMaterial res=getEntradaDeMaterialDao().save(entrada);
 		for(EntradaDeMaterialDet det:res.getPartidas()){
+			System.out.println("Actualizando costos");
 			actualiarCostos(det);
 		}
 		return res;

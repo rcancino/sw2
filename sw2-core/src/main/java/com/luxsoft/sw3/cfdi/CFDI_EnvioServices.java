@@ -182,7 +182,20 @@ public class CFDI_EnvioServices {
 			
 			byte[] xml=cfd.getXml();
 			InputStreamSource source=new ByteArrayResource(xml);
-			messageHelper.addAttachment(cfd.getXmlFilePath(),source);
+			
+			//messageHelper.addAttachment(cfd.getXmlFilePath(),source);
+			String receptor=StringUtils.replace(cfd.getReceptor(),".","");
+			    
+				int indice=receptor.indexOf(",");
+			   
+			   if (indice==-1){
+				   indice=receptor.length();
+			   }
+				   
+			   System.out.println("**************************"+indice);
+			String xmlName=receptor.substring(0, indice).concat("-").concat(cfd.getFolio());
+			 
+			messageHelper.addAttachment(xmlName+".xml",source);
 			
 			JasperPrint jp=null;
 			
@@ -219,8 +232,11 @@ public class CFDI_EnvioServices {
 				
 				byte[] pdf=JasperExportManager.exportReportToPdf(jp);
 				InputStreamSource sourcePdf=new ByteArrayResource(pdf);
-				String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
-				messageHelper.addAttachment(pdfName,sourcePdf);
+				//String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
+				String pdfName=receptor.substring(0, indice).concat("-").concat(cfd.getFolio());
+				
+				//messageHelper.addAttachment(pdfName,sourcePdf);
+				messageHelper.addAttachment(pdfName+".pdf",sourcePdf);
 				
 			}
 			
@@ -317,9 +333,9 @@ public class CFDI_EnvioServices {
 	
 	public static void main(String[] args) throws Exception{
 		final CFDI_EnvioServices service=ServiceLocator2.getCFDIEnvioServices();
-		 Date dia = DateUtil.toDate("28/11/2015");
+		 Date dia = DateUtil.toDate("23/05/2016");
 		service.madarPorCorreo(dia);
-		//service.mandarPorCorreo("8a8a82fa-432f6a82-0143-30f0da04-002d");
+				//service.mandarPorCorreo("8a8a82fa-432f6a82-0143-30f0da04-002d");
 	}
 
 }

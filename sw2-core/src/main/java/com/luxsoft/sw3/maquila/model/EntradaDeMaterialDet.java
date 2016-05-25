@@ -456,7 +456,7 @@ public class EntradaDeMaterialDet extends BaseBean{
 		.toString();
 	}
 	
-	 @ManyToOne(optional = false,fetch=FetchType.LAZY)
+	 @ManyToOne(optional = true,fetch=FetchType.LAZY)
 		@JoinColumn(name = "INVENTARIO_ID",nullable=true)
 	 private MovimientoDet movimientoDet;
 	 

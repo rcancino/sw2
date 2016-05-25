@@ -166,7 +166,20 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 					//XML
 					byte[] xml=cfd.getXml();
 					InputStreamSource source=new ByteArrayResource(xml);
-					messageHelper.addAttachment(cfd.getXmlFilePath(),source);
+					
+					//messageHelper.addAttachment(cfd.getXmlFilePath(),source);
+					String receptor=StringUtils.replace(cfd.getReceptor(),".","");
+				    
+					int indice=receptor.indexOf(",");
+				   
+				   if (indice==-1){
+					   indice=receptor.length();
+				   }
+					   
+				   System.out.println("**************************"+indice);
+				//String xmlName=receptor.substring(0, indice).concat("-").concat(cfd.getFolio());
+				   String xmlName=new String("PAPEL S A -").concat(cfd.getFolio());
+					messageHelper.addAttachment(xmlName+".xml",source);
 					
 					//PDF
 				//	if(cfd.getTipo().equals("FACTURA")){
@@ -196,8 +209,12 @@ public class CFDICorreoFormModel extends DefaultFormModel{
 						if(jp!=null){
 							byte[] pdf=JasperExportManager.exportReportToPdf(jp);
 							InputStreamSource sourcePdf=new ByteArrayResource(pdf);
-							String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
-							messageHelper.addAttachment(pdfName,sourcePdf);
+							//String pdfName=StringUtils.replace(cfd.getXmlFilePath(), ".xml", ".pdf");
+							//String pdfName=receptor.substring(0, indice).concat("-").concat(cfd.getFolio());
+							String pdfName=new String("PAPEL S A-").concat(cfd.getFolio());
+							
+							//messageHelper.addAttachment(pdfName,sourcePdf);
+							messageHelper.addAttachment(pdfName+".pdf",sourcePdf);
 						}
 						
 					//}

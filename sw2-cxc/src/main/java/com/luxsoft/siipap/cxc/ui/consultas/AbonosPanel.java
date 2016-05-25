@@ -111,7 +111,8 @@ public class AbonosPanel extends AbstractMasterDatailFilteredBrowserPanel<Abono,
 			,addAction(CXCActions.SolicitudDeAutorizacionParaAbono.getId(),"solicitarAutorizacion","Solicitar autorización")
 			,addAction(CXCActions.CancelarAbono.getId(),"cancelarAbono","Cancelar Abono")
 			,addAction(CXCActions.CancelarAplicacion.getId(), "cancelarAplicacion", "Cancelar Aplicación")	
-			,addRoleBasedContextAction(null,CXCRoles.ADMINISTRADOR_COBRANZA_CREDITO.getId(),this,"otrosProductos","Otros Productos")
+			//,addRoleBasedContextAction(null,CXCRoles.ADMINISTRADOR_COBRANZA_CREDITO.getId(),this,"otrosProductos","Otros Productos")
+			,addAction(null,"otrosProductos","Otros Productos")
 			
 			};
 		}

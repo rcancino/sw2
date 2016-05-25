@@ -61,7 +61,7 @@
 		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
 		p:jobDetail-ref="atebderDispatcher"
 		p:startDelay="2000"
-		p:repeatInterval="15000"/>
+		p:repeatInterval="10000"/>
 		
 	<!-- Trigger re load del panel de solicitudes pendientes   -->
 	
@@ -75,7 +75,7 @@
 		class="org.springframework.scheduling.quartz.SimpleTriggerBean"
 		p:jobDetail-ref="loadDispatcher"
 		p:startDelay="0"
-		p:repeatInterval="60000"/>
+		p:repeatInterval="30000"/>
      
      <!-- Scheduler para paneles y consultas  -->
      

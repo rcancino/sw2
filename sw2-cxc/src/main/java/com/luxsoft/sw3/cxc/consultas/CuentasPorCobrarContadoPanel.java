@@ -37,6 +37,7 @@ import com.luxsoft.siipap.model.core.Cliente;
 import com.luxsoft.siipap.reports.CobranzaCamioneta;
 import com.luxsoft.siipap.reports.CobranzaPorTesoreria;
 import com.luxsoft.siipap.reports.FacturasPendientesCamioneta;
+import com.luxsoft.siipap.reports.FacturasPendientesCamionetaTab;
 import com.luxsoft.siipap.reports.RmdCobranzaContadoReportForm;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.FilteredBrowserPanel;
@@ -135,6 +136,7 @@ public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPor
 	protected List<Action> createProccessActions() {
 		List<Action> procesos=super.createProccessActions();
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteCobranzaCamioneta", "Reporte de cobranza (CAM)"));
+		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(), "reporteFacturasPendientesTab", "Facturas Pendientes Camioneta Emb"));
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteCobranzaTesoreria", "Reporte de cobranza (TES)"));
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteFacturasPendientes", "Reporte Facutras pend"));
 		procesos.add(addAction(CXCRoles.COBRANZA_CONTADO.name(),"reporteRmds", "Reporte de Rmd's"));
@@ -195,6 +197,10 @@ public class CuentasPorCobrarContadoPanel extends FilteredBrowserPanel<CuentaPor
 	
 	public void reporteCobranzaCamioneta(){
 		CobranzaCamioneta.run(ServiceLocator2.getJdbcTemplate());
+	}
+	
+	public void reporteFacturasPendientesTab(){
+		FacturasPendientesCamionetaTab.run();
 	}
 	
 	public void reporteRmds(){
