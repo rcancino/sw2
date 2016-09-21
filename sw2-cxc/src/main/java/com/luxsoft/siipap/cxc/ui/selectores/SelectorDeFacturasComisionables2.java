@@ -180,6 +180,7 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 				"V.CARGO_ID" +
 				",MAX(A.FECHA) AS FECHAPAG" +
 				",(SELECT SUM(A.IMPORTE) FROM sx_cxc_aplicaciones A JOIN sx_cxc_abonos B ON(A.ABONO_ID=B.ABONO_ID) JOIN sx_ventas X ON(X.CARGO_ID=A.CARGO_ID) WHERE X.CARGO_ID=V.CARGO_ID AND A.FECHA <=? AND B.TIPO_ID IN(\'PAGO_DEP\', \'PAGO_CHE\',\'PAGO_TAR\',\'PAGO_EFE\') AND  A.CAR_ORIGEN=\'CRE\') AS PAGO_COMISIONABLE " +
+				" ,B.ENVIADO, V.REVISADA  " +
 				" FROM sx_cxc_aplicaciones A	" +
 				" JOIN sx_cxc_abonos B ON(A.ABONO_ID=B.ABONO_ID)		" +
 				" JOIN sx_ventas V ON(V.CARGO_ID=A.CARGO_ID)		" +
@@ -206,6 +207,8 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 						String id=(String)row.get("CARGO_ID");						
 						Date pago=(Date)row.get("FECHAPAG");
 						BigDecimal importe=(BigDecimal)row.get("PAGO_COMISIONABLE");
+						Boolean enviado=(Boolean)row.get("ENVIADO");
+						Boolean revisada=(Boolean)row.get("REVISADA");
 						if(importe==null)
 							continue;
 						
@@ -233,6 +236,8 @@ public  class SelectorDeFacturasComisionables2 extends AbstractSelector<Comision
 						c.setFechaInicial(periodo.getFechaInicial());
 						c.setFechaFinal(periodo.getFechaFinal());
 						c.setFechaDelPago(pago);
+						c.setRevisada(revisada);
+						c.setEnviado(enviado);
 						c.setPagoComisionable(importe);
 						c.actualizarComisiones();
 						res.add(c);

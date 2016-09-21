@@ -509,15 +509,12 @@ public void generarExistenciasParaConteoFisico(){
 	}
 	
 	public void print(Conteo dec){
-		
-			Map params=new HashMap();
+		Map params=new HashMap();
 			params.put("CONTEO_ID", dec.getId());
 		//	ReportUtils2.runReport("invent/ConteoFisico.jasper", params);
 			ReportUtils.printReport("file:/mnt/siipapwin/Reportes_MySQL/invent/ConteoFisico.jasper", params, false);
 		//	ReportUtils.printReport("file:z:/Reportes_MySQL/invent/ConteoFisico.jasper", params, false);
-			
-		
-		
+	
 	}
 	
 	public void reporteDeConteoSelectovo(){

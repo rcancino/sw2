@@ -134,7 +134,7 @@ public class CancelacionesDeNotasDeCreditoSAT {
 	
 	public static void main(String[] args) {
 		CancelacionesDeNotasDeCreditoSAT task=new CancelacionesDeNotasDeCreditoSAT("certificadopapel");
-		task.cancelacion(DateUtil.toDate("04/01/2016"));
+		task.cancelacion(DateUtil.toDate("28/06/2016"));
 	}
 
 }

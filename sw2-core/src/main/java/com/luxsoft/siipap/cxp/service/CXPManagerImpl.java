@@ -69,6 +69,9 @@ public class CXPManagerImpl extends HibernateDaoSupport implements CXPManager{
 				.setParameter(1, fecha,Hibernate.DATE)
 				.setParameter(2, moneda,Hibernate.CURRENCY)
 				.uniqueResult();
+				if(cargos==null){
+					cargos=0;
+				}
 				logger.info("Cargos: "+BigDecimal.valueOf(cargos.doubleValue()).setScale(2,RoundingMode.HALF_EVEN));
 				Number abonos=(Number)session.createQuery("select sum(c.total) " +
 						" from CXPAbono c " +
@@ -79,6 +82,9 @@ public class CXPManagerImpl extends HibernateDaoSupport implements CXPManager{
 				.setParameter(1, fecha,Hibernate.DATE)
 				.setParameter(2, moneda,Hibernate.CURRENCY)
 				.uniqueResult();
+				if(abonos==null){
+					abonos=0;
+				}
 				logger.info("Abonos: "+BigDecimal.valueOf(abonos.doubleValue()).setScale(2));
 				return BigDecimal.valueOf(cargos.doubleValue()-abonos.doubleValue());
 			}

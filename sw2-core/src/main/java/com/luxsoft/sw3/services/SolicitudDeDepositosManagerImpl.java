@@ -174,6 +174,7 @@ public class SolicitudDeDepositosManagerImpl implements SolicitudDeDepositosMana
 		pago.setImporte(MonedasUtils.calcularImporteDelTotal(pago.getTotal()));
 		pago.actualizarImpuesto();
 		pago.setFolio(sol.getDocumento().intValue());
+		pago.setEnviado(sol.getEnviado());
 		sol.setPago(pago);
 		sol= save(sol);
 		registrarIngreso(sol);
@@ -208,6 +209,7 @@ public class SolicitudDeDepositosManagerImpl implements SolicitudDeDepositosMana
 		pago.setImporte(MonedasUtils.calcularImporteDelTotal(pago.getTotal()));
 		pago.actualizarImpuesto();
 		pago.setFolio(sol.getDocumento().intValue());
+		pago.setEnviado(sol.getEnviado());
 		sol.setPago(pago);
 		sol= save(sol);
 		//registrarIngreso(sol);

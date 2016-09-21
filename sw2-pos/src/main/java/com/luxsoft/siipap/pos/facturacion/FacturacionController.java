@@ -129,8 +129,14 @@ public class FacturacionController {
 				Date creado=Services.getInstance().obtenerFechaDelSistema();
 				String cuenta="";
 				if(!pedido.getFormaDePago().equals(FormaDePago.EFECTIVO)){
+					System.out.println("El pedido no es de efectivo  ");
 					cuenta=pedido.getCliente().getCuentaDePago();
-					if(StringUtils.isBlank(cuenta)){
+					System.out.println("El numero de cuenta es  "+cuenta);
+					
+					if(StringUtils.isBlank(cuenta) || cuenta==null){
+						
+						System.out.println("El numero de cuenta es blanco o nulo  ");
+						
 						boolean valido=false;
 						while(!valido){
 							cuenta=JOptionPane.showInputDialog("Ultimos 4 digitos de la cuenta/tarjeta ");
@@ -142,7 +148,9 @@ public class FacturacionController {
 						}
 					}
 					else{
+						System.out.println("El cliente si tiene cuenta de PAgo  ");
 						if(!pedido.getCliente().getFormaDePago().equals(pedido.getFormaDePago())){
+							System.out.println("La forma de pago es diferente en el catalogo al pedido");
 							cuenta="";
 						}
 						boolean valido=false;
@@ -156,6 +164,7 @@ public class FacturacionController {
 						}
 					}
 				}
+				System.out.println("La cuenta asignada para el XML es  "+cuenta);
 				if(pedido.getFormaDePago().equals(FormaDePago.CHECKPLUS)){
 					CheckPlusVenta checkplus=CheckplusVentaForm.showForm(pedido);
 					if(checkplus!=null){
@@ -219,7 +228,7 @@ public class FacturacionController {
 			
 			if(!(pedido.getFormaDePago().equals(FormaDePago.EFECTIVO) || pedido.getCliente().getRfc().equals("XAXX010101000")) ){
 				cuenta=pedido.getCliente().getCuentaDePago();
-				if(StringUtils.isBlank(cuenta)){
+				if(StringUtils.isBlank(cuenta) || cuenta==null){
 					boolean valido=false;
 					while(!valido){
 						cuenta=JOptionPane.showInputDialog("Ultimos 4 digitos de la cuenta/tarjeta ");

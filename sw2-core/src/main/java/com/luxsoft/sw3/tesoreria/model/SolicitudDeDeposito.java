@@ -134,6 +134,9 @@ public class SolicitudDeDeposito extends BaseBean implements Replicable{
 	@Column(name="ANTICIPO",nullable=false)
 	private Boolean anticipo=false;
 	
+	@Column(name="ENVIADO")
+	private Boolean enviado=false;
+	
 	@Column(name="SOLICITA",nullable=false,length=25)
 	@Length(max=25)
 	@NotEmpty(message=" Registre quien solicita")
@@ -338,6 +341,17 @@ public class SolicitudDeDeposito extends BaseBean implements Replicable{
 		this.bancoOrigen = bancoOrigen;
 		firePropertyChange("bancoOrigen", old, bancoOrigen);
 	}
+
+	public Boolean getEnviado() {
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		Object old=this.enviado;
+		this.enviado = enviado;
+		firePropertyChange("enviado", old, enviado);
+	}
+	
 	
 	public Boolean getAnticipo() {
 		return anticipo;

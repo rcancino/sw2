@@ -279,14 +279,26 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 		warning(getPedido().getCliente());
 		if(getPedido().getCliente().isDeCredito()){
 			setValue("tipo", Pedido.Tipo.CREDITO);
+			
+			if(getPedido().getCliente().getFormaDePago().equals(FormaDePago.NA)){
+				setValue("formaDePago", FormaDePago.EFECTIVO);
+			}	
+			else{
+				setValue("formaDePago",getPedido().getCliente().getFormaDePago());
+			}
 			if(getPedido().getCliente().getCredito().isChequePostfechado()){
 				setValue("formaDePago", FormaDePago.CHEQUE_POSTFECHADO);
-			}if(getPedido().getCliente().getCredito().isCheckplus()){
+			}
+			if(getPedido().getCliente().getCredito().isCheckplus()){
 				setValue("formaDePago", FormaDePago.CHECKPLUS);
-			}if(getPedido().getCliente().getFormaDePago()==null)
-				setValue("formaDePago", FormaDePago.EFECTIVO);
-			else
-				setValue("formaDePago",getPedido().getCliente().getFormaDePago());
+			}
+			/*if(getPedido().getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_CHEQUE)|| getPedido().getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_EFECTIVO)){
+				setValue("formaDePago", FormaDePago.DEPOSITO);
+			}*/
+			if(getPedido().getCliente().getCredito().isCheckplus()){
+				setValue("formaDePago", FormaDePago.CHECKPLUS);
+			}
+			
 		/*	else{
 				setValue("formaDePago", FormaDePago.EFECTIVO);
 			} */

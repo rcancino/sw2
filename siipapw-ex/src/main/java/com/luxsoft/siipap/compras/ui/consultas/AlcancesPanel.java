@@ -238,7 +238,16 @@ public class AlcancesPanel extends FilteredBrowserPanel<Alcance>{
 		sql=sql.replaceAll("@FECHA_FIN", f2);
 		String suc=sucursal!=null?sucursal.getId().toString():"\'%\'";
 		sql=sql.replaceAll("@SUCURSAL_ID", suc);
-		//System.out.println(sql);
+		
+		if(suc.equals("6")){
+			sql=sql.replaceAll("@EXI_SUCURSAL_ID", " X.SUCURSAL_ID  in(6,11)");
+		}else if(suc.equals("9")){
+			sql=sql.replaceAll("@EXI_SUCURSAL_ID", " X.SUCURSAL_ID  in(9,14)");
+		} else{
+			sql=sql.replaceAll("@EXI_SUCURSAL_ID", " X.SUCURSAL_ID LIKE "+suc);
+		}
+		
+		System.out.println(sql);
 		List<Alcance> res=ServiceLocator2.getJdbcTemplate().query(sql,new BeanPropertyRowMapper(Alcance.class));
 		for(Alcance a:res){
 			a.setSUCURSAL(sucursal!=null?sucursal.getNombre():"TODAS");

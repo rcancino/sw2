@@ -33,8 +33,7 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
 public class CancelacionesEspecialDeNotasDeCredito {
 	
 	CfdiClient client;
-	Empresa empresa;
-	final String pfxPassword;
+	Empresa empresa;	final String pfxPassword;
 	List<CFDI> cfdis ;
 	
 	
@@ -59,7 +58,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 		
 		String sql="SELECT X.CFD_ID FROM sx_cxc_abonos_cancelados C JOIN sx_cxc_abonos A ON(A.ABONO_ID=C.ABONO_ID)"+
 				"  JOIN SX_CFDI X ON(X.ORIGEN_ID=A.ABONO_ID)"+
-				" where  A.TIPO_ID LIKE 'NOTA%'"+
+				" where  A.TIPO_ID LIKE 'NOTA%'"+ 
 				 "AND X.CANCELACION IS  NULL";
 		Object[] args={dia};
 		//List<String> rows=ServiceLocator2.getJdbcTemplate().queryForList(sql, args,String.class);
@@ -144,7 +143,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 	public static void main(String[] args) {
 		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
 		//CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapelsabajio");
-		task.cancelacion(DateUtil.toDate("20/05/2016"));
+		task.cancelacion(DateUtil.toDate("18/08/2016"));
 	}
 
 }

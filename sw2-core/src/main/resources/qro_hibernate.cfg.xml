@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+		
+<hibernate-configuration>
+    
+    <session-factory>
+    
+        <mapping class="com.luxsoft.siipap.model.User"/>
+        <mapping class="com.luxsoft.siipap.model.Role"/>
+        <mapping class="com.luxsoft.siipap.model.Permiso"/>        
+        <mapping class="com.luxsoft.siipap.model.Empresa"/>        
+        <mapping class="com.luxsoft.siipap.model.Sucursal"/>
+        <mapping class="com.luxsoft.siipap.model.Departamento"/>
+        <mapping class="com.luxsoft.siipap.model.Autorizacion"/>
+        <mapping class="com.luxsoft.siipap.model.Autorizacion2"/>
+		<mapping class="com.luxsoft.siipap.model.Configuracion"/>
+		
+		<!-- Core -->
+		<mapping class="com.luxsoft.siipap.model.core.Linea"/>
+        <mapping class="com.luxsoft.siipap.model.core.Marca"/>        
+        <mapping class="com.luxsoft.siipap.model.core.Clase"/>        
+        <mapping class="com.luxsoft.siipap.model.core.Producto"/>
+        <mapping class="com.luxsoft.siipap.model.core.Unidad"/>
+        <mapping class="com.luxsoft.siipap.model.core.TipoDeCliente"/>
+        <mapping class="com.luxsoft.siipap.model.core.Cliente"/>
+        <mapping class="com.luxsoft.siipap.model.core.ClienteCredito"/>
+        <mapping class="com.luxsoft.siipap.model.core.Proveedor"/>
+        <mapping class="com.luxsoft.siipap.model.core.AutorizacionClientePCE"/>
+        <mapping class="com.luxsoft.siipap.model.core.Corte"/>
+        <mapping class="com.luxsoft.siipap.model.core.MedidaPorCorte"/>
+        <mapping class="com.luxsoft.siipap.model.core.Socio"/>
+         
+        <mapping class="com.luxsoft.siipap.model.TipoDeCambio"/>
+        <mapping class="com.luxsoft.siipap.model.core.Folio"/>
+        
+        
+        <!-- Replica 
+        <mapping class="com.luxsoft.sw3.replica.ReplicaLogRecord"/>
+        <mapping class="com.luxsoft.sw3.replica.Validacion"/>      -->
+        
+        <!-- Inventarios -->
+        
+        <mapping class="com.luxsoft.siipap.model.core.ConfiguracionKit"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.Existencia"/>
+         <mapping class="com.luxsoft.siipap.inventarios.model.ExistenciaMaq"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.InventarioAnual"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.Movimiento"/>                
+        <mapping class="com.luxsoft.siipap.inventarios.model.MovimientoDet"/>
+        
+        <mapping class="com.luxsoft.siipap.inventarios.model.Kit"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.KitDet"/>        
+         
+        <mapping class="com.luxsoft.siipap.inventarios.model.Transformacion"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.TransformacionDet"/>
+        
+        <mapping class="com.luxsoft.siipap.inventarios.model.CostoPromedio"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.AutorizacionDeMovimiento"/>
+        
+        <mapping class="com.luxsoft.siipap.inventarios.model.SolicitudDeTraslado"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.Traslado"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.TrasladoDet"/>        
+        <mapping class="com.luxsoft.siipap.inventarios.model.Conteo"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.ConteoDet"/>
+        <mapping class="com.luxsoft.siipap.inventarios.model.ExistenciaConteo"/>
+        
+        
+        <!-- Compras -->
+        <mapping class="com.luxsoft.siipap.compras.model.Compra2"/>
+        <mapping class="com.luxsoft.siipap.compras.model.CompraUnitaria"/>
+        <!-- <mapping class="com.luxsoft.siipap.compras.model.Compra"/>
+        <mapping class="com.luxsoft.siipap.compras.model.CompraDet"/> -->
+        <mapping class="com.luxsoft.siipap.compras.model.EntradaPorCompra"/>
+        <mapping class="com.luxsoft.siipap.compras.model.ListaDePrecios"/>
+		<mapping class="com.luxsoft.siipap.compras.model.ListaDePreciosDet"/>
+		<mapping class="com.luxsoft.siipap.compras.model.RecepcionDeCompra"/>
+		<mapping class="com.luxsoft.siipap.compras.model.DevolucionDeCompra"/>
+		<mapping class="com.luxsoft.siipap.compras.model.DevolucionDeCompraDet"/>
+		
+		
+		 <!--  CXP -->
+		
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPCargo"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPFactura"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPAbono"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPPago"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPAnticipo"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPNota"/>
+		<mapping class="com.luxsoft.siipap.cxp.model.CXPAplicacion"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.CXPAnalisisDet"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.ContraRecibo"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.ContraReciboDet"/> 
+        <mapping class="com.luxsoft.siipap.cxp.model.AutorizacionDeCargoCXP"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.AnalisisDeFactura"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.AnalisisDeFacturaDet"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.AnticipoDeCompra"/>
+        <mapping class="com.luxsoft.siipap.cxp.model.AnalisisDeTransformacion"/>
+        
+        <!-- Ventas--> 
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.Cobrador"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.Vendedor"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.Asociado"/>
+        
+        <mapping class="com.luxsoft.sw3.ventas.Pedido"/>
+        <mapping class="com.luxsoft.sw3.ventas.PedidoDet"/>
+        <mapping class="com.luxsoft.sw3.ventas.PedidoPendiente"/>
+        <mapping class="com.luxsoft.sw3.ventas.AutorizacionDePedido"/>
+        <mapping class="com.luxsoft.sw3.ventas.InstruccionDeEntrega"/> 
+        <mapping class="com.luxsoft.siipap.ventas.model.Venta"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.VentaDet"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.VentaCredito"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.Devolucion"/>
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.CancelacionDeVenta"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.ComisionVenta"/>        
+        <mapping class="com.luxsoft.siipap.ventas.model.DescPorVol"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.DescuentoEspecial"/>
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.ListaDePreciosCliente"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.ListaDePreciosClienteDet"/>
+        
+        
+        <!-- <mapping class="com.luxsoft.siipap.ventas.model.TipoDeLista"/> -->
+        <mapping class="com.luxsoft.siipap.ventas.model.ListaDePreciosVenta"/>        
+        <mapping class="com.luxsoft.siipap.ventas.model.ListaDePreciosVentaDet"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.SalidaPorVenta"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.DevolucionDeVenta"/>
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.AutorizacionParaFacturarSinExistencia"/>
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.PreDevolucion"/>
+		<mapping class="com.luxsoft.siipap.ventas.model.PreDevolucionDet"/>
+        <mapping class="com.luxsoft.siipap.ventas.model.AsignacionVentaCE"/>
+        
+        <!--  CXC -->
+        <mapping class="com.luxsoft.siipap.cxc.model.AplicacionDePago"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.AplicacionDeNota"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCreditoDescuento"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCreditoDevolucion"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCreditoDet"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.AutorizacionDeAbono"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.AutorizacionParaCargo"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.AutorizacionDeAplicacionCxC"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCargo"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.NotaDeCargoDet"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.DevolucionPorTesoreria"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.ChequeDevuelto"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.Juridico"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.Pago"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoConCheque"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoConDeposito"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoConTarjeta"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoConEfectivo"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoEnEspecie"/>        
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoDeDiferencias"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoPorCambioDeCheque"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.PagoPorCambioDeTarjeta"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.CancelacionDeAbono"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.CancelacionDeCargo"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.Esquema"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.Tarjeta"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.Ficha"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.FichaDet"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.CargoPorDiferencia"/>
+        <mapping class="com.luxsoft.siipap.cxc.model.CargoPorTesoreria"/>
+        <mapping class="com.luxsoft.sw3.tesoreria.model.CorreccionDeFicha"/>
+        
+        
+        <!--  Maquila -->
+          
+        
+        <mapping class="com.luxsoft.sw3.maquila.model.Almacen"/>
+        <mapping class="com.luxsoft.sw3.maquila.model.EntradaDeMaterial"/>        
+        <mapping class="com.luxsoft.sw3.maquila.model.EntradaDeMaterialDet"/>   
+        <mapping class="com.luxsoft.sw3.maquila.model.OrdenDeCorte"/> 
+        <mapping class="com.luxsoft.sw3.maquila.model.OrdenDeCorteDet"/>
+        <mapping class="com.luxsoft.sw3.maquila.model.RecepcionDeCorte"/> 
+        <mapping class="com.luxsoft.sw3.maquila.model.RecepcionDeCorteDet"/>  
+        <mapping class="com.luxsoft.sw3.maquila.model.SalidaDeHojasDet"/>
+        <mapping class="com.luxsoft.sw3.maquila.model.SalidaDeBobinas"/>
+        <mapping class="com.luxsoft.sw3.maquila.model.AnalisisDeMaterial"/> 
+        <mapping class="com.luxsoft.sw3.maquila.model.AnalisisDeFlete"/>
+        <mapping class="com.luxsoft.sw3.maquila.model.AnalisisDeHojeo"/>
+        <mapping class="com.luxsoft.siipap.maquila.model.RecepcionDeMaquila"/>
+        <mapping class="com.luxsoft.siipap.maquila.model.EntradaDeMaquila"/>        
+        
+
+                
+        <!-- TESORERIA -->        
+        <mapping class="com.luxsoft.siipap.model.tesoreria.Banco"/>        
+        <mapping class="com.luxsoft.siipap.model.tesoreria.Cuenta"/>        
+        <mapping class="com.luxsoft.siipap.model.tesoreria.Concepto"/>                
+		<mapping class="com.luxsoft.siipap.model.tesoreria.CargoAbono"/>  
+		<mapping class="com.luxsoft.siipap.model.tesoreria.Transferencia"/>		      
+		<mapping class="com.luxsoft.siipap.model.tesoreria.Conciliacion"/>
+		<mapping class="com.luxsoft.siipap.model.tesoreria.Requisicion"/>		        		
+		<mapping class="com.luxsoft.siipap.model.tesoreria.RequisicionDe"/>		
+		<mapping class="com.luxsoft.siipap.model.tesoreria.PagoDeRequisicion"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.SolicitudDeDeposito"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.CorteDeTarjeta"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.CorteDeTarjetaDet"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.TraspasoDeCuenta"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.Inversion"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.ComisionBancaria"/>
+		<mapping class="com.luxsoft.sw3.tesoreria.model.SaldoDeCuentaBancaria"/>
+		
+
+		<!-- Gastos -->		
+		<mapping class="com.luxsoft.siipap.model.gastos.ConceptoDeGasto"/>
+		<mapping class="com.luxsoft.siipap.model.gastos.GProductoServicio"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.GTipoProveedor"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.GProveedor"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.GProductoPorProveedor"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.GCompra"/>
+		<mapping class="com.luxsoft.siipap.model.gastos.GCompraDet"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.GFacturaPorCompra"/>				
+		<mapping class="com.luxsoft.siipap.model.gastos.INPC"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.ClasificacionDeActivo"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.ActivoFijo"/>		
+		<mapping class="com.luxsoft.siipap.model.gastos.Consignatario"/>	
+		
+		 <!--  Embarques -->
+        <mapping class="com.luxsoft.sw3.embarque.Chofer"/>
+        <mapping class="com.luxsoft.sw3.embarque.ChoferFacturista"/>
+        <mapping class="com.luxsoft.sw3.embarque.Transporte"/>
+        <mapping class="com.luxsoft.sw3.embarque.Zona"/>
+        <mapping class="com.luxsoft.sw3.embarque.ZonaDeEnvio"/>
+        <mapping class="com.luxsoft.sw3.embarque.SolicitudDeEmbarque"/>
+        <mapping class="com.luxsoft.sw3.embarque.Embarque"/>
+        <mapping class="com.luxsoft.sw3.embarque.EmbarqueForaneo"/>
+        <mapping class="com.luxsoft.sw3.embarque.Entrega"/>
+        <mapping class="com.luxsoft.sw3.embarque.EntregaDet"/>
+        <mapping class="com.luxsoft.sw3.embarque.ClientePorTonelada"/>
+        <mapping class="com.luxsoft.siipap.embarques.ServicioDeTransporte"/>
+        
+        <!-- Comprobantes Fiscales (CFD) -->
+        <mapping class="com.luxsoft.sw3.cfd.model.CertificadoDeSelloDigital"/>
+        <mapping class="com.luxsoft.sw3.cfd.model.FolioFiscal"/>
+        <mapping class="com.luxsoft.sw3.cfd.model.ComprobanteFiscal"/>
+        
+        		
+        <!-- Contabilidad -->
+        <mapping class="com.luxsoft.sw3.contabilidad.model.CuentaContable"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.ConceptoContable"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.SaldoDeCuenta"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.SaldoDeCuentaPorConcepto"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.Poliza"/>
+        <mapping class="com.luxsoft.sw3.contabilidad.model.PolizaDet"/>
+        
+        
+        
+        
+        
+        <mapping class="com.luxsoft.siipap.ventas.model.AplicacionDeAnticiposFacturados"/>
+
+		<mapping class="com.luxsoft.siipap.model.core.ClienteAuditLog"/>
+		<mapping class="com.luxsoft.sw3.ventas.CheckPlusOpcion"/>
+		<mapping class="com.luxsoft.sw3.ventas.CheckPlusVenta"/>
+		<mapping class="com.luxsoft.sw3.ventas.CheckPlusCliente"/>
+		<mapping class="com.luxsoft.sw3.ventas.CheckPlusReferenciaBancaria"/>
+		<mapping class="com.luxsoft.sw3.ventas.CheckPlusDocumento"/>
+		
+ 		<mapping class="com.luxsoft.sw3.solicitudes.SolicitudDeModificacion"/> 
+ 		
+ 		<mapping class="com.luxsoft.sw3.bi.SimuladorDePreciosPorCliente"/>
+ 		<mapping class="com.luxsoft.sw3.bi.SimuladorDePreciosPorClienteDet"/>
+ 		
+ 		<mapping class="com.luxsoft.sw3.ventas.EstadoDeVenta"/>
+ 		<mapping class="com.luxsoft.sw3.cfdi.model.CFDI"/>
+ 		<mapping class="com.luxsoft.sw3.cfdi.model.CFDIClienteMails"/>
+		
+                
+    </session-factory>
+</hibernate-configuration>

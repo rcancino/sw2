@@ -144,11 +144,12 @@ public class CancelacionesDeCargos{
 		System.setProperty("sucursalOrigen", "OFICINAS");
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
 		
-		//System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
-		//System.setProperty("sucursalOrigen", "OFICINAS");
-		//CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");
+	/*	System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
+		System.setProperty("sucursalOrigen", "OFICINAS");
+		
+		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");*/
 	
-		Periodo per=new Periodo("01/05/2016","20/05/2016");
+		Periodo per=new Periodo("01/09/2016","14/09/2016");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);

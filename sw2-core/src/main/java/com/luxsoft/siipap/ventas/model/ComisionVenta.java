@@ -143,6 +143,38 @@ public  class ComisionVenta extends BaseBean{
 	@Type(type="date")
 	private Date fechaCancelacionVendedor;
 	
+	@Column(name="ENVIADO")
+	private Boolean enviado=Boolean.FALSE;
+	
+	@Column(name="REVISADA")
+	private Boolean revisada=Boolean.FALSE;
+	
+	public Boolean isEnviado() {
+		if(enviado==null)
+			enviado=Boolean.FALSE;			
+		return enviado;
+	}
+
+	public void setEnviado(Boolean enviado) {
+		Object old=this.enviado;
+		this.enviado = enviado;
+		firePropertyChange("enviado", old, enviado);
+	}
+	
+	
+	public Boolean isRevisada() {
+		if(revisada==null)
+			revisada=Boolean.FALSE;			
+		return revisada;
+	}
+
+	public void setRevisada(Boolean revisada) {
+		Object old=this.revisada;
+		this.revisada = revisada;
+		firePropertyChange("revisada", old, revisada);
+	}
+	
+	
 	@Embedded
 	private UserLog userLog=new UserLog();
 	
@@ -429,8 +461,17 @@ public  class ComisionVenta extends BaseBean{
 	
 	public void actualizarComisiones(){
 		if(this.cobrador!=null){
+			BigDecimal pagoRev=BigDecimal.ZERO;
+			BigDecimal pagoEnv=BigDecimal.ZERO;
+			BigDecimal pagoCom=this.pagoComisionable.multiply(BigDecimal.valueOf(this.comisionCobrador/100));
 			this.comisionCobrador=this.cobrador.getComision();
-			setImpComisionCob(this.pagoComisionable.multiply(BigDecimal.valueOf(this.comisionCobrador/100)));
+			 if(this.isRevisada()){
+				 pagoRev=pagoCom.multiply(new BigDecimal(.75));
+			 }if(!this.isEnviado()){
+				 pagoEnv=pagoCom.multiply(new BigDecimal(.25));
+			 }
+			setImpComisionCob(pagoRev.add(pagoEnv));
+			
 		}
 		if(this.vendedor!=null){
 			//this.comisionVendedor=this.origen.equals("CRE")?this.vendedor.getComision():this.vendedor.getComisionContado();			

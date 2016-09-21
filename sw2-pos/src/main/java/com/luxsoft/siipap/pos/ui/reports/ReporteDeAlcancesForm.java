@@ -270,6 +270,16 @@ public class ReporteDeAlcancesForm extends SWXAction{
 			String suc=String.valueOf(getSucursal());
 			if(todasLasSucursales.isSelected())
 				suc="%";
+			
+			
+			if(suc.equals("6")){
+				parametros.put("EXI_SUCURSAL", " and X.SUCURSAL_ID  in(6,11)");	
+			}else if(suc.equals("9")){
+				parametros.put("EXI_SUCURSAL", " and X.SUCURSAL_ID  in(9,14)");
+			} else{
+				parametros.put("EXI_SUCURSAL", " and X.SUCURSAL_ID LIKE "+"\'"+suc+"\'");
+			}
+			
 			parametros.put("SUCURSAL", suc);
 			parametros.put("LINEA", getLinea());
 			int order=getOrden();

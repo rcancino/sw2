@@ -240,7 +240,7 @@ public class Cliente extends BaseBean implements Replicable{
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "FPAGO", nullable = false, length = 25)
-	private FormaDePago formaDePago=FormaDePago.EFECTIVO;
+	private FormaDePago formaDePago=FormaDePago.NA;
 	
 	@Column(name="CUOTAMENSUAL_COMISION")
 	private BigDecimal cuotaMensualComision=BigDecimal.ZERO;

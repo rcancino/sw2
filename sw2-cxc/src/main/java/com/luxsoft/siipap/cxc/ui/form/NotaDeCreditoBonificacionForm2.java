@@ -134,6 +134,7 @@ public class NotaDeCreditoBonificacionForm2 extends AbstractForm{
 		builder.append("Importe",getControl("importe"));		
 		builder.append("Impuesto",getControl("impuesto"));
 		builder.append("Total",getControl("total"));
+		
 		builder.setDefaultDialogBorder();
 		return builder.getPanel();
 	}

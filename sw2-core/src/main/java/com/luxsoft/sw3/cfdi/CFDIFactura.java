@@ -14,6 +14,7 @@ import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Traslados.Tra
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Receptor;
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.TipoDeComprobante;
 import mx.gob.sat.cfd.x3.TUbicacion;
+import mx.gob.sat.cfd.x3.impl.ComprobanteDocumentImpl.ComprobanteImpl.FormaDePagoImpl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.xmlbeans.XmlOptions;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.luxsoft.siipap.cxc.model.FormaDePago;
+import com.luxsoft.siipap.cxc.model.PagoConDeposito;
 import com.luxsoft.siipap.model.CantidadMonetaria;
 import com.luxsoft.siipap.model.Direccion;
 import com.luxsoft.siipap.model.Empresa;
@@ -48,6 +50,8 @@ import java.math.RoundingMode;
 import java.security.cert.CertificateEncodingException;
 import java.text.MessageFormat;
 import java.util.Date;
+
+import com.luxsoft.siipap.cxc.model.OrigenDeOperacion;
 /**
  * Genera CFDI para Venta
  * 
@@ -87,21 +91,64 @@ public class CFDIFactura implements InitializingBean,IFactura{
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
 		
 		boolean cod=false;
-		if(venta.isContraEntrega() && venta.getCliente().getFormaDePago().equals(FormaDePago.EFECTIVO)){
+		if(venta.isContraEntrega()){
 			cod =true;
 		}
 	
-		if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) ||venta.getFormaDePago().equals(FormaDePago.EFECTIVO) || cod){
-		//if(venta.getFormaDePago().equals(FormaDePago.EFECTIVO)){
-	    	cfdi.setMetodoDePago("NO IDENTIFICADO");
-		}else if(venta.getFormaDePago().equals(FormaDePago.CHECKPLUS) || venta.getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO) ){
-			cfdi.setMetodoDePago("CHEQUE");
-		}
-		else
-		   cfdi.setMetodoDePago(venta.getFormaDePago().name());
+		 if(venta.getFormaDePago().equals(FormaDePago.EFECTIVO)  ){
+				cfdi.setMetodoDePago("01");
+			}else
+				if(venta.getFormaDePago().equals(FormaDePago.CHEQUE) || venta.getFormaDePago().equals(FormaDePago.CHECKPLUS) || venta.getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO)){
+						cfdi.setMetodoDePago("02");
+				}else
+					if( venta.getFormaDePago().equals(FormaDePago.TRANSFERENCIA)  ){			
+							cfdi.setMetodoDePago("03");
+					}else
+						if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.getFormaDePago().equals(FormaDePago.DEPOSITO_CHEQUE) || venta.getFormaDePago().equals(FormaDePago.DEPOSITO_EFECTIVO) || venta.getFormaDePago().equals(FormaDePago.DEPOSITO_MIXTO)){
+							
+							cfdi.setMetodoDePago("99");
+							
+								if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO_CHEQUE)){
+									cfdi.setMetodoDePago("02");
+								}
+								if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO_EFECTIVO)){
+									cfdi.setMetodoDePago("01");
+								}
+								if(venta.getFormaDePago().equals(FormaDePago.DEPOSITO_MIXTO)){
+									cfdi.setMetodoDePago("01,02");
+								}
+								
+						
+						}else 	
+							if(venta.getFormaDePago().equals(FormaDePago.TARJETA_CREDITO) ){			
+									cfdi.setMetodoDePago("04");
+							}
+							else
+								if(venta.getFormaDePago().equals(FormaDePago.TARJETA_DEBITO) || venta.getFormaDePago().equals(FormaDePago.TARJETA)  ){			
+										cfdi.setMetodoDePago("28");
+								}
+		 
+			if (venta.getOrigen().equals(OrigenDeOperacion.CRE) && venta.getCliente().getFormaDePago().equals(FormaDePago.NA)  ){
+				cfdi.setMetodoDePago("NA  98");
+				if(venta.getCliente().getClave().equals("L010393"))
+					cfdi.setMetodoDePago("98");
+				if(venta.getCliente().getClave().equals("U050008"))
+					cfdi.setMetodoDePago("NA");
+			}
+			
+			
+			
+			/*if (venta.isContraEntrega()){
+				cfdi.setMetodoDePago("NA 98");
+			}
+					*/		
+		 	if(venta.getAplicaciones().size()>1){
+		 		cfdi.setMetodoDePago("NA 98");
+		 	}
+		 		
 		
 		if(StringUtils.isNotBlank(venta.getComentarioCancelacionDBF()) ){
-			if(!(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.getFormaDePago().equals(FormaDePago.EFECTIVO) || cod))
+			if(!(venta.getFormaDePago().equals(FormaDePago.DEPOSITO) || venta.getFormaDePago().equals(FormaDePago.EFECTIVO) ))
 			    cfdi.setNumCtaPago(venta.getComentarioCancelacionDBF());
 		}
 			

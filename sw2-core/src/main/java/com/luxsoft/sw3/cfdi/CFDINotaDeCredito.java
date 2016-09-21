@@ -87,7 +87,7 @@ public class CFDINotaDeCredito implements InitializingBean,INotaDeCredito{
 		cfdi.setFecha(getFecha());
 		
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
-		cfdi.setMetodoDePago("NO IDENTIFICADO");
+		cfdi.setMetodoDePago("NA");
 		
 		cfdi.setMoneda(nota.getMoneda().getCurrencyCode());
 		cfdi.setTipoCambio(BigDecimal.valueOf(nota.getTc()).toString());
