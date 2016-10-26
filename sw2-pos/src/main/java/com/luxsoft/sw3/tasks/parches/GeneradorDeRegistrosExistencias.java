@@ -79,7 +79,7 @@ public class GeneradorDeRegistrosExistencias {
 	public static void main(String[] args) {
 		//new ActualizarExistencias().execute();
 		POSDBUtils.whereWeAre();
-		String[] claves={"SBSB17324"};
+		String[] claves={"poldm"};
 			for(String clave:claves){
 			new GeneradorDeRegistrosExistencias().execute(clave);
 		}

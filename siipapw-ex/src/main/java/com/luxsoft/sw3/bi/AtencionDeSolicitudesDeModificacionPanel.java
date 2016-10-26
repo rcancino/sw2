@@ -303,6 +303,7 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 				row.setAtendio(form.getModificacion().getAtendio());
 				row.setComentarioDeAtencion(form.getModificacion().getComentarioDeAtencion());
 				row.setEstado(form.getModificacion().getEstado());
+				row.getLog().setModificado(new Date());	
 				ServiceLocator2.getHibernateTemplate().merge(row);
 				load();
 			}

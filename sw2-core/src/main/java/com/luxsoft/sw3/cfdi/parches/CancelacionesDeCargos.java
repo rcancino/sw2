@@ -97,7 +97,7 @@ public class CancelacionesDeCargos{
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelCfdi2016Pfx.pfx");
 		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
@@ -142,14 +142,14 @@ public class CancelacionesDeCargos{
 	public static void main(String[] args) {
 		System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
 		System.setProperty("sucursalOrigen", "OFICINAS");
-		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapel");
+		CancelacionesDeCargos task=new CancelacionesDeCargos("pfxfilepapel");
 		
 	/*	System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
 		System.setProperty("sucursalOrigen", "OFICINAS");
 		
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");*/
 	
-		Periodo per=new Periodo("01/09/2016","14/09/2016");
+		Periodo per=new Periodo("10/10/2016","25/10/2016");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);

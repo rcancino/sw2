@@ -100,6 +100,7 @@ public class Proc_IETU implements IProcesador{
 				if (item.isAnticipo() && item.getFecha().equals(poliza.getFecha()))
 					return true;
 				for(Aplicacion a:item.getAplicaciones()){
+					System.out.println("-------"+item.getId());
 					if(DateUtils.isSameDay(a.getFecha(),poliza.getFecha())){
 						if(a.getDetalle().getOrigen().equals(origen)){
 							return true;

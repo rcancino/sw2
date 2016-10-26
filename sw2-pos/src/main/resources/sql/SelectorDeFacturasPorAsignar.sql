@@ -3,7 +3,7 @@ from sx_ventas a
 join  sx_pedidos b on(a.pedido_id=b.pedido_id) 
 join sx_pedidos_entregas c on (b.INSTRUCCION_ID=c.INSTRUCCION_ID) 
 where b.instruccion_id is not null
-	and a.fecha>'2015-12-31'
+	and a.fecha>DATE(DATE_ADD(?, INTERVAL -30 DAY))
 	and a.ce=false 
 	and (a.importe+(ifnull(a.anticipo_aplicado,0)/1.16))-ifnull( (select sum(e.valor) from sx_entregas e where e.venta_id=a.cargo_id),0)>1 				   
 union

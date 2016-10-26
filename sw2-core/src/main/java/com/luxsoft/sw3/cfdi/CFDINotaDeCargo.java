@@ -80,8 +80,11 @@ public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
 		cfdi.setMetodoDePago("NA 98");
+		if(nota.getCliente().getClave()=="D050011"){
+			cfdi.setMetodoDePago("NA");			
+		}
 		
-		
+		/*
 		
 		if(nota.getCliente().getFormaDePago().equals(FormaDePago.EFECTIVO)  ){
 			cfdi.setMetodoDePago("01");
@@ -117,7 +120,7 @@ public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 							}
 	 
 	
-		
+		*/
 		cfdi.setMoneda(nota.getMoneda().getCurrencyCode());
 		cfdi.setTipoCambio(BigDecimal.valueOf(nota.getTc()).toString());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);

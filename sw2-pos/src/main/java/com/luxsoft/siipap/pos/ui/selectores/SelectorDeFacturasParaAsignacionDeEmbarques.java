@@ -175,6 +175,7 @@ public  class SelectorDeFacturasParaAsignacionDeEmbarques
 		return Services.getInstance().getJdbcTemplate().query(
 				sql
 				,new Object[]{
+						new SqlParameterValue(Types.DATE,periodo.getFechaFinal()),
 						new SqlParameterValue(Types.DATE,periodo.getFechaInicial()),
 						new SqlParameterValue(Types.DATE,periodo.getFechaFinal())
 						}

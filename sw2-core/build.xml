@@ -28,25 +28,37 @@
 			<include name="**/*.jar" />
 			<include name="**/*.properties" />
 		</fileset>
-		<path location="${lib.dir}/${jdbc.driver.jar}" />
+		<!-- <path location="${lib.dir}/${jdbc.driver.jar}" /> -->
+	</path>
+	
+	<path id="hibernate">
+		<fileset dir="${hibernate.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="/pruebasLinux/SW-EX/lib">
+			<include name="/*.jar" />
+			
+		</fileset>
+		
 	</path>
 
 	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask">
 		<classpath refid="hibernate.tools.path" />
+		<classpath refid="hibernate"/>
+		
 	</taskdef>
 
 	<target name="hbm2ddl" description="Genera un  esquema nuevo de la base de datos">
 
-		<hibernatetool destdir="${basedir}/target">
+		<hibernatetool destdir="${basedir}/target/classes" >
 
 			<classpath>
 				<path location="${target.classes.dir}" />
 				<path location="${basedir}/src/test/resources" />
 			</classpath>
-			<!--<configuration configurationfile="${basedir}/target/classes/hibernate.cfg.xml"/>-->
-			<annotationconfiguration configurationfile="${basedir}/target/classes/hibernate.cfg.xml" />
+			<annotationconfiguration configurationfile="${basedir}/target/classes/hibernate.cfg.xml" propertyfile="${basedir}/target/classes/swx-jdbc.properties" />
 
-			<hbm2ddl export="false" update="true" drop="true" create="true" console="true" outputfilename="${basedir}/target/hbm/schema2.sql" format="true" />
+			<hbm2ddl export="false" update="true" drop="true" create="true" console="true" outputfilename="qro.sql" format="true" />
 		</hibernatetool>
 	</target>
 
