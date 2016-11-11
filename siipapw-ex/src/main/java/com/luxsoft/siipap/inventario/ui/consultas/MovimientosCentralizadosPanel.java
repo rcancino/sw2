@@ -47,6 +47,7 @@ import com.luxsoft.siipap.reportes.MovInventDetalle;
 import com.luxsoft.siipap.reportes.MovInventResumen;
 import com.luxsoft.siipap.reportes.ReporteDeAlcancesForm;
 import com.luxsoft.siipap.reportes.ReporteDeAlcancesPorCapasForm;
+import com.luxsoft.siipap.reportes.TrasladoSalidasReport;
 import com.luxsoft.siipap.reportes.VentasMAsMenosBI;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
@@ -193,6 +194,8 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 		actions.add(addAction("", "reporteMovInventResumen", "Movs. Invent. Resumen"));
 		actions.add(addAction("", "reporteDetalleDeDevoluciones", "Detalle de Devoluciones"));
 		actions.add(addAction("", "reportedeVentasMasMenos", "Ventas de Mas/Menos"));
+		actions.add(addAction("", "reporteSalidaTrasladoG", "Traslados Salidas "));
+		
 		return actions;
 	}
 	
@@ -250,7 +253,10 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 	public void reportedeVentasMasMenos(){
 		new VentasMAsMenosBI().run();
 	}
-	
+
+	public void reporteSalidaTrasladoG(){
+		new TrasladoSalidasReport().run();
+	}
 
 	@Override
 	protected List<Movimiento> findData() {

@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.luxsoft.siipap.cxc.model.Cargo;
 import com.luxsoft.siipap.cxc.model.FormaDePago;
 import com.luxsoft.siipap.cxc.model.NotaDeCargo;
 import com.luxsoft.siipap.cxc.model.NotaDeCargoDet;
@@ -79,48 +80,16 @@ public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 		cfdi.setFecha(getFecha());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);
 		cfdi.setFormaDePago("PAGO EN UNA SOLA EXHIBICION");
+		
+		System.out.println("Cliente:  "+nota.getCliente()+"  Clave:  "+nota.getClave() +"----"+ nota.getCliente().getId());
+		
 		cfdi.setMetodoDePago("NA 98");
-		if(nota.getCliente().getClave()=="D050011"){
-			cfdi.setMetodoDePago("NA");			
+		
+		if(nota.getCliente().getId()==5352L){
+			
+			cfdi.setMetodoDePago("NA");
 		}
-		
-		/*
-		
-		if(nota.getCliente().getFormaDePago().equals(FormaDePago.EFECTIVO)  ){
-			cfdi.setMetodoDePago("01");
-		}else
-			if(nota.getCliente().getFormaDePago().equals(FormaDePago.CHEQUE) || nota.getCliente().getFormaDePago().equals(FormaDePago.CHECKPLUS) || nota.getCliente().getFormaDePago().equals(FormaDePago.CHEQUE_POSTFECHADO)){
-					cfdi.setMetodoDePago("02");
-			}else
-				if( nota.getCliente().getFormaDePago().equals(FormaDePago.TRANSFERENCIA)  ){			
-						cfdi.setMetodoDePago("03");
-				}else
-					if(nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO) || nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_CHEQUE) || nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_EFECTIVO) || nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_MIXTO)){
-						
-						cfdi.setMetodoDePago("99");
-						
-							if(nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_CHEQUE)){
-								cfdi.setMetodoDePago("02");
-							}
-							if(nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_EFECTIVO)){
-								cfdi.setMetodoDePago("01");
-							}
-							if(nota.getCliente().getFormaDePago().equals(FormaDePago.DEPOSITO_MIXTO)){
-								cfdi.setMetodoDePago("01,02");
-							}
-							
-					
-					}else 	
-						if(nota.getCliente().getFormaDePago().equals(FormaDePago.TARJETA_CREDITO) ){			
-								cfdi.setMetodoDePago("04");
-						}
-						else
-							if(nota.getCliente().getFormaDePago().equals(FormaDePago.TARJETA_DEBITO) || nota.getCliente().getFormaDePago().equals(FormaDePago.TARJETA)  ){			
-									cfdi.setMetodoDePago("28");
-							}
-	 
 	
-		*/
 		cfdi.setMoneda(nota.getMoneda().getCurrencyCode());
 		cfdi.setTipoCambio(BigDecimal.valueOf(nota.getTc()).toString());
 		cfdi.setTipoDeComprobante(TipoDeComprobante.INGRESO);

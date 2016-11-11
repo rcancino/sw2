@@ -99,6 +99,8 @@ public class CFDIPrintServices {
 		parametros.put("DIRECCION", 		CFDIUtils.getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
 		parametros.put("CUENTA", 		comprobante.getNumCtaPago());
 		parametros.put("METODO_PAGO", 		comprobante.getMetodoDePago());
+		
+		System.out.println("Complemento"+comprobante.getComplemento());
 		//System.out.println("Metodo de pago: "+comprobante.getMetodoDePago());
 	//	System.out.println("Cuenta de pago: "+comprobante.getNumCtaPago());
 		//Datos tomado de la aplicacion
