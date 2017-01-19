@@ -101,7 +101,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/PAPEL_CFDI_CERT.pfx");
+		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelCfdi2016Pfx.pfx");
 		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
@@ -141,9 +141,9 @@ public class CancelacionesEspecialDeNotasDeCredito {
 	}
 	
 	public static void main(String[] args) {
-		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapel");
+		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("pfxfilepapel");
 		//CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapelsabajio");
-		task.cancelacion(DateUtil.toDate("05/10/2016"));
+		task.cancelacion(DateUtil.toDate("13/01/2017"));
 	}
 
 }

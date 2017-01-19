@@ -728,7 +728,7 @@ public class PedidoController extends DefaultFormModel implements ListEventListe
 			if(det.getClave().equals("MANIOBRA") )
 				continue;
 			
-			if(det.getProducto().getModoDeVenta().equals("N") ){
+			if(det.getProducto().getModoDeVenta().equals("N") && det.getProducto().getLinea().getId()!=129L ){
 				importeManiobras=importeManiobras.add(det.getImporteBruto());
 			}
 		}

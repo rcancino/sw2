@@ -131,7 +131,7 @@ private void anticiposFac(ModelMap model){
 			PolizaDetFactory.generarConceptoContable(car.getClave(), car.getNombre(),"113");
 			}*/
 		
-		System.out.println("aplicaciones procesadas: "+aplic.size());
+		//System.out.println("aplicaciones procesadas: "+aplic.size());
 		
 		model.addAttribute("aplicaciones",aplic);
 		
@@ -148,7 +148,7 @@ private void anticiposFac(ModelMap model){
 						.list();
 			}
 		});
-		System.out.println("Fichas: "+fichas.size());
+		//System.out.println("Fichas: "+fichas.size());
 		model.put("fichas", fichas);
 	}
 	
@@ -173,7 +173,7 @@ private void cargos(ModelMap model){
 			PolizaDetFactory.generarConceptoContable(car.getClave(), car.getNombre(),"113");
 			}*/
 		
-		System.out.println("Notas de cargo procesadas: "+cargos.size());
+		//System.out.println("Notas de cargo procesadas: "+cargos.size());
 		
 		model.addAttribute("notasDeCargo",cargos);
 		
@@ -191,7 +191,7 @@ private void cargos(ModelMap model){
 						.list();
 			}
 		});
-		System.out.println("Correcciones Fichas: "+correcciones.size());
+		//System.out.println("Correcciones Fichas: "+correcciones.size());
 		model.put("correcciones", correcciones);
 	}
 	

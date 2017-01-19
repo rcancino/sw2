@@ -135,6 +135,7 @@ public class RequisicionDeComprasFormModel2 extends DefaultFormModel{
 		List<String> numeros=SelectorDeContraRecibos.buscarFacturasRecibidasPendientes(p);
 		
 		List<AnalisisDeFactura> analisis=ServiceLocator2.getAnalisisDeCompraManager().buscarAnalisisPorFactura(numeros, p);
+		System.out.println("Insertar analisis por contrarecibo");
 		procesarAnalisis(analisis);
 	}
 	
@@ -149,9 +150,11 @@ public class RequisicionDeComprasFormModel2 extends DefaultFormModel{
 	
 	private void procesarAnalisis(final List<AnalisisDeFactura> analisis){
 		for(AnalisisDeFactura a:analisis){
+				System.out.println("Procesando Analisis"+ a.getId());
+			
 			if(a.getRequisicionDet()!=null){
-				MessageUtils.showMessage("La factura "+a.getFactura().getDocumento()+" ya existe en la requisición: "+a.getRequisicionDet().getRequisicion().getId()
-						, "Requisición de compras");
+				MessageUtils.showMessage("La factura "+a.getFactura().getDocumento()+" ya existe en la requisición: ", "Requisición de compras");
+				
 				continue;
 			}
 			CXPFactura fac=a.getFactura();

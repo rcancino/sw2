@@ -53,7 +53,7 @@ public class Proc_AplicacionDePagoTarjetaCxC implements IProcesador{
 						
 				String ref1=pago.getOrigenAplicacion();
 				String ref2=pago.getSucursal().getNombre();
-				String asiento="COBRANZA TARJETA";
+				String asiento="COBRANZA TARJETA**********************";
 				
 				BigDecimal totalAplicado=pago.getAplicado(poliza.getFecha());
 				BigDecimal importeAplicado=PolizaUtils.calcularImporteDelTotal(totalAplicado);

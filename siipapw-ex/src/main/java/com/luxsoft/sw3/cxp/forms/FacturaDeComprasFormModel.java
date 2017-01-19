@@ -143,7 +143,7 @@ public class FacturaDeComprasFormModel extends DefaultFormModel implements Prope
 	
 	private void resolverFactura(){
 		String fact=(String)getValue("documento");
-		System.out.println("Buscando factura: "+fact);
+		
 		if(!StringUtils.isEmpty(fact) && getFactura().getProveedor()!=null){
 			CXPFactura existente=ServiceLocator2.getCXPFacturaManager()
 					.buscarFactura(fact, getFactura().getProveedor());
@@ -168,6 +168,7 @@ public class FacturaDeComprasFormModel extends DefaultFormModel implements Prope
 					this.editarFactura.setValue(Boolean.FALSE);
 					//this.editarFactura.setValue(Boolean.FALSE);
 				}else{
+					System.out.println("Buscando factura: "+fact);
 					getFactura().setDocumento(null);
 					analisis.setPrimerAnalisis(true);
 					validate();
@@ -196,11 +197,16 @@ public class FacturaDeComprasFormModel extends DefaultFormModel implements Prope
 	
 	public void insertarEntradas(){
 		Proveedor prov=getFactura().getProveedor();
+		
 		if(prov!=null){
+			System.out.println("Buscando EntradaaaaaaaS:  ");
 			List<EntradaPorCompra> entradas=SelectorDeCOMS.buscarEntradas(prov);
+			
 			CollectionUtils.forAllDo(entradas, new Closure(){
 				public void execute(Object input) {
+					
 					EntradaPorCompra e=(EntradaPorCompra)input;
+					
 					Assert.isTrue(e.getProveedor().equals(getAnalisis().getFactura().getProveedor()));
 					AnalisisDeFacturaDet det=new AnalisisDeFacturaDet();
 					det.setEntrada(e);

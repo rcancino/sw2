@@ -28,14 +28,14 @@ import com.luxsoft.sw3.cfdi.model.CFDI;
  * @author Ruben Cancino
  *
  */
-public class CancelacionesDeCargos{
+public class CancelacionesDeCargosQro{
 	
 	CfdiClient client;
 	Empresa empresa;
 	final String pfxPassword;
 	
 	
-	 public CancelacionesDeCargos(String password) {
+	 public CancelacionesDeCargosQro(String password) {
 		this.pfxPassword=password;
 	}
 	
@@ -97,7 +97,7 @@ public class CancelacionesDeCargos{
 		Assert.isTrue(dir.exists(),"No existe el directorio para cancelaciones: "+dirPath);
 		Assert.isTrue(dir.isDirectory(),"La ruta para las cancelaciones no es un directorio "+dirPath);
 		
-		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelCfdi2016Pfx.pfx");
+		Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsaB2016.pfx");
 		//Resource pfx=ServiceLocator2.instance().getContext().getResource("sat/papelsacfdikey.pfx");
 		Assert.isTrue(pfx.exists(),"No existe el archivo pfx");
 		
@@ -140,16 +140,16 @@ public class CancelacionesDeCargos{
 	}
 	
 	public static void main(String[] args) {
-		System.setProperty("jdbc.url", "jdbc:mysql://10.10.1.228/produccion");
+		System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
 		System.setProperty("sucursalOrigen", "OFICINAS");
-		CancelacionesDeCargos task=new CancelacionesDeCargos("pfxfilepapel");
+		CancelacionesDeCargosQro task=new CancelacionesDeCargosQro("bajiopfxfile");
 		
 	/*	System.setProperty("jdbc.url", "jdbc:mysql://10.10.9.2/produccion");
 		System.setProperty("sucursalOrigen", "OFICINAS");
 		
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");*/
 	
-		Periodo per=new Periodo("01/01/2017","17/01/2017");
+		Periodo per=new Periodo("01/12/2016","31/12/2016");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);

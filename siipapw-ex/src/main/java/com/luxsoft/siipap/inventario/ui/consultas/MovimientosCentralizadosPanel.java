@@ -49,6 +49,7 @@ import com.luxsoft.siipap.reportes.ReporteDeAlcancesForm;
 import com.luxsoft.siipap.reportes.ReporteDeAlcancesPorCapasForm;
 import com.luxsoft.siipap.reportes.TrasladoSalidasReport;
 import com.luxsoft.siipap.reportes.VentasMAsMenosBI;
+import com.luxsoft.siipap.reportes.VentasPorClienteDetalle;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.AbstractControl;
@@ -195,6 +196,7 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 		actions.add(addAction("", "reporteDetalleDeDevoluciones", "Detalle de Devoluciones"));
 		actions.add(addAction("", "reportedeVentasMasMenos", "Ventas de Mas/Menos"));
 		actions.add(addAction("", "reporteSalidaTrasladoG", "Traslados Salidas "));
+		actions.add(addAction("", "reporteVentasPorProducto", "Productos Por Venta "));
 		
 		return actions;
 	}
@@ -256,6 +258,10 @@ public class MovimientosCentralizadosPanel extends AbstractMasterDatailFilteredB
 
 	public void reporteSalidaTrasladoG(){
 		new TrasladoSalidasReport().run();
+	}
+	
+	public void reporteVentasPorProducto(){
+		new VentasPorClienteDetalle().run();
 	}
 
 	@Override

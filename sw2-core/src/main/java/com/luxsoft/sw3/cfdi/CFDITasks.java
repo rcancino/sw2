@@ -32,7 +32,7 @@ public class CFDITasks {
 		is.close();
 		Empresa empresa=(Empresa)hibernateTemplate.get(Empresa.class, 1L);
 		empresa.setCfdiPrivateKey(data);
-		empresa.setNumeroDeCertificado("00001000000403970040");
+		empresa.setNumeroDeCertificado("00001000000404393222");
 		hibernateTemplate.merge(empresa);
 		
 	}
@@ -57,7 +57,7 @@ public class CFDITasks {
 	}
 	
 	public void subirCertificadoPfx() throws IOException{
-		String path="sat/papelCfdi2016Pfx.pfx";
+		String path="sat/papelsaB2016.pfx";
 		//String path="sat/papelsacfdikey.pfx";
 		ClassPathResource resource=new ClassPathResource(path);
 		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
@@ -77,8 +77,8 @@ public class CFDITasks {
 	}
 	
 	public void inicializar() throws Exception{
-		subirCertificado("sat/00001000000403970040.cer","00001000000403970040");
-		subirLlavePrivada("sat/papelCfdi2016.key");
+		subirCertificado("sat/00001000000404393222.cer","00001000000404393222");
+		subirLlavePrivada("sat/papelsaB2016.key");
 		subirCertificadoPfx();
 		
 		

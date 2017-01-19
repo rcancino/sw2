@@ -49,10 +49,10 @@ public class Proc_CobranzaFichasCamioneta  implements IProcesador{
 						PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);
 						PolizaDetFactory.generarOtrosIngresos(poliza, p, p.getOrigenAplicacion(), asiento);
 						
-						System.out.println("APLICADO : " + totalAplicado + "IS ANTICIPO :" + pago.isAnticipo() );
+					//	System.out.println("APLICADO : " + totalAplicado + "IS ANTICIPO :" + pago.isAnticipo() );
 					}
 				}
-				System.out.println(" TOTAL APLICADO : " + totalAplicado + "IS ANTICIPO :" + pago.isAnticipo() );
+				//System.out.println(" TOTAL APLICADO : " + totalAplicado + "IS ANTICIPO :" + pago.isAnticipo() );
 			}
 			importeAplicado=PolizaUtils.calcularImporteDelTotal(totalAplicado);		
 			ivaAplicado=PolizaUtils.calcularImpuesto(importeAplicado);
@@ -62,6 +62,8 @@ public class Proc_CobranzaFichasCamioneta  implements IProcesador{
 			
 			String ref2=pago.getSucursal().getNombre();
 			String ref1=pago.getOrigenAplicacion();
+			
+			System.err.println("*********************************"+pago.getId());
 			//Abono a cliente camioneta
 			PolizaDetFactory.generarPolizaDet(poliza,"105", pago.getSucursal().getId().toString(), false, totalAplicado, "Clientes CAM cobranza", ref1, ref2, asiento);
 			//Cargo Iva en ventas por trasladar

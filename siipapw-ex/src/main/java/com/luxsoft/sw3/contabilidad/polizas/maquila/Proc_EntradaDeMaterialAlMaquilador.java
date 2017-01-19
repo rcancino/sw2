@@ -56,6 +56,9 @@ public class Proc_EntradaDeMaterialAlMaquilador implements IProcesador {
 				final GroupingList<EntradaDeMaterialDet> analisisPorSucursal = new GroupingList<EntradaDeMaterialDet>(source, c);
 				
 				CXPFactura fac = a.getCxpFactura();
+				System.out.println("Analisis"+ a.getId());
+				System.out.println("Factura"+ fac);
+				
 				String ref1 = fac.getNombre();
 				String desc2 = MessageFormat.format("Fac: {0}  {1,date, short} Analisis:{2}", fac.getDocumento(), fac.getFecha(), a.getId());
 

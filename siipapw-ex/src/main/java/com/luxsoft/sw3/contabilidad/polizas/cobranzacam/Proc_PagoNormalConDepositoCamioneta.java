@@ -93,7 +93,7 @@ public class Proc_PagoNormalConDepositoCamioneta implements IProcesador{
 		PolizaDetFactory.generarPolizaDet(poliza, "105",deposito.getSucursal().getId().toString(), false, totalAplicado, MessageFormat.format(desc2, deposito.getFechaDeposito(),deposito.getPrimeraAplicacion()), ref1, ref2, asiento);
 		//Cargo Bancos
 		
-		System.out.println("------------------------------------"+deposito.getId());
+		//System.out.println("------------------------------------"+deposito.getId());
 		PolizaDetFactory.generarPolizaDet(poliza, "102",deposito.getCuenta().getNumero().toString(), true, deposito.getTotal(),desc2 , ref1, ref2, asiento);
 		
 		//Cargo Iva en ventas por trasladar

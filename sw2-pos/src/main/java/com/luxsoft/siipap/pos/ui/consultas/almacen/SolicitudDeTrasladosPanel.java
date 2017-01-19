@@ -2,6 +2,7 @@ package com.luxsoft.siipap.pos.ui.consultas.almacen;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,6 +161,7 @@ public class SolicitudDeTrasladosPanel extends AbstractMasterDatailFilteredBrows
 						
 							m.setnoAtender(true);
 							m.setUsrCancelacion(user.getUsername());
+							m.getLog().setModificado(new Date());
 							//m.getLog().setUpdateUser(user.getFirstName());
 							m=(SolicitudDeTraslado)Services.getInstance().getHibernateTemplate().merge(m);
 							MessageUtils.showMessage("Se cancelo la Solicitud"+m.getDocumento(),"Cancelacin de Vale");

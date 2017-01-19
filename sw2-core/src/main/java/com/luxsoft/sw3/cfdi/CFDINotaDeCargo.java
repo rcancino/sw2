@@ -88,6 +88,9 @@ public class CFDINotaDeCargo implements InitializingBean,INotaDeCargo{
 		if(nota.getCliente().getId()==5352L){
 			
 			cfdi.setMetodoDePago("NA");
+		}if(nota.getCliente().getId()==304945L){
+			
+			cfdi.setMetodoDePago("03");
 		}
 	
 		cfdi.setMoneda(nota.getMoneda().getCurrencyCode());
