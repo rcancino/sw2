@@ -1,5 +1,6 @@
 package com.luxsoft.sw2.replica.valida;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -257,9 +258,10 @@ public class SincronizadorDeExistencias {
 	
 	public static void main(String[] args) {
 		new SincronizadorDeExistencias()
-		.addSucursal(2L,3L,5L,6L,9L)
-		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
-		.actualizarExistenciasOficinas(new Date());
+		.addSucursal(2L,3L,5L,6L,9L,11L,12L,13L)
+		.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
+		//.actualizarExistenciasOficinas(new Date());
+		
 		
 	}
 	

@@ -57,7 +57,7 @@ public class Proc_NotaDeCreditoDevolucionMostrador implements IProcesador{
 			PolizaDetFactory.generarPolizaDet(poliza, "405", "DVTA01", true, importe,desc2, ref1, ref2, asiento+" "+nota.getOrigen());
 			//Cargo a Iva Dev sobre ventas
 			PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV01", true, iva,desc2, ref1, ref2, asiento+" "+nota.getOrigen());
-			System.out.println("*************************************************************"+nota.getId());
+			//System.out.println("*************************************************************"+nota.getId());
 			if(!(nota.getPrimeraAplicacion()== null)) 
 			if(DateUtils.isSameDay(nota.getPrimeraAplicacion(), poliza.getFecha()))		return;
 			

@@ -184,11 +184,10 @@ public class SincronizadorDeExistencias2 {
 	
 	public static void main(String[] args) {
 		new SincronizadorDeExistencias2()
-		.addSucursal(2L,3L,5L,6L,9L,11L)
+		.addSucursal(2L,3L,5L,6L,9L,11L,12L,13L,14L)
 		//.addSucursal(3L,2l)
 		//.sincronizar();
 		.sincronizarMesActual();
 	}
 	
-
 }

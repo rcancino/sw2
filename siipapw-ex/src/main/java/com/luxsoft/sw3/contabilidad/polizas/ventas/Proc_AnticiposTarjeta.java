@@ -20,7 +20,7 @@ public class Proc_AnticiposTarjeta implements IProcesador{
 		List<Pago> pagos=(List<Pago>)model.get("pagos");
 		for(Pago pago:pagos){
 			procesar(poliza, pago);
-			System.out.println("Evaluando Anticipo Tar MOS: "+pago+" "+pago.isAnticipo() +" Es depositable:  " +CobranzaUtils.isDepositable(pago));
+		//	System.out.println("Evaluando Anticipo Tar MOS: "+pago+" "+pago.isAnticipo() +" Es depositable:  " +CobranzaUtils.isDepositable(pago));
 		}
 				
 	}

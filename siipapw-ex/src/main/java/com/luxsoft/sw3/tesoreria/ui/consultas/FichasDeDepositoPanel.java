@@ -24,14 +24,19 @@ import com.luxsoft.siipap.cxc.model.Ficha;
 import com.luxsoft.siipap.cxc.model.FichaDet;
 import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.model.Periodo;
+import com.luxsoft.siipap.reportes.ComisionTarjetasReportForm;
+import com.luxsoft.siipap.reportes.DepositosEnEfectivo;
+import com.luxsoft.siipap.reports.ImportesTraslado;
 import com.luxsoft.siipap.reports.RelacionDeFichas;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.swing.browser.AbstractMasterDatailFilteredBrowserPanel;
 import com.luxsoft.siipap.swing.controls.AbstractControl;
 import com.luxsoft.siipap.swing.utils.MessageUtils;
+import com.luxsoft.sw3.embarques.ui.consultas.AutorizacionDeAsignacionForm;
 import com.luxsoft.sw3.tesoreria.TESORERIA_ROLES;
 import com.luxsoft.sw3.tesoreria.model.CorreccionDeFicha;
 import com.luxsoft.sw3.tesoreria.ui.forms.CorreccionDeFichaForm;
+import com.luxsoft.sw3.tesoreria.ui.forms.RegistroIngresoEfectivoForm;
 
 
 
@@ -97,6 +102,7 @@ public class FichasDeDepositoPanel extends AbstractMasterDatailFilteredBrowserPa
 				,addRoleBasedContextAction(null, TESORERIA_ROLES.CONTROL_DE_INGRESOS.name(),this, "correccionDeFicha", "Corrección de Ficha")
 				//,addRoleBasedContextAction(null, TESORERIA_ROLES.CONTROL_DE_INGRESOS.name(),this, "cancelar", "Cancelar")
 				,addRoleBasedContextAction(null, TESORERIA_ROLES.CONTROL_DE_INGRESOS.name(),this, "reporteDeFichas", "Reporte de Fichas")
+				,addRoleBasedContextAction(null, TESORERIA_ROLES.CONTROL_DE_INGRESOS.name(),this, "reporteDepositosEfectivo", "Reporte Depositos Efe.")
 				};
 		return actions;
 	}
@@ -105,6 +111,7 @@ public class FichasDeDepositoPanel extends AbstractMasterDatailFilteredBrowserPa
 	protected List<Action> createProccessActions() {
 		List<Action> procesos=super.createProccessActions();
 		procesos.add(addAction("", "registrarIngreso", "Registrar Ingreso"));
+		procesos.add(addAction("", "registrarIngresoEfectivo", "Registrar Ingreso Efectivo"));
 		
 		return procesos;
 	}
@@ -148,6 +155,11 @@ public class FichasDeDepositoPanel extends AbstractMasterDatailFilteredBrowserPa
 		report.actionPerformed(null);
 	}
 	
+	public void reporteDepositosEfectivo(){
+		DepositosEnEfectivo.run();
+	}
+	
+
 	public void registrarIngreso(){
 		if(!getSelected().isEmpty()){
 			List<Ficha> fichas=new ArrayList<Ficha>(getSelected());
@@ -172,6 +184,12 @@ public class FichasDeDepositoPanel extends AbstractMasterDatailFilteredBrowserPa
 			}
 			selectionModel.clearSelection();
 		}
+	}
+	
+	
+	public void registrarIngresoEfectivo(){
+		RegistroIngresoEfectivoForm.registrar();
+		MessageUtils.showMessage("Registro de Ingresos realizado", "Registro de ingresos");
 	}
 	
 	

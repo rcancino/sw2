@@ -1,8 +1,8 @@
 SELECT X.periodo,X.origenId,X.DESCRIP AS descripcion,ROUND(SUM(X.IMP_NETO),2) AS ventaNeta,ROUND(SUM(X.COSTO),2) AS costo
 ,(ROUND(SUM(X.IMP_NETO),2)-ROUND(SUM(X.COSTO),2)) AS importeUtilidad
 ,((ROUND(SUM(X.IMP_NETO),2)-ROUND(SUM(X.COSTO),2))*100)/ROUND(SUM(X.IMP_NETO),2) AS porcentajeUtilidad
-,ROUND((X.KILOS),2) AS kilos,ROUND(SUM(X.IMP_NETO)/(X.KILOS),2) AS precio_kilos
-,ROUND(SUM(X.COSTO)/(X.KILOS),2) AS costo_kilos
+,ROUND((X.KILOS),2) AS kilos,CASE WHEN ROUND(X.KILOS,0)=0 THEN 0 ELSE ROUND((X.IMP_NETO)/(X.KILOS),2) END AS precio_kilos
+,CASE WHEN ROUND(X.KILOS,0)=0 THEN 0 ELSE ROUND(SUM(X.COSTO)/(X.KILOS),2) END AS costo_kilos
 ,0 AS inventarioCosteado
 FROM (
 SELECT 

@@ -39,6 +39,7 @@ import com.luxsoft.siipap.model.tesoreria.Banco;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.sw3.model.AddressLoggable;
 import com.luxsoft.sw3.model.AdressLog;
+import com.luxsoft.siipap.model.BaseBean;
 
 /**
  * Entidad para registrar la entrada y salida de importes
@@ -84,6 +85,8 @@ public class Caja implements AddressLoggable{
 	
 	@Column(name="PAGO_HXE")
 	private String pagoCambioCheque;
+	
+	
 	
 	/**
 	 * Commodity para capturar un importe q en funcion del tipo y concepto se transforma
@@ -154,6 +157,62 @@ public class Caja implements AddressLoggable{
 	
 	@Transient
 	private String numeroDeAutorizacion;
+	
+	@Column(name="CIERRE")
+	private Boolean cierre=Boolean.FALSE;
+	
+	
+	 @Column(name = "FECHA_DEP")
+		private Date fechaDep = new Date();
+	 
+	 
+	 @Column(name="ANTICIPO_CORTE")
+		private Boolean anticipoCorte=Boolean.FALSE;
+	    
+	    
+	    public Boolean isAnticipoCorte() {
+			if(anticipoCorte==null)
+				anticipoCorte=Boolean.FALSE;			
+			return anticipoCorte;
+		}
+
+		public void setAnticipoCorte(Boolean anticipoCorte) {
+			Object old=this.anticipoCorte;
+			this.anticipoCorte = anticipoCorte;
+			
+		}
+		public Boolean getanticipoCorte() {
+			return anticipoCorte;
+		}
+	
+	    
+	    
+		public Date getfechaDep() {
+			return fechaDep;
+		}
+
+		public void setFechaDep(Date fechaDep) {
+			this.fechaDep = fechaDep;
+		}
+	    
+	
+	
+	
+	public Boolean isCierre() {
+		if(cierre==null)
+			cierre=Boolean.FALSE;			
+		return cierre;
+	}
+
+	public void setCierre(Boolean cierre) {
+		Object old=this.cierre;
+		this.cierre = cierre;
+		
+	}
+	
+	public Boolean getCierre() {
+		return cierre;
+	}
 
 	@Embedded
 	@AttributeOverrides( {
@@ -190,6 +249,7 @@ public class Caja implements AddressLoggable{
 	public void setFolio(long folio) {
 		this.folio = folio;
 	}
+
 
 	public Date getFecha() {
 		return fecha;

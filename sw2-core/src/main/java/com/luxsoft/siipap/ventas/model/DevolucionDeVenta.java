@@ -1,6 +1,7 @@
 package com.luxsoft.siipap.ventas.model;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -87,6 +88,11 @@ public class DevolucionDeVenta extends Inventario{
 	
 	public BigDecimal getImporteBruto(){
 		CantidadMonetaria imp=CantidadMonetaria.pesos(getPrecio().doubleValue());
+		if(ventaDet.getVenta().getMoneda().getCurrencyCode().equals("USD")){
+			imp=CantidadMonetaria.dolares(getPrecio().doubleValue());
+		}
+		System.out.println("EL Valor de la moneda de DEvo det es +++"+ventaDet.getVenta().getMoneda().getCurrencyCode());
+		System.out.println("/////////"+imp.getCurrency().getCurrencyCode());
 		double cant=getCantidad()/getFactor();
 		return imp.multiply(cant).amount();
 	}
@@ -95,6 +101,9 @@ public class DevolucionDeVenta extends Inventario{
 	
 	public BigDecimal getImporteNeto(){
 		CantidadMonetaria importeBruto=CantidadMonetaria.pesos(getImporteBruto().doubleValue());
+		if(ventaDet.getVenta().getMoneda().getCurrencyCode().equals("USD")){
+			importeBruto=CantidadMonetaria.dolares(getImporteBruto().doubleValue());
+		}
 		double descuento=getVentaDet().getDescuento()/100;
 		CantidadMonetaria descImp=importeBruto.multiply(descuento);
 		return importeBruto.subtract(descImp).amount();
@@ -103,6 +112,9 @@ public class DevolucionDeVenta extends Inventario{
 	
 	public BigDecimal getImporteDescuento(){
 		CantidadMonetaria importeBruto=CantidadMonetaria.pesos(getImporteBruto().doubleValue());
+		if(ventaDet.getVenta().getMoneda().getCurrencyCode().equals("USD")){
+			importeBruto=CantidadMonetaria.dolares(getImporteBruto().doubleValue());
+		}
 		double descuento=getVentaDet().getDescuento()/100;
 		CantidadMonetaria descImp=importeBruto.multiply(descuento);
 		return descImp.amount();
@@ -113,6 +125,9 @@ public class DevolucionDeVenta extends Inventario{
 		if(getVentaDet()!=null){
 			double cant=getVentaDet().getCortes()/getFactor();
 			CantidadMonetaria impCortes=CantidadMonetaria.pesos(cant);
+			if(ventaDet.getVenta().getMoneda().getCurrencyCode().equals("USD")){
+				impCortes=CantidadMonetaria.dolares(cant);
+			}
 			impCortes=impCortes.multiply(getVentaDet().getPrecioCorte().doubleValue());
 			double descuento=0;
 			if(getVentaDet().getVenta().getDescuentos().doubleValue()>0)

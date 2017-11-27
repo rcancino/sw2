@@ -30,6 +30,7 @@ import net.sf.jasperreports.view.JRViewer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.eclipse.jdt.core.util.IModifierConstants;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXTable;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -341,6 +342,7 @@ public class MovimientosPanel extends FilteredBrowserPanel<CargoAbono>{
 	protected List<Action> createProccessActions() {
 		List<Action> procesos=super.createProccessActions();
 		procesos.add(addAction("", "reporteDeDiferenciasAmex", "Diferencias AMEX"));
+		procesos.add(addAction("", "ImportesTraslados", "Importes Traslado Valores"));
 		
 		
 		return procesos;
@@ -349,6 +351,11 @@ public class MovimientosPanel extends FilteredBrowserPanel<CargoAbono>{
 
 	public void reporteDeDiferenciasAmex(){
 		DiferenciasAmexReportForm.run();
+		
+	}
+	
+	public void ImportesTraslados(){
+		ImportesTraslado.run();
 		
 	}
 	@Override

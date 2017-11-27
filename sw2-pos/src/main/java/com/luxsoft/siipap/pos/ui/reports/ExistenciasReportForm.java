@@ -150,7 +150,7 @@ public class ExistenciasReportForm extends SWXAction{
 			if (detalleBox.isSelected())
 				map.put("SUC", "%");
 			else
-				map.put("SUC", String.valueOf(getSucursal().getClave()));
+				map.put("SUC", String.valueOf(getSucursal().getId()));
 			//map.put("IMP_EXIS", exstenciaBox.isSelected()?"SI":"NO");
 			//Linea linea=(Linea)lineaBox.getSelectedItem();
 			//Clase clase=(Clase)claseBox.getSelectedItem();

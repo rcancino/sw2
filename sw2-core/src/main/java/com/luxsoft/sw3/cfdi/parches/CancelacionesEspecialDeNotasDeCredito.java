@@ -143,7 +143,7 @@ public class CancelacionesEspecialDeNotasDeCredito {
 	public static void main(String[] args) {
 		CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("pfxfilepapel");
 		//CancelacionesEspecialDeNotasDeCredito task=new CancelacionesEspecialDeNotasDeCredito("certificadopapelsabajio");
-		task.cancelacion(DateUtil.toDate("13/01/2017"));
+		task.cancelacion(DateUtil.toDate("24/11/2017"));
 	}
 
 }

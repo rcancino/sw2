@@ -344,7 +344,7 @@ public class PedidosManagerImpl implements PedidosManager{
 			return false;
 		if(pedido.isPorAutorizar())
 			return pedido.getAutorizacion()!=null;
-		if(pedido.getTotal().doubleValue()<=0)
+		if(pedido.getTotal().doubleValue()<0)
 			return false;
 		if(StringUtils.containsIgnoreCase(pedido.getComentario2(), "CANCELADO"))
 			return false;		

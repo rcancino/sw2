@@ -49,9 +49,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 			fechade= r.getFechaDocumento(); 
 		}
 		 procesarPagosDeImportaciones(poliza,pago);	
-//      Comp		 
-/*		if(!DateUtil.isSameMonth(fechaPago, fechaCobro))
-			return;*/
+
 		
 		procesarDevolucionCte(poliza, pago);
 		procesarCompraDolares(poliza,pago);
@@ -59,11 +57,14 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 	
 	private void procesarDevolucionCte(Poliza poliza,CargoAbono pago){
 		
-	//	Long concepto=pago.getRequisicion().getConcepto()!=null?pago.getRequisicion().getConcepto().getId():0L;
+
 		
 		Long concepto=pago.getRequisicion().getConcepto()!=null || pago.getRequisicion().getPago()==null ?pago.getRequisicion().getConcepto().getId():0L;
 		
-		if(concepto==224289L){			
+		if(concepto==224289L){	
+			
+			System.out.println("procesando devolucion con pago "+pago.getId()+" para la requisicion"+ pago.getRequisicion().getId());
+			
 			String asiento="DEVOLUCION CLIENTE";
 			String desc2="DEV:"+pago.getId()+" CTE: "+pago.getAFavor();
 			String ref1=pago.getCuenta().getBanco().getNombre();
@@ -88,21 +89,14 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 			}else{
 				ref2="OFICINAS S/R";
 			}
-		//	String ref2=pago.getSucursal().getNombre();
-			System.out.println("PAGO DEVOLUCION TOTAL: "+pago.getRequisicion().getId()+" Clave cliente:"
-					+pago.getRequisicion().getClaveCliente()+ " Notificar: "+pago.getRequisicion().getNotificar());
-			
-		//	PolizaDetFactory.generarPolizaDet(poliza, "102", m.getCuenta().getNumero().toString(), true,m.getImporte().abs(), desc2, ref1, ref2, asiento);
-			//if(pago.getRequisicion().getClaveCliente()!=null){
-				//System.out.println("PAGO DEVOLUCION SAF: "+pago.getRequisicion().getId());
+		
 				
 			if(StringUtils.isNotBlank(pago.getRequisicion().getClaveCliente()) &&  pago.getRequisicion().getNotificar().equals("SALDO_A_FAVOR") ){
 				
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" SAF");
-				PolizaDetFactory.generarPolizaDet(poliza, "203","DIVR03" /*pago.getRequisicion().getClaveCliente()*/ , true ,MonedasUtils.calcularImporteDelTotal(importe), desc2, ref1, ref2, asiento+" SAF");
+				PolizaDetFactory.generarPolizaDet(poliza, "203","DIVR03" , true ,MonedasUtils.calcularImporteDelTotal(importe), desc2, ref1, ref2, asiento+" SAF");
 
 				PolizaDetFactory.generarPolizaDet(poliza, "206","IVAV01", true ,MonedasUtils.calcularImpuestoDelTotal(importe), desc2, ref1, ref2, asiento+" SAF");
-//				PolizaDetFactory.generarPolizaDet(poliza, "206","IVAV02", false ,MonedasUtils.calcularImpuestoDelTotal(pago.getImporte().abs()), desc2, ref1, ref2, asiento+" SAF");
 
 			
 				PolizaDetFactory.generarPolizaDet(poliza, "902","AIETU06", false ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" SAF");
@@ -116,7 +110,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 			String tipo=pago.getRequisicion().getNotificar();
 			tipo=StringUtils.trim(tipo);
 			
-			//if(StringUtils.equalsIgnoreCase(tipo, Requisicion.TiposDeDevoluciones[0])){
+		
 			if(pago.getRequisicion().getNotificar().equals("DEPOSITO_POR_IDENTIFICAR")){	
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" DEP X ID");
 				PolizaDetFactory.generarPolizaDet(poliza, "203","DEPI01", true,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" DEP X ID");
@@ -125,13 +119,13 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 				PolizaDetFactory.generarPolizaDet(poliza, "902","AIETU04", false ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" DEP X ID");
 				PolizaDetFactory.generarPolizaDet(poliza, "903","IETUA04", true ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" DEP X ID");
 				
-		//	}else if(pago.getRequisicion().getNotificar().equals(Requisicion.TiposDeDevoluciones[1])){
+		
 			}else if(StringUtils.isNotBlank(pago.getRequisicion().getComentario()) &&  pago.getRequisicion().getNotificar().equals("DEPOSITO_DEVUELTO") ){
-		//	}else if(pago.getRequisicion().getNotificar().equals("DEPOSITO_DEVUELTO")){	
+		
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getRequisicion().getComentario(), true,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());	
 						
-				//	}else if(pago.getRequisicion().getNotificar().equals(Requisicion.TiposDeDevoluciones[1])){			
+							
 			}else if(StringUtils.isNotBlank(pago.getRequisicion().getClaveCliente()) &&  pago.getRequisicion().getNotificar().equals("NOTA_CREDITO") ){
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 				PolizaDetFactory.generarPolizaDet(poliza, "106",pago.getRequisicion().getClaveCliente(), true,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
@@ -142,7 +136,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 				PolizaDetFactory.generarPolizaDet(poliza, "902","AIETU03", false ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 				PolizaDetFactory.generarPolizaDet(poliza, "903","IETUA03", true ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 						
-				//	}else if(pago.getRequisicion().getNotificar().equals(Requisicion.TiposDeDevoluciones[1])){
+				
 			}else if(pago.getRequisicion().getNotificar().equals("NOTA_CAMIONETA")){	
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 				PolizaDetFactory.generarPolizaDet(poliza, "105",sucursalId.toString(), true,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
@@ -154,7 +148,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 				PolizaDetFactory.generarPolizaDet(poliza, "903","IETUA06", true ,MonedasUtils.calcularImporteSinIva(importe), desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 						
 
-				//	}else if(pago.getRequisicion().getNotificar().equals(Requisicion.TiposDeDevoluciones[2])){
+				
 			}else if(pago.getRequisicion().getNotificar().equals("NOTA_MOSTRADOR")){	
 				PolizaDetFactory.generarPolizaDet(poliza, "102", pago.getCuenta().getNumero().toString(), false,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
 				PolizaDetFactory.generarPolizaDet(poliza, "203","DIVR01", true ,importe, desc2, ref1, ref2, asiento+" "+pago.getRequisicion().getNotificar());
@@ -237,7 +231,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 		}
 		
 		// Cargo Acreedor Diverso
-		//if(concepto.getId().equals(737344L)){
+		
 		if(conceptoID==737344L){
 			String asiento="CARGO ACREEDOR";
 			BigDecimal importe=m.getImporte().abs();
@@ -279,7 +273,7 @@ public class Proc_PagoNormalTesoreria implements IProcesador{
 		}
 		
 		// Cargo Acreedor Diverso
-		//if(concepto.getId().equals(737344L)){
+		
 		if(conceptoID==737342L){
 			String asiento="COMPRA DOLARES";
 			BigDecimal importe=m.getImporte().abs();

@@ -138,6 +138,8 @@ public class CFDIFactura implements InitializingBean,IFactura{
 					cfdi.setMetodoDePago("NA");
 				if(venta.getCliente().getClave().equals("A010052"))
 					cfdi.setMetodoDePago("NA");
+				if(venta.getCliente().getClave().equals("G010568"))
+					cfdi.setMetodoDePago("NA");
 			}
 			
 			

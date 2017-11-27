@@ -26,7 +26,7 @@ public class Proc_PagosNormalesConDepositosMostrador implements IProcesador {
 		if(entidad instanceof PagoConDeposito){
 			PagoConDeposito pago=(PagoConDeposito)entidad;
 			if(!pago.isAnticipo()){
-				System.err.println("-------------"+pago.getId());
+			   //System.err.println("-------------"+pago.getId());
 				if(DateUtils.isSameDay(pago.getPrimeraAplicacion(), poliza.getFecha())){
 					return DateUtil.isSameMonth(pago.getPrimeraAplicacion(), pago.getFechaDeposito());
 				}

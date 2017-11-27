@@ -41,14 +41,18 @@ public class RecalculoDeExistenciasRemoto {
 
  public void recalcularExistencias(){
 	    final Date fecha=new Date();
-		//final int mes=Periodo.obtenerMes(fecha)+1;
-	    
-	    /**Para Arreglar discrepancias del mes anterior**/
-	  final int mes=Periodo.obtenerMes(fecha);
-		
 	    final int year=Periodo.obtenerYear(fecha);
+	    
+	    /**Recalculo de existencias mes actual**/
+	   
+		final int mes=Periodo.obtenerMes(fecha)+1;
+		final Periodo per=Periodo.getPeriodoEnUnMes(mes, year);
+		
+	    /**Para Arreglar discrepancias del mes anterior**/
+		
+		//final int mes=Periodo.obtenerMes(fecha);
 		//final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
-		final Periodo per=Periodo.getPeriodoEnUnMes(mes-1, year);
+		
 		
 		try {
 			
@@ -146,8 +150,8 @@ public class RecalculoDeExistenciasRemoto {
 	
 	public static void main(String[] args) {
 		new RecalculoDeExistenciasRemoto()
-		 .addSucursal(2L,5L,14L,11L,3L,9L)
-		//.addSucursal(9l)
+		 //.addSucursal(2L,5L,14L,11L,3L,9L)
+		.addSucursal(6l)
 		//.addSucursal(11L)
 		//.actualizarExistenciasOficinas(DateUtil.toDate("14/02/2014"));
 		.recalcularExistencias();

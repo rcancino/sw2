@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.ui.ModelMap;
 
 import ca.odell.glazedlists.EventList;
@@ -13,7 +14,10 @@ import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.GroupingList;
 
 
+
+
 import com.luxsoft.siipap.cxc.model.Pago;
+import com.luxsoft.siipap.cxc.model.PagoConEfectivo;
 import com.luxsoft.siipap.cxc.model.PagoConTarjeta;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.sw3.contabilidad.model.Poliza;
@@ -140,12 +144,15 @@ public class Proc_PagosTarjetaMostrador implements IProcesador{
 				if((p.isAnticipo() && p instanceof PagoConTarjeta && p.getFecha().equals(poliza.getFecha())))
 					continue;
 				
+			
+				
 				if( (p instanceof PagoConTarjeta) ){
 					//System.out.println("Acumulado pago tar: "+p+ "  Orig: "+p.getOrigenAplicacion());
-					System.out.println("Error ---------"+p.getId());
+					//
+					System.out.println("Error ---------"+p.getId()+" -- "+p.getPrimeraAplicacion()+"  ---  ");
 					if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
 						if(!"MOS".equals(origen)){
-							//System.out.println("Acumulado pago tar: "+p);
+							//System.out.println("Acumulado pago tar: "+p);							  
 							totalAplicado=totalAplicado.add(p.getAplicado(poliza.getFecha()));
 						
 							

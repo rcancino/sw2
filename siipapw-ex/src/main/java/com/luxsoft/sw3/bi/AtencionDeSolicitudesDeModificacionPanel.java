@@ -2,6 +2,7 @@ package com.luxsoft.sw3.bi;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -31,6 +32,7 @@ import com.luxsoft.sw3.cfdi.parches.ValidarUUID;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacion;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacionForm;
 import com.luxsoft.sw3.solicitudes.SolicitudDeModificacionFormModel;
+
 
 
 
@@ -86,6 +88,10 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	
 	private Action recalculoExistencias;
 	
+	private Action actualizarClientesCredito;
+	
+	private Action actualizarProductos;
+	
 	
 	@Override
 	protected List<Action> createProccessActions(){
@@ -108,6 +114,10 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		
 		recalculoExistencias=addAction("","arrancarRecalculo","Recalcular Existencias");
 		
+		actualizarClientesCredito=addAction("","arrancarSincronizacionCliente","Actualizar Clientes Cre");
+		
+		actualizarProductos=addAction("","arrancarSincronizacionProductos","Actualizar Productos");
+		
 		List<Action> actions=new ArrayList<Action>();
 		actions.add(addAction(null, "actualizarExistencias", "Actualizar Exist."));
 		actions.add(prenderActualizacion);
@@ -121,6 +131,9 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 		
 		actions.add(recalculoExistencias);
 		
+		actions.add(actualizarClientesCredito);
+		
+		actions.add(actualizarProductos);
 		
 		actions.add(addAction("", "envioDeCfdiDiaAnterior", "Enviar Cfdi dia ant."));
 		actions.add(addAction("", "xmlNoEnviados", "Reporte De No Enviados"));
@@ -269,6 +282,38 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
          timerRecalculoAutomatico.schedule(recalcularExistencias,1000, 1800000 );
 	 }
 	 
+	 
+	 
+	 private Timer timerSincronizacionClientes;
+	 
+	 TimerTask sincronizarClientes=new TimerTask(){
+			public void run(){
+				actualizarClientesCredito();
+			}
+		 };
+	 
+	 public void startSincronizacionClientes(){
+		 System.out.println("Arrancando Sincronizacion de Clientes");
+		 timerSincronizacionClientes=new Timer();
+         timerSincronizacionClientes.schedule(sincronizarClientes,1000, 600000 );
+	 }
+	 
+	 
+	 private Timer timerSincronizacionProductos;
+	 
+	 TimerTask sincronizarProductos=new TimerTask(){
+			public void run(){
+				actualizarProductos();
+			}
+		 };
+	 
+	 public void startSincronizacionProductos(){
+		 System.out.println("Arrancando Sincronizacion de productos");
+		 timerSincronizacionProductos=new Timer();
+         timerSincronizacionProductos.schedule(sincronizarProductos,1000, 600000 );
+	 }
+	 
+	 
 	 public void recalcularExistencias(){
 		 RecalculoDeExistenciasRemoto recalculo=new RecalculoDeExistenciasRemoto();
 		 recalculo.addSucursal(6L,5L,2L,3L,9L,11L,14L).recalcularExistencias();
@@ -313,9 +358,32 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	
 	public void actualizarExistencias(){
 		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
-		sync.addSucursal(2L,3L,5L,6L,9L,11L,14L).actualizarExistenciasOficinas(new Date());
+		
+		Calendar hoy=Calendar.getInstance();
+		 hoy.set(Calendar.DATE, 1);
+		 hoy.add(Calendar.DATE,-1);
+		 Date primeroMes=hoy.getTime();
+		 
+		 System.out.println(primeroMes);
+		 
+		sync.addSucursal(2L,3L,5L,6L,9L,11L,14L).actualizarExistenciasOficinasCreado(primeroMes);
 		MessageUtils.showMessage("Existencias Actualizadas", "Actualizacion de Existencias");
 	}
+	
+	public void actualizarClientesCredito(){
+		
+		System.out.println("Actualizando Clientes Credito");
+		SincronizadorDeClientesCredito sync= new SincronizadorDeClientesCredito();
+		sync.addSucursal(2L,3L,5L,6L,9L).actualizarClientesCredito();
+	}
+	
+	public void actualizarProductos(){
+		System.out.println("ActualizandoProductos");
+		SincronizadorDeProductos sync=new SincronizadorDeProductos();
+		sync.addSucursal(2L,3L,5L,6L,9L,11L,14L).actualizarProductos();
+		
+	}
+	
 	
 	public void actualizarExistenciasAutomatico(){
 		SincronizadorDeExistencias sync= new SincronizadorDeExistencias();
@@ -326,6 +394,14 @@ public class AtencionDeSolicitudesDeModificacionPanel extends FilteredBrowserPan
 	
 	public void arrancarRecalculo(){
 		startRecalculo();
+	}
+	
+	public void arrancarSincronizacionCliente(){
+		startSincronizacionClientes();
+	}
+	
+	public void arrancarSincronizacionProductos(){
+		startSincronizacionProductos();
 	}
 	
 	public void prenderActualizacionAutomatica(){		

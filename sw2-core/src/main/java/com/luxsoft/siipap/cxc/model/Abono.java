@@ -399,6 +399,8 @@ public abstract class Abono extends BaseBean implements EntityUserLog,Replicable
 	
 	public List<Aplicacion> getAplicaciones() {
 		return aplicaciones;
+		
+		
 	}
 	
 	public void agregarAplicacion(Aplicacion a){
@@ -433,8 +435,10 @@ public abstract class Abono extends BaseBean implements EntityUserLog,Replicable
 	}
 	
 	public BigDecimal getAplicado(Date fecha){
+	
 		BigDecimal aplicado=BigDecimal.ZERO;
 		for(Aplicacion a:getAplicaciones()){
+			
 			if(DateUtils.isSameDay(a.getFecha(),fecha)){
 				aplicado=aplicado.add(a.getImporte());
 			}

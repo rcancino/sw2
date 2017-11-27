@@ -219,6 +219,7 @@ public class RevisionCobroPanel extends FilteredBrowserPanel<CargoRow2> {
 					/*if(row.isRevisada())
 						continue;*/
 					Cargo cargo=getManager().getCargo(row.getId());
+				
 					RevisionDeCargosRules.instance().actualizar(cargo);
 					persistir(cargo);			
 				}
@@ -232,6 +233,7 @@ public class RevisionCobroPanel extends FilteredBrowserPanel<CargoRow2> {
 					MessageUtils.showMessage(
 							"Error procesando actualización \n "+ExceptionUtils.getRootCauseMessage(e)
 							, "Actualización de revisión y cobro");
+					ExceptionUtils.printRootCauseStackTrace(e);
 				}finally{
 					getLoadAction().setEnabled(true);
 				}

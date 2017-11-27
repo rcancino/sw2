@@ -2,8 +2,11 @@ package com.luxsoft.sw3.contabilidad.polizas.ventas;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.ui.ModelMap;
@@ -11,11 +14,17 @@ import org.springframework.ui.ModelMap;
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.GroupingList;
+import ca.odell.glazedlists.UniqueList;
 
+import com.luxsoft.siipap.cxc.model.Abogado;
+import com.luxsoft.siipap.cxc.model.Abono;
 import com.luxsoft.siipap.cxc.model.Ficha;
+import com.luxsoft.siipap.cxc.model.Ficha.TiposDeFicha;
 import com.luxsoft.siipap.cxc.model.Pago;
 import com.luxsoft.siipap.cxc.model.PagoConCheque;
 import com.luxsoft.siipap.cxc.model.PagoConEfectivo;
+import com.luxsoft.siipap.model.tesoreria.CargoAbono;
+import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.siipap.util.MonedasUtils;
 import com.luxsoft.sw3.contabilidad.model.Poliza;
 import com.luxsoft.sw3.contabilidad.polizas.IProcesador;
@@ -28,34 +37,54 @@ public class Proc_PagosChequeEfectivoMostrador implements IProcesador{
 		
 		String asiento="COBRANZA FICHA";
 		
+	
 		List<Ficha> fichas=(List<Ficha>)model.get("fichas");
+		 fichas.addAll((List<Ficha>)model.get("fichasEfe"));
+		Set<CargoAbono> ingresos=new HashSet<CargoAbono>();
 		if(fichas==null) return;
+		
 		for(Ficha ficha:fichas){
-			String desc2=MessageFormat.format("Ficha - {0}",ficha.getTipoDeFicha()+ " Folio: "+ficha.getFolio());
-			PolizaDetFactory.generarPolizaDet(poliza,"102",ficha.getCuenta().getNumero().toString(), true, ficha.getTotal(), desc2, ficha.getOrigen().name(), ficha.getSucursal().getNombre(),asiento+" "+ficha.getOrigen().name());
+		
+			String  desc2=MessageFormat.format("Ficha - {0}",ficha.getTipoDeFicha()+ " Folio: "+ficha.getFolio());
+			if(!ficha.getTipoDeFicha().equals("EFECTIVO")){
+				
+				PolizaDetFactory.generarPolizaDet(poliza,"102",ficha.getCuenta().getNumero().toString(), true, ficha.getTotal(), desc2, ficha.getOrigen().name(), ficha.getSucursal().getNombre(),asiento+" "+ficha.getOrigen().name());
+			}else{
+	
+				if(ficha.getIngreso()!=null && DateUtils.isSameDay(poliza.getFecha(), ficha.getfechaDep())){
+					ingresos.add(ficha.getIngreso());
+
+				}
+					
+				if(ficha.getfechaDep().before(poliza.getFecha())){
+					PolizaDetFactory.generarPolizaDet(poliza,"109", "198838",true,ficha.getTotal()
+	                           , "Faltante Anticipo: "+desc2,"MOS"
+	                           ,ficha.getSucursal().getNombre(), asiento +" MOS");
+				}
+				
+				
+				if(ficha.getFecha().after(poliza.getFecha())){
+					PolizaDetFactory.generarPolizaDet(poliza,"109", "198838",false,ficha.getTotal()
+	                        , "Sobrante Anticipo: "+desc2,"MOS"
+	                        ,ficha.getSucursal().getNombre(), asiento+" MOS");
+				}
+					
+			}
+				
 		}
+		
+		for(CargoAbono ingreso:ingresos){
+			
+			PolizaDetFactory.generarPolizaDet(poliza,"102",ingreso.getCuenta().getNumero().toString(), true, ingreso.getImporte(),ingreso.getReferencia()+" "+ingreso.getFormaDePago(), "MOS",ingreso.getSucursal().getNombre(),asiento+" MOS");
+		}
+		
+	
 		EventList<Pago> pagos=(EventList<Pago>)model.get("pagos");
 		if(pagos==null) return;
-		
-	/*	for(Pago pag:pagos){
-			System.out.println("el pago" + pag.getId()+"       " + pag.getTotal() );
-			if(pag.isAnticipo()){
-				System.out.println("el pago" + pag.getId()+"       " + pag.getTotal() +"es anticipomjjjjjjjjjjjjjjjjjjjj");
-				BigDecimal totalAnticipo=pag.getTotal();
-				BigDecimal importeAnticipo=MonedasUtils.calcularImporteDelTotal(totalAnticipo);
-				BigDecimal impuestoAnticipo= MonedasUtils.calcularImpuestoDelTotal(totalAnticipo);
-				PolizaDetFactory.generarPolizaDet(poliza,"204",pag.getClave(), false,importeAnticipo,"ANTICIPO "+ pag.getInfo(), pag.getOrigen().name(),pag.getSucursal().getNombre(),asiento+" "+pag.getOrigen().name());	
-				PolizaDetFactory.generarPolizaDet(poliza,"206","IVAA01", false,impuestoAnticipo,"ANTICIPO "+ pag.getInfo(), pag.getOrigen().name(),pag.getSucursal().getNombre(),asiento+" "+pag.getOrigen().name());
-				PolizaDetFactory.generarPolizaDet(poliza,"902","AIETU04", true,importeAnticipo,"ANTICIPO "+ pag.getInfo(), pag.getOrigen().name(),pag.getSucursal().getNombre(),asiento+" "+pag.getOrigen().name());
-				PolizaDetFactory.generarPolizaDet(poliza,"903","IETUA04", false,importeAnticipo,"ANTICIPO "+ pag.getInfo(), pag.getOrigen().name(),pag.getSucursal().getNombre(),asiento+" "+pag.getOrigen().name());
-				
-			}
-		}*/
-		
+
 		Comparator<Pago> c=GlazedLists.beanPropertyComparator(Pago.class, "sucursal.id");
 		GroupingList<Pago> pagosPorSucursal=new GroupingList<Pago>(pagos,c);
-		
-		// Aculuar la cobranza PagoConCheque y PagoConEfectivo
+	
 		for(List<Pago> lpagos:pagosPorSucursal){
 			
 			BigDecimal totalAplicado=BigDecimal.ZERO;
@@ -69,16 +98,23 @@ public class Proc_PagosChequeEfectivoMostrador implements IProcesador{
 				{
 				continue;
 				}
+		
+				String ori=p.getOrigenAplicacion();
+				if(ori.equals("CAM")){
+					if((p instanceof PagoConEfectivo)){
+						if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
+                          
+							totalAplicado=totalAplicado.add(p.getAplicado(poliza.getFecha()));
+							//PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);
+							PolizaDetFactory.generarOtrosIngresos(poliza, p, p.getOrigenAplicacion(), asiento);
+						}
 				
-				if((p instanceof PagoConCheque) || (p instanceof PagoConEfectivo)){
-					System.out.println("----------  "+p.getId());
-					if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
-						totalAplicado=totalAplicado.add(p.getAplicado(poliza.getFecha()));
-						PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);
-						PolizaDetFactory.generarOtrosIngresos(poliza, p, p.getOrigenAplicacion(), asiento);
 					}
+					
 				}
+				PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);
 			}
+			
 			importeAplicado=PolizaUtils.calcularImporteDelTotal(totalAplicado);		
 			ivaAplicado=PolizaUtils.calcularImpuesto(importeAplicado);
 			importeAplicado=PolizaUtils.redondear(importeAplicado);
@@ -86,15 +122,17 @@ public class Proc_PagosChequeEfectivoMostrador implements IProcesador{
 			
 			
 			String ref2=pago.getSucursal().getNombre();
-			String ref1=pago.getOrigenAplicacion();
-			//Abono a cliente camioneta
-			//PolizaDetFactory.generarPolizaDet(poliza,"106", "", false, totalAplicado, "Clientes CAM cobranza", ref1, ref2, asiento);
-			//Cargo Iva en ventas por trasladar
-			//PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV02", true, ivaAplicado, "", ref1, ref2, asiento);
-			//Abono Iva en ventas
-			//PolizaDetFactory.generarPolizaDet(poliza, "206", "IVAV01", false, ivaAplicado, "", ref1, ref2, asiento);
+			String ref1="MOS";
+			String origen="CAM";
+		
+				//Abono a cliente camioneta 
+				PolizaDetFactory.generarPolizaDet(poliza,"105", pago.getSucursal().getId().toString(), false, totalAplicado, "Clientes cobranza Efectivo "+origen, origen, ref2, asiento+" "+ref1);
+				PolizaDetFactory.generarPolizaDet(poliza,"206", "IVAV02", true,  MonedasUtils.calcularImpuestoDelTotal(totalAplicado), "Clientes cobranza "+origen, origen, ref2, asiento+" "+ref1);
+				PolizaDetFactory.generarPolizaDet(poliza,"206", "IVAV01", false, MonedasUtils.calcularImpuestoDelTotal(totalAplicado), "Clientes cobranza "+origen, origen, ref2, asiento+" "+ref1);
 			
 		}	
 	}
+	
+
 
 }

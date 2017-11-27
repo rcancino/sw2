@@ -529,8 +529,7 @@ public class Venta extends Cargo implements Replicable{
 		for(VentaDet det:getPartidas()){
 			importe=importe.add(new CantidadMonetaria(det.getImporte(),getMoneda()));
 		}
-		return importe.amount();
-		
+		return importe.amount();	
 	}
 	
 	static Date vigenciaDF=DateUtil.endOfDay(DateUtil.toDate("31/03/2009")); 

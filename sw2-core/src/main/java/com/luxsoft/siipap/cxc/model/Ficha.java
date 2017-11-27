@@ -29,6 +29,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.NotNull;
 
 import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.tesoreria.CargoAbono;
@@ -134,6 +135,53 @@ public class Ficha implements Replicable,Serializable{
     
     @Column(name = "CANCELADA")
 	private Date cancelada; 
+    
+    @Column(name="CIERRE")
+	private Boolean cierre=Boolean.FALSE;
+    
+    @Column(name="ANTICIPO_CORTE")
+	private Boolean anticipoCorte=Boolean.FALSE;
+    
+    @Column(name = "FECHA_DEP")
+	private Date fechaDep = new Date();
+    
+    
+	public Date getfechaDep() {
+		return fechaDep;
+	}
+
+	public void setFechaDep(Date fechaDep) {
+		this.fechaDep = fechaDep;
+	}
+    
+    public Boolean isAnticipoCorte() {
+		if(anticipoCorte==null)
+			anticipoCorte=Boolean.FALSE;			
+		return anticipoCorte;
+	}
+
+	public void setAnticipoCorte(Boolean anticipoCorte) {
+		Object old=this.anticipoCorte;
+		this.anticipoCorte = anticipoCorte;
+		
+	}
+    
+	
+	public Boolean isCierre() {
+		if(cierre==null)
+			cierre=Boolean.FALSE;			
+		return cierre;
+	}
+
+	public void setCierre(Boolean cierre) {
+		Object old=this.cierre;
+		this.cierre = cierre;
+		
+	}
+	
+	public Boolean getCierre() {
+		return cierre;
+	}
     
     @Embedded
 	@AttributeOverrides({

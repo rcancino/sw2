@@ -89,6 +89,7 @@ public class ControladorDeProvisionDeGastos extends ControladorDinamico{
 					}
 					
 					if( (fechaPago==null || fechaPago.compareTo(fecha)>0) ){
+						
 						BigDecimal saldo=ff.getSaldoCalculadoAlCorte(fecha).amount();						
 						if(saldo.doubleValue()>0){
 							GCompra compra=ff.getCompra();

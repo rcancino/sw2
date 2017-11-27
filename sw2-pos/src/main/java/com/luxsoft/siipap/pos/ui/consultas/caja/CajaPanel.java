@@ -1,7 +1,6 @@
 package com.luxsoft.siipap.pos.ui.consultas.caja;
 
 import java.awt.Toolkit;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -40,6 +39,7 @@ import com.luxsoft.siipap.pos.ui.reports.ArqueoCaja;
 import com.luxsoft.siipap.pos.ui.reports.CierreCaja;
 import com.luxsoft.siipap.pos.ui.reports.CobranzaCamioneta;
 import com.luxsoft.siipap.pos.ui.reports.CobranzaCamionetaPOS;
+import com.luxsoft.siipap.pos.ui.reports.CobranzaEfectivoReport;
 import com.luxsoft.siipap.pos.ui.reports.ControlDePagosCODReportForm;
 import com.luxsoft.siipap.pos.ui.reports.FacturasCobradas;
 import com.luxsoft.siipap.pos.ui.reports.FacturasPendientesCamioneta;
@@ -250,6 +250,7 @@ public class CajaPanel extends FilteredBrowserPanel<Pedido>{
 		//actions.add(addAction("", "reporteCierreCaja", "Cierre"));
 		//actions.add(addAction("", "reporteArqueoCaja", "Arqueo"));
 		actions.add(addAction("", "reporteCobranzaCamioneta", "Cobranza (CAM)"));
+		actions.add(addAction("", "reporteCobranzaEfectivo", "Cobranza (EFE)"));
 		actions.add(addAction("", "aplicacionDeSaldos", "Aplicacion de Saldos"));
 		actions.add(addAction("", "disponiblesSuc", "Saldos a Favor"));
 		actions.add(addAction("", "reporteControlDePagosCOD", "Pago De Facturas COD"));
@@ -391,6 +392,10 @@ public class CajaPanel extends FilteredBrowserPanel<Pedido>{
 	
 	public void reporteFacturasCobradas(){
 		FacturasCobradas.run();
+	}
+	
+	public void reporteCobranzaEfectivo(){
+		CobranzaEfectivoReport.run();
 	}
 	
 	public void reporteCierreCaja(){

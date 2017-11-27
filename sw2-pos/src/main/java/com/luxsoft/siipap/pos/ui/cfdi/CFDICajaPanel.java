@@ -28,6 +28,7 @@ import com.luxsoft.siipap.pos.ui.reports.AplicacionDeSaldosReportForm;
 import com.luxsoft.siipap.pos.ui.reports.ArqueoCaja;
 import com.luxsoft.siipap.pos.ui.reports.CierreCaja;
 import com.luxsoft.siipap.pos.ui.reports.CobranzaCamioneta;
+import com.luxsoft.siipap.pos.ui.reports.CobranzaEfectivoReport;
 import com.luxsoft.siipap.pos.ui.reports.ControlDePagosCODReportForm;
 import com.luxsoft.siipap.pos.ui.reports.FacturasCobradas;
 import com.luxsoft.siipap.pos.ui.reports.FacturasPendientesCamioneta;
@@ -223,6 +224,7 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 		actions.add(addAction("", "reporteVentasDiarias", "Ventas diarias"));
 		actions.add(addAction("", "reporteFacturasCobradas", "Facturas cobradas"));
 		actions.add(addAction("", "reporteCobranzaCamioneta", "Cobranza (CAM)"));
+		actions.add(addAction("", "reporteCobranzaEfectivo", "Cobranza (EFE)"));
 		actions.add(addAction("", "aplicacionDeSaldos", "Aplicacion de Saldos"));
 		actions.add(addAction("", "disponiblesSuc", "Saldos a Favor"));
 		actions.add(addAction("", "reporteControlDePagosCOD", "Pago De Facturas COD")); 
@@ -427,6 +429,10 @@ public class CFDICajaPanel extends FilteredBrowserPanel<PedidoRow>{
 	
 	public void reporteFacturasCobradas(){
 		FacturasCobradas.run();
+	}
+	
+	public void reporteCobranzaEfectivo(){
+		CobranzaEfectivoReport.run();
 	}
 	
 	public void reporteCierreCaja(){

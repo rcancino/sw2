@@ -1,6 +1,5 @@
 package com.luxsoft.sw3.bi;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +17,7 @@ import com.luxsoft.siipap.swing.utils.MessageUtils;
 import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.utils.LoggerHelper;
 
-public class SincronizadorDeExistencias {
+public class ClientesAcompletar {
 	
 	protected Logger logger=LoggerHelper.getLogger();
 	
@@ -28,8 +27,8 @@ public class SincronizadorDeExistencias {
 	protected Set<Long> sucursales=new HashSet<Long>();
 	
 	
-	public SincronizadorDeExistencias(){
-		insert=new SimpleJdbcInsert(ServiceLocator2.getJdbcTemplate()).withTableName("SX_EXISTENCIAS");
+	public ClientesAcompletar(){
+		insert=new SimpleJdbcInsert(ServiceLocator2.getJdbcTemplate()).withTableName("SX_CLIENTES");
 		   
 	}
 	
@@ -49,13 +48,7 @@ public class SincronizadorDeExistencias {
 	
 	public void sincronizar(Date fecha){
 		for(Long sucursalId:sucursales){
-			
-			try {
-				importarFaltantes(fecha,  sucursalId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
+			importarFaltantes(fecha,  sucursalId);
 		}
 	}
 	
@@ -160,7 +153,7 @@ public class SincronizadorDeExistencias {
 		this.sucursales = sucursales;
 	}
 	
-	public SincronizadorDeExistencias addSucursal(Long...ids){
+	public ClientesAcompletar addSucursal(Long...ids){
 		sucursales.clear();
 		for(Long id:ids){
 			sucursales.add(id);
@@ -172,7 +165,7 @@ public class SincronizadorDeExistencias {
 		return todo;
 	}
 
-	public SincronizadorDeExistencias setTodo(boolean todo) {
+	public ClientesAcompletar setTodo(boolean todo) {
 		this.todo = todo;
 		return this;
 	}
@@ -264,104 +257,13 @@ public class SincronizadorDeExistencias {
 	}
 	
 	
-	public void actualizarExistenciasOficinasCreado(Date fecha){
-		  //Long[] sucursales={2L,3L,5L,6L,9L,11L};
-	
-		for(Long sucursalId:sucursales){
-			
-	 System.out.println("Validando Existencias para Sucursal: "+sucursalId +" Del Dia :" +fecha);
-			actualizarExistenciasOficinasCreado(fecha, sucursalId);
-			
-		}
-		
-	}
-	
-	public void actualizarExistenciasOficinasCreado(final Date fecha,Long sucursalId){
-		
-		JdbcTemplate template=ConnectionServices.getInstance().getJdbcTemplate(sucursalId);
-
-		String sqlSucursales="SELECT NOMBRE FROM SW_SUCURSALES WHERE SUCURSAL_ID NOT IN (?,1,12,4,8,10,7) ";
-		Object[] arguments=new Object[]{sucursalId};
-		List<Map<String,Object>> sucs=ServiceLocator2.getJdbcTemplate().queryForList(sqlSucursales, arguments);
-
-
-
-		String sql="SELECT * FROM SX_EXISTENCIAS where date(creado)>=? and SUCURSAL_ID=?";
-		Object[] args=new Object[]{ValUtils.getPamaeter(fecha),sucursalId};
-		List<Map<String,Object>> rows=template.queryForList(sql,args);
-		//updateLog("TX_IMPORTADO", rows.toArray(new Map[0]));
-		for(Map<String,Object> row:rows){
-			try {
-				String exiSuc=(String)row.get("INVENTARIO_ID");
-				Double cantSuc=(Double)row.get("CANTIDAD");
-
-				String sqlLocal="SELECT * FROM SX_EXISTENCIAS WHERE INVENTARIO_ID=?";
-				Object[] argumentos=new Object[]{exiSuc};
-
-				//Map<String,Object> rowOfi=ServiceLocator2.getJdbcTemplate().queryForMap(sqlLocal, argumentos);
-				List<Map<String,Object>> rowOfi=ServiceLocator2.getJdbcTemplate().queryForList(sqlLocal, argumentos);
-				if(rowOfi.isEmpty()|| rowOfi==null){ 
-					System.out.println("No existe registro insertando:  "+row.get("INVENTARIO_ID"));
-					//System.out.println("'"+row.get("INVENTARIO_ID")+"', --INSERT "+sucursalId);
-					insert.execute(row);
-					for(Map<String,Object> sucursal:sucs){
-						String sucur=(String)	sucursal.get("NOMBRE");
-						//						logger.info("AuditLog para INSERT : "+sucur);
-
-						String inserAuditIns="INSERT INTO AUDIT_LOG (entityId,entityName,action,tableName,ip,SUCURSAL_ORIGEN,SUCURSAL_DESTINO,dateCreated,lastUpdated,replicado,message,version)" +
-								"  VALUES (?,\'Existencia\',\'INSERT\',\'SX_EXISTENCIAS\',\'10.10.1.1\',\'OFICINAS\',?,now(),now(),null,\'\',0)";
-						Object[] argsAuditIns=new Object[]{row.get("INVENTARIO_ID"),sucur};
-						ServiceLocator2.getJdbcTemplate().update(inserAuditIns, argsAuditIns);
-					}
-				}else{
-					Double cantOfi=(Double) rowOfi.get(0).get("CANTIDAD");
-					if(!cantOfi.equals(cantSuc)){
-
-					//	logger.info("Hay que actualizar:"+exiSuc +" Por que La cantidad de Oficinas: "+cantOfi + " Es diferente a la cantidad de sucursal: "+ cantSuc);
-						System.out.println("Actualizando:  " +row.get("INVENTARIO_ID"));
-					//	System.out.println("'"+row.get("INVENTARIO_ID")+"', --UPDATE " +sucursalId);
-						String update="UPDATE SX_EXISTENCIAS SET CANTIDAD=?, RECORTE=?, RECORTE_COMENTARIO=?, RECORTE_FECHA=?, MODIFICADO=? WHERE INVENTARIO_ID=?";
-						Object[] argsUpdate=new Object[]{row.get("CANTIDAD"),row.get("RECORTE"),row.get("RECORTE_COMENTARIO"),row.get("RECORTE_FECHA"),row.get("MODIFICADO"),row.get("INVENTARIO_ID")};
-						ServiceLocator2.getJdbcTemplate().update(update, argsUpdate);
-						for(Map<String,Object> sucursal:sucs){
-
-							String sucur=(String)	sucursal.get("NOMBRE");
-							//							logger.info("AuditLog para UPDATE : "+sucur);
-							String inserAuditUp="INSERT INTO AUDIT_LOG (entityId,entityName,action,tableName,ip,SUCURSAL_ORIGEN,SUCURSAL_DESTINO,dateCreated,lastUpdated,replicado,message,version)" +
-									"  VALUES (?,\'Existencia\',\'UPDATE\',\'SX_EXISTENCIAS\',\'10.10.1.1\',\'OFICINAS\',?,now(),now(),null,\'\',0)";
-							Object[] argsAuditUp=new Object[]{row.get("INVENTARIO_ID"),sucur};
-							ServiceLocator2.getJdbcTemplate().update(inserAuditUp, argsAuditUp);
-						}
-
-					}
-				}
-
-				/*logger.info("Exis actualizado Suc: "+row);
-					logger.info("Exis actualizado Ofi: "+rowOfi);*/
-			} catch (Exception e) {
-				System.out.println("Error importando exis: "+row+ " Causa: "+ExceptionUtils.getRootCauseMessage(e));
-			}
-
-		}
-		
-
-	}
 	
 	
 	
 	public static void main(String[] args) {
-		new SincronizadorDeExistencias( )
-		//.addSucursal(2L,3L,5L,6L,9L,11L,14L)
-		//.actualizarExistenciasOficinas(new Date());
-		.addSucursal(2L,3L,5L,6L,9L,11L,14L)
-		.actualizarExistenciasOficinasCreado(new Date("2017/06/30"));
-		
-		/*Calendar hoy=Calendar.getInstance();
-		 hoy.set(Calendar.DATE, 1);
-		 hoy.add(Calendar.DATE,-1);
-		 Date primeroMes=hoy.getTime();
-		 
-		 System.out.println(primeroMes);*/
+		new ClientesAcompletar( )
+		.addSucursal(9L)
+		.actualizarExistenciasOficinas(new Date("2016/09/11"));
 		
 		
 		

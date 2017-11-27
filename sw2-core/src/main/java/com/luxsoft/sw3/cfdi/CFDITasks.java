@@ -57,7 +57,7 @@ public class CFDITasks {
 	}
 	
 	public void subirCertificadoPfx() throws IOException{
-		String path="sat/papelsaB2016.pfx";
+		String path="sat/papelsabajio2017.pfx";
 		//String path="sat/papelsacfdikey.pfx";
 		ClassPathResource resource=new ClassPathResource(path);
 		Assert.isTrue(resource.exists(),"No existe el recurso: "+path);
@@ -77,8 +77,8 @@ public class CFDITasks {
 	}
 	
 	public void inicializar() throws Exception{
-		subirCertificado("sat/00001000000404393222.cer","00001000000404393222");
-		subirLlavePrivada("sat/papelsaB2016.key");
+		subirCertificado("sat/00001000000408286327.cer","00001000000408286327");
+		subirLlavePrivada("sat/papelsabajio2017.key");
 		subirCertificadoPfx();
 		
 		

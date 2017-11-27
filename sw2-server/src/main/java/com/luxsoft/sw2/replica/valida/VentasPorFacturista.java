@@ -165,8 +165,8 @@ static Logger logger=LoggerHelper.getLogger();
 	public static void main(String[] args) {
 
 		final VentasPorFacturista task=new VentasPorFacturista();
-		task.addSucursal(2L,3L,6L,5L,9L);
-		task.actualizar(new Periodo("01/04/2016","30/04/2016"));
+		task.addSucursal(2L,3L,5L,6L,9L);
+		task.actualizar(new Periodo("01/07/2017","31/07/2017"));
 	//	task.actualizar();
 		
 		

@@ -135,6 +135,7 @@ public class RevisionDeCargosRules {
 		if(cuenta.getFechaRevisionCxc()==null){
 			final Date vto=DateUtils.addDays(cuenta.getFechaRevision(), plazo+tolerancia);
 			cuenta.setVencimiento(vto);
+			System.out.println("***************"+cuenta.getId());
 			if(cuenta.getCliente().getCredito().isVencimientoFactura() && !cuenta.getCliente().getCredito().isRevision()){
 				cuenta.setRevisada(true);
 				cuenta.setFechaRevisionCxc(cuenta.getFecha());

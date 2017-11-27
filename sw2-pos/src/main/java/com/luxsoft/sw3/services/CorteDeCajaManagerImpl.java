@@ -49,6 +49,8 @@ public class CorteDeCajaManagerImpl implements CorteDeCajaManager{
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Caja registrarCorteDeCaja(Caja caja) {
 		
+		System.out.println("Registrando corte de efectivo");
+		
 		Ficha ficha=new Ficha();
 		String tipo="FICHAS";
 		Folio folio=folioDao.buscarNextFolio(caja.getSucursal(), tipo);
@@ -63,6 +65,11 @@ public class CorteDeCajaManagerImpl implements CorteDeCajaManager{
 		ficha.setTipoDeFicha(Ficha.FICHA_EFECTIVO);
 		ficha.setTotal(caja.getDeposito());
 		ficha.setComentario(caja.getComentario());
+		ficha.setCierre(caja.getCierre());
+		ficha.setAnticipoCorte(caja.getanticipoCorte());
+		ficha.setFechaDep(caja.getfechaDep());
+		
+		
 		registrarBitacora(caja,ficha);
 		
 		Ficha fichaRes=(Ficha)hibernateTemplate.merge(ficha);

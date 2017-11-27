@@ -105,6 +105,9 @@ public class ConnectionServices {
 		case 11:
 			name="vertiz176"+name;
 			break;
+		case 14:
+			name="solis"+name;
+			break;
 		default:
 			break;
 		}

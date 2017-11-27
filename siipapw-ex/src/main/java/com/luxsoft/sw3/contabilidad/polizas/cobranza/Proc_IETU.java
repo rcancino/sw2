@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.ui.ModelMap;
 
 import ca.odell.glazedlists.EventList;
@@ -14,6 +15,7 @@ import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.GroupingList;
 import ca.odell.glazedlists.matchers.Matcher;
 
+import com.luxsoft.siipap.cxc.model.Abono;
 import com.luxsoft.siipap.cxc.model.Aplicacion;
 import com.luxsoft.siipap.cxc.model.Pago;
 import com.luxsoft.siipap.cxc.model.PagoConCheque;
@@ -80,7 +82,7 @@ public class Proc_IETU implements IProcesador{
 				Aplicacion a2=p2.findPrimeraAplicacion(poliza.getFecha());
 			
 				if(a1==null ){
-					System.out.println("P1:"+p1.getId());
+						System.out.println("P1:"+p1.getId());
 				}
 				if(a2==null ){
 					System.out.println("P2:"+p2.getId());
@@ -100,7 +102,7 @@ public class Proc_IETU implements IProcesador{
 				if (item.isAnticipo() && item.getFecha().equals(poliza.getFecha()))
 					return true;
 				for(Aplicacion a:item.getAplicaciones()){
-					System.out.println("-------"+item.getId());
+					System.out.println("-------"+item.getId());					
 					if(DateUtils.isSameDay(a.getFecha(),poliza.getFecha())){
 						if(a.getDetalle().getOrigen().equals(origen)){
 							return true;
@@ -126,7 +128,7 @@ public class Proc_IETU implements IProcesador{
 				}
 				
 			}
-			System.out.println("Procesando cobranza : "+sucursal+pagosPorTipo.resumenAplicado(poliza.getFecha()));
+			//System.out.println("Procesando cobranza : "+sucursal+pagosPorTipo.resumenAplicado(poliza.getFecha()));
 			
 			// IETU de Cobranza
 			BigDecimal acumPagoPorTC=BigDecimal.ZERO;
@@ -231,7 +233,7 @@ public class Proc_IETU implements IProcesador{
 //		PolizaDetFactory.generarPolizaDet(poliza, cuentaAIETU, "AIETU06", false, importeAcumuladoSAF, cuentaAIETUDesc+asiento, origen, sucursal, asiento);
 //		PolizaDetFactory.generarPolizaDet(poliza, cuentaIETUA, "IETUA06", true,importeAcumuladoSAF,cuentaIETUADesc+asiento, origen, sucursal, asiento);
 		
-		System.out.println("PRIMERA APLICACION OI: "+importeAcumuladoNormal+" OI SAF: "+importeAcumuladoSAF);
+	//	System.out.println("PRIMERA APLICACION OI: "+importeAcumuladoNormal+" OI SAF: "+importeAcumuladoSAF);
 		
 	}
 	

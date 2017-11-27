@@ -6,6 +6,7 @@ import java.util.Date;
 import com.luxsoft.siipap.cxc.model.Ficha;
 import com.luxsoft.siipap.cxc.model.PagoConDeposito;
 import com.luxsoft.siipap.cxc.model.PagoConTarjeta;
+import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.tesoreria.CargoAbono;
 import com.luxsoft.sw3.tesoreria.model.CorreccionDeFicha;
 import com.luxsoft.sw3.tesoreria.model.CorteDeTarjeta;
@@ -37,6 +38,8 @@ public interface IngresosManager {
 	
 	
 	public Ficha registrarIngresoPorFicha(Ficha ficha);
+	
+	public void registrarIngresoPorFichaEfectivo(Date fecha,Sucursal sucursal);
 	
 	public CorreccionDeFicha registrarCorreccionDeFicha(CorreccionDeFicha co);
 	

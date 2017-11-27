@@ -20,6 +20,7 @@ public class Proc_CobranzaPagosConDiferenciasCamioneta implements IProcesador{
 				String ref1=pago.getOrigenAplicacion();
 				String ref2=pago.getSucursal().getNombre();
 				String asiento="COBRANZA DIFERENCIAS OI";
+				
 				BigDecimal totalAplicado=pago.getAplicado(poliza.getFecha());
 				
 				//Cargo a Otros gastos

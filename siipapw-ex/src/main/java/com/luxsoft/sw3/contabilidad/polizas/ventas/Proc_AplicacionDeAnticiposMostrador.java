@@ -26,6 +26,7 @@ public class Proc_AplicacionDeAnticiposMostrador implements IProcesador{
 				String ref2=pago.getSucursal().getNombre();
 				String asiento="COBRANZA ANTICIPO";
 				
+				//System.out.println("malooooooooooo"+pago.getId());
 				BigDecimal totalAplicado=pago.getAplicado(poliza.getFecha());
 				BigDecimal importeAplicado=PolizaUtils.calcularImporteDelTotal(totalAplicado);
 				BigDecimal ivaAplicado=PolizaUtils.calcularImpuesto(importeAplicado);

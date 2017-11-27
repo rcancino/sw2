@@ -30,6 +30,7 @@ import com.luxsoft.siipap.cxc.model.PagoConDeposito;
 import com.luxsoft.siipap.cxc.model.PagoConTarjeta;
 import com.luxsoft.siipap.cxc.service.DepositosManager;
 import com.luxsoft.siipap.model.CantidadMonetaria;
+import com.luxsoft.siipap.model.Sucursal;
 import com.luxsoft.siipap.model.tesoreria.CargoAbono;
 import com.luxsoft.siipap.model.tesoreria.Concepto;
 import com.luxsoft.siipap.model.tesoreria.FormaDePago;
@@ -129,6 +130,85 @@ public class IngresosManagerImpl implements IngresosManager{
 		getHibernateTemplate().delete(corte);
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
+	public void registrarIngresoPorFichaEfectivo(Date fecha,Sucursal sucursal){
+		
+		System.out.println("Buscando fichas para el dia "+fecha + " de la sucursal"+ sucursal);
+		
+		Object[] values={sucursal.getId(),fecha};
+		String hqlParc="from Ficha f where   " +
+				" f.corte is null and f.cancelada is null " +
+				" and f.origen in(\'MOS\',\'CAM\') and f.cierre is false and f.tipoDeFicha=\'EFECTIVO\' and f.sucursal.id=? and f.fechaDep=?";
+		
+		String hqlCie="from Ficha f where   " +
+				" f.corte is null and f.cancelada is null " +
+				" and f.origen in(\'MOS\',\'CAM\') and cierre is true and f.tipoDeFicha=\'EFECTIVO\' and f.sucursal.id=? and f.fecha=?";
+
+		List<Ficha> fichasParciales=ServiceLocator2.getHibernateTemplate().find(hqlParc, values);
+		List<Ficha> fichasCierre=ServiceLocator2.getHibernateTemplate().find(hqlCie, values);
+		
+		if(!fichasParciales.isEmpty()){
+			Ficha ficha1=fichasParciales.get(0);
+			BigDecimal totalParcial=BigDecimal.ZERO;
+			for(Ficha f:fichasParciales){
+				System.out.println("Ficha Parcial id "+f.getId() +" Maestro Parcial   "+ficha1);
+				
+				totalParcial=totalParcial.add(f.getTotal());
+			}
+			crearCargoAbonoFichaEfectivo(ficha1,fichasParciales, totalParcial);
+		}
+		
+		if(!fichasCierre.isEmpty()){
+			Ficha ficha2=fichasCierre.get(0);
+			BigDecimal totalCierre=BigDecimal.ZERO;
+			for(Ficha f:fichasCierre){
+				System.out.println("Ficha Cierre id "+f.getId()+" Maestro Cierre  "+ ficha2);
+				totalCierre=totalCierre.add(f.getTotal());
+			}
+			crearCargoAbonoFichaEfectivo(ficha2,fichasCierre, totalCierre);
+		}
+		
+		
+		
+	}
+	
+	//@Transactional(propagation=Propagation.REQUIRED)
+	public void crearCargoAbonoFichaEfectivo(Ficha ficha,List<Ficha> fichas,BigDecimal total) {
+		
+	
+		CargoAbono cargo=new CargoAbono();
+		cargo.setAFavor(ficha.getCuenta().getBanco().getEmpresa().getNombre());
+		cargo.setImporte(total);
+		cargo.setCuenta(ficha.getCuenta());
+		cargo.setFecha(ficha.getFecha());
+		cargo.setMoneda(ficha.getCuenta().getMoneda());
+		cargo.setSucursal(ficha.getSucursal());
+		cargo.setEncriptado(false);
+		cargo.setFormaDePago(FormaDePago.EFECTIVO);
+		String pattern="Deposito en efectivo {0,date,short} sucursal: {1}";
+		cargo.setComentario(MessageFormat.format(pattern, ficha.getCorte(),cargo.getSucursal()));		
+		cargo.setReferencia("Ficha: "+ficha.getFolio());
+		cargo.setOrigen(Origen.VENTA_MOSTRADOR);
+		registrarBitacora(cargo);
+		System.out.println("Cargo generado"+cargo);
+		getHibernateTemplate().save(cargo);
+		
+		for(Ficha f:fichas){
+			System.out.println("Cargo generado Finalmente"+f);
+			System.out.println("Grabando cargo abono en ficha"+ f +" Cargo "+cargo);
+			f.setIngreso(cargo);
+			f.setCorte(new Date());
+			
+		//	getHibernateTemplate().merge(f);
+			//getDepositosManager().save(f);
+			
+		}
+		
+	
+	}
+	
+	
+	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Ficha registrarIngresoPorFicha(Ficha ficha) {
 		

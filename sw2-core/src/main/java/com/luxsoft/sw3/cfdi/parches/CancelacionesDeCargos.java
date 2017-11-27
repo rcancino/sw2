@@ -149,7 +149,7 @@ public class CancelacionesDeCargos{
 		
 		CancelacionesDeCargos task=new CancelacionesDeCargos("certificadopapelsabajio");*/
 	
-		Periodo per=new Periodo("01/01/2017","17/01/2017");
+		Periodo per=new Periodo("21/11/2017","21/11/2017");
 		//task.cancelacion(per);
 		for(Date dia:per.getListaDeDias()){
 			//System.out.println("Buscando Cargos a cancelar en el dia: "+dia);
@@ -158,6 +158,7 @@ public class CancelacionesDeCargos{
 		}
 		
 	}
+	
                                                          
  
 

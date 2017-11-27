@@ -1,6 +1,18 @@
 package com.luxsoft.siipap.pos.ui.forms.caja;
 
+import java.awt.Checkbox;
+import java.awt.event.ActionListener;
+import java.beans.EventHandler;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.list.SelectionInList;
@@ -21,10 +33,25 @@ import com.luxsoft.sw3.services.Services;
  *
  */
 public class CorteDeCajaEfectivoForm extends AbstractForm {
+	
+
 
 	public CorteDeCajaEfectivoForm(CorteDeCajaEfectivoFormModel model) {
 		super(model);
+		
+		final CorteDeCajaEfectivoFormModel mod=model; 
 		setTitle("Corte de caja : "+model.getCaja().getTipo());
+		
+		model.getModel("cierre").addValueChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				
+				
+			}
+			
+		});
+		
 	}
 
 	@Override
@@ -37,8 +64,8 @@ public class CorteDeCajaEfectivoForm extends AbstractForm {
 		builder.append("Fecha",getControl("fecha"));
 		builder.append("Hora",addReadOnly("hora"));
 		
-		builder.nextLine();
-		builder.append("Origen",getControl("origen"));
+		/*builder.nextLine();
+		builder.append("Origen",getControl("origen"));*/
 		builder.nextLine();
 		
 		builder.append("Pagos Registrados",addReadOnly("pagos"));
@@ -46,12 +73,31 @@ public class CorteDeCajaEfectivoForm extends AbstractForm {
 		
 		builder.append("Cambios de cheque",addReadOnly("cambiosDeCheque"));
 		builder.nextLine();
-		builder.append("Importe",addReadOnly("importe"));
+		
+		//builder.append("Importe",addReadOnly("importe"));
+		
+		builder.append("Importe",getControl("importe"));
+
 		builder.append("Disponible",addReadOnly("disponible"));
 		
+		
+		
 		builder.nextLine();
-		builder.append("Comentario",getControl("comentario"),5);
+		
+		builder.append("Cierre Monedas",getControl("cierre"));
+		
+		builder.append("Anticipo Corte",getControl("anticipoCorte"));
+		
+		builder.nextLine();
+		
+		
+		builder.append("Comentario",getControl("comentario"));
+		
+		
+		
+	
 		return builder.getPanel();
+		
 	}
 
 	@Override
@@ -65,6 +111,14 @@ public class CorteDeCajaEfectivoForm extends AbstractForm {
 			return Binder.createBigDecimalForMonyBinding(model.getModel(property));
 		}else if("comentario".equals(property)){
 			return Binder.createMayusculasTextField(model.getModel(property));
+		}else if("cierre".equals(property)){
+			JComponent c=BasicComponentFactory.createCheckBox(model.getModel(property), "Cierre");
+			//c.setEnabled(!model.isReadOnly());
+			return c;
+		}else if("anticipoCorte".equals(property)){
+			JComponent c=BasicComponentFactory.createCheckBox(model.getModel(property), "anticipoCorte");
+			//c.setEnabled(!model.isReadOnly());
+			return c;
 		}
 		return super.createCustomComponent(property);
 	}
@@ -72,7 +126,11 @@ public class CorteDeCajaEfectivoForm extends AbstractForm {
 	public static Caja registrarCorte(){
 		final CorteDeCajaEfectivoFormModel model=new CorteDeCajaEfectivoFormModel();
 		model.getCaja().setTipo(Caja.Tipo.EFECTIVO);
+		model.getCaja().setOrigen(OrigenDeOperacion.MOS);
+	
+		
 		final CorteDeCajaEfectivoForm form=new CorteDeCajaEfectivoForm(model);
+		
 		form.open();
 		if(!form.hasBeenCanceled()){
 			Caja bean=model.commit();

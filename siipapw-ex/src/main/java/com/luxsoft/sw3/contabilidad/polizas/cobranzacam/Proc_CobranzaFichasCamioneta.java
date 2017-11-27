@@ -43,7 +43,8 @@ public class Proc_CobranzaFichasCamioneta  implements IProcesador{
 			
 			Pago pago=lpagos.get(0);
 			for(Pago p:lpagos){
-				if( (!p.isAnticipo()) && ((p instanceof PagoConCheque) || (p instanceof PagoConEfectivo))  ){
+				//if( (!p.isAnticipo()) && ((p instanceof PagoConCheque) || (p instanceof PagoConEfectivo))  ){
+				if( (!p.isAnticipo()) && ((p instanceof PagoConCheque) )  ){
 					if(DateUtils.isSameDay(p.getPrimeraAplicacion(), poliza.getFecha())){
 						totalAplicado=totalAplicado.add(p.getAplicado(poliza.getFecha()));
 						PolizaDetFactory.generarSaldoAFavor(poliza, p, p.getOrigenAplicacion(), asiento);

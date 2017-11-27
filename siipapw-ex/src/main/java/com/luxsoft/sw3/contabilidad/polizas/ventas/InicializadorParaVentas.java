@@ -22,9 +22,12 @@ import ca.odell.glazedlists.UniqueList;
 
 import com.luxsoft.siipap.cxc.model.Abono;
 import com.luxsoft.siipap.cxc.model.Ficha;
+import com.luxsoft.siipap.cxc.model.FormaDePago;
 import com.luxsoft.siipap.cxc.model.NotaDeCredito;
 import com.luxsoft.siipap.cxc.model.NotaDeCreditoBonificacion;
 import com.luxsoft.siipap.cxc.model.Pago;
+import com.luxsoft.siipap.model.cxp.CxP2.Origen;
+import com.luxsoft.siipap.model.tesoreria.CargoAbono;
 import com.luxsoft.siipap.service.ServiceLocator2;
 import com.luxsoft.siipap.util.DateUtil;
 import com.luxsoft.sw3.tesoreria.model.CorteDeTarjeta;
@@ -109,9 +112,12 @@ public class InicializadorParaVentas {
 				" union " +
 				" select x.abono_id from sx_cxc_abonos x where x.fecha=? and tipo_id like 'NOTA_%'  and x.total>0" +
 				" union " +
-				" select distinct(y.abono_id) from sx_cxc_aplicaciones x    join sx_cxc_abonos y on(x.abono_id=y.abono_id) where x.fecha=?  and y.ANTICIPO=false and y.tipo_id like 'PAGO%' and tipo_id='PAGO_TAR' and x.car_tipo<>'TES'";
+				" select distinct(y.abono_id) from sx_cxc_aplicaciones x    join sx_cxc_abonos y on(x.abono_id=y.abono_id) where x.fecha=?  and y.ANTICIPO=false and y.tipo_id like 'PAGO%' and tipo_id='PAGO_TAR' and x.car_tipo<>'TES'"+
+				" union " +
+				" select distinct(y.abono_id) from sx_cxc_aplicaciones x    join sx_cxc_abonos y on(x.abono_id=y.abono_id) where x.fecha=?  and y.ANTICIPO=false and y.tipo_id like 'PAGO%' and tipo_id='PAGO_EFE' and x.car_tipo<>'TES'";
 		Object[] args=new Object[]{
 		new SqlParameterValue(Types.DATE, fecha)	
+		,new SqlParameterValue(Types.DATE, fecha)
 		,new SqlParameterValue(Types.DATE, fecha)
 		,new SqlParameterValue(Types.DATE, fecha)
 		,new SqlParameterValue(Types.DATE, fecha)
@@ -164,8 +170,15 @@ public class InicializadorParaVentas {
 	
 	public InicializadorParaVentas inicializarFichas(ModelMap model){
 		final Date fecha=(Date)model.get("fecha");
-		List<Ficha> fichas=hibernateTemplate.find("from Ficha f where date(f.fecha)=? and f.origen=\'MOS\'",fecha);
+		
+		List<Ficha> fichasEfe=hibernateTemplate.find("from Ficha f where (date(f.fechaDep)=? or date(f.fecha)=?) and f.origen=\'MOS\' and f.tipoDeFicha=\'EFECTIVO\'",new Date[]{fecha,fecha});
+		model.addAttribute("fichasEfe",fichasEfe);
+		List<Ficha> fichas=hibernateTemplate.find("from Ficha f where date(f.fecha)=? and f.origen=\'MOS\' and f.tipoDeFicha!=\'EFECTIVO\'",new Date[]{fecha});
 		model.addAttribute("fichas",fichas);
+		/*List<Ficha> fichas=hibernateTemplate.find("from Ficha f where date(f.fecha)=? and f.origen=\'MOS\' and f.tipoDeFicha!=\'EFECTIVO\'"
+						+ " union "
+						+ " from Ficha f where (date(f.fechaDep)=? or date(f.fecha)=?) and f.origen=\'MOS\' and f.tipoDeFicha=\'EFECTIVO\'",new Date[]{fecha,fecha,fecha});
+		model.addAttribute("fichas",fichas);*/
 		return this;
 	}
 	
@@ -178,6 +191,8 @@ public class InicializadorParaVentas {
 		model.addAttribute("cortes",cortes);
 		return this;
 	}
+	
+	
 	
 	public InicializadorParaVentas inicializarCorreccionesDeFichas(ModelMap model){
 		final Date fecha=(Date)model.get("fecha");
@@ -197,9 +212,9 @@ public class InicializadorParaVentas {
 	public static void main(String[] args) {
 		InicializadorParaVentas i=new InicializadorParaVentas(ServiceLocator2.getHibernateTemplate(),ServiceLocator2.getJdbcTemplate());
 		ModelMap model=new ModelMap();
-		model.addAttribute("fecha", DateUtil.toDate("12/01/2012"));
+		model.addAttribute("fecha", DateUtil.toDate("21/04/2017"));
 		//i.inicializarVentas(model);
-		i.inicializarAbonos(model);
+		//i.inicializarCortesEfectivo(model);
 			
 	}
 

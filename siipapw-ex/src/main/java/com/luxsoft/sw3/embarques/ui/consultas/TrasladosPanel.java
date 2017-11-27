@@ -28,6 +28,7 @@ public class TrasladosPanel extends FilteredBrowserPanel<Traslado>{
 		setTitle("Traslados por chofer");
 	}
 	
+	
 	protected void init(){
 		addProperty(
 				"sucursal.nombre"

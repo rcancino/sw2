@@ -283,6 +283,7 @@ public class PolizaDetFactory {
 	public static void generarOtrosIngresos(Poliza poliza,Abono abono,String ref1,String asiento){
 		String ref2=abono.getSucursal().getNombre();
 		BigDecimal diferencia=abono.getDiferencia();
+        System.out.println("aaaaaaaaa"+abono.getId());
 		if(diferencia.doubleValue()>0 && DateUtils.isSameDay(abono.getDirefenciaFecha(), poliza.getFecha())){
 			if(abono.getDiferencia().doubleValue()>0){
 				BigDecimal importeDiferencia=PolizaUtils.calcularImporteDelTotal(diferencia);
